@@ -9,8 +9,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --cream: #F5F0E8;
-    --cream-dark: #EDE7D9;
+    --cream: #F5EDE8;
+    --cream-dark: #EDE3DC;
     --burgundy: #6B2737;
     --burgundy-light: #8B3545;
     --burgundy-pale: #F0E6E8;
@@ -657,12 +657,97 @@
     color: var(--burgundy);
     font-weight: 600;
   }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    width: 22px;
+    height: 2px;
+    background: var(--burgundy);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* MOBILE MENU */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+    padding: 16px 24px;
+    flex-direction: column;
+    gap: 0;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    text-decoration: none;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a.active { color: var(--burgundy); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+
+    .hero { padding: 40px 20px 32px; }
+    .hero h1 { font-size: 2.2rem; }
+    .hero-metrics { flex-direction: column; gap: 8px; }
+    .hero-btns { flex-direction: column; }
+    .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+
+    .section { padding: 0 16px 48px; }
+
+    .stats-row { grid-template-columns: 1fr; }
+    .itas-metrics { grid-template-columns: 1fr; }
+    .pie-row { grid-template-columns: 1fr; }
+    .company-grid { grid-template-columns: 1fr; }
+    .philosophy-grid { grid-template-columns: 1fr; }
+
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { min-width: 600px; }
+
+    .company-meta { flex-direction: column; gap: 8px; }
+
+    .chart-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+    .period-selector { flex-wrap: wrap; }
+
+    .recap-nav { flex-wrap: wrap; gap: 8px; }
+
+    footer { flex-direction: column; gap: 8px; text-align: center; padding: 20px; }
+
+    [style*="padding: 48px 48px"] { padding: 32px 20px 16px !important; }
+    [style*="padding: 48px"] { padding: 20px !important; }
+
+    .ratios-row { flex-wrap: wrap; }
+    .ratio-item { min-width: 120px; flex: 1; }
+  }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo" onclick="showPage('home')">ALS Capital</div>
+  <div class="nav-logo" onclick="showPage('home');closeMobileMenu()">ALS Capital</div>
   <ul class="nav-links">
     <li><a onclick="showPage('home')" id="nav-home" class="active">Inicio</a></li>
     <li><a onclick="showPage('portfolio'); closeCompany();" id="nav-portfolio">Portfolio ALS</a></li>
@@ -671,7 +756,19 @@
     <li><a onclick="showPage('macro')" id="nav-macro">Macro</a></li>
     <li><a onclick="showPage('articles')" id="nav-articles">Artículos</a></li>
   </ul>
+  <div class="hamburger" onclick="toggleMobileMenu()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a onclick="showPage('home');closeMobileMenu()" id="mnav-home" class="active">Inicio</a>
+  <a onclick="showPage('portfolio');closeCompany();closeMobileMenu()" id="mnav-portfolio">Portfolio ALS</a>
+  <a onclick="showPage('itas');closeMobileMenu()" id="mnav-itas">Portfolio ITAS</a>
+  <a onclick="showPage('watchlist');closeMobileMenu()" id="mnav-watchlist">Watchlist</a>
+  <a onclick="showPage('macro');closeMobileMenu()" id="mnav-macro">Macro</a>
+  <a onclick="showPage('articles');closeMobileMenu()" id="mnav-articles">Artículos</a>
+</div>
 
 <!-- ===================== HOME ===================== -->
 <div id="page-home" class="page active">
@@ -1168,7 +1265,7 @@ const twrData = [
 ];
 
 const recaps = [
-  { date:"16 May 2026", title:"Semana del 12 al 16 de Mayo de 2026", content:"<p>📝 <em>Añade aquí tu primer recap semanal. Puedes incluir movimientos del mercado, noticias relevantes de tus posiciones, cambios en la cartera o cualquier reflexión sobre la semana.</em></p><p style='color:var(--text-light);font-size:0.8rem'>— Próxima actualización: 23 May 2026</p>" },
+  { date:"18 May 2026", title:"Semana del 12 al 18 de Mayo de 2026", content:"<p>📝 <em>Añade aquí tu primer recap semanal. Puedes incluir movimientos del mercado, noticias relevantes de tus posiciones, cambios en la cartera o cualquier reflexión sobre la semana.</em></p><p style='color:var(--text-light);font-size:0.8rem'>— Próxima actualización: 25 May 2026</p>" },
 ];
 
 let currentRecapIdx = 0;
@@ -2832,12 +2929,25 @@ function changeRecap(dir) {
   renderRecap();
 }
 
-// ====== NAVIGATION ======
+// ====== MOBILE MENU ======
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+function closeMobileMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+}
+
+// Update mobile nav active state
+const origShowPage = showPage;
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('.mobile-menu a').forEach(a => a.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   document.getElementById('nav-' + id).classList.add('active');
+  const mNav = document.getElementById('mnav-' + id);
+  if (mNav) mNav.classList.add('active');
   if (id === 'home' || id === 'portfolio') setTimeout(renderChart, 50);
   if (id === 'portfolio') setTimeout(renderAlsPies, 100);
   if (id === 'itas') setTimeout(renderItasPies, 100);
