@@ -828,6 +828,15 @@
 </head>
 <body>
 
+<div id="mobile-banner" style="display:none;background:#3D3530;color:#F5EDE8;text-align:center;padding:10px 16px;font-size:0.78rem;line-height:1.5;position:relative;">
+  📱 Para una mejor experiencia, activa el <strong>modo escritorio</strong> en tu navegador.
+  <button onclick="document.getElementById('mobile-banner').style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#F5EDE8;font-size:1.1rem;cursor:pointer;line-height:1;">✕</button>
+</div>
+<script>
+  if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+    document.getElementById('mobile-banner').style.display = 'block';
+  }
+</script>
 <nav>
   <div class="nav-logo" onclick="showPage('home');closeMobileMenu()">ALS Investment Journal</div>
   <ul class="nav-links">
