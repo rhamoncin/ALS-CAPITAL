@@ -6,7 +6,7 @@
 <title>ALS Capital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
 <style>
   :root {
     --cream: #F5EDE8;
@@ -703,6 +703,35 @@
   .mobile-menu a:last-child { border-bottom: none; }
   .mobile-menu a.active { color: var(--burgundy); }
 
+  /* MOBILE CARDS */
+  .mobile-cards { display: none; }
+  .mobile-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .mobile-card:active { background: var(--cream); }
+  .mobile-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+  }
+  .mobile-card-ticker { font-weight: 700; font-size: 1rem; color: var(--text-dark); }
+  .mobile-card-ret { font-weight: 600; font-size: 0.9rem; }
+  .mobile-card-name { font-size: 0.78rem; color: var(--text-light); margin-bottom: 8px; }
+  .mobile-card-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 0.75rem;
+    color: var(--text-mid);
+  }
+  .mobile-card-meta span { background: var(--cream); padding: 2px 8px; border-radius: 12px; }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 768px) {
 
@@ -718,19 +747,21 @@
 
     .section { padding: 0 16px 48px; }
 
-    .stats-row { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
     .itas-metrics { grid-template-columns: 1fr; }
     .pie-row { grid-template-columns: 1fr; }
     .company-grid { grid-template-columns: 1fr; }
     .philosophy-grid { grid-template-columns: 1fr; }
 
-    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { min-width: 600px; }
+    /* Hide tables, show cards */
+    .table-wrap { display: none; }
+    .mobile-cards { display: block; }
 
     .company-meta { flex-direction: column; gap: 8px; }
 
     .chart-header { flex-direction: column; gap: 12px; align-items: flex-start; }
-    .period-selector { flex-wrap: wrap; }
+    .period-selector { flex-wrap: wrap; gap: 3px; }
+    .period-btn { padding: 5px 10px; font-size: 0.7rem; }
 
     .recap-nav { flex-wrap: wrap; gap: 8px; }
 
@@ -741,8 +772,19 @@
 
     .ratios-row { flex-wrap: wrap; }
     .ratio-item { min-width: 120px; flex: 1; }
+
+    .section-title { font-size: 1.4rem; }
+    .chart-value { font-size: 1.5rem; }
   }
-</style>
+
+  .article-body h1 { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--text-dark); margin: 0 0 8px; line-height: 1.25; }
+  .article-body h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--text-dark); margin: 40px 0 14px; border-left: 3px solid var(--burgundy); padding-left: 14px; }
+  .article-body p { font-size: 0.95rem; line-height: 1.85; color: var(--text-mid); margin: 0 0 18px; }
+  .article-body strong { color: var(--text-dark); font-weight: 600; }
+  .article-body em { color: var(--text-light); font-style: italic; }
+  .article-body hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  </style>
 </head>
 <body>
 
@@ -877,6 +919,7 @@
         <tbody id="home-tbody"></tbody>
       </table>
     </div>
+    <div class="mobile-cards" id="home-cards"></div>
   </div>
 
   <!-- Recap semanal -->
@@ -977,6 +1020,7 @@
           <tbody id="portfolio-tbody"></tbody>
         </table>
       </div>
+      <div class="mobile-cards" id="portfolio-cards"></div>
       <!-- Pie charts -->
       <div class="pie-row" style="margin-top:24px">
         <div class="pie-card">
@@ -1027,8 +1071,7 @@
         <tbody id="itas-tbody"></tbody>
       </table>
     </div>
-
-    <!-- Pie charts -->
+    <div class="mobile-cards" id="itas-cards"></div>
     <div class="pie-row" style="margin-top:24px">
       <div class="pie-card">
         <div class="pie-title">Posiciones</div>
@@ -1056,7 +1099,7 @@
           <div class="company-meta-item">Sector: <span id="wl-sector"></span></div>
           <div class="company-meta-item">Precio actual: <span id="wl-price"></span></div>
           <div class="company-meta-item">Consenso analistas: <span id="wl-consensus"></span></div>
-          <div class="company-meta-item">Objetivo 3A: <span id="wl-target"></span></div>
+          <div class="company-meta-item">Target Price: <span id="wl-target"></span></div>
           <div class="company-meta-item" id="wl-upside-wrap">Upside consenso: <span id="wl-upside" class="badge"></span></div>
         </div>
       </div>
@@ -1090,9 +1133,13 @@
           <div class="section-label" style="margin-bottom:12px">Tesis de inversión</div>
           <div id="wl-thesis" class="thesis-box"></div>
         </div>
-        <div class="card-section" id="wl-images-card" style="grid-column:1/-1;display:none">
-          <div class="section-label" style="margin-bottom:12px">Imágenes y recursos</div>
-          <div id="wl-images" style="display:flex;flex-wrap:wrap;gap:12px"></div>
+        <div class="card-section" id="wl-risks-card" style="grid-column:1/-1;display:none">
+          <div class="section-label" style="margin-bottom:12px">Riesgos</div>
+          <div id="wl-risks" class="thesis-box"></div>
+        </div>
+        <div class="card-section" id="wl-images-card" style="grid-column:1/-1;display:none;background:transparent;border:none;box-shadow:none;padding:0">
+          <div style="font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--burgundy);font-weight:700;margin-bottom:16px">Valoración</div>
+          <div id="wl-valuation"></div>
         </div>
       </div>
     </div>
@@ -1116,7 +1163,7 @@
               <th style="color:var(--burgundy);font-weight:700">Precio Actual</th>
               <th style="color:var(--burgundy);font-weight:700">Consenso</th>
               <th style="color:var(--burgundy);font-weight:700">Upside</th>
-              <th style="color:var(--burgundy);font-weight:700">Objetivo 3A</th>
+              <th style="color:var(--burgundy);font-weight:700">Target Price</th>
             </tr>
           </thead>
           <tbody id="wl-tbody"></tbody>
@@ -1149,9 +1196,11 @@
     <div style="margin-bottom:48px">
       <div style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--burgundy);font-weight:700;margin-bottom:20px">Análisis e ideas</div>
       <div id="articles-list">
-        <div style="background:var(--card-bg);border:1px dashed var(--border);border-radius:10px;padding:48px;text-align:center;color:var(--text-light)">
-          <div style="font-size:1.5rem;margin-bottom:12px;opacity:0.3">✍️</div>
-          <div style="font-size:0.9rem">Los artículos aparecerán aquí cuando los publiques.</div>
+        <div class="article-card" onclick="openArticle('ormuz-2026')" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:28px 32px;cursor:pointer;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.10)'" onmouseout="this.style.boxShadow=''">
+          <div style="font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--burgundy);margin-bottom:8px">Macro · Oil &amp; Gas</div>
+          <div style="font-size:1.15rem;font-weight:700;color:var(--text-dark);font-family:'Playfair Display',serif;margin-bottom:8px">El Estrecho de Ormuz y el mercado del petróleo: lo que ha cambiado</div>
+          <div style="font-size:0.83rem;color:var(--text-mid);line-height:1.6;margin-bottom:14px">Un análisis del impacto del cierre de Ormuz en la oferta y demanda global de crudo: cifras de producción perdida, rutas alternativas, capacidad de compensación y perspectivas de los principales bancos de inversión.</div>
+          <div style="font-size:0.72rem;color:var(--text-light)">Mayo 2026 · 8 min lectura</div>
         </div>
       </div>
     </div>
@@ -1163,6 +1212,12 @@
     </div>
 
   </div>
+</div>
+
+<div id="lightbox" onclick="closeLightbox()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1000;cursor:zoom-out;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px">
+  <img id="lightbox-img" src="" style="max-width:92%;max-height:88vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,0.5)">
+  <div id="lightbox-caption" style="color:rgba(255,255,255,0.7);font-size:0.8rem;margin-top:12px"></div>
+  <div onclick="closeLightbox()" style="position:absolute;top:20px;right:24px;color:white;font-size:1.8rem;cursor:pointer;line-height:1">✕</div>
 </div>
 
 <footer>
@@ -1304,12 +1359,26 @@ const watchlist = [
     precioActual: 35.32,
     currency: "USD",
     consenso: 62.00,
-    objetivo3a: null,
+    targetPrice: "53 USD",
     descripcion: `<p>Build-A-Bear Workshop es una compañía de retail experiencial especializada en peluches personalizables. Su propuesta combina producto, entretenimiento y personalización: el cliente crea su propio peluche en tienda mediante un proceso interactivo de relleno, vestido, accesorios, nombre y la conocida Heart Ceremony. La compañía opera a través de tres segmentos: Direct-to-Consumer, Commercial e International Franchising.</p>
     <p>A cierre de FY2025 contaba con 662 ubicaciones globales, distribuidas en 375 tiendas corporativas, 178 ubicaciones operadas por partners y 109 franquicias internacionales. Durante FY2025 añadió 64 ubicaciones netas: 7 corporativas, 40 partner-operated y 17 franquicias internacionales. La compañía espera seguir abriendo nuevas ubicaciones en 2026 y más allá, con especial foco en formatos asset-light fuera de EE.UU., mediante partners y franquicias.</p>
     <p>La caída reciente de la acción parece estar vinculada principalmente a la preocupación del mercado por la presión sobre márgenes: tarifas, inflación, mayores costes de inventario y dependencia de producción en Asia, especialmente China y Vietnam. Aunque las ventas siguen creciendo, el beneficio antes de impuestos se mantuvo prácticamente estable en FY2025, lo que genera dudas sobre cuánto crecimiento puede traducirse realmente en mayor rentabilidad.</p>`,
-    tesis: `<p style="color:var(--text-light);font-style:italic">Añade aquí tu tesis de inversión para Build-A-Bear Workshop.</p>`,
-    imagenes: [],
+    tesis: `<p>Build-A-Bear es una marca de retail experiencial con una propuesta difícil de replicar, que está pasando de ser un negocio principalmente mall-based y dependiente de tiendas propias en EE.UU. a una plataforma global multicanal, más asset-light y con mayor generación de caja.</p>
+    <p>La tesis principal es que la compañía todavía tiene margen relevante para expandir su huella internacional mediante tiendas operadas por partners y franquicias, modelos menos intensivos en capital que las tiendas propias. Si este crecimiento continúa, BBW puede aumentar ingresos y beneficios sin necesidad de reinvertir tanto capital como un retailer tradicional. A esto se suma una marca muy reconocida, una experiencia de cliente diferenciada, colaboraciones con IPs populares y una creciente exposición a consumidores adolescentes/adultos, coleccionistas y ocasiones de regalo.</p>
+    <p>En el corto plazo, los resultados están penalizados por tarifas, costes logísticos/inflacionarios y cierta presión en el consumidor discrecional. Pero si estas presiones se normalizan parcialmente, el margen y el free cash flow podrían recuperar fuerza, dejando más visible el crecimiento estructural del negocio.</p>`,
+    imagenes: [
+      {src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTg1MSIgaGVpZ2h0PSIxNDcwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWw6c3BhY2U9InByZXNlcnZlIiBvdmVyZmxvdz0iaGlkZGVuIj48ZGVmcz48Y2xpcFBhdGggaWQ9ImNsaXAwIj48cmVjdCB4PSIyMjEiIHk9IjE3ODEiIHdpZHRoPSIxODUxIiBoZWlnaHQ9IjE0NzAiLz48L2NsaXBQYXRoPjwvZGVmcz48ZyBjbGlwLXBhdGg9InVybCgjY2xpcDApIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjIxIC0xNzgxKSI+PHJlY3QgeD0iMjIxIiB5PSIxNzgxIiB3aWR0aD0iMTg1MSIgaGVpZ2h0PSIxNDcwIiBmaWxsPSIjRkZGRkZGIi8+PGc+PHBhdGggZD0iTTcwMy41MjMgMTk3Mi41IDcwMy41MjMgMzA2NS41TTg5NS41MyAxOTcyLjUgODk1LjUzIDMwNjUuNU0xMDg4LjU0IDE5NzIuNSAxMDg4LjU0IDMwNjUuNU0xMjgxLjU0IDE5NzIuNSAxMjgxLjU0IDMwNjUuNU0xNDc0LjU1IDE5NzIuNSAxNDc0LjU1IDMwNjUuNU0xNjY2LjUgMTk3Mi41IDE2NjYuNSAzMDY1LjUiIHN0cm9rZT0iI0Q5RDlEOSIgc3Ryb2tlLXdpZHRoPSIzLjQzNzUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIgZmlsbD0ibm9uZSIvPjwvZz48Zz48cGF0aCBkPSJNMTEyOS4wNCAzMDE4LjEgMTAwOC4wMyAzMDE4LjEgMTAwOC4wMyAyOTU2LjEgMTEyOS4wNCAyOTU2LjFaTTc4MS4wMjYgMjg2Mi4wOSA2NzUuMDIyIDI4NjIuMDkgNjc1LjAyMiAyODAwLjA5IDc4MS4wMjYgMjgwMC4wOVpNMTMyOC4wNCAyNzA2LjA5IDExMzYuMDQgMjcwNi4wOSAxMTM2LjA0IDI2NDQuMDkgMTMyOC4wNCAyNjQ0LjA5Wk0xMDgyLjA0IDI1NTAuMDggOTI4LjAzIDI1NTAuMDggOTI4LjAzIDI0ODguMDggMTA4Mi4wNCAyNDg4LjA4Wk0xMjE4LjA0IDIzOTQuMDggMTA0Mi4wMyAyMzk0LjA4IDEwNDIuMDMgMjMzMi4wOCAxMjE4LjA0IDIzMzIuMDhaTTg3Ny4wMjkgMjIzOC4wNyA3MjMuMDI0IDIyMzguMDcgNzIzLjAyNCAyMTc2LjA3IDg3Ny4wMjkgMjE3Ni4wN1pNMTMzNi4wNCAyMDgyLjA3IDEwOTguMDQgMjA4Mi4wNyAxMDk4LjA0IDIwMTkuMDcgMTMzNi4wNCAyMDE5LjA3WiIgZmlsbD0iIzQzNzFDNSIvPjwvZz48Zz48cGF0aCBkPSJNMTI1Mi4wNCAzMDE4LjEgMTEyOS4wNCAzMDE4LjEgMTEyOS4wNCAyOTU2LjEgMTI1Mi4wNCAyOTU2LjFaTTg4Ni4wMjkgMjg2Mi4wOSA3ODEuMDI2IDI4NjIuMDkgNzgxLjAyNiAyODAwLjA5IDg4Ni4wMjkgMjgwMC4wOVpNMTUxMy4wNSAyNzA2LjA5IDEzMjguMDQgMjcwNi4wOSAxMzI4LjA0IDI2NDQuMDkgMTUxMy4wNSAyNjQ0LjA5Wk0xMjMxLjA0IDI1NTAuMDggMTA4Mi4wNCAyNTUwLjA4IDEwODIuMDQgMjQ4OC4wOCAxMjMxLjA0IDI0ODguMDhaTTE0OTQuMDUgMjM5NC4wOCAxMjE4LjA0IDIzOTQuMDggMTIxOC4wNCAyMzMyLjA4IDE0OTQuMDUgMjMzMi4wOFpNMTA0NS4wMyAyMjM4LjA3IDg3Ny4wMjkgMjIzOC4wNyA4NzcuMDI5IDIxNzYuMDcgMTA0NS4wMyAyMTc2LjA3Wk0xNTg4LjA1IDIwODIuMDcgMTMzNi4wNCAyMDgyLjA3IDEzMzYuMDQgMjAxOS4wNyAxNTg4LjA1IDIwMTkuMDdaIiBmaWxsPSIjRkZEOTY2Ii8+PC9nPjxnPjxwYXRoIGQ9Ik0wIDAgMC4wMDAzNjA4OTIgMTA5MyIgc3Ryb2tlPSIjRDlEOUQ5IiBzdHJva2Utd2lkdGg9IjMuNDM3NSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIC0xIDUxMC41IDMwNjUuNSkiLz48L2c+PGc+PHBhdGggZD0iTTgwNS41IDE5NzIuNUM4MDUuNSAyMzM2LjgzIDgwNS41IDI4ODMuMzMgODA1LjUgMzA2NS41IDgwNS41IDMwNjUuNSA4MDUuNSAzMDY1LjUgODA1LjUgMzA2NS41IDgwNS41IDMwNjUuNSA4MDUuNSAzMDY1LjUgODA1LjUgMzA2NS41IiBzdHJva2U9IiNDMDAwMDAiIHN0cm9rZS13aWR0aD0iOS4xNjY2NyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS1kYXNoYXJyYXk9IjI3LjUgMzYuNjY2NyIgZmlsbD0ibm9uZSIvPjwvZz48Zz48dGV4dCBmaWxsPSIjNTk1OTU5IiBmb250LWZhbWlseT0iQ2FsaWJyaSxDYWxpYnJpX01TRm9udFNlcnZpY2Usc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgZm9udC1zaXplPSI0OCIgdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgMSA0NzMuODQzIDMxNDIpIj4kMjA8L3RleHQ+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDY2Ni41NzIgMzE0MikiPiQzMDwvdGV4dD48L2c+PGc+PHRleHQgZmlsbD0iIzU5NTk1OSIgZm9udC1mYW1pbHk9IkNhbGlicmksQ2FsaWJyaV9NU0ZvbnRTZXJ2aWNlLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiIGZvbnQtc2l6ZT0iNDgiIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgODU5LjMwMiAzMTQyKSI+JDQwPC90ZXh0PjwvZz48Zz48dGV4dCBmaWxsPSIjNTk1OTU5IiBmb250LWZhbWlseT0iQ2FsaWJyaSxDYWxpYnJpX01TRm9udFNlcnZpY2Usc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgZm9udC1zaXplPSI0OCIgdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgMSAxMDUyLjAzIDMxNDIpIj4kNTA8L3RleHQ+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDEyNDQuNzYgMzE0MikiPiQ2MDwvdGV4dD48L2c+PGc+PHRleHQgZmlsbD0iIzU5NTk1OSIgZm9udC1mYW1pbHk9IkNhbGlicmksQ2FsaWJyaV9NU0ZvbnRTZXJ2aWNlLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiIGZvbnQtc2l6ZT0iNDgiIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMTQzNy40OSAzMTQyKSI+JDcwPC90ZXh0PjwvZz48Zz48dGV4dCBmaWxsPSIjNTk1OTU5IiBmb250LWZhbWlseT0iQ2FsaWJyaSxDYWxpYnJpX01TRm9udFNlcnZpY2Usc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjQwMCIgZm9udC1zaXplPSI0OCIgdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgMSAxNjMwLjIyIDMxNDIpIj4kODA8L3RleHQ+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDIzMi45NSAyOTcyKSI+RENGIG1hcmtldDwvdGV4dD48L2c+PGc+PHRleHQgZmlsbD0iIzU5NTk1OSIgZm9udC1mYW1pbHk9IkNhbGlicmksQ2FsaWJyaV9NU0ZvbnRTZXJ2aWNlLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iNDgiIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMjk1LjUyNCAzMDMxKSI+V2FjYzwvdGV4dD48L2c+PGc+PHRleHQgZmlsbD0iIzU5NTk1OSIgZm9udC1mYW1pbHk9IkNhbGlicmksQ2FsaWJyaV9NU0ZvbnRTZXJ2aWNlLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iNDgiIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMjg0LjkwMiAyODE2KSI+RENGIEJlYXI8L3RleHQ+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDMyOC45OTMgMjg3NSkiPkNhc2U8L3RleHQ+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDMwMC41MDggMjY2MCkiPkRDRiBCdWxsPC90ZXh0PjwvZz48Zz48dGV4dCBmaWxsPSIjNTk1OTU5IiBmb250LWZhbWlseT0iQ2FsaWJyaSxDYWxpYnJpX01TRm9udFNlcnZpY2Usc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSI0OCIgdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgMSAzMzYuNzk3IDI3MTgpIj5DYXNlPC90ZXh0PjwvZz48Zz48dGV4dCBmaWxsPSIjNTk1OTU5IiBmb250LWZhbWlseT0iQ2FsaWJyaSxDYWxpYnJpX01TRm9udFNlcnZpY2Usc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSI0OCIgdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgMSAyODIuNzkzIDI1MDQpIj5EQ0YgQmFzZTwvdGV4dD48L2c+PGc+PHRleHQgZmlsbD0iIzU5NTk1OSIgZm9udC1mYW1pbHk9IkNhbGlicmksQ2FsaWJyaV9NU0ZvbnRTZXJ2aWNlLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iNDgiIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMzI3LjkzOSAyNTYyKSI+Q2FzZTwvdGV4dD48L2c+PGc+PHRleHQgZmlsbD0iIzU5NTk1OSIgZm9udC1mYW1pbHk9IkNhbGlicmksQ2FsaWJyaV9NU0ZvbnRTZXJ2aWNlLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iNDgiIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMjQ2LjU0IDIzNzcpIj5FVi9FQklUREE8L3RleHQ+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDMwMS40MDIgMjIyMSkiPkVWL0ZDRkY8L3RleHQ+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDM4OS41ODYgMjA2NSkiPlBFUjwvdGV4dD48L2c+PGc+PHRleHQgZmlsbD0iIzU5NTk1OSIgZm9udC1mYW1pbHk9IkNhbGlicmksQ2FsaWJyaV9NU0ZvbnRTZXJ2aWNlLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iNjQiIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMTAyOC42MiAxODg0KSI+SW1wbGllZCBzaGFyZSBwcmljZTwvdGV4dD48L2c+PGc+PHJlY3QgeD0iMTcwMSIgeT0iMjQ3NCIgd2lkdGg9IjExNiIgaGVpZ2h0PSIyNi4wMDAyIiBmaWxsPSIjNDM3MUM1Ii8+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDE4MjkuNTUgMjUwMSkiPjI1dGggdG88L3RleHQ+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDE4MjkuNTUgMjU2MCkiPk1lZGlhbjwvdGV4dD48L2c+PGc+PHJlY3QgeD0iMTcwMSIgeT0iMjU4NiIgd2lkdGg9IjExNiIgaGVpZ2h0PSIyNi4wMDAyIiBmaWxsPSIjRkZEOTY2Ii8+PC9nPjxnPjx0ZXh0IGZpbGw9IiM1OTU5NTkiIGZvbnQtZmFtaWx5PSJDYWxpYnJpLENhbGlicmlfTVNGb250U2VydmljZSxzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iNDAwIiBmb250LXNpemU9IjQ4IiB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDE4MjkuNTUgMjYxMykiPk1lZGlhbiB0bzwvdGV4dD48L2c+PGc+PHRleHQgZmlsbD0iIzU5NTk1OSIgZm9udC1mYW1pbHk9IkNhbGlicmksQ2FsaWJyaV9NU0ZvbnRTZXJ2aWNlLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI0MDAiIGZvbnQtc2l6ZT0iNDgiIHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMTgyOS41NSAyNjcyKSI+NzV0aDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==", caption: "Football Field — Implied Share Price"},
+      {src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTk5IiBoZWlnaHQ9IjQwMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgb3ZlcmZsb3c9ImhpZGRlbiI+PGRlZnM+PGNsaXBQYXRoIGlkPSJjbGlwMCI+PHJlY3QgeD0iNjYwIiB5PSI1MyIgd2lkdGg9IjU5OSIgaGVpZ2h0PSI0MDEiLz48L2NsaXBQYXRoPjxpbWFnZSB3aWR0aD0iNTk5IiBoZWlnaHQ9IjQwMSIgeGxpbms6aHJlZj0iZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFsY0FBQUdSQ0FZQUFBQklZcGF3QUFBQUFYTlNSMElBcnM0YzZRQUFBQVJuUVUxQkFBQ3hqd3Y4WVFVQUFBQUpjRWhaY3dBQURzTUFBQTdEQWNkdnFHUUFBRnh1U1VSQlZIaGU3YjFianlUSGxhQVpwUFluYlpHbG5GZnBSMlFtdXRSVTlXYnJ1ZlVTV1MvNzBOeWQwb296bTBCRjhnY0lQZE9sYWM1T1JRSXNRT2lIZWFGQVZVYk5GRnF6QlVqSXVZQ3F5cFkwTFU0UHhXVjM2NkZvQ3pOemN6Yzdkc3d2bVhIMStEN2dnSmx1NXJlVDVlNGZqMWw0VENZQUFBQUFzRndNQUFBQUFDeUQvd1c1QWdBQUFGZ2V5QlVBQUFEQUVrR3VBQUFBQUpZSWNnVUFBQUN3UkpBckFBQUFnQ1dDWEFFQUFBQXNFZVFLQUFBQVlJbHNzVnhkblptRHljUk1KaWZtcVd3REFBQUEyRTdXS1ZkUHpZbVRwVHdPenE0NisvaytldHNKOWdVQUFBRGJ3U2JrS3FwRTFkV3BJRWhYNXV5Z2txYlltSjZlQ0xtaW1nVUFBQUJieVlibHlpMCthV1NxY3lpd3NBMEFBQUNBN1dBTDVDb0kxY0dadVlwRlM2V3dEUUFBQUlEdFlMdms2dW5aUVUrNWl1UEFKRk8yQUFBQUFEYkhkc2xWWGJteVA4ZDlhZ3JiQUFBQUFOZ09OaTlYVDA5OEJjcE5XSy9uWEpXcVVmbzJBQUFBQUxhRVRjaVZGbzBzQmRrS0ZheDBxQkM1QWdBQWdLMW1DK1JLbVYrVkNKYUxVTWxDcmdBQUFHQ3JXYWRjQVFBQUFJd2U1QW9BQUFCZ2lTQlhBQUFBQUVzRXVRSUFBQUJZSWw2dS91V1Byd3hCRUFSQkVBUnh1L2pmLy8yL1I2NElnaUFJZ2lDV0ZjZ1ZRUkFFUVJERUVnTzVJZ2lDSUFpQ1dHSWdWd1JCRUFSQkVFc001SW9nQ0lJZ0NHS0pnVndSQkVFUUJFRXNNWkFyZ2lBSWdpQ0lKUVp5UlJBRVFSQUVzY1JBcmdpQzJMLzQ5RXRqekpmbVk3SDg0MWZHZlA3eXM3VHZUejQzbnl0OTdUYStOc1pjZmFwc1AxcjNkKzVsemNyNlEvb1FCTEZUZ1Z3UkJMRjM4YU9YZjNBNms0aVVFNjVjY3F4d0dmTUg4N09meE52NHRia0tYM0toU2xIYzNtRDM5MzhQNmtNUXhDNEdja1VReFA1RkVLbFh2NjZYZVlueU5OV29Tb0MrK056OFNLeHZxMWFmZjZGSTJvOC9Nei83b3RyUXExODNvdlRwbCtaM3RUajE2VU1ReEs0R2NrVVF4QjVHcUJxRnFsTWtPN0VzdVNGQklVQzFpSDFwUGc3dHNYejFHZWJyMDRjZ2lKME41SW9naUQyTUlGUFZjRjhsU1orLy9EeXBWSVhodzNSZVZTVm1UcmpFZG14N1ZkV1NRcFpFbno0RVFleHNJRmNFUWV4bEpPSlVEUlBhbit1cVZGeWhpdGNWRTlubC9LM3dlNXM0OWVsREVNVHVCbkpGRU1SK1JqVGtGMHRVSTExVlZVck10NHJuWmlXRWZxRXFKZWRweGRHbkQwRVFPeHZJRlVFUWV4cGhzdnFYNWlxV3FEQkUrT3JMYXFnd21xd2VoRXlsR1dMMDg2bmtKd3lqNk5PSElJaWREZVNLSUlpOWpiZ0sxVWhVK29xRWVMNlZIQUxVbHR0aHZxUzY5Y1huNW1ObEdMQlBINElnZGpPUUs0SWc5amJxdVU5Q29ocnhpZWRiS1pQWFF5aWZHc3lIRC9QMSt2UWhDR0wzQXJraUNJSWdDSUpZWWlCWEJFRVFCRUVRU3d6a2lpQUlnaUFJWW9tQlhCRUVRUkFFUVN3eGtDdUNJQWlDSUlnbEJuSTFNSDczKzM4aUNJSWdDSUlvaGpFR3VSb1NNb0VFUVJBRVFSQnhJRmNEUXlhUUlBaUNJQWdpRHVScVlNZ0VFZ1JCRUFSQnhJRmNEUXlaUUlJZ0NJSWdpRGlRcTRFaEUwZ1FCRUVRQkJFSGNqVXdaQUlKZ2lBSWdpRGlRSzRHaGt4Z0hiOTlaWDc1MmYvSWx4TUVRUkFFc1ZlQlhBME1tY0E2QnNuVi96RC83WmUvTkwvOEw3ODF2OG5hWkF6cFM5VHgwWDB6bVV6TTVKMFB6S1ZvZS96ZXBORDIwcnovemwzei9ndGxlM3NZajk5N3E4N1RzeS9pdHBmbS9YZHRudjR4VzJmVThlSmZtSGZlZXN0TTNudGkvaTdKeHorWng5OTl5N3psY3ZWRDgreUxPQzh2emYveDdqZk4rLy94SDgzZnllMk5LVDc2RS9QMmQ1K1kveTd5NHVQQ2ZPZnR0OHhiV1c1czN0NDJiNzIxUjNuN3R5RlBoV3VuMFA3ajc3NXQzclo1dXZORDg3UC9LZkowOThDOC94Ly9ZVng1c3ZGdi96ZnpqZTgrTWI5TnpqZHFlL3N0ODcvK256L1AvczM5K1A0M3FsejlYK2JUdnhlNSt1YUJlZjgvZkxXV1hDRlhBME1tOEc4Lys2WDVwWldmS1A3YmIvTkVoL2pOMy81WDg4dGYvbGZ6cTgvRHorWCtRL29TSWVibVhpUk9sdy92bWpzUFh6YnRWcnJlbTd1ZnJXVEZiZkwzVWNlTEQ4d2Rld095dVlvamlOUkg5ODFiNzgzZFRjaEsxcDJILzI5OVE1Sy9qei9zZzk3SzAzM3psMS84WXlWU2Q4MmZod2YvUjMvaWMvV0ZsNngzYkc2cUc3NzhmWHdSY3FNSjBqK1p5eDk4MDd6MTFsM3o1Ly9oSDgwejkvUEUvTkZmL1lQUFJ5UVNWckxlZWZpZjZqeFptWWgvMy8yd0VsU0paQ1pJSGUxUm5rSmVnbERJMzhjUk5oZVJJQ1c1dWpCLy9JMjMvYiszT3I1ci92WGZWM0laQ1ptVnJIZi8rYy9OYjBPdXd1Ly9VKzV2TllGY0RZdzBnYmFxNU9WSEpsYU56MzlyL3JQbzc2UkpxMG9ONlV2VTRhcFNsVHhwa2NoV0pGcnU1NnlTdFU5aHEzYU5ORjArL0tiTGs1ZUhSclRjejFrbGErUmg1ZWt0TDFaaFdTeE5WaUJxZ1lwRXkvMzhyczJWZkpDT0o2d1VmZWV2L3NFOGUvaE44OWE3UXE1c3BlL3RienF4Q2lMdVpLdnFsK1F0cnRqWW45Lzl3UHhzUkhtekV1VHpkR0RlZmplWHE3YjJ5eDhjTkFLbDVTa1R0ZDBPSzBIZithdXZYQzYrOGU0UGhWeUplUEV2ekx2ZmVOdjgwYi81eXVYbjhnZi96THo3OEQ5NW9Zb3JYL2JudXo4MG4vNzlQK1RiV0ZFZ1Z3TWpUYUFmc3V0ZFRiSkRoNzk4WmY2MmExbHB1YmFNaU1KV3JUcUc5U0toYWtTcngzcGpEeXROay92bWNaQ21TS2dhMFpxYmUyL2RkVU0xMmZwakRrV1NuQ1E0eWZ6SFJLZ2FZWmliNzd3MXdtR3RRc1RTVkMrM0QzOHJwYklLRTVaRm9wRGs3ZTF2bXZjaklSdFRXRkdTOHRUWm51UXBpRmJJMHdpSEE2dXc1enBVcm1LaGFrUnJidjc0R3dmbXo1K3Zaemd3QkhJMU1HUUN3M0JkbjRxU1dubHlGYXBjbUliMEphcXdRMTFXRU1KOEszVmVWVFZzNk9LK2VieHZ3NEdGY1BPclFuWEtoUldwYXM1VkpWMzdOeHhZaFZLNVN1VHE5MWFrbWx5Rm9jTnhEd2Vtb2NtVnRzeFhzNEp3VlhPeHFxRWR1MHdPRDQ0dFZIbnFiTGQ1Q2tOaDN6WC9Pc3JUdUlZRDArZ2xWMjd1MWYxbVdEQVpOdlREaFkvRjhPQzZBcmthR0RLQlByNDB2L292WWM1VldYNkdDTk9RdmtRVlRxN2lZVUU3MU5VK1ROZ01CemJTZGU4anBkK1l3ODIvc2hVcHBTMUVQUnpZU05lOXYycTU2WTBxb25sRmNTaHpqRnpVbFM0dlhYYTlQL3FyY1ZaaVFtZ2lwUzFMNVVwc3B4NE90Rldaa0xkcWZwYnN1Nk9oeTFQL2RoZjFjS0ROa3hlSlAvbzM0OHFUalc2NThpTDFqaktwdlk1Nk9QQ0orVTRsWFgvMGIvNi9jdjhsQm5JMU1HUUMwNmdrcS9DcHdTSENOS1F2VVVXb1hNWExYQlZMTEt2RENsVlR2ZkpTMVN6TCs0OHo4cXFWREN0VVRmWHEza2UrV2hPVzVmM0hIMDRjbEU4TitpcVd6WXV2WHRsYzJlSFVzRXh1Wnl5aGlaUzJyQ3hYdGpyekozWDF5czQvK3Jzdm1tWGxmNXU3RlYzeTFOVytMM215MFM1WDFhVDNQLzUzK3FjSlhWajUraFB6bDFYMXlzN2ordTlmTk10V25TdmthbURJQk1wUXBTaUVNbWVxMkg5SVg2SUtaZTVVVWE1OFZjc0xWZndLaG4xN0hZT1ZKSnVIMGczS3ZuWWhDRlg4Q29ZOWZSMURGZnF3bjY5dzJZcmUzeVd2RWhqcGF3V2lVRVZLbVhPbDluUDVlZHZjYzZJdzdyeDF5Vk43dS85RVlaMm4raFVNNDN3ZFExbXUrb2lWZmUzQ044eDMzRnlzK0JVTTYzc2RBM0kxTUpJRS92YVYrYzkvKzJXMHpFOXdUNWZGSWR0OXBTdnViMS90NEgvdjdrdkl5SWNCUzU4ZXRKUFowK0hESUZUN1ZibHllY2ptcGNYdHRrSVRxbHF4VU8xdjVjb0pncGlEVlMrdnExbXhHT3huNVNyTXFicnp6OE1jS2k5Ujc5Uy9SK3UrRjk3dEZPZHRmQldaZG5scWIzZHRjWjVxb1JwZm5teVU1TXE5eCtwZCtZb0d1ZTQvTTkvNGJwQ3ZXS2lvWEcxdHBBbXNYdkFaUmFmOHVJcFV0RTR5aENpR0ZWdjdFbXFFZVZmRkNlMkZhbFk4Q1Y2UnNYR0dyMXJaU2VwNVd6WFBTZ3FVV3hieTlHVGxONml0aVBEeTBQcmZWUzVXMnFSM3Y2eGE3NCsxSWNUZGovb2xvS1c1YUs1NkZlWHVqOFVMTXBYcVZyS083TCtqVWI4RU5NNVQ5RDZycm5hWEV6dHhPeFlvdHl6azZkK05JazgyNnBlQUpybW9aS3I2ZEdBMi96RitIMVkyeVQwc0M3bjZmMW9xWHNzTDVHcGd5QVM2R1BSMmRvSWdDSUlneGh6STFjQ1FDYlJoNTBKMVZxd0lnaUFJZ3RpTFFLNEdoa3dnUVJBRVFSQkVITWpWd0pBSkpBaUNJQWlDaUFPNUdoZ3lnUVJCRUFSQkVIRWdWd05ESnBEUUF3QUFZSTlCcm9hRWxBaENEd0FBZ0QwR3VSb1NVaUlJUFFBQUFQWVk1R3BJU0lrZzlBQUFBTmhqa0tzaElTV0MwQU1BQUdDUFFhNkdoSlFJUWc4QUFJQTlCcmthRWxJaUNEMEFBQUQyR09ScVNFaUpJUFFBQUFEWVk1Q3JJU0VsZ3RCajZTeG01bkMya0V0QlFwNzZzNWlabzluQ2ZDMlhROHJpM09lSlJIV3pPRGZINTVmbURibnE1bm5JMVdpVGhWd05DU2tSZFh4MDMwemVtK2ZMWGN6TnZjbkVUTjc1d0Z4bWJlT01wZE5ER2hhelE2TjJzZXNlSG5hdW54RFdtYzdOdFd6YlptNlRKMHVQOVd1dTUyYmFJNitMMlpHWkxiYndCdG9tVjFZb2p1eTVYZXBTY1QwM3A3WjlPamV2dGZZYnNqajN1VnJpSm05UGwxeDE1V29JMWJhbVQxN2ZmbHVib0UydWJOdlJrVGw4VkdnZnl2V0ZPYlhibXo0eHI3VmtXWGs1T3RyZVhMYkpWWFhzUGxkS2U4WHo4Mk56ZnZtbTkvazkvOUQzWDByK3UwR3Vob1NVaU4vOS9xVjUvNTJKbVJUazZmTGhYVE9aM0RYdnZ3Zy9UOHk5aitRMnhoZkx3b3FBazV3b3RHZjU5WHlxeU5EQ3pPcUhmL1h6NGN3b3EwZFUvYXJ0Mk8xTzUyR0wxMlkrbGNmVHRiMzFjTHM4dVpibTNMSTJTZWpyejkzdmUycnFOTVU5aS92YkhGYjJqbVN1THNQZGRtSE83VTNkaVVMMTgrSE1YRVozYnl0QVIyRlpKUU4yZmZWK0hTUk03RStUc3V2NXFUOHU5N0JNMnphQlA4ODhUMUVtMm5NVkh2N1p1V3N5RU5hUCs4WjV2ellYcC9KNDByL0xKbkc1RW4vblIvYWg3MXZOK2ZHUk9YS2lVUDE4K01oYzFrOTQ3ZHg4ZStuc3JGUWNIVlY5S2hGeCszTXJQSy8yMFg5NzY4UWZ1NUtyK05pVlhNbGp2NzU0WUk3ZC8rQThNYTk2MkpMZS85cGNQRGpPY3ZYc1RmamIzUXJrYWtoSWlYajhucGNsSjA1U3JsNThZTzVVWWhXV3FmMUdHTXZCaW83KzBFNXdGWlNaV2RpcVM5dEQzUFZyMzU0VEJjMUtIRjRxaXMwYjQvWjVDdFVzSjBOdE9iUzRxbDRxbFhiOVJrSXJXdmEzT1JabWRqUTE4NzcyNHVRbzdtOGxJRjNmUFZoN1YyMnV6ZnoweUV6bnI5T2J0OXZQekN3dVorWklFYS8xWTgvejFKMW43ME54TXVWem82L2pKY0tkdTk2aG9SS3pSdWI4dWtXSjNTZ0RjK1hPN2RROHFmdUhjK3Y3UUxjQ2t1N1BDY3VzVU9XcGM5bS93ck02cW1OLzFmTmNyeS9NZytOVDgwVDJkOHRuNXZMWnpCeWZ6cnZscXRqZnk1WE5UZGNtYmdCeU5TU2tSSVJRcGNrT0ZVN3VtOGVGWmI2U0ZiVnIvWGMwbG9PdkluWEpUUDFnNzNxSWQ4cFZsNlJzczF4MUgxZWZQUFdXSzlGSFc4OVdpTUwrckRDMGJuTnRXTG55RCtsZXFISVZ5MUZCbGtxNFNsZGVjYkdDNXJaUjVXbzc1R3FnekhUSlZlSGNWWFpPcmdZYzIxTGtLaDd1OCt1ZmxvYi90azZ1Qmh4TFFhNnNUSjdPWDVrM2RxaTFoMXlWK3lOWFd4TlNJa0pvY3FVdDg5V3NJRkRWa0tLYnErWG5aWTFseUhCWmRBNHJ4UTk2NWFGZlU4MFB5cW9yTVhHbEpaU0lrKzNKWWNFMkVWc3Z5OHFUSmtrWlN1VXFXeThXcXEyU0szdXNZZml0UTJLcUliMU1uTUljbyttMG1uUFd0MnBWcUhMWjdZVmppWC9lTU5jWHA5VjVhc040Z3VvQjNqYS9SejMzRXBtSXlhR3phU1FubTZkM3J0UTgzZURjd3B5azhHK3diVzZTNnp0VGg5WTJnVDQ4cCtERXl1YnFWU28rOW55Q0lNVS9sMGo2ZjZqS1ZaSjdXU1c3T2NqVmtKQVNFVUlUS1cxWktsZk4wT0dkV3JMeWJlOWlMSmRZYXVLSHVxZ2thZElRSmwycnNpVElKbWhYK3kyVWhJTFFGSm8zd0MzeVZKRkprb3FVVEpuYnNML3FGclZsY3VYeEZhZVFxNlNRSmVkSlpiSVRyenRBcnJJcW1Gdm90bFZQWXQ4aXVmTEVEMzZsNmlUblZaWGtvcXVxbFZCVkIxdEVMY2hNNzJyUldvaHpGYytwR3BDbjZOeWFlVWdhUXNpS2NpV3JYTnRDTERWaVRsVWxWWEd1cEF6VmxhOU91Wkw5cFZ5bEJQRjc5R3dwbFN6a2FraElpUWloaVpTMkxKT3JhdDVXbVBRdXQ3dXJzUnBTMlhFaUVKdE5pelI0L1BCWnNYb1ZLbGZ4TXFWS0U5TStSMnRUM0R4UC9lUXFKOTVIK0xtK04yMmxYQVVxVWJLQ0pKc2NjaGhRRGdGRjYrc2JxTkVxTjY2S0ZuOFNiK3ZrS2xBOXpGdlBzeXhGMnJucjlObVBwLzgyMTAxekR2b0Qyay9VMXZJVWFKMURsUTJ0eGZ1TCs1ZVdieE9WWkJXUE1jaWhyMTQ1K1luN2RzaFYzcjlkcml6MkU0WEhzMmZtVFV1Zm5pQlhRMEpLUkFoVnBKUTVWRm0vU3JidVdjR1M2Kzl3cklyNDRhOTlRczVIZWJpdVhZYVVPVmM3S1ZjM3o5Tk41U3FlMEc3bld1WDcwdmUzRFRqQmFSR2E1Q0d1eVU4MmhLVWhwYXhhcW53aUwrVEtEZzF0RTY2aTRzNjlmRnk2OE9qbm50TmZyQ3o2dnJZRGw2dlRjblZxVWN1VGJQRzB5bFVsRk1tMnM2Ry9YUkFyanhPZzAvSVFZWndMKzdNYlV0U3VGMlU0YjJoL3R3NXl0Wm1RRWhFaWt5WVhmaDdWblljdnE5LzlIQ3Y5ZCtaY1pTeG1vc3JVVVhtU0ZabnJ1Wm5IM3FQTXUwby81WllQQTdiS1U3VzlVdlBhdUcyZUl0cmtTdjFFWUZpblJVQzNxbksxbUpuVCtYVjBVL1VUM092S2xQSnZKcGwzNVVRcUhkcVRjbFpQVHE5NzVIMkthUEsyQ1JibjVqVDVWSjlTbGJxK01CZnhPN25VK1VUdFVtWnpGZmJqWktsbHVDd2htL0MrUWJSY3haV3Bubm1xVVNhZyt3blpWWDhuVXVtOExDbHpUa2o2NW5LZFBEODNEK2F2STZsTUsxTjFycG9UMCtkZEJaVEtWVDE1WGUzZlVibXE5amRqV0hEOUlTWENEK21KaUNYTFZhK2l0bWhlbFJTeTdOT0RPeHpMSWJ5YnFnbnQ0VjZUU1VPK2ZpcEt1VXkxenRHU2JWM0hzemJ5ODJ3OXJpeFBoZXBXMGlmS1ZaYUhGckd5YkpOY1ZUS1Y1aW9XSWVWOVM2STZrbGViWXRuU2hnbmwwR0lMMnlKWFNoNXlHY2o3eUZ5cFVsWVRWYXBlVzRsVktwNUJFT1NjSmZWNE5vVS94L2pmUkhwczRYMU4wWG5GTHhMdFBMZThDcFcvS3lxU0xXVjdTUzQzU3Y0T3JsU2M4dmJ5ZkRKTnJzSXc0ek45SFNsWGNuNVhkankzQXJrYUVsSWlDRDJXaXBXQmpaZUhkZ0R5MUorMnQ3TkRnNVc5dHJlelEwT1ZxeVU5bU1kTjI5dlp4d055TlNTa1JCQjZMQk03N05SYWlRRUhlZXFQSGFhenVScjFyWDBKMk9HbWRNZ0xTcENyL3RoNVZqWlhJeGRSNUdwSVNJa2c5QUFBQU5oamtLc2hJU1dDMEFNQUFHQ1BRYTZHaEpRSVFnOEFBSUE5QnJrYUVsSWlDRDBBQUFEMkdPUnFTRWlKSVBRQUFBRFlZNUNySVNFbGd0QURBQUJnajBHdWhvU1VDRUlQQUFDQVBRYTVHaEpTSWdnOUFBQUE5aGprYWtoSWlTRDBBQUFBMkdPUXF5RWhKWUxRQXdBQVlJOUJyb2FFbEFoQ2o2WEQ5K2IxZ3p6MTUrZS9NTi8raTkveEZUaGQ4UDJDL1ZtRTc4eVREWkF4L3U4WDNCRzUrc25uNW5ON3VGOThibjRrMjlZWVVpTHErT2krbWJ3M3o1ZUh0c25FM0huNE1tOGJhU3lkVzBuRHdzemN0OExQVGU5djNyUDdhMXZuVnNlelFub2MxMkoyYU5RdTEzTXpiVHRuamE0OHVTNUhacmJZd2h0b0Q3bjY2Vjk4WWg3KzNCVDdkTFhYL1BaWDVudmYvOFI4cTIxLzluaHNueC8reW54VzdMUUJlc3JWNHR6L25iTnVkdjJqUTNNNHUremNSdWc3ZmRMK0hYM0ZmVzJhSG5LMU9EODI1NWR2OUdPdjExZGJjNnlnSEIyWncra1Q4enBiNTdrNVB6NHlSMnJiRnRCRHJwNkhYR1ZkN0xrZHUzTjcxWmJzbW83K3p6ODB4OGRINXZEUk0vTkdhNzhaNjVhclg1c3JlUWlXVjc5VytrYVJ5TlZuNW1kZjJGKytOQi9MZmlzT0tSRy8rLzFMOC80N0V5ZFBrM2MrTUpkSjI5emNzOHVUdUc4ZVo5c1lYeXdMS3dMdTRSMUZJd2JYWmo2VjdUTVRlNFA5TXVQRHc2bXgzMmZzZnk2SVJVMHFZdm1YSVVmN2JCR0tkZE9lcDRhUUEzbnNmdjBxZDVVd2FlczNkT1hKVTlyZkpyRkM5TzAvKzhSOEt3cE5rSDcxMXk5OHY0THNkTFY3dmpLUFA3RDcrNFg1NU91dzd4Zm1MMzhUOS9tZCtVRWtWWGE3My92cnI3TGpXVGRXWUk3a3Y2bExYV2pzbHhZN2dVb2U1QXR6YmgvOFRxcXFudzluNWpKL1VqWjl4YldzOWRYM3RWbGNydXd4UmNmL1NCR284ckZmbTR2VEt0OVptMFlxVHZKTG8vMStwdWJKNjYvTjYycWY3bmk2TnJzR3JEQ3B1UkxIWnIvYytiaktWU3hFZnZuVVBIbjF4cnl1K2p4NmxxOGZLUFgzbTN4dVByVFM1YVJxNFg4K2ZHU2V2Y24vZGpkZ1UzSjFHekhhSHJsNi9ON0UzUHZvbjh6bHc3dUtYSWw0OFlHNU0vSDlzN2FSeFhLd0QzQXZSanBlZElvUzRDb3g2ZnJ1WWQveW9IZVNVZHhnVS9YcDJzNTY2Y3BUaGN2SHpDeXNQQ1hIbnEvZkp3OXQ3WTdpL2phSkZaa1g1bkVpTndxdTB2UUw4MU5iVGRMa3Fhczk0S3BSWHF3Q1ZyQmllWExDMVZiUjJnaFdkazdOL0xVdVV3blhGK2IwYUdZdUwyZm02SFJlRmdQWGJ6cGdtMGU1elBYZDExcnBtYXVXWXcvVnJOZnpVM04wMmkxWFRsQm1oYXFQMjgrcEU2dlE2bVNyeDNaWGo1WENVek4vMVNFdjF4Zm13WEdUcTFxdTNQSlRKMHJOdVQwd3g2ZUZpdFFTK3QrQzdaR3JINzM4Z3ora3Fvb1Zmci82TkZydml5L05sUk9yaURVT0ZVcUpDSEVUdVhMcnhKVXNOM3c0anNyV2N2RFZrZkl6dkVPdVhBVW1yV1NweTJweXlTaXhmWExWa29jS0swU3V1cFRKamwrL3FUejV2R3FWS0UrL1BObmh3TEMvbzYzSmxhOFNhWldxR0NzOGYyb0ZxQ0JQWGUwMVNydXJlTlhMZXNyZTJ2R1ZwRXh1Rkd6VnhsVk43SkJlbS9Bc1FhNTY3MnV0OU11VkZhaHc3TWVGWSs4blFaV2dsUExvaGdwbjV2Sk4xSzR0MndpKzRqWlRLbFV4Vmg1UDU2L01teXBYdFFqWjh6aWVtV2Z5M09TeXRqWTNCR2lYS1FJMURybUtDYUlWMnY1Z2Z2YVRJRk5Cbk9MZnQ2ZHlGYUtYWEdYeVZBMHB1cmxhZmdoeExGV3RaZEUrckNTSEJYdFVxVUkxSlY0V2lDc3RZWnR5L2JxcnN1ME4wcDZuU2lwRFd5WlhRVHJ0K2xNLzc2ck4xUHJrS1JhcXJaS3JIc041c1JBcGN0VFpIcU5VcmhLNXFpcGduL3hOTmQrcTdialdUSGtJS3lLV25EYmhxV1NwYXk1VmpadDdKWVlGKys1ckEzVG1LaGFxMjhwVlhBRUxRNm5SZnRWdGhIVTBBVmt6cGVHK0dpdEVRYWppbjhPNnN1b1VxbHpLdWJYM0Z3TGxsdHQvbzY5YTU4d05ZSnZrNnNyOHkwKy9URnA4MVNwYWIyZmx5c3RUTnFuZFZiUHVtanUxWk1uMWRqT1dTeXhSQlRHS0JDTjRnU3BBblhJVmkwVzFYMFUwMUcxdm5GS2VSSVZQa3lzcHFzbzUxM1RtS2V5dnVrTnRtVng1L0Z3b1ArY3FsaCsvdks1c1pmTFUxUzRKYzY3U09WNjFRR1VUM2I4eVA3Yjk3ZS9GYmE2VGFDNVFOZ2ZLdDlVVkcwMTRLcWxxSkx4REhCeStFcFNLV0k5OWJadzRWNC9jd3o1ZTdxbzE5dGVseUpXZGZCMkdCYXY5VnNPRTZqYTJTSzQ4MStiaWdaM2YxT1RLSDVkZlhsZTIxaUZYbFZURi8wWlY2UnZPcHVTcUpFYVJmQ1hEZmJzc1YzR0ZTcmI1ZVZ1VHlWM3ovb3U4YlZkak5jaUhlRTQ4RjBnVm9FNjU2amVNcUc1N2Ewano1STQxemxrbVYzSllzU1BQSFhrSys2dHZUMXNwVjRGS3NpcTVjVldsZVA2VGtLZXU5ajRrMndpVnEzaDlwZHExZVpvSGVIaG11NGQ0L0FuQVR1SFJwRW1TNzhjdEhieXZUUkxMVG5QczlmTjZLWEpWSHZaVHQ2R3RzeFZVa2xXTDRRTnpITThsVzRkY0pmZ0o3a3VxWG0yWFhOWHpyaW8rZi9sWnV0N095Vlc3V1BuSzFYMXp6d3FXdXY1dXhxcm9rcHBrb3JVaVJ1M3JLM09KbEcxWTJyZXplZUxqMHo1SjZLTTYxMHkyeXVmdGFjK1RuV3VWN3l2YTM1WVJEOU5wbnlUMDRlZEZkYlgzSVozUXJzeTUya3E1cWg3ODAwWUt0RThUaHI5elBKazZ4cTFUZkNXRExsYVdtK3hyazhTQ1krZGF5VS9IbFk1ZEZhTU1aYzVWUEtkS21WL1ZiN3ViSVJhZzFselplVkJXVE1VY0tsV2dBc3FjcTliK2JrcldzVG1lTGVXVkRKdVNxeFF2VVpGQWhWY3Z5UGxZVlRYcjQxZk5laDkvMnZFYWh5V0dsSWdRSmJseVZTbGx1UTh2WG42b2tEbFhHWXVabUZRdEoxNExxdUdxcHVBaSsrY1R0ZXRKM2xGN1hMRXBmU3B1cStScWFKNmtURGt4NnA2djF1U3FmNTRjMjFTNSt2a3Z4R3NPL0FSM056azk2VmpSVlpsUzJ1V25BV1A4Zks5OEdES3VodjMwWDIzQnNPRGlQUGxvZjYrcWs2d21YVitZaS9oZFZNcThxM3FDdXB1S05PQ2RUSEpmbTBUTGxadTdVOGpWRFNwWGZvSjMyRjQ2REJqYW05LzlwUEZtLzc3L2FlbDQxc256Yy9OZy9qcXFDb1ZqTFZTS1JPVXF2SytxNmU4clg2ZlIrdlZrZVBkN1IvL3dielJzZnJuenJyWkRydXduQklNd2hYbFdvWXFWaVpmZFRqdzNhNE9mRnZSRGVpS0NURldmRGl5MVN5SExQajI0dzdFY3FuY3BSWkVJUTVqN1UycTN4Sk91YlNRQ2tFdEN0azFGTUxML3E5cTRPSFRrU1NMbFNqMHZXV1VTdWVySVU4STJ5VlY0cDFSVWRTcUtsVVdScDRTc1hjaFNtRk5WNzArcFNNaytiZnRiRy9sN3A0cXlFTWlFSjk5RytpTFJxRkwxZXA3T3phci9YZVdpNGNqMnRVbjhlY2FWdGRaY0tYS2xWbXpxYzg5bHFuTXVXM2k1YUdpdjUyZHRtdXI5WEVtdVdrUW1rNnRRallyUDdWbDBibUdZTVZxbTlZOWt6Yi9iS3NyNzhsNGt1bTY1MnUyUUVrSG9zVlNzREpTcUl0QkFudnBqcFdqcjNpMjFoVmlKNmZGMmRtaHl0WnpuOHNpeHd0UHhkdllSZ0Z3TkNTa1JoQjdMeEE1UnRWWml3RUdlK3JNdGIwSGZkdXd3VlRya0JTWElWWC9zdkNlYnE1R0xLSEkxSktSRUVIb0FBQURzTWNqVmtKQVNRZWdCQUFDd3h5QlhRMEpLQktFSEFBREFIb05jRFFrcEVZUWVBQUFBZXd4eU5TU2tSQkI2QUFBQTdESEkxWkNRRWtIb0FRQUFzTWNnVjBOQ1NnU2hCd0FBd0I2RFhBMEpLUkdFSGdBQUFIc01jalVrcEVRUWVnQUFBT3d4eU5XUWtCSkI2QUVBQUxESElGZERRa29Fb1FjQUFNQWVnMXdOQ1NrUmhCNUxoeThsN2dkNTZnOWYzdHdQdnJ5NVA0dndoY1N5QVRMRy8rWE5CYm42eWVmbWM5ZitwZmxZdG0xbC9OcGMyY1A5NG5Qem82eXRpbkJPYlgwNnRpa2xvbzZQN3B2SmUvTjhlUlNQMzV1WWV4L2x5OGNZUzJmYnBNRWV6K0doT1p6T3pWWjlWZkk2OHhSeTBMRy94ZXpJekJaYmVBTzlyVndOWGIrdC8yOS9aYjczL1UvTXQzNzRLL09aMm1HRDlKU3J4Ym4vTzJmZHJpL002ZEdST1p4ZGRtN0Q3ZXZvMEV5ZnRIOEJjbkZmbTZhSFhDM09qODM1NVp2Ykg3dVZFNXZYUndWQkNYa3Z0VythSG5MMVBPU3EzS1UvZG4vSFIrWncrc1M4MHY1QXp6LzB4Nk8xM1F3dlYxZWZDcUVRZlA3eXMyS2JYN2V0YlIwUmk5Qm41bWRmMkYrRUdLNUVybDZhOTkrWm1NbGtZaWJ2ZkdBdXMzWWZsdy92ZHZZWlV5eUx4ZXpRUDhDamFKN2wxMlkrbGUwejB6VFB6VlNzMnk1RUhkdHpMTXdzMnNiMWZHcW1jMzFyNitSV2VlcHNsMVE1Y0R1b2ZpNzB0L2xwei9uNitlbGZmR0srL1dlZm1HOUY4ZkRucG5yWWZXVWVmNUMyZmV2UGZtRStTZTYzVVo5ZU11VDd1MzBxL2YzeFZQdXdBdmI5VDh6RHZ3bkhzem1zd0J6SmYxT1h1dEJjWDV3NktiSVBydGYxay9EYVhKemFiY3pNNWRkZlY5dWJtaWV2dFcwc3pMa1ZBZkZ2MEs0bjBmZTFXZHk1MldPS2p2K1JJbERxc1FjSkVya3VuOTl6YzM1OFpJNmNOQzM4ejRlUHpPV2JrTmVRZDcvTXl0elJVU252NjhjS2s1b3JjWERYRncvTWNaV3JSb2F1emNXRFkvSHY4cEY1VnArN2hzM1hzVG1xdG1PMysyRCtLaExnYUpzbDhib1pjZVVxU0lreDV0V3ZHOG40OUVzaFYxbzFxNjF0SGRGRHJnWkh0MXlGYXBTVHA1STR2ZmpBM0puY040OXRkYXZVWjJTeEhPeURlMnJLN3VLbG9LTndFdUg3bDJXb2UzdE9ZdG82YklUYjVxbXJ2UU1uc2NyKzNmS1pXZGdLMTliSTFlL01ENzcvd2p6K2pWd2U4Q0xVeUZhT2xTSGIvcXUvZm1HK3JjaVNwTDEvZmp3Ly9WZWYrQXBYeDNaWGk1V2RVelB2ODBCMmNqQXpsNWN6YzNRNmI0VEFWYUZTUWJJU2NqcHZyMG81S3VISVpLNjByNDNTTTFlOWo5M0wwV2xIOWE3R2JmZTBrU2RYMFpwRnN1V0ZwbGZlVjQ0Vm5WTXpmNVdMWjhMMWhYbHczT1JLeXRWTWtiRVM5dHlQWjgrS0ZiTG5IL3JxMk92NUEzTjh1aXE1Nmh3S2JCT290alladnUvbkx6OVBxbDJmdi94MUkzZVdXUERDc1VYTFBuNWxGL3pCL093bjBmNi8rTkpjeGR0d3k0SWNTVm5TajZQWmgrai82WmVaUklSb2t5c3JZSGNldnZSRGgxRWZYODI2Yng2SHZyWTkvbjJIWXpuNHFrajVvVDlRQ3R3d2xsNWg4WFJ0cjB0aU5zVnQ4OVRWM2tGQnJ1eHdvQlBaeGN3Y2JaVmN0Y2xUdDF3RmRGa3FvL2YzeC9PbmYvMVZ0Yit2ekk4L2lIL2ZGTDZTbE1tTlFpMU1WcWFrWEFtSmNKV2JhWnRZVkJUa3FyaXZqZEl2VjdhQ0ZJNzl1TzNZRlRscVJaTXJMZStucFVyWU92RlZ0eTQ1OGpMNHlyeXBjblZ6dWVvcGN5NUhxNVNyVDcvMGkyS3BVYVJJRjZpMk5oblJFS0lWbDdEZnNINHRlVUdjaHNoVlcrVktseXVIM1c2MjM3aS8vMWxLUklpaVhNVkNsVld1cWlGRk4xZHJidTVOeGpNbmExbTBEeXZKNGF6OEFSL1RYWFhxMkY1Y2lhbEw5OXB4clovYjVhbXJ2WVZxNkRXckJzWkN0VlZ5VlVsT1lZZ3VIeFlzVjdsMFdTcFQ3RjhOQlg3cmh5L01uOXA5YnJ4cTVWR0hzQ1N4NUVqaFVTcFh2ZVZLV2JkMVh4dW1NMWV4VUhYSWxSczJtN1hQUmFxcEpEU1pvNmJJMmZiSVZTVXgyWEJmUkNXSHJpMysyU0dIQmFmbVNaczRoUXJZczVtZmI5VXk5TGN5dWJJeThhT1hmL0NMT3VVcVJvaUkyaVpEU2s0dVErRlk2amxicTVTcmFOZ3Y3RGNaQm8wRVVFcEVDRjJ1dkR6VndwVEpWUmd5dkd2dTFKS1ZiM3NYWTduRUQvOXk1U2tJaHVwUGhlcEtHOW4yd2h5dVpvRS9MbldIbTJBSmVlclI3cER6MlJKNUNwV3c4SkRkTHJueXhCSWw1MVExQkJIVEtsbEZXU3BRN2gvTnlkb2l1ZktFK1R2KzMxUTZCOHEzMVJXYlRIamlkZU4vSzEwUGVWOEpTaWUxZCsxckc0alAxODkzaXBlN2Fvdjl0VTJ1WkJXcWhKeW5wYzUxRzVyM2RSSkxrcGd2RmxlbU1ybEtDYUwyNkZtaGt1WGt5azdxRDhPQzFYN3RNS0hZNXNya3lzbEhxQ0FWSjN5M1ZhZmEybVJJcWNsbGFOdms2dU5xdVpTSUVKcGN1V1d4TUdseVZRMGJUaVozemZzdjh1M3VhcXlHYnBrcFZhZEt5N3RJMWd1VnE3UkRxOGhzaHB2bktkRFZudUtISlVQMXlzbVovWFJaM2J5TmNoV29KS3YwS2I0dzRWeHBMOHVTanQ2L0dxYXNKN0Q3WWNITno3bVNWQS9zNkJOL3Job1Nmd0t3aC9CazYyVGsrM0ZMNVhvOTlyVTVtbk93eitsdzdQVXp1MFd1M09UenZsV3JHai9VMXZZSnkrWVlDaDAyUnBBZGYyeE9jT0xqN0pBclMrdWNxbEM1aW9kWTdhY0NqMmZtMlp1MDRyVmF1Y3FHeFdTMENWUmJtd3dwTmJrTUZlVXFFcUZWeWxYeUNjZ2JWcTY4TkdrUmlWUTEyZjJlN2F1STE2N0dxbkFQN3BZSHRTNEZYWE9TeXFUYlUrWmNiYVZjM1RSUERWM3Rrcmkvbld1Vi9COXpIY01xaCt0Q2w1NkdsY3FWSFJMVWxuMi9YRTNiRkhKSVQvczBZZmc3bHlvdjdSUGFkYkd5M0dSZm15UWVodk9mMXBQSHJSMjcvK1JmLy9sRURWMURpZHN6b1QwbmxwcldYQldHLzFybFNwdHp0Ukc1cW9XbElxclkrSXBSbTBDMXRjbVFVcFBMVUNaWDlmYmx4SGROcnByenNCV29qejh0VEZDUHRoa0xsTHJOU3U2a1JJVFE1Q3FMckhMbGh3M2RaSGZtWE9Vc1ptSXVUMW9oeWFpR3FxUVR0SW1HbFlMKzI4c3JRa01sWkNVc0tVODFoZlk2Vjlkek00L2JTdk91QXR0VXVmcjVMOHoza3NuaWNrSzVvSHIvMUpCaFFTdGo2VDQ4YW44blVpL01YMGJ6dXRSKzYyWnhMaDdHMmxDZG9LT2E1T2NsbFQ4OTZBU3E3OUJWeDc3V2lwYXJ0a3BTb1hMVk5pOHFrYVByQzNOaDMvRVZ1bW56cmlMcXZQZWRJTDlLbnArYkIvUFgwV3NRUXRVdGZqVkNSRmZscWhyMm0wWERndlZrZVBkN05BeFlkYkNmRG5ReXR0Wmh3U29Td1hMSWVWV2FRTFcxeVpDUzAwZXVvamxoMVg1KzVuNVhSTWoyanlmSlM1bktmdjlEVmJIeitDRkJwYi95YVVHMU9sV1NMTzNUZ3ZKM1BpMFlFZDZoMUVUeUFKZnpmbVM3bzAwMGhDejEyWjdzc3hYU2NNczhkYlg3VGxHdTh2MjFDdVkyeVZVbFUvRjdyQkt4Q2kvekxMVVgzcFBWVEk2djVrOUZsYTcyL2xxN2w2MmwzZUp2UlA3ZXFkTER1MFlLajV3WFZKaXo1U3BWcitmRDN2VWs5N1ZSZks3aXlscHJybFM1YWhPeWVKalJObGJ2dVlyekZMOG9OTXQ3UEtkcDArVEhYaFFyaTVTck1JZXF1SDR1VTlrNllrSzdreTFaTFN0TWVoOUlMbGY3RTFLMnVrTktCS0hIVWxublc4ZDNHZkxVbjdhM3BVT0RsWmdlYjJlSEpsZTNmeWJ2QVQzZXpqNENrQ3ZrYXZteFRMYmxMZWpiRG5ucWp4MTYwNGJ1SU1VT0tXM3JYSjF0ZzF6MXh3N0IyVnlOWEVTUnEvS3JKL0tRRWtIb0FRQUFzTWZzczF3TkR5a1JoQjRBQUFCN0RISTFKS1JFRUhvQUFBRHNNY2pWa0pBU1FlZ0JBQUN3eHlCWFEwSktCS0VIQUFEQUhvTmNEUWtwRVlRZUFBQUFld3h5TlNTa1JCQjZBQUFBN0RISTFaQ1FFa0hvQVFBQXNNY2dWME5DU2dTaEJ3QUF3QjZEWEEwSktSR0VIZ0FBQUhzTWNqVWtwRVFRZWl3ZHZqZXZIK1NwUDN5L1lELzRmc0grMkM5bGR0K1pKeHNnWS96Zkw0aGNEUWtwRVhWOGROOU0zcHZueStQMnljUk0zdm5BWE1xMkVjYlM2WklHMis2K3pYeHVTdCt1dDVnZG1yWk45S2JhMTFaK2o5OXQ4alQ0dkJabVZ0cVdaVEV6UjdiZFBwaGwyemF3QWJuNjZWOThZaDcrM0NqNy9KMzV3ZmMvTWQvNjRhL01aM25qWmxtblhObDlIUjJhNlpQMjcraGJuQitaMmVKckpZOGI1alp5WmRjOU9qS0hqd1lJeHk0THltMlBmZWo2b2IvMng3bStNQStPYmU2ZjZlMDNBN2thRWxJaWZ2ZjdsK2I5ZHlZdDRqUTM5NksyeTRkM3paMkhMNVh0akN1V2hSVWlKd05ScE82UVB1QkxYMTVzbHhlbG91YmF6S2R5ZnpQVDdLN2FWN0Y5Yzl3dVQ4UFB5K2R6YXV3bVFtNmIvUzNNN0NoSVZmV3ozZDdTN2xtM3d3ck90Ly9zRS9PdEtCcmgrY284L2lCdCs5YWYvY0o4RW83OXQ3OHkzN01TSk5idkkwWDJ5NkxkZmtWZnYveUYrY3ZmTkgwZS9vMG1ZT3ZGQ295VDQvamYxR1VzTk5mbTRsVDJtWm5MK21IWDFSNnpNT2RXTEhyMHRWK1FiQVhzY1ByRXZGYmFONEhMbGZ0MzNzU2p5emRWcnJROFBES1g5VU44WWM2UGo4eVJrNnJxNTZxOWZIYlJObVVlcmkvTWFaWkxwZCtHZUg1K3JPZktIZHExdVhod3JPWXErWGNYK2t5Zm1GZWRNdFRXUDdROU1zL2V2REdMRDQvTjhkSFVQSGtWL25hM0Fya2FFbElpSHI4M01mYys4dEtreVpWdGI2MW9qVFNXZzMzbyt3ZDRDU2NWYlpVYXkvWGNUTzNEM1ZabWVzaFYxK1pxM0hZSDlGOFpTOHBUb091OFhIdTZQeWRZcGR3cS9UZUhyUkM5TUk5L0k1Y0h2RnpwMVNVTjMvOVAvL3FyOXY1T3luNWhQdm1iWDVodngzTGxscWZINHdTcmg2eXRGaXM3cDJiK3V2c0Jud3BYVEZkN0M1VWdaT3U2NVROemVUa3pSNmZ6clpDRjdseUZQUFI4WUx0elBEVlBpdHZ6Z25KKytjYThucCthbzlNdWFmTDdQKzJvQnE2SDUrYjgrTlRNaS9MaVpjZmxTdThRbmZzRGMzd3FaU21udGYvekQ4M3g4Y3lKVlZqNi9NTmpjenAvZGJQcVl3cHlOU1NrUklUUTVjcFdyZTZhOTEvay9ldDFKdmZONDdETURSMUd2Kzl3TEFkZlVTays1SHRJaGNXS2hhdlNqRnF1Mm82alg1NXF1czdMRFIrS3lwYTJMTEIxY3RVbVR3UGx5ZzR0eHBXdEFyWmE5ajByWUxaL0xFNzJkeXRkOGZyYXNyWGpLMG1aM0NSMHlWTlhld3NGdWJJVm90UDVhL08xSFQ3Y0tybktqN1ZoK1hJVmNGVzhMcm15dzJGV1NGc3JZZXZDeWxXVkMvVmd1dVVxY0gyaHlGSUxhbjhyVjZmelpKbmE3MllnVjBOQ1NrUUlWYTVlZkdEdVdGa0s4NjJ5b2NOcVNORlZ0dnp3b2EyQ3lXM3ZZaXlMMXVHOHVDSlZsNzVGdjFpb2VzcFZVNDd1RUlJMm9WZ3p0ODVUVE1kNXFWV3FzSTk0V2IxOHlEeXUxVk1hbnZQSVljRzJLbGMxeE5nMWJ5c1dLaUZYYXBVcVZMbGFON3A2dW9mZjVIRFhWQWhCVjNzTGJ1NlZHQmFNaFdxcjVLb3JWd1B5VUVsbDE1eXpRQis1Y3NOd3N3RnprMWFNazVjcVY3bkF5R0hCOGhEZFVBbFMreXVWSzdYZnpVQ3Vob1NVaUJCbHVZcUhCV09aaXZ2Y05YZms4aDJQNVJKTFQvUUFyeDdjelhCWDFVLzhYdi9hS1ZjcCtWeWlHRjh0MmlacHVIbWVZcnJQcTVkY2hYMzJrYm1ORUV0VVdXVHFPVkJhSlVzWjBzc1JsYkFka2l0UExBYjZIS2hBRUl4U0JhZXJ2Y0ZYZ2xMQkVGV3dMWk1yVDV5cmVFNVZTc2hETXlmTExVem5TYW1TbHRNcFZ3T3FZT3NsbGlnNXB5cnFWWWxZTXlkTHRBMlFJTDIvbExrbS8zMjMyd0p5TlNTa1JJUW95NVVZNWxPRy90eThySmJodzEyTTFTQ2tRRDdRTFZIVnhVbEFMQkFENWNxaXoxVnFrNU50WUZpZUd2cWRWeSs1U3ZDVDJ0dUViWE5Va3RWU2ZTcFZwMHJMWTV3OHhYMTJUcTRDbFRqTUxyT0hYSXliMk4zU3A2dTl0QjhuRWZHeXJaU3JRSE1PcGVmem9xNG15UmFMSHpyclU3M3FrcXR0cTFybFZITFRjb3lsYzlCbHFVemYvcTZmM1Y5SHZ4NGdWME5DU2tRSVZhNjBPVmRTcmlvQnUyY0ZLMXQvZDJOVnBBOTJaUzVSSkEzYUoraENxYm52Y3o2WHEzNENzbW1HNUtsYW8vOTVaZXZLL2VVc1prZlZwd2UzRDFWd0luU0o2cHE3NWRFK21SaUdHKzJuQTdYNVZWM0hzeW5jZzN6YUxqUmQ4dFRlcm91VlJmdmtZcmlXdDY4cTB5MDk3WEpWRmdwSiszNjY1amR0QjEzU1U4cEYxM3FTdnYyWjBMNmhrQklSUXBlcmZCZ3cvZlNnYi9ldlptRE9WY1ppSnFvZGNzZ3FGNEpjaGlLVXlsVTkyVjFEbWRqdHR0OGlFUnRoQ1hucWMxNU5ydlR0MTc5Zno4MDhOYS90bVhmMTgxLzRpZVgxQWk5SnhVLzdWYTlla0JMVkprRDE1SFhaWUpFVDJyUDlmMlYrM09mVGg2dG1jZTRuanRjSG9RM1ZDUXFUMEd1VTlucUN1cHRHZFdTT2VnNkhiVlhsU3N0VlcrV3B6a00xTEhoOVlTN2lkM1lwODY2c1lLVDdDRjNMY3RYV3RqR2VuNXNIODllUnVJUXFYVUZtcXZkUGFZSllraVdmcTN4N3BmNHhmaGd5bllOMUM1Q3JJU0Vsd2cvcGlZZ2xLOHk3VXRxa2tHV2ZIdHpoV0E3NSs1ZXlCL1NRdVQyWlhHbkRaeTM3VTlvNzk3a1dicGtuMmFiMWtibUtKOGZiU0lRMnZOc3FiVi9DeldvSlZDL3JqS3BJaWNnbzc3SEtSVWNLVVl3Zlpzd3JYUldaWElYcVZiUlB1NjY2OGpySjN6dVZ5WUtjSnlUN2RMWEhsYXJYODZ5dmk1SnNiWk5jVmJtS0sydkQ4aERlYlJXZGQvSWkwWGlZMFMvVDNoV1Y1cXIvME9KNjhjZVY1aW9Tb2ZBeXoxSjdkZTV1UXJ3NGR5OU5ZWmp4V1pLcll2OXNmLzU5VjB0S0dYSTFKS1JFRUhvc0Zmc2dMMVdqb0lFODlXY0RiMmZmU2RiNWR2WmRwOHBWUzJFRUFrUGZycjZiSUZkRFFrb0VvY2N5S2IxMUhWTElVMy9zc0Y1eDZBNXE3TkNTTmh3Rk9lU3FQM2I0emVacTVDS0tYQTBKS1JHRUhnQUFBSHNNY2pVa3BFUVFlZ0FBQU93eHlOV1FrQkpCNkFFQUFMREhJRmREUWtvRW9RY0FBTUFlZzF3TkNTa1JoQjRBQUFCN0RISTFKS1JFRUhvQUFBRHNNY2pWa0pBU1FlZ0JBQUN3eHlCWFEwSktCS0VIQUFEQUhvTmNEUWtwRVlRZUFBQUFld3h5TlNTa1JCQjZBQUFBN0RISTFaQ1FFa0hvQVFBQXNNY2dWME5DU2dTaHg5TGhTNG43UVo3NnM1ajVMeVdXeXlHRkwyL3V6eUo4SWJGc2dJenhmM2t6Y2pVa3BFVFU4ZEY5TTNsdm5pKzM4ZUlEYzJjeU1aTjNQakNYc20ya3NYUnVLdzAzV0g4eE96UURWOWs4WGVkcDJ3OFB6ZUYwYnJLdmVMNmVtMm1wN1NaWWViSGIyMWFCNlpJckt4VkhQaCt2WmFmUU5ydnNMeDA5dGplMVgvd3JtalpPSDdtcXorMkplYTExN0xNTlM4akRrL1l2UUY2Y0g1blo0dXV0ek5XTjVlcjZ3cHdlSFpWektBbjlIN1VJaWhXWUlkdGNKN2VWSzd2K3NUKzNWemRLK01wQnJvYUVsSWpmL2Y2bGVmK2RpWmtVNU9ueGU3YnR2bmxzZjdjQ05wbVlleC9KYll3dmxvVVZIQ2NEVWRUdUVHUkFSaUlIMTJZKzFaYTNjejJmNXV2MDJ0OW1hTTJUNzJGbTBiSGE4NXZPbTZQMjY4K01XNlVTc0tLamRlWmhZV1pPUEt5NFZEL2JiVy9KL1c4eE8vTFNGK2ZxTWo2NGhUbDNEeVF2UWRmelUzTmFTMC9WNXFTcSt2bHdaaTViSHhBOXRwY2NUOWYyMW9NVkdDMVA2WkdGYy9NUDcrdUw2dHpxVHRmbTRyVGFUdXNEdm44ZTdENWFSVzREdUZ5NWYrZE5QTHA4VStVcXlrRWRqOHhsSkFTTDgyTnpkT1NYZlYwSmtWdGZQYjJ3UGQvZnJ6czFUMTdIZjV2bjV2ejR5QndWL3k2YjQ3azdYaVZYN3RpdXpjV0RZelZYNmJrZHUzT3pVblY5OGNDZG0rcFgxeGZtZ1JXd1pIdiszNDRUc3E3MjI0RmNEUWtwRVZhZXJDeGRQcnlyeU5YYzNKdmNOZSsvU1BzWEsxd2ppdVZnaFdCcUlnZm93SXVVbEFZckNVNlcra3FRazRlWldWakphRjBuMzk5bTZNNlRrNmVpTGVYcnQvZVhkT1RCNWJQOStOYUhsYjJwbVdlbG93YjNvT3hia2JxZW05T2xiKzlJa1poMVkyWG4xSjFYMjNGMG5WdW9NTDJlbjVvako1ZUZqcEtxS3BQbHdTMmZtY3ZMbVRrNkhiQzlsZEtWS3k5RHMxcTJKQXR6ZnB5dTd3UmtWcWpxT1BtYUpjSmgrOGZ5MUxyK1JyRmlkR3JtcjBxNThITGxjcVYzY09kMlBIdDJ3M1B6Mno5OThrcVhzYzcyUVNCWFEwSktSSWl5WEUzTW5ZY3ZxOTk5bFN2ODd0WUpWUzBicnJJVi9iN0RzUng4dGFYM005NVZYS3JxaTJDSVhGbXhjS0xRSlZjdCsxc3ZYWG5LNVNuRnI5L0lVWWNzU2JyeXNIVnk1Ui9hT3ZaQjJTNUxDWjF5ZFpQdEtWS3hkbndscWYwNHVxU2l3VldibGlCWFZ0YWNSTmpodzYyU3EveFlHL3JJMVZFMEZPcjduNWFHUnExY2lYTjMrVDBObGJ4S1lIcjhYZGFQcjZpVjVhbExycnJrcklQbkg1cmo0NWw1OXFhd2ZsZjdNSkNySVNFbElvUXVWODFRNE9TZHUzN2VWVksxcW9ZVTNUSXZZbU1aTWx3VzZ2QmNnYlpxUzIrNWlvV3FRNjdhOXJkdVd2TVVWK0xxc3Jmb1Y4L0Ztdm9odndIbjFacUhhZ2l4dDZpdEFUc3M1NGVwbExsUFRtNW1abUVySTJIb1F1dFg5KzJZSnpWa2V4WTM1MGdmRGxzM25jTnZjUldwUGplOTcyQzUwdklRQzlWV3lWVlhydVN3b0J6QzgrZm01MFpWMTEvblBLcTBjcFhJVmZKM3FZYTgxT1BhREhZWTc3aktWVDcwSm9jRnArWkpMRkp1R0c5bUxwL04vSHlyNnR6eTdlZzgvN0NxZWhYNmQ3VVBCTGthRWxJaVFoVGxLcDZUbGNsVm1PeCsxOXlwSlV1dXY1dXhYS0o1VTZVS1NVZDFwSjljK2YzVW50QW1WeDM3Mnd5RlBJVTVVczFrTmQ4dkVhSjRYZG5XUWlrUGNsNVdLWThiNDlyTVQ4TmNDL3NRRDR1OU1EVVQxYXQrOGRCWDZCT2RXMUdXK215dnhsZEFYQVZETm0yTVdBeUU3SVFKMWRHNXViN0t1UTJUcXlnUHpWTzFxdjVVUXJGbGN1V0pjNVhPcVlvSkl0Yk15WEpMVXdGcmt5dlp0LzUzR010VlBORzkrYnVVdDdsdVlvbVNjNnFpWHBXSTFYT3l3aHlwUjJGWXNOcE9uMkZDdCs1cEttc3hYZTNEUWE2R2hKU0lFTHBjeVdwVVhLbHErdmxKNytuY3JGMlAxYUJKZ2FlMWVtTFg3Q0ZYcmsrOGpSYTU2dHJmWmhGNUNwV3J1RXN5bENlSEZjdDVsdlRMZzUvVXZrM1ZxNFpJZHR5dlZhVXB2bEZyVlpTbTBZdEFxWHJWZTN0dDByVU5LT0lVS2lTZDV6WkVycFQ5aFBYalpWc3BWNEZZWm1TYngwMUNyOXY5c0dBemJEaGNoa0orWFAvd2Q0bUZSYWwyYlFkQmpzcm5tc3dmQzVVcmVXNXVLSy85M09xNVdvVS95cEtyVmhia2FraElpUWloeXBVZEV0U1d4Zk9xWE9YcXZybG5CVXYyM2VGWUZib2tTVG5JMGRkTDBUNXg1ME5XWnJyM3QyblM4MVhtWE1WeXBVbGsxendxUi84ODJFL29XUWxiMm0xcmliaGh3cnI2cE15UktnaERvSDFTZDUvdGJidFllWEpCVXVaY1plZm15ZGZWME1YS29uMXlNVnliMlJEYkZwRE9nY3BKNU1vT0NVcFJIQ2hENllSMlpjN1Z3TzJ0RTFlZE9pMFA3YVdUODVVNVY3M2t5bi9DY1Bic1RVRjRuNXNQVzl0dkJISTFKS1JFaENqS2xhaElwZjNpQ2U2eXlyWGJzUlFXTTFIdGtCT3ZQWDNFcWRTbm5yeXVvVWxIeTdZMlJtZWU4a3BVVW5GeUlwWEtsM2FPTWxkYW42ckJ6R1BoMnFaNVY0dVpPWjFmUnpkaFA4RzlxVHpsb3BQSWszSnVjdDZWN2Q5N2UrSDN0cUhGVGJBNEZ4L2RMdy9WWmVlaXlGRkpydW9KNm00YVZmUHFnRTYycVhLbDVTcVpvQzZvSit0WGd1RG1XNldTS09WTWZob3d4Zzh6eHVLVVY3NjI1dE9EejgvTmcrUzFDWDZDKzdUMDZieHFHTENaNEo0UEE4cFBEL3BjcGR2ckVyaXU5aHVDWEEwSktSRitTRTlFSkZsNWV5TmJVc2l5VHcvdWNDeUg2dDFNVWVRUGFDa1NLV28xcWhhQ1hEb1NWTGxxMzk5bTZKR25qamxRZVo1a3RVN21xaTBQNGQxV1VXeE4xY3JMVkpvck1hVFhPcWRLZVI5VEloTzVUTFZ1VDdiVmZleUROV3h6RStUbnFjcENtTitUSEhmVFNhMDQxWDBpT1h2dFB5V3A1MEh1MUF2SjFzaFZsYXY0UEpOY3lSekpkbmM2OHQxUHNXd0pXY3EycDh4WmtuMUtlVnc3MWZ1M2tseEVJcVM4ZHlvVEw5a25tZENleTFlb1dtWGJxZkZWcTNMN2pVR3Vob1NVQ0VLUHBXSWxweVJBMEVDZSt0UDFkbmJ3V0lucDgyWjFxSE8xNUFmME9MbnQyOWwzQStScVNFaUpJUFJZSm5iNFNhK1FRQXg1Nm8rZFoyVnpOZXBiK3hLd1EwNmw0U2hJSVZmOWFYMnIrbmhBcm9hRWxBaENEd0FBZ0QwR3VSb1NVaUlJUFFBQUFQWVk1R3BJU0lrZzlBQUFBTmhqa0tzaElTV0MwQU1BQUdDUFFhNkdoSlFJUWc4QUFJQTlCcmthRWxJaUNEMEFBQUQyR09ScVNFaUpJUFFBQUFEWVk1Q3JJU0VsZ3RBREFBQmdqMEd1aG9TVUNFSVBBQUNBUFFhNUdoSlNJZ2c5QUFBQTloamtha2hJaVNEMFdEcDhiMTQveUZOLytIN0JmdkQ5Z3YxWmhPL01rdzJRTWY3dkYwU3Vob1NVQ0JjZjNUZVR5Y1RjZWZneWIzTXhOL2NtRXpONTV3TnptYldOTTViT2JhVGhlbTZtN3R2VDUyYklOKzh0Wm9kRzNhVTlGcnM5dFhIRDNDWlBONlF0VDBkVm5yYnk5dGtsVjFZcWp2eS9tOWV5MC9YY25OcTIyV1UvNlFqOXRXMUZMTTZQekd6eGRmbVlOa0VmdWFwejljUzhidTNZUWJXZDZaUENkL1NGL2ZUTis3cnBraXZiZm5UVW1xZm41OGZtL1BMTjBzNXYyZHRiR2wxeVpkdXJYTDJTQ2JWdHgwZG0rdVJWT2RjeFZmL0RSOC9NbTE0ckxBWGtha2lrRWxGSlV4TDN6ZU9veitYRHUyWXl1V3ZlZnhGK25waDdIK1V5TXJaWUZ2YkI3VVFtaXZwQkhxUkpSaVJSZnYyWmNhdFVVcVNLZ01CK0NiTGNsakVMTTZ1bHF2bzViSHZEM0M1UDEyWStsZTM5enF1WUovY0F0T0pTL1d5M3Q3WjdXanVMMlpHWHZqaFhsL0hCTGN5NXU2bDdFYkpmOHV5K2tOZTFYWnY1NlpFN244dXZ2M1l5ZEhRNE5mTVdZL0o5ZlA4Z0IzWi9jZzI3SDNkYzdzRXJHamVBUCs0OFQrbWhoVng1V1VpK3ZQajZ3cHphdHV6Zm5TWVcxWGJFdjBHWHM3amRTVlhvRzdkdkZwY3I5Kys4aVVkV2FKb2U1dno0eUJ4cGVZcXd5enNsZFVCZWUyMXZ6VmpaVTNOVkg5N3pPbGRXcXRJdmViWnR4K0xmNVNQejdJMzhkeG1vK2x1cCtucGhQblRyMnY3aGIzTnRMaDVvMjR2L2RqY0d1Um9TVWlLU2VQR0J1UlBMay92ZGkxWG80d1JyRHlwWXk4RUt6TlRNZTVlYnZDUk02eFh5OVoyRWRObVZrNUdaV1ZnWmE2dDJ1WDVEam05VjVPZlpqc3lULzcwckxSazdseWVMbGIwZU1sU3FqRGc1U2gvcXR2KzBsaStKRllGMGYrcjJYV1ZyWmhhWE0zUFVVZDFhRC9hNFQ5MXh0eDJLZWk1RnJzM0ZhWldycnY2VlFPUXlWK0hhZlY3VjlyWFNuYXVGRllwWlMwWEw0czVwWmk3dHY0RlQrMitnclhPTXordXByUGJkZUh1cnhNck9xWm0vS3N1TGt5K1hxMUtQaU9zTDgrRDR5TXllOWF6TXVmNm41a205Znk5WHM4czM3WCtibTRGY0RRa3BFVWxJdVhMRGhXa2xLMTdtSzFsUnU5Wi9SMk01K09wUTc0ZStxMHpGRlJlL3ZwU0k1bmNkSzJDdXo4NUl3MjN6ZERPNTJyMDhXYXhjK1llMlRpNURDVmF1aFB5NGlsTlJpSHlWcFpFdlgvbVNNbFlMbWgycUxHNXJuZmpqTHNxTm8xc3FFaFF4TGJKemN0VnlySzVxMVowbksyQ3VtbVdIRG9mSWtCcyttNWxMVWIyeGtuS2o3YTBVWDVXeU1xTWZUcmQ4SlNCWDR3a3BFVWtJT1ZLclZFN0FRcCtYNXYxM0ptYnkzcndlWWh6TGtPR3kwSWVkZE5TcVZKZ2ZOWjM2b1RIWkxvbEZvVTBhcXFHMkxsRmJGN2ZMa3h3VzdDRkNPNW9uU3pQOHBraE1YRUVLUXhkeFAwVVEydVVxckJQL0d4U1ZubGpZRkhuYkZKMURTbkZscE01Vm9hODd0UUZWTGlYUE5aVjRGZWRsYllEV1hDVjVxb2J6Wkw5WWdLd3NEWkFodGRJVGIyUGc5bGFOSGVZN3JuS1Z6YVZ5OHBQbkt1c1hjSE9wWmkzRGdoR1ZpS1h6dE9TdzREUVNyMXVEWEEwSktSRk5lRG1LSjdWM3kxVXpkSGlubGl5NTNkMk01UkkvL0F0emdZclZFU0VPclhJbEtqaWFOTWo1UzdKOW85d21UdzFCMU1xcDJ2VThXY0xjS1orcnVwQ1ZUVlN2K3NuZjQzT3J6cThzUkdLZFJEQjhXejJKZll2a3l1T0huUHpEUjhoT21Qc1Q1Y2IxMVFScVVLV3BxdlpKZVpKemphU2diSnc0VjQ5Y0pja3Zybzc3VVJnV2JQSVUvKzZxT2ZiWElUTGt0bjFxbmlSNWpiWm5GdzdaM3RxSXBjYm55cWZDQzVEUGxWMVM5WlB5NlBEenFUb250WWR0UnY5dVNySVd4Ty9SczZWVXNwQ3JJU0Vsd2tkY2dXcVc5NUtyMy8rVGVmeWVuUWlmenMzYTlWZ05sVHdvVC8yOEd1T1dpdUd5OHZvV0p4VnhteVlOQ1hMWWNWc29uNmVlcDV5MmZqZktrLzBFMk5ibHlSTEprL3UxcWx6Rk4vSzJLb3BiNWJUbDAzUnl5Q2lWdFd6ZHJaT3JnQ0pPb1NMVEkxZjlxMWJLZmxRS0FyWVZDSGtLZVlxZjF1NVRnMzZacTNyRjg3RUd5SkJXdFdxMlZ5MGJzTDMxSStRcFZLN2lTcFE2N0JuV3N4UFZoNXpYY3plcHZVM0lubjk0Ykk3dGRrc2Qrb05jRFFrcEVTV3hjcUhNb2NxRXE1S3RlMWF3cElqdGNLd0s5MkRQSHVSU29zSmk1YUdmelRlS20wUTFvbzV5cGFkTlFqYkpvRHdwdEozWHpmSmtoYUxsdFFjYkpCM1dVK1pjRllRaDBEcWhYWk9sYUh2YUovSkNMbTAxWXB0d0QyMTNMdUc0bERsWGFxNmtZSmJvSzFhZS9zSzJmbHl1VGtObFRabHpGY21WbSt3dVBqMFgveHNvbjU0K2YwbjdORjYvN1cwR1Z5MDZEZFVrWmM1VkpsYzNGU3RQbHp4MXRROEF1Um9TVWlKYzFha29SWEtvMEl1WS9qdHpyaklXTTFIdDBDdEZ1a2o0OWVVRFgvYXRKMlZyU0RtN25wdDU3QnZiTXAvb3RubVNWT2NsM2FxWXExM0prMlV4TTZmejYrZ0I0eWU0eXdubjhkQmQyMFBjejk5cStmU2drNDFVMWxybmFHa3l0Z2tXNStKVkFWcWxLSmNoTFZlNWxEWFkvbUUvYnQzU1VOLzFoYm1JMy8rMVRmT3V0Rnk1dVQxaG1Sd0d0S3UwZkhwUXFUVFZrOU5sWG11QmEwSFozc1o0Zm00ZTFLOVZjQXVxWElWS1VqNE1LS3R6OXZmamxxRTluNnRxZStIZlRlaXF6cnVLaUNiSXErM0RRSzZHUkNJUjFhY0QwL2RjQ2RtcVhqQmFSMVRoa2xXczdOT0RPeHpMSWJ4THFvbjhBYTJMUkNDdnNzU3lWUjQrYzBocFVJNm51TzVheVk4cnowZExudVQ4S0xWZlM2NjBQTW4vYzk2YXFwV1hxZlJjUmRVcHpMc0tmV0xaa1cxeUhsSkp6cEw4RHZzMDRtWUk3NUtLOHFTSlRPYzhLRTNLQXBHY3ZiWjUxZWF5UmRVZjJWNFEzdlhqankzK0cyZm4yNW1uaUV5R1lqa0x5NEtVYUhrVlpOdmJKTlU3ckpKY0NkRnBteU1sMjdJK3NxcWx2QmNyZnBHb3NyM3NlRzRPY2pVa3BFUVFlaXdWKy9EV0h1cVFRcDc2MC9WMmR2QlkyU3ZPSjRPRUtsZExlakNQR3l0OGJXOW5Id2ZJMVpDUUVrSG9zVXpzY0ZaZVNRRUplZXFQSFpxenVScjFyWDBKbE40a0Rqbmtxai9wVzlkSEMzSTFKS1JFRUhvQUFBRHNNY2pWa0pBU1FlZ0JBQUN3eHlCWFEwSktCS0VIQUFEQUhvTmNEUWtwRVlRZUFBQUFlNHlYS3dBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQURZT1F3QWJBeDVQUUlBd0FpUU4zc0FXQi95ZWdRQWdCRWdiL1lBc0Q3azlRZ0FBQ05BM3V3QllIM0k2eEVBQUVhQXZOa0R3UHFRMXlNQUFJd0FlYk1IZ1BVaHIwY0FBQmdCOG1ZUEFPdERYbzhBQURBQzVNMGVBTmFIdkI0QkFHQUV5SnM5d0Rad2RYWmdEczZ1NUdMejlHUmlUcDdLcFFPNE9qTUhrNG1aSEp5WmZPdCsrNVBKZ1ZGMnZSTGs5UWdBQUNOQTN1d0JOczlUYzJJRmFISmlFby9xRUtOZWRHd0R1UUlBZ0ZzamIvWUFtMmVGY3RVQmNnVUFBTGRHM3V3Qk5rOGZ1Zko5RHM3T3FyNVYxR09HVitic0lGcGVDMU8xN1VyUTdQQmozT2ZBclNQazZ1bEoxRWM1cmxzZ3IwY0FBQmdCOG1ZUHNIbjZ5MVV0VktFdGlGRWxSTFZyUFQzTDVVcXM0NnRXVXE1U0dhdjNjNnVKWHczeWVnUUFnQkVnYi9ZQW0yZUFYRVZEaEtFSzVTYkMxOVVtV1dXSzFxdjZ4QlBuczJIQnJFK29pTW50M2d4NVBRSUF3QWlRTjN1QXpiTUV1YXBGU1E3bE5lczlGZjJiZFJxNVNvY050ZTNkRG5rOUFnREFDSkEzZTRETkU2cERoYmxQYmtpdUxGZHl4QzVJbHBlbzIxYXVsb3U4SGdFQVlBVEltejNBTnRCVWpOSTVWSTA4UlhPdUlsRUsvZTM2UWJMU2lsWnB6bFU4QVQ2U3E3cFBWS215eTZUQjNSQjVQUUlBd0FpUU4zdUFiU0VkMW92RnlyVldrblJReVU5Y25VcGxyQmF3WkQzdDA0SW41c3o5WHFpWXhZRmNBUUJBQ1htekI5Z044bUhCWFVSZWp3QUFNQUxrelI1Z04wQ3VBQUJnUzVFM2U0RGRvSktySlEzUGJRcDVQUUlBd0FpUU4zc0FXQi95ZWdRQWdCRWdiL1lBc0Q3azlRZ0FBQ05BM3V4QkovdTBHRUVzSndBQVlHeElpUUFkVWdXclFGNlBBQUF3QXVUTkhuUklGYXdDZVQwQ0FNQUlrRGQ3MENGVnNBcms5UWdBQUNOQTN1eEJoMVRCS3BEWEl3QUFqQUI1c3djZFVnV3JRRjZQQUFBd0F1VE5IblJJRmF3Q2VUMENBTUFJa0RkNzBDRlZzQXJrOVFnQUFDTkEzdXhCcDVpcXhjd2N6aFp5S1VBdjVQVUlBQUFqUU43c2E1NmVPS0hZOGE5dVd4ckZWSzFBcmhhelE5TnJrM2JmaDRkbU9yK1dMV0NwOHFQOWZhN25VOTkyT0RPeTFlWi9YVG1WMXlNQUFJd0FlYlAzVkYrSzYrTEU0RmU1WE5rSHNIODRONkU4d3l1dXpYd3ErK2NQZGRjelBQU25jMU4rdkMvTVRPeTd0TDF4b3VWemFob2ZxdkxqY2hqL0hKb2JJWllpNi9KZi9rTXVIWGs5QWdEQUNKQTNlMGRWdFRvNE9QRC9QYnVTUGZhT05GWDJnUjAvekx2d010RDV6TDZlbTZtVkpQdndiNVVyZ1Z1dngvWkh3OEQ4dXdwV0k1K3hVTVUvcjF1c0xQSjZCQUNBRVNCdjlwYW5KMVhGNnVyTUhOanExY0daOFhwMVpjNE9iTnVCYVh5cnFuS0ZQcFdZTlJGWHZuemZnNU1UdjkxNk8zR2xMRi9QSDQrSVh2dGJIcmxjRFpHWmZuSlZEMGNoViswRUNaWExDemhwcXZOcC94WkJ6Q0pKRzVyekpTR3ZSd0FBR0FIeVpsK0xqcHRzbGN2VTFabW9aZ1c1Y2YyRmFBVTVxeWR1U1ltcVJNajF5MlhLYjdLcW9ybjlWY2RUeTE3WC9wYUhURlcvNGJ1QUhNWlNxaTd4dzMzb2cxNVVaa1pQbUV0VlJWa3FROTdUM0RUenJXNG9zMHRFWG84QUFEQUM1TTFlVG1UUFpFcFVzOG9pNURwWGNoYkVTY2hRaVhnNzZ2RlUyK3ZjMy9MUVVwVktVMys1Q1EvM1JncEVaV3ZRdzk1WDBkWTFBWHZycUtwMjZmbUxPV2x0dWF5cllNM2ZjcDI1bE5jakFBQ01BSG16VjRmZ0VpR0txMW1wekFRUnk2Tkxyc0oyMHZEU0pLdGRUV1dxZTMvTHcyNjNUUFZnTHBkUU10eUUrS3AvTnRlbnQxd04zKzhZaVhPWjB5YWZZVmd3bGx1N3JMOG8zeFo1UFFJQXdBaEk3dlNoS3FWR1BqUjRjaWFHNGJKS2trU1hxNnc2bGxXdURzelptZkpxaU03OUxRK1pLa2s2cjZlYldBaTBUeDRXaHc5ckVDdVB6NE11VDVaU2V6VGZLcG5EaFZ3QkFNQXRpVy8wbWVTVWxnc0pxNFduWGg1Vmp1d3lPZWVxVmE2YUtwYjlQYTlPaVcxcnkxWTk1Mm94VTRlaDhnZDRnYTRKNkVybFNyNTd5UW5aQUprYkszNklOZm9rNER6TmlXK1hraXFHWWUzZkk1N3ZWdnpETEI5NVBRSUF3QWhvYnZQNTVQV21LWjFubFE3amlTRzQ3Tk43eW9UMmJGaFFEUDJkblBoUEZkb0RLVlRUWkpWTDM5L3lTRklsNS9SMGlWVWxVNzM3WjNJbHFsVEs5anJuRm8wQytjRUFHMm1WS2E4Q1NySFNQdWtaL3ozWFY3V3l5T3NSQUFCR2dMelpieGZLQlBVVmZpS3dEVFZWYTY1eXdQaVExeU1BQUl3QWViUGZOa29UN05mc1ZxcGMyU0duMWdvVVFBZnllZ1FBZ0JFZ2IvWmJTVHowbHcwcHJvZGRTUlhzRnZKNkJBQ0FFU0J2OXFCRHFtQVZ5T3NSQUFCR2dMelpndzZwZ2xVZ3IwY0FBQmdCOG1ZUE9xUUtWb0c4SGdFQVlBVEltejNva0NwWUJmSjZCQUNBRVNCdjlxQkRxbUFWeU9zUkFBQkdnTHpaZ3c2cGdsVWdyMGNBQUJnQjhtWVBPcVFLVm9HOEhnRUFZQVRJbXozb2tDcFlCZko2QkFDQUVTQnY5cUJEcW1BVnlPc1JBQUJHZ0x6WmcwNHhWWHkvSU53Q2VUMENBTUFJa0RmN2RlQy9ML0RBbk5udnNRbGZ4THlocjdYcFN6RlZLNUNyeGV6UTlOcWszZmZoSWQ5dldLTEtqL2Izc2Q4TDZkb09aMGEyMnZ5dks2ZnllZ1FBZ0JHUTN1cWZtcFBveTVFUG5QMUVCQkZ5Y1dKdSt0M0pZNUFyK3dEMkQrY21sR2Q0eGJXWlQyWC8vS0h1ZW9hSC9uUnV5by8zaFptSmZaZTJOMDYwZkU1TjQwTlZmbHdPNDU5RGN5UEVVbVJkL3N0L3lLVWpyMGNBQUJnQjZhMitrcXVEQTFWNGdoUWRIQ3hScm5hRU5GWDJnUjAvekx2d010RDV6TDZlbTZtVkpQdndiNVVyZ1Z1dngvWkh3OEQ4dXdwV0k1K3hVTVUvcjF1c0xQSjZCQUNBRVpEZTZvTmNuWm16VElDcXRwTXpjeGJMMWRPVHV0SlZxbWhkblIxRTdVSE93cmFiZlY2SnlsbTZQZDkyY0hiV1hsMWJFYmxjRFpHWmZuSlZEMGNoViswRUNaWExDemhwcXZOcC94WkJ6Q0pKRzVyekpTR3ZSd0FBR0FIcHJUNFNuVXFhYW5tcGZqOTVlaFhKVlN4RzBSRGZTYVJYOVZDaWx5bGZ0U3JJbGV2YnlGbm82emNYaVZkMGZKck1yUUtacW43RGR3RTVqS1ZVWGVLSCs5QUh2YWpNako0d2w2cUtzbFNHdktlNWFlWmIzVkJtbDRpOEhnRUFZQVNrdDNxdGl1VGx4WXVPL1RtU0t5bGdjVnU5U2RsSERnc0tRWXRKMXMzN3JYTjRNVXVWSTVhbS9uSVRIdTZORklqSzFxQ0h2YStpcldzQzl0WlJWZTNTOHhkejB0cHlXVmZCbXIvbE9uTXByMGNBQUJnQjZhMCtGWmk2Y25RV1Y2UWFnVHBMaHZ2aWFPUXFEQW4yazZ1dzdUUzJWNjRDMVlPNVhFTEpjQlBpcS83WlhKL2VjalY4djJNa3ptVk9tM3lHWWNGWWJ1MnkvcUo4VytUMUNBQUFJeUM5MVF1QkVmT3AvUEJjVytWS1FlbFRrcXVuVXNTMnZuTFZrTTdyNlNZV0F1MlRoOFhod3hyRXl1UHpvTXVUcGRRZXpiZEs1bkFoVndBQWNFdlNXNzBVbUxpU0ZLcFJrVnpWODZtaVlVQzdyRGpuS3Q1ZWwxdzFmYmRPcmhZemRSZ3FmNEFYNkpxQXJsU3U1THVYbkpBTmtMbXg0b2RZbzA4Q3p0T2MrSFlwcVdJWTF2NDk0dmx1eFQvTThwSFhJd0FBaklEMFZwOExURDZzSitaVlpaOFdGQlBhczA4TGh1SEVYSzZ5VHd1ZW5MamZ0MDZ1NUp5ZUxyR3FaS3AzLzB5dVJKVksyVjduM0tKUklEOFlZQ090TXVWVlFDbFcyaWM5NDcvbitxcFdGbms5QWdEQUNKQTNlOUJSVTdYbUtnZU1EM2s5QWdEQUNKQTNlOURSVW1XSG5Gb3JVQUFkeU9zUkFBQkdnTHpaZ3c2cGdsVWdyMGNBQUJnQjhtWVBPcVFLVm9HOEhnRUFZQVRJbXozb2tDcFlCZko2QkFDQUVTQnY5cUJEcW1BVnlPc1JBQUJHZ0x6Wmd3NnBnbFVncjBjQUFCZ0I4bVlQT3FRS1ZvRzhIZ0VBWUFUSW16M29rQ3BZQmZKNkJBQ0FFU0J2OXFCRHFtQVZ5T3NSQUFCR2dMelpndzZwZ2xVZ3IwY0FBQmdCOG1ZUE9xUUtWb0c4SGdFQVlBVEltejNva0NwWUJmSjZCQUNBRVNCdjlxQlRUQlZmM2d5M1FGNlBBQUF3QXVUTkhuU0txVnFtWEYzUHpmVHcwQnhPNTJiSTEwRXZab2RtV1lldy9Tek03SEJtMU5NTitTc2xvNlBkZmhIM29XMVh0bTl6dklvdjZaYlhJd0FBaklEMFZ2L1VuRXdtVGlSc0hKeGRwYzFYWithZ2JqOHhUOVBXVVNOVFpSKzIva0hjUk9HWjNUelVaVVFTNWJkWFBkU3RzTFZ0TDZJV2dvRkN0bnRjbS9rMHo1dkhDbGM1dDkzdHFTUkxXWFU1N3ZQSHVBSHllZ1FBZ0JHUTN1b3J1VG80OEJKMWNHWml2WHA2WXFYcXdCd2M3THRjMllmMTFOeThrT0ZGb2FtRTVOdHpzdFgxUUhmU05qTUxLd1pTRmthRno1ZE5SNis4T0RsdCtmc283YkZReFQrdlVxd3M4bm9FQUlBUmtON3FnMXlkbWJOS3BKcmlWZFYyY21iT2FybEtLMTF4UmV2cTdNRC9mdUlWTFB4ZS9icHo1SExWcjdLazRoN3U4ZENUMzE0alcxSytkT3FocXRITFZhQmZYbncxTHgvYUMrVHRkcnRCdGlMUlhVTmU1ZlVJQUFBaklMM1ZOM0oxOWZRa0hScXNmajk1ZXRYSWxSc21iQ3BZdnJJVkJDcUlseFcwYUx2UjNuWUptYXJiRE1lcDFaZHFLUEJ3T20yZEYxUVRQL2pYSUFIYlFWN2h5NUdpS3RIYm0vbFc2eFZXZVQwQ0FNQUlTRy8xc1FRRk9mTHk1TVhKL2h6SlZicHlMV0JTeUVMc2F0WEtrcVhLRWMwRGFxbVVKTGloUEUwUTRtMTF5VlV6VE9aWWt3aHNuREFNS3BmWFZEa3M1cTZydmFMZVQvTTNrVEsyTE9UMUNBQUFJeUM5MWFjVnByb1NkVlpOWkhkMkZNdFYrRG1OWmlKOE5HeTR3MVVyUzVhcWhKNFA3VkxWS2h0bWJOOWVOZzlvVCtUS25YZnhQS3VjM2JnOUVLcGpzY0MyZkVMeGxzanJFUUFBUmtCNnF4ZkRkMnJscVpHcnMyb2VsYXhVaGQvcmVWZVpkTzBlV2FvRTdRLytnSlNvc0ZpUm8yeGVWdHdrUHZsV2gxWVJHdys2bUxvVy8ybEF0YzNTMVI2SWhoMlRLaGx5QlFBQUEwaHY5WEp1VkZ5WkNzT0FKYmxxK3ZyZm8yM1ZyM0JRaGhKM2hDUlZpNWtZSnRMbjhVaUtBcVo4ZWszMmJYM1BraVpubzZNd21iMTZ6VVcyUE5EVlhpT0dXdTE2OFp5MlRqRzdHZko2QkFDQUVaRGU2cVZjTmRXbnB1b1VEd3VLVHd1ZW5MamZiZDkwY3J1Mm5kMGlUVlZWQ1ltaSsrSGRMbUI1TlNxV3JmWmh3bEhMVlpqb3IrWkd6Rk1iM0Y3dlJLa294bi9qMVZTdExQSjZCQUNBRVNCdjlxQ2pwbXFGRlEzWUQrVDFDQUFBSTBEZTdFRkhTNVVkdWl0Vm9nRDZJSzlIQUFBWUFmSm1EenFrQ2xhQnZCNEJBR0FFeUpzOTZKQXFXQVh5ZWdRQWdCRWdiL2FnUTZwZ0ZjanJFUUFBUm9DODJZTU9xWUpWSUs5SEFBQVlBZkptRHpxa0NsYUJ2QjRCQUdBRXlKczk2SkFxV0FYeWVnUUFnQkVnYi9hZ1E2cGdGY2pyRVFBQVJvQzgyWU1PcVlKVklLOUhBQUFZQWZKbUR6cWtDbGFCdkI0QkFHQUV5SnM5NkpBcVdBWHllZ1FBZ0JFZ2IvYWdVMHdWM3k4SXQwQmVqd0FBTUFMa3pYNFFWMmZtWURJeGs0TXpjeVhiUmtZeFZVUGt5dlk5UE96c3Y1Z2RtbzR1ME1YMTNFd0x1YmJmQ2VuK0RvY3pJMXR0N3RmNWZaSHllZ1FBZ0JHUTN1cWZtaE1yUzFVY25BbGxDakxsNHNRODNXTzVzZzloLzRCdVFubU9WeXpNckg3UVZ6OHJEM1pML2VDZnprMzVFWDl0NWxPNWYzMTcrMGZJYnhSeExpTVpsaExyY2wvK0k2NEVlVDBDQU1BSVNHLzFsVndkSEtqUzlQVEVTdFdCT1RpbzVDcHFHenRwcXV3RGZHcHVYT0J3VlJWbGZiZDhaaFpXQUhySTFabzlZRGR4MWNJbTE3RlF4VDl2UXF3czhub0VBSUFSa043cWcxeWRtYk5LcEpyaVZkVjJjbWJPYXJscSt2dHUvdmVEczdQMkN0Z09rc3ZWTGVTbUlGZjFrQlJ5dFRSOEpUQlU5V3plUXQ0alFlN005K3FRMXlNQUFJeUE5RllmeWRMVGsxU01xdDlQbmw1MXlwV1RxbWdiWTZoeXlWVDFHNzVUcU9ZQ1pmTjY0Z2Q4NThOZURndm1vZ1lXTDhGeHJwdjVWbjFGZHJYSTZ4RUFBRVpBZXF1UFpTbUlraGNqUHlSb2YrNGhWOUZ3WWhoSzNQWGlWWllxUnl3NUhYT2V3Z1JyYlI2UXJFUU5mT0FIWWFDU0ZWUDliZHFTRW9aaG83OWpKcjByUmw2UEFBQXdBdEpiZlNwSFhvd201dVNzbXJoK1lqVUx1Y3JwOFNCUFNDc3EyWHlmZ1hKbGNSUHNlKzkvOTRrclVMbllWbitQMWh5R1ljRlliTzB5dWEzVklxOUhBQUFZQWVtdFhzaFJQYXhYU1pZYjIwT3VOTnpEdnZWaG5oTExrUGJKdzZIRGZmc21WMlhpVDJhV2lPWmIxZFdyc0J5NUFnQ0FXNUxlNnFVY0JaR0s1MDBoVjdheWxBNGY1WE43RXE3blpoNC9zVXZ6cmdKSzVhcjEvVXZWOWxwOVloL295cXRERE1IYWRlSzVibXRPb3J3ZUFRQmdCS1MzK2x5T3JzNE9uRmcwbi9oRHJyUjNLYlUvMFBQK3JRL3hUSzdFc0tPY3Y5VzUvMzFBVHZMWHFuL2FwenpqdjgxNnExWVdlVDBDQU1BSWtEZDcwRkZUdFlGS0I0d0xlVDBDQU1BSWtEZDcwTkZTWmVkWlVUR0MyeUN2UndBQUdBSHlaZzg2cEFwV2did2VBUUJnQk1pYlBlaVFLbGdGOG5vRUFJQVJJRy8yb0VPcVlCWEk2eEVBQUVhQXZObUREcW1DVlNDdlJ3QUFHQUh5Wmc4NnBBcFdnYndlQVFCZ0JNaWJQZWlRS2xnRjhub0VBSUFSSUcvMm9FT3FZQlhJNnhFQUFFYUF2Tm1ERHFtQ1ZTQ3ZSd0FBR0FIeVpnODZwQXBXZ2J3ZUFRQmdCTWliUGVpUUtsZ0Y4bm9FQUlBUklHLzJvRk5NRmQ4dkNMZEFYbzhBQURBQzVNMStOVHcxSjVPSm1SeWNtU3ZadENNVVV6VlVybXovdzBOek9KMmI3RnNKcXphK3IzRDEyTytGZEgrSHc1bVJmNzNGYkgxL0EzazlBZ0RBQ0VqdTlFOVBuRVRrY1dLZStnNWVra1NjK0VaanpKVTVPNGo3QjRiSWxiNlBmdXV1RHBrcSt3RDJEK2NtMmgxcllXYVJWS1ZmK2x5MUpaRS85R3V1NTJhYTlTOEkyeGpwT3YrdTlraUk3ZDh4L3JzNTZXci9ReTRWZVQwQ0FNQUlrRGY3aENCYnRkaFU0dFBZbEdDWmNoVzJFYllaUzl6NlNWTmxaV2hxaGhRM25JejFmV2hYY3RDM3V6SFhaajVkWDdWbCsvQnlXczVYMmg0TFZmenp1c1hLSXE5SEFBQVlBZkptSC9QMFJFcE5tMXcxRXBSWG00SmNIWmlEcVAzZ1RGTXRLVmZHWEowZHBQMnpDcHN1Y3djbko5WCtEb3hiVmE0WHprTXVUN2JYVk5JYXVoN21rb0V5TmxTdTNIQmlTNlZyNUhTSmE5cHVSVFQ4TGFLL2k4M2hCaXAvOG5vRUFJQVJJRy8yTlZkblhreVNhbE0rWkpjS1VrZmxLbXl2bGhuWkwrN2J0S1dTSjZwZzRUZ1Q0WlBIYWJjVmxsV2laZGR6MitqYW5pWlgwWnlkUGc5a0owc3pzd2p6cmJyV0d5aExYWEl4YXJweXBiUTM4NjJxYXQrR3hNb2lyMGNBQUJnQjhtWWZDRUtqeTVPSVdrUTY1Q29TTmIvOVNuUVNwQmhWRWRhdHhLdzVMbTJmK2Y3eTlVckw1ZlowdWZMNDRUai9vRzU1d0ljNVFFbjFwQ1JFdmlyV2U0alBiWHRBVld4VWRGVVF1OW9qOFkzK2xyMXp2d1RrOVFnQUFDTkEzdXc5ZWZWSUphdHVTVEVKNUxJelJLN2lvbFFZSXN5alhhNnlvVVd4UEk4K2NoVm9rNlg0QVI2aFZGUTZ0Nk93ejFVcmQrNHRGYWV1OW1aWTBPZmRwOUV1azMrWDFTR3ZSd0FBR0FIeVptK3BoVU9kV3hXeFVybVMyNmpJS2swYStmNks2NVdXMS9TUnEycW9xZmdnVitaY1pYSTFYS3g2VldiR2lzdGZTOFd1cXozK215VHlpMXdCQU1BdGtUZjdSaVlVOFhFaVVrbFBFQ3NoSnZGdzR0T25ZdDdTTXVTcTNtL1VicGRwYzY1aXVZcU8xM1oxQW1uYk83ZW55TlZpSm9hT3VvYnljbkdTRmFldUtvdjI3cVYyb1JzelhmbnVhbzhyVlpWY0thOXBXQWZ5ZWdRQWdCRWdiL2F0VmF0SVVPcVEvZUpQM3RWeWs4dk9qZVhLa24yNlR4NUh2aisvdU8rbkJic210UHVIZC93T3BmS0R2RUsrZXltV0l0bVc5Y25sckZzZ3hrc2ZFUzIzYTlXKytPKzV2cXFWUlY2UEFBQXdBdVROSG5UVVZLMjV5Z0hqUTE2UEFBQXdBdVROSG5TMFZLVnZXUWNZanJ3ZUFRQmdCTWliUGVpUUtsZ0Y4bm9FQUlBUklHLzJvRU9xWUJYSTZ4RUFBRWFBdk5tRERxbUNWU0N2UndBQUdBSHlaZzg2cEFwV2did2VBUUJnQk1pYlBlaVFLbGdGOG5vRUFJQVJJRy8yb0VPcVlCWEk2eEVBQUVhQXZObUREcW1DVlNDdlJ3QUFHQUh5Wmc4NnBBcFdnYndlQVFCZ0JNaWJQZWlRS2xnRjhub0VBSUFSSUcvMm9FT3FZQlhJNnhFQUFFYUF2Tm1ERHFtQ1ZTQ3ZSd0FBR0FIeVpnODZ4VlR4NWMxd0MrVDFDQUFBSTBEZTdDMVhad2RPSmlZSForWktOdDZJcCtaa3FkdGJQNFZVM1VpdUZyTkQwN1pLVjN1QzNmL2hvVG1jenMzZWZZWDA5ZHhNN2JtM0pTdjBFZm14WDdydDhuWTRNM0p0bS85MWZTRzN2QjRCQUdBRUpIZjZxek56WUNWSXhNblQwS0dTcEdMN2xUazdzTXRPVEwwb1hxK1hYT243NkxmdTZwQ3BzZzlnLzNCdW91MFpINmdmNmdVWjZtcHZXSmhaMU0rdXR5NGgyRHpWdWNjaDh4V2tLc2pUWXRia0p4SmlLYkl1LzMzK2tFdENYbzhBQURBQ2tqdTlsYXZhbElJb1RjeWtYbGFKVDJOVGdtWEtWZGhHY3h6RjNhNkJORlgyNFQ0MWcxM0dQZkJuWm1FZjdsSUcrclJIT0xsYm93UnNOYTU2Ri84OXJzMThXcTQreFVJVi83eHVzYkxJNnhFQUFFYUF2Tm5IUEQzeFVuTndGcFNvVGE0aUdjdXFUVUd1RHBMS1dMUGRHQ2xYelRCbDNmL3BTYnFmZ3N3ZG5KeFUrenN3YmxXNVhqZ1B1VHpaWGxOSmEvQ1ZrNkhQNFhxNHFTQlBYZTBOTjVTN2tlS3JmYzN3bnZ1OW1EOHJYaUYzVVI0N2M3NGE1UFVJQUFBalFON3NHeHFwYUJzV1RBV3BvM0psd3dwWExUT3lYOXkzYVF1UzU0OURWTUhDVUdZaWZQSTQ3YmJDc2txMDdIcHVHMTNiMCtScXlQQmRSZnp3MWg3a1hlMHhjWVdyTkN5Mk4zalJiYXBVVmRWcU5xdUdCZk41VmMxOHE3NHl1enJrOVFnQUFDTkEzdXdEUVdoU2FWR3FVMG1mRHJtS2hnWDk5aXZSU1pCaVZFVll0eEt6UnVxMGZlYjd5OWNyTFpmYjArWEs0eC9rMmdNOHhmZXJLMTNadzd5clhaQk41SzZPWTJncGJlZlJ6anVkaSthVzJDSFVVajZEcUVaL3k5Snc0aXFRMXlNQUFJd0FlYk8zOVA2MFlLankxUDJrbUFSeTJSa2lWN0hmMWNlV1JidGNaVU9MWW5rZWZlUXFvRDNrRzdLNVBFS2V1dG96YWlHSWNGV3NOc0ViRzFYT1paNWNic1NRYVRFM1lWZ3dsbHU3VE91N0d1VDFDQUFBSTBEZTdIdUxsV1dsY2lXM1VaRlZtalR5L1JYWEt5MnY2U05YN2ZOOHRFOFcrdkFTME5XZW84eTVLZ3JFR0ttcVU1ck1LdUtwLzIyaUhDYnJJRmNBQUhCTGtqdDlOckc3aW1SSXJwS2U2TFVOc1pqRWsrQ2ZQaFh6bHBZaFYvVitvL2JrVTQ2V2ZIL3g4ZHF1VGlKdGUrZjJGTG1LUDlidkY0aDVQeDEwVmFhVTl2VGRTM21sYkc4K1BWZ05pUlp6TFN0WFZmODBOV0lZMXZhSjU3dXRNWS95ZWdRQWdCR1EzT2xMY3FVSVZSM3lrNFB4Tm1xNXlXWG54bkpsMFk2elM2N2M0cjZmRnV5YTBKNi9aNm40c05kUTVDa2hhODlscW5tUFV4VnQyeHNOOFJ5M2NvVlBWZ0pUVjlJKzZSbi9QZGRYdGJMSTZ4RUFBRWFBdk5tRGpwcXFOVmM1WUh6STZ4RUFBRWFBdk5tRGpwYXEvWG9yT3F3Q2VUMENBTUFJa0RkNzBDRlZzQXJrOVFnQUFDTkEzdXhCaDFUQktwRFhJd0FBakFCNXN3Y2RVZ1dyUUY2UEFBQXdBdVROSG5SSUZhd0NlVDBDQUFBQUFBQUFRTVgvRDR0UXFQSHBLbmZKQUFBQUFFbEZUa1N1UW1DQyIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgaWQ9ImltZzEiPjwvaW1hZ2U+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC02NjAgLTUzKSI+PHVzZSB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bGluazpocmVmPSIjaW1nMSIgZmlsbD0ibm9uZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjYwIDUzKSI+PC91c2U+PC9nPjwvc3ZnPg==", caption: "DCF — Sensibilidad Exit Multiple vs WACC"},
+    ],
+    riesgos: `<ol style="padding-left:20px;line-height:1.9;color:var(--text-mid);font-size:0.88rem">
+      <li>El consumidor discrecional puede debilitarse más por inflación, tipos o menor confianza.</li>
+      <li>Las tarifas pueden durar más o aumentar, presionando margen bruto.</li>
+      <li>El crecimiento internacional puede no replicar la productividad de EE.UU.</li>
+      <li>El modelo partner-operated depende de la calidad de los operadores locales.</li>
+      <li>El e-commerce ha mostrado debilidad y necesita mejorar tráfico y conversión.</li>
+      <li>El exceso de inventario o promociones podría erosionar márgenes.</li>
+      <li>Las colaboraciones/IPs pueden ser volátiles si no hay lanzamientos relevantes.</li>
+    </ol>`,
     priceHistory: [
       ["2016-01-04", 12.89],
       ["2016-01-07", 11.3],
@@ -2203,7 +2272,7 @@ function renderWlTbody() {
       <td>${w.precioActual} ${w.currency}</td>
       <td>${w.consenso ? w.consenso + ' ' + w.currency : '—'}</td>
       <td>${upside ? `<span class="badge ${isUp?'badge-high':'badge-pending'}" style="color:${isUp?'var(--green)':'var(--red)'}">${isUp?'+':''}${upside}%</span>` : '—'}</td>
-      <td style="color:var(--text-light)">${w.objetivo3a || 'Pendiente'}</td>`;
+      <td style="color:var(--text-light)">${w.targetPrice || 'Pendiente'}</td>`;
     tr.onclick = () => openWatchlistCompany(w.ticker);
     tbody.appendChild(tr);
   });
@@ -2282,9 +2351,18 @@ function openWatchlistCompany(ticker) {
   document.getElementById('wl-sector').textContent = w.sector;
   document.getElementById('wl-price').textContent = w.precioActual + ' ' + w.currency;
   document.getElementById('wl-consensus').textContent = w.consenso ? w.consenso + ' ' + w.currency : '—';
-  document.getElementById('wl-target').textContent = w.objetivo3a || 'Pendiente';
+  document.getElementById('wl-target').textContent = w.targetPrice || 'Pendiente';
   document.getElementById('wl-description').innerHTML = w.descripcion || '<p style="color:var(--text-light);font-style:italic">Sin descripción.</p>';
   document.getElementById('wl-thesis').innerHTML = w.tesis || '<p style="color:var(--text-light);font-style:italic">Añade tu tesis aquí.</p>';
+
+  const risksCard = document.getElementById('wl-risks-card');
+  const risksEl = document.getElementById('wl-risks');
+  if (w.riesgos) {
+    risksEl.innerHTML = w.riesgos;
+    risksCard.style.display = '';
+  } else {
+    risksCard.style.display = 'none';
+  }
 
   const upside = w.consenso ? ((w.consenso - w.precioActual) / w.precioActual * 100).toFixed(1) : null;
   const upsideWrap = document.getElementById('wl-upside-wrap');
@@ -2297,7 +2375,20 @@ function openWatchlistCompany(ticker) {
     upsideWrap.style.display = '';
   } else { upsideWrap.style.display = 'none'; }
 
-  document.getElementById('wl-list').style.display = 'none';
+  const imagesCard = document.getElementById('wl-images-card');
+  const imagesEl = document.getElementById('wl-valuation');
+  if (w.imagenes && w.imagenes.length > 0) {
+    imagesEl.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px';
+    imagesEl.innerHTML = w.imagenes.map(img => `
+      <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;box-shadow:var(--shadow)">
+        <img src="${img.src}" alt="${img.caption||''}"
+          style="width:100%;display:block;border-radius:4px">
+        ${img.caption ? `<div style="font-size:0.7rem;color:var(--text-light);margin-top:10px;text-align:center;font-style:italic">${img.caption}</div>` : ''}
+      </div>`).join('');
+    imagesCard.style.display = '';
+  } else {
+    imagesCard.style.display = 'none';
+  }
   document.getElementById('wl-detail').style.display = 'block';
   currentWlTicker = ticker;
   activeWlPeriod = 'ALL';
@@ -2389,6 +2480,31 @@ function updateItasHeaders() {
     </tr>`;
 }
 
+function renderMobileCards(containerId, positions, onClickFn) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  positions.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'mobile-card';
+    const ret = p.ret !== undefined ? p.ret : null;
+    const pct = p.pct !== undefined ? p.pct : null;
+    div.innerHTML = `
+      <div class="mobile-card-top">
+        <div class="ticker-bold">${p.ticker}</div>
+        ${ret !== null ? `<div class="mobile-card-ret ${parseFloat(ret)>=0?'ret-pos':'ret-neg'}">${parseFloat(ret)>=0?'+':''}${ret}%</div>` : ''}
+      </div>
+      <div class="mobile-card-name">${p.name || p.nombre || ''}</div>
+      <div class="mobile-card-meta">
+        ${pct !== null ? `<span>% ${pct}%</span>` : ''}
+        ${p.country ? `<span>${p.country}</span>` : ''}
+        ${p.sector ? `<span>${p.sector}</span>` : ''}
+      </div>`;
+    if (onClickFn) div.onclick = () => onClickFn(p.ticker);
+    el.appendChild(div);
+  });
+}
+
 function renderHomeTbody() {
   const tbody = document.getElementById('home-tbody');
   tbody.innerHTML = '';
@@ -2433,6 +2549,13 @@ function renderHomeTbody() {
     tbody.appendChild(cashTr);
   }
   updateAlsHeaders();
+  // Mobile cards
+  const homeMobile = getSortedAls().map(p => {
+    const { pct, ret } = calcPosition(p);
+    return { ...p, pct, ret };
+  });
+  homeMobile.push({ ticker:'CASH', name:'Liquidez', pct: (alsCashEUR / (alsPositions.reduce((s,x)=>s+x.costBasis*FX[x.currency],0)+alsCashEUR)*100).toFixed(1), ret: null, country:'—', sector:'—' });
+  renderMobileCards('home-cards', homeMobile, (ticker) => { if(ticker!=='CASH'){showPage('portfolio');openCompany(ticker);} });
 }
 
 function renderPortfolioTbody() {
@@ -2484,6 +2607,14 @@ function renderPortfolioTbody() {
     tbody.appendChild(cashTr);
   }
   updateAlsHeaders();
+  // Mobile cards portfolio
+  const portMobile = getSortedAls().map(p => {
+    const { pct, ret, avgEntry, currency } = calcPosition(p);
+    return { ...p, pct, ret };
+  });
+  const cashPctNum2 = (alsCashEUR / (alsPositions.reduce((s,x)=>s+x.costBasis*FX[x.currency],0)+alsCashEUR)*100).toFixed(1);
+  portMobile.push({ ticker:'CASH', name:'Liquidez', pct: cashPctNum2, ret: null, country:'—', sector:'—' });
+  renderMobileCards('portfolio-cards', portMobile, (ticker) => { if(ticker!=='CASH') openCompany(ticker); });
 }
 
 function renderItasTbody() {
@@ -2498,6 +2629,9 @@ function renderItasTbody() {
     tbody.appendChild(tr);
   });
   updateItasHeaders();
+  // Mobile cards itas
+  const itasMobile = getSortedItas().map(p => ({ ...p, name: p.name, ret: null }));
+  renderMobileCards('itas-cards', itasMobile, null);
 }
 
 // ====== CHART ======
@@ -2929,17 +3063,26 @@ function changeRecap(dir) {
   renderRecap();
 }
 
-// ====== MOBILE MENU ======
-function toggleMobileMenu() {
-  document.getElementById('mobile-menu').classList.toggle('open');
+// ====== LIGHTBOX ======
+function openLightbox(idx, ticker) {
+  const w = watchlist.find(x => x.ticker === ticker);
+  if (!w || !w.imagenes[idx]) return;
+  const img = w.imagenes[idx];
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox-caption').textContent = img.caption || '';
+  const lb = document.getElementById('lightbox');
+  lb.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
 }
 
-function closeMobileMenu() {
-  document.getElementById('mobile-menu').classList.remove('open');
+function closeLightbox() {
+  document.getElementById('lightbox').style.display = 'none';
+  document.body.style.overflow = '';
 }
 
-// Update mobile nav active state
-const origShowPage = showPage;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ====== NAVIGATION ======
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
@@ -2953,6 +3096,15 @@ function showPage(id) {
   if (id === 'itas') setTimeout(renderItasPies, 100);
   if (id === 'watchlist') { renderWlTbody(); closeWatchlist(); }
   if (id === 'articles') renderRecapArchive();
+}
+
+// ====== MOBILE MENU ======
+function toggleMobileMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+function closeMobileMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
 }
 
 // ====== INIT ======
@@ -2972,6 +3124,88 @@ renderWlTbody();
 renderRecap();
 renderChart();
 setTimeout(renderAlsPies, 200);
+
+
+const articles = {
+  'ormuz-2026': {
+    title: 'El Estrecho de Ormuz y el mercado del petróleo: lo que ha cambiado',
+    category: 'Macro · Oil & Gas',
+    date: 'Mayo 2026',
+    readTime: '8 min lectura',
+    content: `<h1>El Estrecho de Ormuz y el mercado del petróleo: lo que ha cambiado</h1>
+<p><em>Mayo 2026</em></p>
+<hr>
+<h2>El cuello de botella energético más importante del mundo</h2>
+<p>El Estrecho de Ormuz es un paso marítimo de apenas 54 kilómetros en su punto más estrecho, situado entre la península arábiga e Irán, que conecta el Golfo Pérsico con el Mar Arábigo. Sus canales navegables de entrada y salida miden solo dos millas náuticas cada uno. Pese a sus dimensiones, por él transitaban en 2025 cerca de <strong>20 millones de barriles diarios</strong> de crudo y productos petrolíferos — aproximadamente el <strong>25% del comercio mundial de petróleo transportado por mar</strong> y alrededor del <strong>34% del comercio global de crudo</strong>.</p>
+<p>El impacto no se limita al petróleo. Aproximadamente el 93% de las exportaciones de GNL de Qatar y el 96% de las de los Emiratos Árabes Unidos pasan por el estrecho, lo que representa cerca del <strong>19% del comercio mundial de GNL</strong>. Alrededor del 80% del volumen que cruza Ormuz tiene como destino Asia, con China e India como principales receptores — juntas absorbían el 44% de las exportaciones que pasaban por el estrecho en 2025.</p>
+<p>La singularidad de Ormuz no reside solo en el volumen que canaliza, sino en la ausencia de alternativas a escala. La IEA estimaba que solo existían entre <strong>3,5 y 5,5 mb/d de capacidad disponible en rutas alternativas</strong> para redirigir exportaciones en caso de interrupción — insuficientes para absorber ni siquiera una fracción relevante del flujo habitual.</p>
+<hr>
+<h2>El contexto antes del conflicto: oferta ajustada, demanda resiliente</h2>
+<p>Antes del estallido del conflicto, el mercado del petróleo arrancaba 2026 con un equilibrio delicado. La OPEC+ mantenía recortes voluntarios y la capacidad excedentaria efectiva del grupo superaba los <strong>4 mb/d</strong> en el cuarto trimestre de 2025 — excluyendo países sancionados. La mayor parte de esa spare capacity estaba concentrada en Arabia Saudí, con EAU en segundo lugar.</p>
+<p>El problema estructural de esa capacidad de reserva es su ubicación geográfica: casi toda ella está en la región del Golfo, accesible únicamente a través del mismo estrecho cuyo cierre se convertiría en el shock central del mercado. Es decir, el colchón de oferta que normalmente estabilizaría el precio en un shock de oferta quedaba atrapado dentro del mismo cuello de botella.</p>
+<p>La demanda global, por su parte, se mostraba resiliente. La IEA proyectaba un crecimiento de +850 kb/d para 2026 antes del conflicto, con Asia liderando el incremento. Los inventarios globales observables se situaban por encima de <strong>8,2 mil millones de barriles</strong> a comienzos de 2026 — su nivel más alto desde febrero de 2021 — lo que ofrecía un colchón temporal, aunque no una solución estructural.</p>
+<hr>
+<h2>El cierre y sus cifras: una disrupción sin precedentes recientes</h2>
+<p>Cuando el conflicto interrumpió el tráfico por Ormuz, los efectos fueron inmediatos y severos. Según datos de S&P Global y Kpler, los flujos diarios a través del estrecho cayeron hasta representar apenas el <strong>6% del nivel prebélico</strong> en términos de media móvil de cuatro días — de cerca de 20 mb/d a aproximadamente <strong>1,3 mb/d</strong>.</p>
+<p>La producción de los países del Golfo no tardó en verse afectada. Cuando el almacenamiento onshore se acerca a su límite operativo, los productores no tienen alternativa: o detienen el bombeo o asumen el riesgo de saturar la infraestructura. JPMorgan alertaba a comienzos del conflicto de que Iraq y Kuwait podrían verse forzados a recortar producción en cuestión de días. Goldman Sachs estimó una caída de la producción de crudo del Golfo Pérsico de <strong>14,5 mb/d</strong> en abril de 2026 respecto a niveles prebélicos.</p>
+<p>Por países, el impacto fue desigual. Arabia Saudí, con mayor capacidad técnica y acceso parcial a rutas alternativas, logró mantener algo de producción. Iraq, Irán, Kuwait y Qatar quedaron expuestos con mayor intensidad. Un escenario ilustrativo elaborado por Commodity Context estimaba que, asumiendo un cierre hasta el 20 de abril de 2026, la pérdida acumulada de producción del Golfo se acercaría a <strong>900 millones de barriles hacia julio de 2026</strong> — incluso considerando una recuperación gradual posterior a la reapertura.</p>
+<p>La IEA, en su informe de marzo, estimaba que la oferta global caería en torno a <strong>8 mb/d</strong> ese mes, aunque parte se compensaría con más producción fuera de OPEC+. Además, recortó su previsión de crecimiento de demanda global para 2026 hasta <strong>+640 kb/d</strong>, unos 210 kb/d menos que en el informe anterior. El impacto no se limitó al crudo: la caída de flujos por Ormuz afectó de lleno al LPG, la nafta y el jet fuel, con consecuencias directas sobre la petroquímica asiática y las cancelaciones masivas de vuelos en Oriente Medio.</p>
+<hr>
+<h2>¿Cuánto se pudo compensar? Las rutas alternativas y sus límites</h2>
+<p>Ante el cierre, los productores del Golfo con acceso a rutas alternativas activaron su capacidad de bypass. Las dos vías relevantes son bien conocidas:</p>
+<p><strong>Arabia Saudí</strong> cuenta con el sistema Abqaiq-Yanbu (Petroline) hacia el Mar Rojo, con una capacidad de diseño de 5 mb/d — y Aramco afirmaba en marzo de 2025 poder llegar a 7 mb/d, aunque ese nivel nunca había sido probado de forma sostenida. A comienzos de 2026 utilizaba unos 2 mb/d por esa vía, dejando entre <strong>3 y 5 mb/d de capacidad libre</strong> según condiciones operativas.</p>
+<p><strong>Los Emiratos Árabes Unidos</strong> disponen del oleoducto ADCOP desde Habshan hasta Fujairah, con capacidad cercana a 1,8 mb/d. Como ya exportaba unos 1,1 mb/d por esa vía antes del conflicto, el margen adicional era de apenas <strong>700 kb/d</strong>.</p>
+<p>Sumando ambas vías, la capacidad alternativa total disponible se situaba en torno a <strong>3,5-5,5 mb/d</strong> — una fracción pequeña frente a los casi 20 mb/d que normalmente cruzan el estrecho. El resto de productores — Iraq, Kuwait, Irán, Qatar — no disponen de rutas alternativas viables a escala.</p>
+<p>Del lado de la demanda, los países consumidores activaron sus reservas estratégicas. Los miembros de la IEA decidieron el 11 de marzo liberar <strong>400 millones de barriles</strong> de reservas de emergencia al mercado. Los inventarios globales observables, pese a partir de niveles altos, comenzaron a caer a un ritmo preocupante: JPMorgan estimaba una reducción de <strong>140 millones de barriles</strong> desde el inicio del conflicto, con un ritmo de caída de unos 2,7 mb/d. El banco proyectaba que los inventarios podrían alcanzar el <strong>nivel de estrés operativo</strong> (7,6 mil millones de barriles) en junio de 2026 y el <strong>suelo operacional</strong> (6,8 mil millones) en septiembre — el mínimo necesario para mantener en funcionamiento pipelines y refinerías.</p>
+<hr>
+<h2>Perspectivas y puntos de vista: lo que dicen los analistas</h2>
+<p><strong>Goldman Sachs</strong> mantenía en su escenario base un Brent medio de <strong>85 dólares para 2026</strong>, con riesgos claramente sesgados al alza. En su análisis de abril, estimaba que Arabia Saudí y EAU podrían desplegar más de <strong>2 mb/d de capacidad ociosa</strong> por encima de niveles prebélicos para estabilizar el mercado tras una eventual reapertura — pero subrayaba que la velocidad de recuperación de la producción dependía mucho de la duración del cierre y del tipo de daño sufrido por los campos. Su estimación central apuntaba a recuperar alrededor del <strong>70% de la producción perdida tras tres meses</strong> de reapertura y el <strong>88% tras seis meses</strong>.</p>
+<p><strong>JPMorgan</strong> advertía en su nota "The Illusion of Plenty" que los inventarios globales no eran tan cómodos como parecían. De los 8,4 mil millones de barriles globales, solo unos <strong>280 millones</strong> eran realísticamente accesibles sin comprometer la operativa del sistema — el resto estaba inmovilizado en almacenamiento flotante, stocks estratégicos o inventarios mínimos operativos. La conclusión era que el mercado tenía un colchón más fino de lo que sugería la cifra bruta.</p>
+<p><strong>La IEA</strong> enfatizaba que el mercado no podía resolver el problema simplemente con "más oferta en otro sitio". Incluso una vez reabierto el paso, advertía que harían falta días o semanas para limpiar el backlog de barcos acumulados, y que parte de la producción tardaría semanas o meses en volver a niveles previos.</p>
+<p>Un <strong>trader de energía entrevistado por Polymarket</strong> en abril ofrecía una visión más escéptica sobre el alto el fuego entonces negociado. En su análisis, cualquier acuerdo que dejase a Irán en posición de controlar el acceso a Ormuz sería inaceptable para los países del Golfo — especialmente Arabia Saudí. El problema no era el coste del peaje, sino que Irán pasaría a tener capacidad de regular arbitrariamente un flujo de 20 mb/d, superando con mucho la spare capacity de OPEC+. En su escenario optimista, el tráfico por el estrecho no recuperaría más del 50% del nivel prebélico en las primeras dos semanas, y haría falta entre <strong>6 y 8 semanas para recuperar más del 70% del volumen parado</strong> — incluso si la tregua aguantaba.</p>
+<p>Hay también voces que apuntan a los límites de la destrucción de demanda como mecanismo de ajuste. Aunque los precios altos penalizan el consumo, especialmente en economías emergentes, la magnitud del shut-in productivo — estimado en 10-12 mb/d — hace matemáticamente imposible que la destrucción de demanda absorba el shock por sí sola. Durante el COVID, con la economía global prácticamente paralizada, se destruyó demanda por unos 15 mb/d. Un shock de precio sin colapso de actividad no puede generar un ajuste de esa magnitud.</p>
+<hr>
+<h2>Conclusión: una disrupción con cola larga</h2>
+<p>Lo que hace singular este episodio no es solo la magnitud del shock inicial, sino la asimetría entre la velocidad de parada y la velocidad de recuperación. Detener producción puede ocurrir en días cuando el almacenamiento se satura. Reiniciarla exige verificar seguridad, recuperar operativa en terminales, asignar tankers, despejar rutas, vaciar inventarios acumulados y aumentar el bombeo progresivamente — un proceso que Bloomberg estimaba en 2-3 semanas para campos pequeños y 4-5 semanas para campos grandes en condiciones normales.</p>
+<p>A eso se añade la incertidumbre geopolítica residual: incluso tras un alto el fuego, pocos armadores y aseguradoras querrán entrar al Golfo sin garantías de seguridad. Ese riesgo de prima persistente sobre el paso por Ormuz es, posiblemente, el cambio estructural más relevante que deja este episodio — independientemente de cómo evolucione la situación militar en los próximos meses.</p>
+<hr>
+<em>Fuentes: IEA Oil Market Report (marzo 2026), Goldman Sachs Commodities Research (abril 2026), JPMorgan Oil Flash Note (abril 2026), Commodity Context, Kpler, S&P Global, Bloomberg, Reuters, Polymarket/Will Ward.</em>`
+  }
+};
+
+function openArticle(id) {
+  const a = articles[id];
+  if (!a) return;
+  const overlay = document.createElement('div');
+  overlay.id = 'article-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:var(--cream);z-index:500;overflow-y:auto;padding:48px 24px';
+  const inner = document.createElement('div');
+  inner.style.cssText = 'max-width:740px;margin:0 auto';
+  const btn = document.createElement('button');
+  btn.textContent = '← Volver';
+  btn.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--text-light);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:40px;padding:0';
+  btn.onclick = function() { overlay.remove(); };
+  const cat = document.createElement('div');
+  cat.textContent = a.category;
+  cat.style.cssText = 'font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--burgundy);margin-bottom:12px';
+  const meta = document.createElement('div');
+  meta.textContent = a.date + ' · ' + a.readTime;
+  meta.style.cssText = 'font-size:0.78rem;color:var(--text-light);margin-bottom:40px';
+  const body = document.createElement('div');
+  body.className = 'article-body';
+  body.innerHTML = a.content;
+  const footer = document.createElement('div');
+  footer.textContent = 'Solo fines informativos. No constituye asesoramiento de inversión.';
+  footer.style.cssText = 'margin-top:48px;padding-top:24px;border-top:1px solid var(--border);font-size:0.72rem;color:var(--text-light);font-style:italic';
+  inner.appendChild(btn);
+  inner.appendChild(cat);
+  inner.appendChild(meta);
+  inner.appendChild(body);
+  inner.appendChild(footer);
+  overlay.appendChild(inner);
+  document.body.appendChild(overlay);
+  overlay.scrollTop = 0;
+}
 </script>
 </body>
 </html>
