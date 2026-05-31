@@ -2021,7 +2021,6 @@
       </div>
       <div style="font-size:0.88rem;color:rgba(255,255,255,0.65);margin-bottom:6px;">Petr&oacute;leo, curva de futuros, inventarios, ETFs energ&eacute;ticos, acciones clave y demanda a&eacute;rea.</div>
       <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:10px;align-items:center;">
-        <div style="font-size:0.68rem;color:rgba(255,255,255,0.45);">Fuente: <span style="color:rgba(255,255,255,0.7);">Oil&amp;Gas Tracker.xlsb</span></div>
         <div style="font-size:0.68rem;color:rgba(255,255,255,0.45);">Actualizado: <span id="energy-last-update" style="color:rgba(255,255,255,0.7);">—</span></div>
       </div>
     </div>
@@ -7959,10 +7958,20 @@ function computeEnergySnapshots() {
   });
 
   // Add value hints to snap cards
-  if (wtiYTD !== null && energyOilPrices[0]) {
-    const last = energyOilPrices[0][1];
+  if (energyOilPrices[0]) {
+    const wtiLast = energyOilPrices[0][1];
+    const brentLast = energyOilPrices[1] ? energyOilPrices[1][1] : null;
     const el = document.querySelector('#snap-crude');
-    if (el) { const ind = el.previousElementSibling; if (ind) ind.textContent = `WTI $${last ? last.toFixed(0) : '?'}  ·  YTD ${wtiYTD >= 0 ? '+' : ''}${wtiYTD.toFixed(1)}%`; }
+    if (el) {
+      const ind = el.previousElementSibling;
+      if (ind) {
+        const wtiVal = wtiLast !== null ? `$${wtiLast.toFixed(2)}` : '—';
+        const brentVal = brentLast !== null ? `$${brentLast.toFixed(2)}` : '—';
+        ind.innerHTML =
+          `<div style="display:flex;justify-content:space-between;gap:8px;"><span>WTI</span><strong>${wtiVal}</strong></div>` +
+          `<div style="display:flex;justify-content:space-between;gap:8px;"><span>Brent</span><strong>${brentVal}</strong></div>`;
+      }
+    }
   }
   if (curveSpread !== null) {
     const el = document.querySelector('#snap-curve');
