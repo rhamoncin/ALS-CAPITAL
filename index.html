@@ -2417,6 +2417,7 @@ const twrData = [
 ];
 
 const recaps = [
+  { date:"31 May 2026", title:"Semana del 25 al 31 de Mayo de 2026", link:"recap-2026-05-31", content:"<p>La semana mantiene un tono constructivo en los mercados, apoyado por un crecimiento todavía resistente, mejores resultados empresariales y cierta expectativa de desescalada geopolítica. No obstante, la lectura macro no es plenamente favorable: el repunte de los tipos reales, el riesgo de inflación por la energía y la fortaleza menos clara de algunos datos de actividad aconsejan mantener una posición selectiva. En cartera, el entorno favorece renta variable de calidad, crédito de mayor solvencia y activos de cobertura como oro o materias primas, con más cautela en deuda de larga duración y crédito de menor calidad.</p>" },
   { date:"18 May 2026", title:"Semana del 12 al 18 de Mayo de 2026", content:"<p>📝 <em>Añade aquí tu primer recap semanal. Puedes incluir movimientos del mercado, noticias relevantes de tus posiciones, cambios en la cartera o cualquier reflexión sobre la semana.</em></p><p style='color:var(--text-light);font-size:0.8rem'>— Próxima actualización: 25 May 2026</p>" },
 ];
 
@@ -5265,15 +5266,17 @@ function renderRecapArchive() {
     </div>`;
     return;
   }
-  el.innerHTML = recaps.map((r, i) => `
-    <div onclick="showRecapDetail(${i})" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow);transition:background 0.15s"
+  el.innerHTML = recaps.map((r, i) => {
+    const action = r.link ? `openArticle('${r.link}')` : `showRecapDetail(${i})`;
+    return `<div onclick="${action}" style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow);transition:background 0.15s"
       onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='var(--card-bg)'">
       <div>
         <div style="font-weight:600;font-size:0.9rem;color:var(--text-dark)">${r.title}</div>
         <div style="font-size:0.78rem;color:var(--text-light);margin-top:3px">${r.date}</div>
       </div>
       <div style="color:var(--burgundy);font-size:0.8rem">Leer →</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function showRecapDetail(idx) {
@@ -5288,7 +5291,10 @@ function showRecapDetail(idx) {
 function renderRecap() {
   const r = recaps[currentRecapIdx];
   document.getElementById('recap-date-label').textContent = r.date;
-  document.getElementById('recap-content').innerHTML = `<h3>${r.title}</h3>${r.content}`;
+  const linkBtn = r.link
+    ? `<div style="margin-top:18px"><button onclick="openArticle('${r.link}')" style="background:none;border:none;cursor:pointer;color:var(--burgundy);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;padding:0;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;">Leer informe completo →</button></div>`
+    : '';
+  document.getElementById('recap-content').innerHTML = `<h3>${r.title}</h3>${r.content}${linkBtn}`;
 }
 
 function changeRecap(dir) {
@@ -5514,6 +5520,368 @@ const articles = {
 <p>A eso se añade la incertidumbre geopolítica residual: incluso tras un alto el fuego, pocos armadores y aseguradoras querrán entrar al Golfo sin garantías de seguridad. Ese riesgo de prima persistente sobre el paso por Ormuz es, posiblemente, el cambio estructural más relevante que deja este episodio — independientemente de cómo evolucione la situación militar en los próximos meses.</p>
 <hr>
 <em>Fuentes: IEA Oil Market Report (marzo 2026), Goldman Sachs Commodities Research (abril 2026), JPMorgan Oil Flash Note (abril 2026), Commodity Context, Kpler, S&P Global, Bloomberg, Reuters, Polymarket/Will Ward.</em>`
+  },
+  'recap-2026-05-31': {
+    title: 'Semana del 25 al 31 de Mayo de 2026',
+    category: 'Recap Semanal · Macro',
+    date: '31 Mayo 2026',
+    readTime: '12 min lectura',
+    content: `<h1>Semana del 25 al 31 de Mayo de 2026</h1>
+<p><em>31 Mayo 2026 · Recap Semanal · Macro</em></p>
+<hr>
+<h2>1. Resumen ejecutivo</h2>
+<p>La lectura agregada de la semana es constructiva, pero no limpia. El mercado sigue apoyado por crecimiento nominal positivo, beneficios empresariales resistentes y una mejora táctica del apetito por riesgo tras la expectativa de desescalada entre Estados Unidos e Irán. Sin embargo, la combinación de inflación persistente, real yields elevados y riesgo energético impide interpretar el entorno como un simple "asunción de riesgo" amplio. La señal dominante es más bien de expansión con fricción: crecimiento suficiente para sostener equities, pero no lo bastante sólido como para eliminar la sensibilidad a rates, oil y bancos centrales.</p>
+<p>El principal cambio semanal está en la composición del riesgo. A comienzos de año el debate estaba centrado en inflación, Fed y valoración de la renta variable. Esta semana, el canal geopolítico y energético ha vuelto al centro del análisis: oil, shipping, fertilizantes y cadenas de suministro son ahora variables clave para determinar si el shock es transitorio o si se convierte en presión inflacionista más persistente. La posible normalización del Estrecho de Ormuz ha reducido parte del prima de riesgo, pero las fuentes no coinciden en que el riesgo haya desaparecido: algunas lo tratan como un alivio táctico; otras lo interpretan como una señal de mayor fragmentación estructural de la economía global.</p>
+<p>Rates siguen siendo el punto de control para la asignación de activos. El informe de J.P. Morgan muestra que el Treasury 10Y acumula un repunte relevante en 2026 y que, en mayo, el movimiento ha estado más vinculado a real yields que a breakevens de inflación. Esto es importante porque los real yields afectan directamente a la valoración de equities, real estate, utilities y duration larga. Si el mercado pasa de descontar recortes a aceptar un escenario de "tipos altos durante más tiempo", la renta variable puede seguir subiendo, pero con menor margen para expansión de múltiplos y mayor dependencia de earnings.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-05-31/picture-1.webp" alt="Resumen ejecutivo semanal" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" loading="lazy" />
+</figure>
+<table style="width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:0.8rem;margin:24px 0 28px;">
+  <thead>
+    <tr style="background:var(--cream-dark);">
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Bloque</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Lectura ejecutiva</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Implicación de inversión</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Macro</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Crecimiento positivo, pero con calidad desigual por inventarios y hedging de cadenas de suministro.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mantener exposición a riesgo, evitando extrapolar PMIs como señal cíclica pura.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Inflación</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Oil, energía y costes de inputs vuelven a condicionar la trayectoria de precios.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Reducir sensibilidad a duración y priorizar negocios con capacidad de fijación de precios.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Rates</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Real yields y déficit fiscal limitan la posibilidad de una relajación agresiva.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Preferir rentabilidad por cupón de calidad y duration controlada.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Equities</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Beneficios resilientes y IA sostienen el mercado, con mejora parcial de breadth.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Constructivo pero selectivo: quality, large caps, IA, Japón/semiconductores emergentes.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Crédito</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">IG soportado por fundamentals; HY más vulnerable.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Carry sí, pero evitando beta crediticia excesiva.</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Commodities</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Gold, oil, copper y agriculture aportan señales distintas de hedge y escasez.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Útiles para diversificación, inflación y riesgos geopolíticos.</td>
+    </tr>
+  </tbody>
+</table>
+<p>En crecimiento, el mensaje es ambiguo. Los datos de actividad y PMIs han sorprendido positivamente en Estados Unidos, pero parte de la fortaleza parece venir de demanda adelantada y acumulación preventiva de inventarios para protegerse de posibles disrupciones. Esta distinción es relevante para inversión: si los PMIs reflejan acumulación de inventarios y no demanda final, la señal cíclica es menos fiable. El mercado puede premiar cyclicals a corto plazo, pero la sostenibilidad dependerá de si el consumo, los pedidos finales y el empleo mantienen tracción cuando se normalicen inventarios.</p>
+<p>La lectura de activos favorece una cartera todavía invertida, pero más selectiva que agresiva. En equities, las fuentes siguen favoreciendo calidad, grandes compañías estadounidenses y beneficiarios estructurales de IA, aunque también aparece una mejora de breadth y rotaciones hacia value, hardware, Japón, Europa y EM semiconductors. En crédito, el sesgo es claro hacia investment grade frente a high yield: el carry sigue siendo atractivo, pero las valoraciones de HY, necesidades de refinanciación y sensibilidad a earnings hacen que la asimetría sea menos favorable. En commodities, gold mantiene valor como hedge, copper se beneficia de IA/grid capex, y agriculture aparece como una exposición específica al riesgo de fertilizantes y food security.</p>
+<hr>
+<h2>2. Régimen macro: expansión con fricción</h2>
+<p>El escenario macro no apunta a una recesión inminente, pero tampoco a una aceleración limpia. Estados Unidos sigue mostrando resiliencia en actividad, empleo y consumo, aunque varias fuentes advierten de que la mejora manufacturera puede estar distorsionada por acumulación preventiva de inventarios. En Europa, la lectura es más dividida: Deutsche Bank destaca estabilización, estímulo fiscal alemán y mejora gradual de beneficios, mientras Deloitte muestra datos de PMI más débiles y una recuperación menos convincente en servicios e industria. China continúa siendo un apoyo parcial para commodities y EM, pero con demanda doméstica y property sector todavía débiles.</p>
+<p>La inflación es el elemento que impide un giro plenamente dovish de bancos centrales. Aunque algunas previsiones estratégicas siguen asumiendo desinflación gradual, el shock energético, la tensión en shipping y los costes de inputs pueden retrasar el proceso. El riesgo no es solo que el CPI o el PCE repunten puntualmente, sino que las empresas vuelvan a trasladar costes y que las expectativas de tipos se desplacen hacia un escenario de mayor restricción durante más tiempo.</p>
+<p>La consecuencia para mercados es clara: el ciclo puede seguir siendo compatible con retornos positivos en equities, pero la tolerancia a decepciones macro es menor. La combinación de yields altos, savings rate bajo y costes energéticos elevados reduce el colchón para una expansión sostenida de demanda. Por tanto, el régimen favorece estrategias de calidad, balances sólidos, flujos de caja visibles y exposición selectiva a crecimiento estructural, más que beta cíclica indiscriminada.</p>
+<table style="width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:0.8rem;margin:24px 0 28px;">
+  <thead>
+    <tr style="background:var(--cream-dark);">
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Variable</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Señal actual</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Cambio semanal</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Lectura de mercado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Crecimiento</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mixta / positiva</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mejora de headline, calidad menos clara</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Suficiente para sostener equities, pero no para justificar rotación cíclica agresiva sin confirmación de demanda final.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Inflación</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Negativa</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Riesgo al alza por oil y cadenas de suministro</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Limita recortes y presiona múltiplos de activos sensibles a duración.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Bancos centrales</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Restrictiva / dependiente de datos</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Menor visibilidad</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Fed y ECB necesitan más evidencia antes de relajar con fuerza.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Liquidez</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Neutral</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Condiciones aún razonables, pero vulnerables a real yields</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">El mercado aguanta mientras earnings y credit spreads no se deterioren.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Consumo</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mixto</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Sentiment débil, gasto aún resistente</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Riesgo de desaceleración si energía y tipos afectan renta disponible.</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Geopolítica</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Negativa</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Alivio táctico, riesgo estructural intacto</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">El mercado descuenta desescalada, pero oil y shipping siguen siendo catalizadores clave.</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2>3. Lectura de mercados y asignación de activos</h2>
+<p>La renta variable mantiene una señal constructiva, pero el liderazgo debe analizarse con más granularidad. El mercado estadounidense conserva ventajas relativas por revisiones de beneficios, márgenes, interest coverage y exposición a IA. No obstante, el rally no debería interpretarse solo como momentum tecnológico: Horizon y Deutsche Bank apuntan a una mejora de breadth y a rotaciones bajo la superficie, incluyendo value, hardware, Japón, Europa y semiconductores de mercados emergentes. Esta ampliación es positiva porque reduce el riesgo de concentración, pero todavía necesita confirmación para convertirse en una rotación estructural.</p>
+<p>La preferencia de asignación sigue favoreciendo equities de calidad frente a segmentos con balances más sensibles a tipos. Pequeñas compañías pueden beneficiarse si caen yields y mejora el apetito por riesgo, pero siguen expuestas a costes de financiación, márgenes más débiles y menor capacidad de fijación de precios. En Europa, la oportunidad depende de que el impulso fiscal y los earnings compensen la debilidad macro de corto plazo. Japón mantiene una historia diferenciada por reformas corporativas, earnings y política doméstica, aunque el yen y la normalización del BoJ añaden volatilidad.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-05-31/picture-2.webp" alt="Lectura de mercados semanal" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" loading="lazy" />
+</figure>
+<p>En renta fija, el mensaje no es simplemente negativo. El backup de yields ha creado niveles de rentabilidad por cupón más atractivos y puede volver a ofrecer ballast si el crecimiento decepciona. Sin embargo, la duración larga sigue expuesta a fiscal dominance, emisión, inflación y repricing de bancos centrales. La lectura más equilibrada es mantener exposición a bonos de calidad con duración controlada, evitando hacer de la caída de yields el único driver de rentabilidad esperada.</p>
+<p>En crédito, el sesgo es claramente de calidad. Investment grade continúa respaldado por fundamentals, demanda y carry, mientras high yield aparece más vulnerable por spreads ajustados, refinancing needs, sensibilidad a earnings y posibles spillovers desde crédito privado. La recomendación implícita de las fuentes es no abandonar crédito, sino desplazar el riesgo desde beta crediticia hacia carry de calidad.</p>
+<table style="width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:0.8rem;margin:24px 0 28px;">
+  <thead>
+    <tr style="background:var(--cream-dark);">
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Activo</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Lectura semanal</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Racional</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Riesgo principal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Equities</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Constructiva selectiva</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Earnings resilientes, IA, mejora de breadth y posible desescalada geopolítica.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Real yields, inflación y concentración del liderazgo.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Bonos soberanos</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Neutral / cautela en duración</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Yields ofrecen rentabilidad por cupón, pero fiscal dominance y real yields limitan rally.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Higher for longer y presión de emisión.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Crédito IG</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Constructivo moderado</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Fundamentals sólidos y demanda firme.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Spreads estrechos y sensibilidad a shocks macro.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">High yield</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Cauteloso</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Carry atractivo pero menor margen de seguridad.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Refinanciación, earnings y crédito privado spillover.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">USD</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mixto</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Soporte por tipos y safe haven; presión estructural por diversificación.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Geopolítica y cambios en diferenciales reales.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Gold</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Constructivo</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Hedge frente a geopolítica, deuda pública y diversificación away from USD.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Real yields altos y profit-taking.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Oil</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mixto / volátil</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Risk premium por Oriente Medio; posible alivio si se normaliza Hormuz.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Disrupción prolongada o caída de demanda.</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Emerging markets</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Selectivo constructivo</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">IA semis, carry, weaker USD y metales.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">China, oil shock y USD rebound.</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2>4. Commodities, geopolítica y sectores</h2>
+<p>El bloque de commodities es clave porque conecta tres riesgos a la vez: inflación, geopolítica y márgenes empresariales. Oil es el canal más inmediato. Una desescalada en Irán reduce el riesgo de spike, pero no elimina la vulnerabilidad de cadenas de suministro ni la sensibilidad de inflación a energía. Deutsche Bank considera que el mercado de oil está bien abastecido y que una disrupción prolongada no es su escenario base. ODI, por el contrario, enfatiza que el shock puede acelerar un cambio estructural hacia cadenas de suministro más redundantes, más caras y menos eficientes.</p>
+<p>Gold mantiene una función clara de cobertura. No es solo un trade de miedo geopolítico; también refleja diversificación frente a USD, compras de bancos centrales, preocupación por deuda pública y demanda de activos reales. En un entorno en el que real yields pueden seguir altos, la posición debe dimensionarse como hedge estratégico, no como sustituto de liquidez.</p>
+<p>Copper y agriculture aportan una lectura más específica. Copper está ligado a electrificación, data centres, grids, almacenamiento y capex de IA, mientras que agriculture aparece como oportunidad por disrupciones de fertilizantes, food security y recuperación del ciclo de commodities. LPL defiende que el sector agrícola puede actuar como exposición a un mercado de commodities menos cubierto por carteras tradicionales, aunque con riesgos propios de weather, regulation y volatilidad de inputs.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-05-31/picture-3.webp" alt="Commodity Markets Recover in the 2020s" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" loading="lazy" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">Commodity Markets Recover in the 2020s. Fuente: LPL Research</figcaption>
+</figure>
+<p>A nivel sectorial, la lectura favorece energía como hedge táctico, materiales vinculados a copper y agriculture inputs, industriales expuestos a infraestructura/capex de IA, y tecnología de calidad. Consumer discretionary queda más expuesto a energy costs y sensibilidad de renta disponible. Real estate y utilities siguen condicionados por real yields, aunque utilities podrían beneficiarse parcialmente de demanda eléctrica estructural si el mercado vuelve a premiar IA power infrastructure.</p>
+<table style="width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:0.8rem;margin:24px 0 28px;">
+  <thead>
+    <tr style="background:var(--cream-dark);">
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Sector / tema</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Lectura</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Driver macro</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Implicación</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Energy</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mixta / hedge</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Oil prima de riesgo y posible desescalada.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Útil como protección, pero con alta volatilidad si cae el premium geopolítico.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Technology</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Constructiva selectiva</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Capex de IA y earnings crecimiento.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mantener calidad; evitar compañías donde capex no se traduzca en returns.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Industrials</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Constructiva</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Fiscal spending, infraestructura, reshoring y IA build-out.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Favorece equipos, automatización y cadenas de suministro resilience.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Materials</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Constructiva selectiva</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Copper, agriculture inputs y escasez de oferta.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Exposición a commodities estructurales con volatilidad cíclica.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Banks</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Neutral / positiva</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Yields elevados y crédito aún estable.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Beneficio de tipos, pero vigilar deterioro crediticio.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Consumer discr.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mixta</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Sentiment débil y coste energético.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Riesgo si inflación afecta consumo real.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Real estate</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Cautelosa</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Real yields y mortgage rates.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Necesita caída de yields para re-rating sostenible.</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Utilities</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Neutral</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Duration sensitivity vs demanda eléctrica.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Potencial estructural, pero vulnerable a yields.</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2>5. Regiones: divergencias relevantes</h2>
+<p>Estados Unidos sigue siendo el mercado central para la lectura global. La economía muestra resiliencia y los beneficios del S&amp;P 500 siguen sosteniendo la narrativa de calidad, pero el mercado está muy sensible a real yields, PCE y cualquier señal de erosión del consumo. La clave no es si el crecimiento es positivo, sino si la calidad del crecimiento permite sostener márgenes y múltiplos en un entorno de tipos reales elevados.</p>
+<p>Europa ofrece una lectura más balanceada. Por un lado, Deutsche Bank destaca que el crecimiento se estabiliza, el estímulo fiscal alemán puede mejorar la demanda y los beneficios europeos tienen margen de recuperación. Por otro lado, Deloitte muestra datos de actividad más débiles, especialmente en servicios e industria. La región puede funcionar como rotación táctica si mejora el risk appetite global, pero todavía necesita confirmación macro.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-05-31/picture-4.webp" alt="Regiones y divergencias macro" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" loading="lazy" />
+</figure>
+<p>Japón mantiene una historia diferenciada por reformas corporativas, earnings momentum y apoyo político a una agenda pro-crecimiento. El riesgo está en la normalización monetaria del BoJ y en la evolución del yen. China, en cambio, sigue generando una señal incompleta: exportaciones, apoyo político y sectores estratégicos sostienen el crecimiento, pero property, consumo privado y baja inflación limitan una lectura más bullish. En emergentes, la selección importa más que la beta: los mercados vinculados a semiconductores, capex de IA y metales tienen mejor perfil que aquellos más vulnerables a oil, USD o demanda china débil.</p>
+<table style="width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:0.8rem;margin:24px 0 28px;">
+  <thead>
+    <tr style="background:var(--cream-dark);">
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Región</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Lectura macro</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Relevancia de mercado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Estados Unidos</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Expansión resistente, pero con presión de inflación y real yields.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Grandes compañías siguen siendo core, con vigilancia estrecha de PCE y consumo.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Eurozona</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Estabilización con señales mixtas; fiscal alemán como soporte.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Oportunidad táctica si earnings mejoran y yields no repuntan.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Japón</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Momentum de beneficios y reformas corporativas.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mercado atractivo, pero sensible a BoJ y yen.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">China</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Crecimiento apoyado por política, pero property y demanda interna débiles.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Selectividad en commodities y EM Asia.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">EM Asia</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mejor perfil donde hay semiconductores y IA supply chain.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Exposición preferente dentro de emergentes.</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Oriente Medio / Golfo</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Centro del riesgo energético y logístico.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Impacto directo en oil, inflación, shipping y sentiment global.</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2>6. Riesgos, catalizadores y lectura final de inversión</h2>
+<p>El principal riesgo para la semana siguiente es que el mercado esté descontando demasiado rápido una normalización geopolítica. Si el conflicto se reintensifica o si oil vuelve a subir, el impacto sería doble: inflación más persistente y menor poder adquisitivo del consumidor. El segundo riesgo es rates: si el PCE o los datos de actividad obligan a repricing de la Fed, el mercado podría volver a penalizar duration, pequeñas compañías, real estate y sectores defensivos con características de sustitutos de bonos.</p>
+<p>El tercer riesgo es la calidad del crecimiento. Si la mejora de PMIs responde a inventarios, la reversión de acumulación de inventarios podría generar decepción en pedidos, producción y márgenes en los próximos meses. Esto afectaría especialmente a cyclicals y compañías con menor capacidad de fijación de precios. Por el contrario, si los datos de demanda final se mantienen, la mejora de breadth podría extenderse y favorecer una rotación más equilibrada fuera de mega-cap technology.</p>
+<p>La oportunidad principal está en mantener una cartera invertida, pero con disciplina de riesgo. Equities de calidad, beneficiarios de IA, Japón, semiconductores emergentes, crédito investment grade y hedges en gold/commodities forman una combinación razonable para un régimen de crecimiento positivo con inflación y geopolítica. La cartera debería evitar una apuesta binaria a bajada de tipos o a desescalada permanente del riesgo energético.</p>
+<div style="background:var(--cream-dark);border-left:3px solid var(--burgundy);border-radius:0 8px 8px 0;padding:16px 20px;margin:24px 0;">
+  <div style="font-size:0.67rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--burgundy);font-weight:700;margin-bottom:8px;">Lectura final</div>
+  <p style="margin:0;font-size:0.9rem;line-height:1.75;color:var(--text-dark);">El régimen de mercado sigue siendo compatible con riesgo, pero ya no permite una lectura complaciente. La semana deja una señal de alivio táctico por menor tensión geopolítica y mejor breadth en equities, aunque el trasfondo sigue dominado por inflación, real yields y fragilidad de cadenas de suministro. La asignación más robusta combina exposición a crecimiento de calidad con protección frente a shocks de oil, rates y geopolítica. En comité, la conclusión sería mantener una postura constructiva pero no agresiva: riesgo equity selectivo, crédito de calidad, duración controlada y hedges reales. La próxima confirmación debe venir de PCE, oil/Hormuz, PMIs desagregados y comportamiento del consumidor.</p>
+</div>
+<table style="width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:0.8rem;margin:24px 0 28px;">
+  <thead>
+    <tr style="background:var(--cream-dark);">
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Indicador a monitorizar</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Por qué importa</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Frecuencia sugerida</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">US 10Y real yield</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Principal canal de presión sobre múltiplos y duration.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Diaria</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">PCE y core PCE</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Determina margen de la Fed para recortar o mantener restrictiva.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mensual</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Brent / WTI y flujos por Hormuz</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Canal directo de inflación y prima de riesgo geopolítico.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Diaria / semanal</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">PMIs (inventories/new orders)</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Distingue crecimiento real de acumulación de inventarios preventivo.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mensual</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Consumer confidence y gasto real</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Valida si el consumidor absorbe energía y tipos altos.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mensual</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Credit spreads IG/HY</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Termómetro de stress financiero y risk appetite.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Semanal</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Breadth del S&amp;P 500</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Confirma si el rally se amplía más allá de mega caps de IA.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Semanal</td>
+    </tr>
+    <tr>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Gold y ETF flows</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mide demanda de hedge ante geopolítica y deuda pública.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Semanal</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<em>Fuentes: J.P. Morgan Asset Management — Weekly Market Recap; T. Rowe Price — Global Markets Weekly Update; Horizon Investments — Weekly Market Recap; Deloitte — Weekly Global Economic Update; LPL Research — Seeds of Opportunity: The Case for Agriculture Investments; Deutsche Bank Chief Investment Office — Perspectives: Economic and Asset Class Outlook; Citi Wealth — Growth Holds, Inflation Builds, Markets Recalibrate; ODI — The long-term consequences of the Iran crisis.</em>`
   }
 };
 
