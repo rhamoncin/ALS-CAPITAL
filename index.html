@@ -1043,10 +1043,13 @@
   .spread-ct-strong { background:rgba(181,41,44,0.18); color:#8B1012; }
 
   .flight-kpi-row { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-bottom:20px; }
-  .flight-kpi-card { background:var(--card-bg); border:1px solid var(--border); border-radius:8px; padding:13px 14px; box-shadow:var(--shadow); }
-  .flight-kpi-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.09em; color:var(--text-light); margin-bottom:3px; }
-  .flight-kpi-value { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:var(--text-dark); margin-bottom:2px; }
-  .flight-kpi-sub { font-size:0.68rem; color:var(--text-mid); }
+  .flight-kpi-card { background:var(--card-bg); border:1px solid var(--border); border-radius:8px; padding:13px 14px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:4px; }
+  .flight-kpi-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.09em; color:var(--text-light); font-weight:600; }
+  .flight-kpi-value { font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:700; color:var(--text-dark); line-height:1.1; }
+  .flight-kpi-sub { font-size:0.65rem; color:var(--text-light); }
+  .flight-mode-toggle { display:flex; gap:4px; }
+  .flight-toggle-btn { border:1px solid var(--border); border-radius:5px; padding:4px 13px; font-size:0.73rem; font-family:'DM Sans',sans-serif; cursor:pointer; background:var(--card-bg); color:var(--text-mid); transition:all 0.15s; }
+  .flight-toggle-btn.active { background:var(--burgundy); color:#fff; border-color:var(--burgundy); font-weight:600; }
 
   .energy-comment-box { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; overflow:hidden; box-shadow:var(--shadow); }
   .energy-comment-header { background:var(--cream-dark); padding:12px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
@@ -1274,9 +1277,9 @@
       <div style="flex:1;height:1px;background:var(--border);"></div>
     </div>
     <div class="recap-nav">
-      <button class="recap-btn" onclick="changeRecap(-1)">&larr; Anterior</button>
+      <button class="recap-btn" onclick="changeRecap(1)">&larr; Anterior</button>
       <div class="recap-date" id="recap-date-label">16 May 2026</div>
-      <button class="recap-btn" onclick="changeRecap(1)">Siguiente &rarr;</button>
+      <button class="recap-btn" onclick="changeRecap(-1)">Siguiente &rarr;</button>
     </div>
     <div class="recap-card" id="recap-content">
       <h3>Semana del 12 al 16 de Mayo de 2026</h3>
@@ -2158,8 +2161,7 @@
 
   <!-- 6. FUTURES CURVE -->
   <div class="energy-section">
-    <div class="energy-section-title">Curva de futuros WTI y Brent</div>
-    <div class="energy-section-sub">Estructura temporal de precios. Backwardation = mercado ajustado; contango = mercado relajado.</div>
+    <div class="energy-section-title" style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">Curva de futuros WTI y Brent<span id="fut-curve-date" style="font-size:0.67rem;font-weight:400;color:var(--text-light);text-transform:none;letter-spacing:0;"></span></div>
     <div class="energy-divider"></div>
     <div class="energy-chart-row">
       <div class="energy-chart-card" style="grid-column:1/-1;">
@@ -2250,38 +2252,30 @@
   <!-- 8. FLIGHT DEMAND -->
   <div class="energy-section">
     <div class="energy-section-title">Flight Demand Tracker</div>
-    <div class="energy-section-sub">Vuelos comerciales como proxy de actividad a&eacute;rea global y demanda de jet fuel.</div>
+    <div class="energy-section-sub">Actividad a&eacute;rea global como proxy de demanda de jet fuel.</div>
     <div class="energy-divider"></div>
     <div class="flight-kpi-row" id="flight-kpi-row"></div>
     <div class="energy-chart-card">
-      <div class="energy-chart-title">Vuelos comerciales &mdash; comparativa anual</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:8px;">
+        <div class="energy-chart-title" id="flight-chart-title">Vuelos comerciales &mdash; comparativa anual</div>
+        <div class="flight-mode-toggle">
+          <button id="flight-btn-commercial" class="flight-toggle-btn active" onclick="switchFlightMode('commercial')">Comerciales</button>
+          <button id="flight-btn-total" class="flight-toggle-btn" onclick="switchFlightMode('total')">Totales</button>
+        </div>
+      </div>
+      <div id="flight-chart-sub" style="font-size:0.72rem;color:var(--text-light);margin-bottom:10px;">Media diaria de vuelos comerciales. Comparativa frente a a&ntilde;os anteriores.</div>
       <canvas id="flight-chart" height="110"></canvas>
     </div>
   </div>
 
   <!-- 9. FINAL READING -->
   <div class="energy-section">
-    <div class="energy-section-title">Lectura semanal del sector</div>
-    <div class="energy-section-sub">Comentario anal&iacute;tico manual. Actualiza el Excel, genera el comentario con ChatGPT y p&eacute;galo aqu&iacute;. El historial se guarda por semana.</div>
+    <div class="energy-section-title">Actualizaci&oacute;n semanal</div>
     <div class="energy-divider"></div>
-    <div class="energy-comment-box">
-      <div class="energy-comment-header">
-        <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-mid);font-weight:600;">Semana:</div>
-        <select class="energy-comment-week-select" id="energy-week-select" onchange="loadEnergyComment(this.value)"></select>
-        <button class="energy-filter-btn" onclick="addNewEnergyWeek()" style="margin-left:4px;">+ Nueva semana</button>
-        <div style="font-size:0.68rem;color:var(--text-light);margin-left:auto;" id="energy-comment-saved-label"></div>
-      </div>
-      <div class="energy-comment-body">
-        <div style="font-size:0.68rem;color:var(--text-light);margin-bottom:8px;">
-          Estructura sugerida: Precio petr&oacute;leo · Ratios / fuerza relativa · Curva de futuros · Inventarios · Flight demand · Conclusi&oacute;n
-        </div>
-        <textarea class="energy-comment-textarea" id="energy-comment-textarea" placeholder="Pega aqu&iacute; el comentario semanal generado con ChatGPT..."></textarea>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <button class="energy-comment-save-btn" onclick="saveEnergyComment()">Guardar</button>
-          <span style="font-size:0.73rem;color:var(--text-light);">El comentario se guarda localmente en el navegador.</span>
-        </div>
-      </div>
-      <div id="energy-comment-history"></div>
+    <div class="energy-comment-box" style="padding:20px 22px;">
+      <p style="margin:0 0 14px;font-size:0.88rem;line-height:1.8;color:var(--text-dark);">El mercado del petr&oacute;leo mantiene una lectura constructiva, aunque con se&ntilde;ales de consolidaci&oacute;n a corto plazo tras el fuerte avance acumulado. Los precios del Brent y WTI siguen en niveles elevados, pero han corregido recientemente, reflejando mayor volatilidad y toma de beneficios.</p>
+      <p style="margin:0 0 14px;font-size:0.88rem;line-height:1.8;color:var(--text-dark);">La curva de futuros contin&uacute;a en backwardation, se&ntilde;al de un mercado f&iacute;sico todav&iacute;a ajustado y con limitada disponibilidad de barriles inmediatos. Los inventarios comerciales muestran ca&iacute;das relevantes en crudo, gasolina y stocks totales, reforzando la percepci&oacute;n de tensi&oacute;n en el balance oferta-demanda.</p>
+      <p style="margin:0;font-size:0.88rem;line-height:1.8;color:var(--text-dark);">En renta variable, el sector energ&eacute;tico sigue mostrando un comportamiento relativo s&oacute;lido, especialmente en exploraci&oacute;n y producci&oacute;n y servicios petroleros. No obstante, la reciente correcci&oacute;n del crudo y de los activos energ&eacute;ticos sugiere un mercado m&aacute;s selectivo y menos dominado por el momentum.</p>
     </div>
   </div>
 
@@ -6954,6 +6948,7 @@ const energyOilPrices = [
 ];
 
 const energyFutures = {
+  date:  '2026-05-29',
   wti:   { m1:87.8,  m2:85.9,  m6:78.69, m12:73.9,  m24:70.67 },
   brent: { m1:91.99, m2:91.89, m6:84.03, m12:79.24, m24:75.64 },
   spreads: [
@@ -6991,14 +6986,15 @@ const energyInventories = {
   ],
 };
 
-const energyFlightKPIs = [
-  { label:'Último Dato', value:'128.733', sub:'vuelos com. diarios' },
-  { label:'vs MA 7D',    value:'-4.9%',   sub:'bajo su media 7 días' },
-  { label:'30D Change',  value:'-0.6%',   sub:'variación 30 días'   },
-  { label:'YoY vs 2025', value:'-1.3%',   sub:'vs mismo periodo 2025'},
-  { label:'Vs Media 3Y', value:'+3.6%',   sub:'vs media 2023-2025'  },
-  { label:'Señal',       value:'Neutral', sub:'actividad aérea'     },
-];
+let flightMode = 'commercial'; // 'commercial' | 'total'
+
+let energyFlightDataTotal = {
+  labels:['01 Jan','08 Jan','15 Jan','22 Jan','29 Jan','05 Feb','12 Feb','19 Feb','26 Feb','05 Mar','12 Mar','19 Mar','26 Mar','02 Apr','09 Apr','16 Apr','23 Apr','30 Apr','07 May','14 May','21 May','28 May','04 Jun','11 Jun','18 Jun','25 Jun','02 Jul','09 Jul','16 Jul','23 Jul','30 Jul','06 Aug','13 Aug','20 Aug','27 Aug','03 Sep','10 Sep','17 Sep','24 Sep','01 Oct','08 Oct','15 Oct','22 Oct','29 Oct','05 Nov','12 Nov','19 Nov','26 Nov','03 Dec','10 Dec','17 Dec','24 Dec','31 Dec'],
+  y2026:[193842,208445,221432,223089,207966,223095,233510,225879,235817,240363,233521,239900,253579,244015,253342,254003,257141,255152,249874,252067,253825,253326,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+  y2025:[180986,199577,205480,204294,214274,215490,201166,189420,202837,201784,203721,200015,212094,206848,225656,234703,231223,234985,227404,235263,234062,234618,238711,239334,243243,250858,244654,239036,248759,251048,250569,253272,258583,253489,254572,241120,243913,248015,246207,254953,245424,240541,244378,228196,233785,224483,226508,222202,204868,215116,223310,209199,190609],
+  y2024:[172960,183659,174524,174340,176973,193224,193182,204752,209937,195204,205517,210529,206250,205239,216790,221635,224865,229459,236594,245798,230170,227049,234213,241320,244409,248503,248382,238580,252304,253690,246311,243260,246124,242315,246305,232316,234207,232869,236096,224405,236632,230857,235290,232426,208195,211407,206194,202775,194074,198290,198734,198620,176991],
+  y2023:[157028,171108,175169,175254,178000,179172,196058,192488,183955,192020,188882,196561,194264,196212,201560,210265,214072,213518,217453,217207,227164,234194,230976,231673,232330,231025,230046,229083,238481,245728,238687,237279,238746,238951,235909,229776,233844,229910,229921,227044,226721,217940,221604,213715,210634,210242,208029,192335,194273,194708,198000,187238,168779],
+};
 
 // Chart instances registry
 const energyCharts = {};
@@ -7197,6 +7193,16 @@ function curveSignalLabel(v) {
   return           { label:'Contango fuerte',         cls:'ct-strong' };
 }
 
+function fmtXlsxDate(v) {
+  if (!v) return '';
+  let d;
+  if (v instanceof Date) { d = v; }
+  else if (typeof v === 'number') { d = new Date(Date.UTC(1899, 11, 30) + v * 86400000); }
+  else { d = new Date(v); }
+  if (isNaN(d)) return String(v);
+  return d.toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' });
+}
+
 function fmtSpreadVal(v) {
   if (v === null || v === undefined) return '—';
   return (v >= 0 ? '+' : '') + v.toFixed(2) + ' $/bbl';
@@ -7215,6 +7221,10 @@ function renderFuturesTables() {
   if (!priceBody || !spreadBody) return;
 
   const f = energyFutures;
+
+  // Date label
+  const dateEl = document.getElementById('fut-curve-date');
+  if (dateEl) dateEl.textContent = f.date ? 'Datos a ' + fmtXlsxDate(f.date) : '';
 
   // -- Compact price table: M1, M12, M24 only
   priceBody.innerHTML = ['wti','brent'].map(k => {
@@ -7402,10 +7412,35 @@ function renderInventoryTables() {
 function renderFlightKPIs() {
   const row = document.getElementById('flight-kpi-row');
   if (!row) return;
-  row.innerHTML = energyFlightKPIs.map(({ label, value, sub }) => `
+  const isTotal  = flightMode === 'total';
+  const kpi      = isTotal ? energyFlightKPIDataTotal : energyFlightKPIData;
+  const modeLbl  = isTotal ? 'Vuelos totales' : 'Vuelos comerciales';
+  const fmtN     = v => v ? Math.round(v).toLocaleString('es-ES') : '—';
+  const fmtC     = v => v !== null && v !== undefined ? (v>=0?'+':'')+v.toFixed(1)+'%' : '—';
+  const cls      = v => v === null || v === undefined ? '' : v > 0 ? ' ret-pos' : v < 0 ? ' ret-neg' : '';
+  const vs7d     = (kpi && kpi.lastMA && kpi.lastCount) ? (kpi.lastCount/kpi.lastMA-1)*100 : null;
+  const sigCls   = kpi ? (kpi.signal==='Bullish'?' ret-pos':kpi.signal==='Bearish'?' ret-neg':'') : '';
+
+  const cards = kpi ? [
+    { lbl: modeLbl,            val: fmtN(kpi.lastCount),  sub: 'Último dato',     vc: '' },
+    { lbl: 'Vs 7D',           val: fmtC(vs7d),            sub: 'Media 7 días',    vc: cls(vs7d) },
+    { lbl: 'Var. 30D',        val: fmtC(kpi.ch30),        sub: 'Cambio 30 días',  vc: cls(kpi.ch30) },
+    { lbl: 'Vs año anterior', val: fmtC(kpi.yoy),         sub: 'Mismo periodo',   vc: cls(kpi.yoy) },
+    { lbl: 'Vs media 3A',     val: fmtC(kpi.vs3y),        sub: 'Media 2023-2025', vc: cls(kpi.vs3y) },
+    { lbl: 'Señal',           val: kpi.signal||'—',        sub: 'Lectura actual',  vc: sigCls },
+  ] : [
+    { lbl: modeLbl, val: '—', sub: 'Último dato',     vc: '' },
+    { lbl: 'Vs 7D',           val: '—', sub: 'Media 7 días',    vc: '' },
+    { lbl: 'Var. 30D',        val: '—', sub: 'Cambio 30 días',  vc: '' },
+    { lbl: 'Vs año anterior', val: '—', sub: 'Mismo periodo',   vc: '' },
+    { lbl: 'Vs media 3A',     val: '—', sub: 'Media 2023-2025', vc: '' },
+    { lbl: 'Señal',           val: '—', sub: 'Lectura actual',  vc: '' },
+  ];
+
+  row.innerHTML = cards.map(({ lbl, val, sub, vc }) => `
     <div class="flight-kpi-card">
-      <div class="flight-kpi-label">${label}</div>
-      <div class="flight-kpi-value">${value !== null ? value : '—'}</div>
+      <div class="flight-kpi-label">${lbl}</div>
+      <div class="flight-kpi-value${vc}">${val}</div>
       <div class="flight-kpi-sub">${sub}</div>
     </div>
   `).join('');
@@ -7535,38 +7570,70 @@ let energyFlightData = {
   y2024: [114483,117671,113679,113683,115465,117939,118643,122301,122200,119860,120848,121512,122521,123099,127455,127418,127882,129677,131566,131282,130556,130216,132809,135841,137025,137637,139228,137364,141993,140043,138505,136881,137188,136493,136549,133002,132462,131982,131853,133188,133729,131493,133131,131689,123993,124479,118658,120578,116789,119276,120090,124798,120714],
   y2023: [96373,103502,104590,103461,104275,104846,109650,108075,108254,109188,109048,111201,111353,112250,113466,116803,119832,121046,121326,120516,122150,124791,123584,125107,126896,127717,128304,126811,131718,133531,132425,132515,132194,131308,131448,128615,127362,128128,129301,128793,127584,125546,125574,124175,120025,119487,119578,115603,119299,118905,120035,119714,113081],
 };
-let energyFlightKPIData = null;
+let energyFlightKPIData = { lastCount:128733, lastMA:135366, ch30:-0.6, yoy:-1.3, vs3y:3.6, signal:'Neutral' };
+let energyFlightKPIDataTotal = { lastCount:243491, lastMA:253326, ch30:-0.02, yoy:7.97, vs3y:9.22, signal:'Neutral' };
 
 function initFlightChart() {
   destroyEnergyChart('flight');
   const ctx = document.getElementById('flight-chart');
   if (!ctx) return;
-
-  const hasData = energyFlightData.labels.length > 0;
-  const labels  = hasData ? energyFlightData.labels : Array.from({length:52}, (_,i) => 'W'+(i+1));
+  const src    = flightMode === 'total' ? energyFlightDataTotal : energyFlightData;
+  const hasData = src.labels.length > 0;
+  const labels  = hasData ? src.labels : Array.from({length:52}, (_,i) => 'W'+(i+1));
   const toK = arr => arr.map(v => v !== null ? Math.round(v / 1000) : null);
-
   energyCharts['flight'] = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
       datasets: [
-        { label:'2026', data: hasData ? toK(energyFlightData.y2026) : new Array(52).fill(null), borderColor:'#6B2737', fill:false, borderWidth:2.5, tension:0.3, pointRadius:0 },
-        { label:'2025', data: hasData ? toK(energyFlightData.y2025) : new Array(52).fill(null), borderColor:'#2D6A4F', fill:false, borderWidth:1.8, tension:0.3, pointRadius:0, borderDash:[6,3] },
-        { label:'2024', data: hasData ? toK(energyFlightData.y2024) : new Array(52).fill(null), borderColor:'#D4870A', fill:false, borderWidth:1.5, tension:0.3, pointRadius:0, borderDash:[3,3] },
-        { label:'2023', data: hasData ? toK(energyFlightData.y2023) : new Array(52).fill(null), borderColor:'#5B7FD4', fill:false, borderWidth:1.5, tension:0.3, pointRadius:0, borderDash:[2,4] },
+        { label:'2026', data: hasData ? toK(src.y2026) : new Array(52).fill(null), borderColor:'#6B2737', fill:false, borderWidth:2.5, tension:0.3, pointRadius:0 },
+        { label:'2025', data: hasData ? toK(src.y2025) : new Array(52).fill(null), borderColor:'#2D6A4F', fill:false, borderWidth:1.8, tension:0.3, pointRadius:0, borderDash:[6,3] },
+        { label:'2024', data: hasData ? toK(src.y2024) : new Array(52).fill(null), borderColor:'#D4870A', fill:false, borderWidth:1.5, tension:0.3, pointRadius:0, borderDash:[3,3] },
+        { label:'2023', data: hasData ? toK(src.y2023) : new Array(52).fill(null), borderColor:'#5B7FD4', fill:false, borderWidth:1.5, tension:0.3, pointRadius:0, borderDash:[2,4] },
       ]
     },
     options: {
       responsive:true,
       plugins:{ legend:{ position:'top', labels:{ boxWidth:14, font:{size:11} } },
-                tooltip:{ callbacks:{ label: ctx => `${ctx.dataset.label}: ${ctx.raw}k vuelos` } } },
+                tooltip:{ callbacks:{ label: c => `${c.dataset.label}: ${c.raw}k vuelos` } } },
       scales:{
         y:{ grid:{ color:'rgba(0,0,0,0.05)' }, ticks:{ font:{size:10}, callback: v => v+'k' } },
         x:{ grid:{display:false}, ticks:{ font:{size:10}, maxTicksLimit:14 } }
       }
     }
   });
+  _updateFlightLabels();
+}
+
+function _updateFlightLabels() {
+  const isTotal = flightMode === 'total';
+  const titleEl = document.getElementById('flight-chart-title');
+  const subEl   = document.getElementById('flight-chart-sub');
+  if (titleEl) titleEl.textContent = isTotal ? 'Vuelos totales — comparativa anual' : 'Vuelos comerciales — comparativa anual';
+  if (subEl)   subEl.textContent   = isTotal ? 'Media diaria de vuelos totales. Comparativa frente a años anteriores.' : 'Media diaria de vuelos comerciales. Comparativa frente a años anteriores.';
+}
+
+function switchFlightMode(mode) {
+  flightMode = mode;
+  document.querySelectorAll('.flight-toggle-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('flight-btn-' + mode);
+  if (btn) btn.classList.add('active');
+  // Update chart data in-place if chart exists, else init
+  const chart = energyCharts['flight'];
+  if (chart) {
+    const src = mode === 'total' ? energyFlightDataTotal : energyFlightData;
+    const toK = arr => arr.map(v => v !== null ? Math.round(v / 1000) : null);
+    chart.data.labels          = src.labels;
+    chart.data.datasets[0].data = toK(src.y2026);
+    chart.data.datasets[1].data = toK(src.y2025);
+    chart.data.datasets[2].data = toK(src.y2024);
+    chart.data.datasets[3].data = toK(src.y2023);
+    chart.update();
+  } else {
+    initFlightChart();
+  }
+  _updateFlightLabels();
+  renderFlightKPIs();
 }
 
 // ---- Weekly Comment System ----
@@ -7602,7 +7669,8 @@ function loadEnergyComment(weekKey) {
   const ta = document.getElementById('energy-comment-textarea');
   if (ta) ta.value = entry ? entry.text : '';
   renderEnergyCommentHistory(weekKey);
-  document.getElementById('energy-comment-saved-label').textContent = '';
+  const savedLabel = document.getElementById('energy-comment-saved-label');
+  if (savedLabel) savedLabel.textContent = '';
 }
 
 function saveEnergyComment() {
@@ -7729,6 +7797,7 @@ function parseEnergyFuturesInventories(wb) {
 
   // Row 6: futures latest [date, WTI M1, M2, M6, M12, M24, Brent M1, M2, M6, M12, M24]
   const fr = gr(6);
+  energyFutures.date  = fr[0] || null;
   energyFutures.wti   = { m1:numV(fr[1]), m2:numV(fr[2]), m6:numV(fr[3]), m12:numV(fr[4]),  m24:numV(fr[5])  };
   energyFutures.brent = { m1:numV(fr[6]), m2:numV(fr[7]), m6:numV(fr[8]), m12:numV(fr[9]), m24:numV(fr[10]) };
 
@@ -7768,56 +7837,72 @@ function parseEnergyFlightsData(wb) {
   if (!ws) return;
   const rows = XLSX.utils.sheet_to_json(ws, { header:1, raw:true, defval:null });
 
-  // Headers at row 3 (idx 3). Commercial flights cols: 8=date, 9=2026, 10=2026MA, 11=2025MA, 12=2024MA, 13=2023MA
-  // Data starts row 4 (idx 4). Sample every 7 rows for chart.
+  // ---- Commercial flights: cols 8=date, 9=daily, 10=MA7, 11-13=prev year MA7 ----
   const labels=[], y2026=[], y2025=[], y2024=[], y2023=[];
-
   for (let ri = 4; ri < rows.length; ri += 7) {
     const row = rows[ri];
     if (!row) continue;
-    const dateSerial = numV(row[8]);
-    if (!dateSerial) continue;
-    labels.push(excelSerialToLabel(dateSerial));
-    y2026.push(numV(row[10])); // 2026 7-day MA commercial
+    const ds = numV(row[8]);
+    if (!ds) continue;
+    labels.push(excelSerialToLabel(ds));
+    y2026.push(numV(row[10]));
     y2025.push(numV(row[11]));
     y2024.push(numV(row[12]));
     y2023.push(numV(row[13]));
   }
   energyFlightData = { labels, y2026, y2025, y2024, y2023 };
 
-  // KPIs: find last row with 2026 data (col 9 non-null)
-  let lastIdx = -1;
+  // Commercial KPIs
+  let lastCIdx = -1;
   for (let ri = 4; ri < rows.length; ri++) {
-    if (rows[ri] && numV(rows[ri][9]) !== null) lastIdx = ri;
+    if (rows[ri] && numV(rows[ri][9]) !== null) lastCIdx = ri;
+  }
+  if (lastCIdx >= 0) {
+    const lc = rows[lastCIdx];
+    const lastCount = numV(lc[9]), lastMA = numV(lc[10]);
+    const lMA25 = numV(lc[11]), lMA24 = numV(lc[12]), lMA23 = numV(lc[13]);
+    const ago30 = lastCIdx >= 34 ? numV((rows[lastCIdx-30]||[])[10]) : null;
+    const avg3y = (lMA25!==null&&lMA24!==null&&lMA23!==null) ? (lMA25+lMA24+lMA23)/3 : null;
+    const yoy   = (lastMA!==null&&lMA25!==null) ? (lastMA/lMA25-1)*100 : null;
+    const ch30  = (lastMA!==null&&ago30!==null) ? (lastMA/ago30-1)*100 : null;
+    const vs3y  = (lastMA!==null&&avg3y!==null) ? (lastMA/avg3y-1)*100 : null;
+    let signal = 'Neutral';
+    if (yoy!==null&&ch30!==null) { if (yoy>2&&ch30>0) signal='Bullish'; else if (yoy<-2&&ch30<0) signal='Bearish'; }
+    energyFlightKPIData = { lastCount, lastMA, ch30, yoy, vs3y, signal };
   }
 
-  if (lastIdx >= 0) {
-    const last = rows[lastIdx];
-    const lastCount = numV(last[9]);  // 2026 daily count
-    const lastMA    = numV(last[10]); // 2026 7-day MA
-    const lastMA25  = numV(last[11]); // 2025 MA same period
-    const lastMA24  = numV(last[12]);
-    const lastMA23  = numV(last[13]);
-    const ago30     = lastIdx >= 34 ? numV((rows[lastIdx-30] || [])[10]) : null;
-    const avg3y     = (lastMA25 !== null && lastMA24 !== null && lastMA23 !== null) ? (lastMA25+lastMA24+lastMA23)/3 : null;
-    const yoy       = (lastMA !== null && lastMA25 !== null) ? (lastMA/lastMA25-1)*100 : null;
-    const ch30      = (lastMA !== null && ago30 !== null) ? (lastMA/ago30-1)*100 : null;
-    const vs3y      = (lastMA !== null && avg3y !== null) ? (lastMA/avg3y-1)*100 : null;
+  // ---- Total flights: cols 0=date, 1=daily, 2=MA7, 3-5=prev year MA7 ----
+  const tlabels=[], ty2026=[], ty2025=[], ty2024=[], ty2023=[];
+  for (let ri = 4; ri < rows.length; ri += 7) {
+    const row = rows[ri];
+    if (!row) continue;
+    const ds = numV(row[0]);
+    if (!ds) continue;
+    tlabels.push(excelSerialToLabel(ds));
+    ty2026.push(numV(row[2]));
+    ty2025.push(numV(row[3]));
+    ty2024.push(numV(row[4]));
+    ty2023.push(numV(row[5]));
+  }
+  energyFlightDataTotal = { labels:tlabels, y2026:ty2026, y2025:ty2025, y2024:ty2024, y2023:ty2023 };
 
-    let signal = 'Neutral';
-    if (yoy !== null && ch30 !== null) {
-      if (yoy > 2 && ch30 > 0) signal = 'Bullish';
-      else if (yoy < -2 && ch30 < 0) signal = 'Bearish';
-    }
-
-    energyFlightKPIData = { lastCount, lastMA, ch30, yoy, vs3y, signal };
-
-    energyFlightKPIs[0] = { label:'Último Dato', value: lastCount ? Math.round(lastCount).toLocaleString('es-ES') : '—', sub:'vuelos com. diarios' };
-    energyFlightKPIs[1] = { label:'vs MA 7D', value: (lastMA && lastCount) ? ((lastCount/lastMA-1)*100).toFixed(1)+'%' : '—', sub:'media móvil 7 días' };
-    energyFlightKPIs[2] = { label:'30D Change', value: ch30 !== null ? (ch30>=0?'+':'')+ch30.toFixed(1)+'%' : '—', sub:'variación 30 días' };
-    energyFlightKPIs[3] = { label:'YoY vs 2025', value: yoy !== null ? (yoy>=0?'+':'')+yoy.toFixed(1)+'%' : '—', sub:'año anterior' };
-    energyFlightKPIs[4] = { label:'Vs Media 3Y', value: vs3y !== null ? (vs3y>=0?'+':'')+vs3y.toFixed(1)+'%' : '—', sub:'media 2023-25' };
-    energyFlightKPIs[5] = { label:'Señal', value: signal, sub:'actividad aérea' };
+  // Total KPIs
+  let lastTIdx = -1;
+  for (let ri = 4; ri < rows.length; ri++) {
+    if (rows[ri] && numV(rows[ri][2]) !== null) lastTIdx = ri;
+  }
+  if (lastTIdx >= 0) {
+    const lt = rows[lastTIdx];
+    const tCount = numV(lt[1]), tMA = numV(lt[2]);
+    const tMA25  = numV(lt[3]), tMA24 = numV(lt[4]), tMA23 = numV(lt[5]);
+    const tAgo30 = lastTIdx >= 34 ? numV((rows[lastTIdx-30]||[])[2]) : null;
+    const tAvg3y = (tMA25!==null&&tMA24!==null&&tMA23!==null) ? (tMA25+tMA24+tMA23)/3 : null;
+    const tYoy   = (tMA!==null&&tMA25!==null) ? (tMA/tMA25-1)*100 : null;
+    const tCh30  = (tMA!==null&&tAgo30!==null) ? (tMA/tAgo30-1)*100 : null;
+    const tVs3y  = (tMA!==null&&tAvg3y!==null) ? (tMA/tAvg3y-1)*100 : null;
+    let tSig = 'Neutral';
+    if (tYoy!==null&&tCh30!==null) { if (tYoy>2&&tCh30>0) tSig='Bullish'; else if (tYoy<-2&&tCh30<0) tSig='Bearish'; }
+    energyFlightKPIDataTotal = { lastCount:tCount, lastMA:tMA, ch30:tCh30, yoy:tYoy, vs3y:tVs3y, signal:tSig };
   }
 }
 
