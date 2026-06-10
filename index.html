@@ -1091,6 +1091,41 @@
   .inv-quick-read ul { margin:0; padding-left:16px; }
   .inv-quick-read li { font-size:0.8rem; color:var(--text-mid); line-height:1.75; }
 
+  /* ── Earnings Monitor ── */
+  .em-sensors-grid { display:grid; grid-template-columns:1fr 2fr; gap:24px; margin-bottom:24px; }
+  .em-signals-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; }
+  .em-table-wrap { overflow-x:auto; }
+  .em-selector { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:16px; margin-bottom:36px; }
+  .em-sel-card { background:#fff; border:2px solid var(--border); border-radius:12px; padding:20px 22px; cursor:pointer; transition:border-color 0.15s, box-shadow 0.15s; text-align:left; width:100%; box-sizing:border-box; }
+  .em-sel-card:hover { border-color:rgba(107,39,55,0.35); }
+  .em-sel-card.active { border-color:var(--burgundy); box-shadow:0 2px 18px rgba(107,39,55,0.13); background:rgba(107,39,55,0.02); }
+  .em-sel-label { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--burgundy); margin-bottom:3px; }
+  .em-sel-q { font-size:0.7rem; color:var(--text-light); }
+  .em-sel-title { font-size:0.88rem; font-weight:600; color:var(--text-dark); line-height:1.45; margin-top:10px; margin-bottom:8px; }
+  .em-sel-pill { display:inline-block; padding:3px 10px; border-radius:4px; font-size:0.68rem; font-weight:700; flex-shrink:0; white-space:nowrap; }
+  .em-sel-pill.green { background:rgba(45,106,79,0.11); color:var(--green); }
+  .em-sel-pill.amber { background:rgba(210,140,0,0.11); color:#A36800; }
+  .em-sel-pill.mixed { background:rgba(155,133,0,0.11); color:#9B8500; }
+  @media (max-width:900px) {
+    .em-sensors-grid { grid-template-columns:1fr; }
+    .em-signals-grid { grid-template-columns:1fr; }
+  }
+  @media (max-width:700px) { .em-selector { grid-template-columns:1fr; } }
+  .em-company-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:24px; }
+  .em-trend-table { width:100%; border-collapse:collapse; }
+  .em-trend-table th { padding:9px 14px; text-align:left; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-light); border-bottom:1px solid var(--border); background:#faf7f5; white-space:nowrap; }
+  .em-trend-table td { padding:10px 14px; vertical-align:top; font-size:0.79rem; color:var(--text-mid); border-bottom:1px solid #f0ece8; line-height:1.55; }
+  .em-trend-table tr:last-child td { border-bottom:none; }
+  .em-trend-table .em-td-label { font-weight:600; color:var(--text-dark); font-size:0.77rem; white-space:nowrap; }
+  .em-kpi-row { display:flex; justify-content:space-between; align-items:baseline; gap:10px; padding:5px 0; border-bottom:1px solid #f5f0ec; }
+  .em-kpi-row:last-child { border-bottom:none; }
+  .em-kpi-label { font-size:0.74rem; color:var(--text-mid); flex-shrink:0; }
+  .em-kpi-value { font-size:0.78rem; font-weight:600; color:var(--text-dark); text-align:right; }
+  @media (max-width:900px) { .em-company-cards { grid-template-columns:1fr; } }
+  @media (max-width:650px) {
+    .em-signals-grid { grid-template-columns:1fr; }
+  }
+
   </style>
 </head>
 <body>
@@ -1122,6 +1157,7 @@
         <a onclick="showPage('macro')" id="nav-macro">Mercados</a>
         <a onclick="openMacroDetail()" id="nav-macro-detail">Macro</a>
         <a onclick="showPage('energy')" id="nav-energy">Energ&iacute;a</a>
+        <a onclick="showPage('earnings')" id="nav-earnings">Earnings Monitor</a>
       </div>
     </li>
     <li><a onclick="showPage('articles')" id="nav-articles">Artículos</a></li>
@@ -1140,6 +1176,7 @@
   <a onclick="showPage('macro');closeMobileMenu()" id="mnav-macro" style="padding-left:10px">Mercados</a>
   <a onclick="openMacroDetail();closeMobileMenu()" id="mnav-macro-detail" style="padding-left:10px">Macro</a>
   <a onclick="showPage('energy');closeMobileMenu()" id="mnav-energy" style="padding-left:10px">Energ&iacute;a</a>
+  <a onclick="showPage('earnings');closeMobileMenu()" id="mnav-earnings" style="padding-left:10px">Earnings Monitor</a>
   <a onclick="showPage('articles');closeMobileMenu()" id="mnav-articles">Artículos</a>
 </div>
 
@@ -2278,6 +2315,1422 @@
   </div>
 
 </div>
+
+<!-- ===================== EARNINGS MONITOR ===================== -->
+<div id="page-earnings" class="page">
+
+  <!-- HEADER -->
+  <div style="padding:48px 48px 24px;max-width:1200px;margin:0 auto">
+    <div class="section-label">An&aacute;lisis sectorial</div>
+    <div class="section-title">Earnings Monitor</div>
+    <div class="divider"></div>
+    <p style="max-width:720px;color:var(--text-mid);font-size:0.92rem;line-height:1.75;margin-top:18px;">
+      Este monitor analiza resultados trimestrales de compa&ntilde;&iacute;as l&iacute;deres por subsector para extraer se&ntilde;ales macroecon&oacute;micas. La lectura se basa en m&eacute;tricas operativas, guidance y comentarios de management, no en valoraci&oacute;n burs&aacute;til.
+    </p>
+  </div>
+
+  <!-- METODOLOGÍA -->
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 32px;">
+    <div style="background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:22px 28px;">
+      <div style="font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);font-weight:700;margin-bottom:8px;">Metodolog&iacute;a</div>
+      <p style="color:var(--text-mid);font-size:0.88rem;line-height:1.75;margin:0;">
+        Cada subsector se analiza a trav&eacute;s de compa&ntilde;&iacute;as representativas. Para cada una se revisan earnings releases, presentaciones y transcripts. La informaci&oacute;n se estandariza en KPIs comparables y se resume en sensores macro como demanda, pricing, m&aacute;rgenes, costes y se&ntilde;al agregada.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTOR SELECTOR -->
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 36px;">
+    <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:16px;">Subsectores publicados</div>
+    <div class="em-selector">
+      <div id="em-card-qsr" class="em-sel-card active" onclick="showEMSector('qsr')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px;">
+          <div>
+            <div class="em-sel-label">Restaurantes / QSR</div>
+            <div class="em-sel-q">Q1 2026</div>
+          </div>
+          <span class="em-sel-pill mixed">Mixta / vigilancia</span>
+        </div>
+        <div class="em-sel-title">Consumo, inflaci&oacute;n y sensibilidad al precio</div>
+        <div style="font-size:0.73rem;color:var(--text-light);">McDonald&#39;s &middot; Yum! Brands &middot; Chipotle</div>
+      </div>
+      <div id="em-card-retail" class="em-sel-card" onclick="showEMSector('retail')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px;">
+          <div>
+            <div class="em-sel-label">Retail Value</div>
+            <div class="em-sel-q">Q2 2026</div>
+          </div>
+          <span class="em-sel-pill green">Fuerte / vigilancia</span>
+        </div>
+        <div class="em-sel-title">Value retail fuerte, pero impulsado por b&uacute;squeda de valor y bifurcaci&oacute;n del consumidor</div>
+        <div style="font-size:0.73rem;color:var(--text-light);">Walmart &middot; Costco &middot; Dollar General</div>
+      </div>
+      <div id="em-card-luxury" class="em-sel-card" onclick="showEMSector('luxury')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px;">
+          <div>
+            <div class="em-sel-label">Lujo</div>
+            <div class="em-sel-q">Primavera 2026 / Q1 2026 comparable</div>
+          </div>
+          <span class="em-sel-pill mixed">Mixta / positiva</span>
+        </div>
+        <div class="em-sel-title">1T26: el ultra-lujo resiste, pero el lujo aspiracional sigue bajo presi&oacute;n</div>
+        <div style="font-size:0.73rem;color:var(--text-light);">LVMH &middot; Herm&egrave;s &middot; Richemont</div>
+      </div>
+      <div id="em-card-homebuilders" class="em-sel-card" onclick="showEMSector('homebuilders')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px;">
+          <div>
+            <div class="em-sel-label">Homebuilders</div>
+            <div class="em-sel-q">&Uacute;ltimos resultados FY26</div>
+          </div>
+          <span class="em-sel-pill mixed">Estable / soporte</span>
+        </div>
+        <div class="em-sel-title">Demanda resistente, pero sostenida por incentivos y polarizada por renta</div>
+        <div style="font-size:0.73rem;color:var(--text-light);">D.R. Horton &middot; Lennar &middot; Toll Brothers</div>
+      </div>
+      <div id="em-card-homeimprovement" class="em-sel-card" onclick="showEMSector('homeimprovement')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px;">
+          <div>
+            <div class="em-sel-label">Home Improvement</div>
+            <div class="em-sel-q">Q1 2026</div>
+          </div>
+        </div>
+        <div class="em-sel-title">Demanda estable pero fr&aacute;gil; el Pro resiste mientras el DIY sigue condicionado por tipos y baja rotaci&oacute;n de vivienda</div>
+        <div style="font-size:0.73rem;color:var(--text-light);">Home Depot &middot; Lowe&#39;s &middot; Sherwin-Williams</div>
+      </div>
+      <div id="em-card-banks" class="em-sel-card" onclick="showEMSector('banks')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px;">
+          <div>
+            <div class="em-sel-label">Bancos</div>
+            <div class="em-sel-q">Q1 2026</div>
+          </div>
+        </div>
+        <div class="em-sel-title">Bancos fuertes por NII, mercados y consumidor resiliente, pero con se&ntilde;ales de normalizaci&oacute;n crediticia</div>
+        <div style="font-size:0.73rem;color:var(--text-light);">JPMorgan Chase &middot; Bank of America &middot; Wells Fargo</div>
+      </div>
+      <div id="em-card-cards" class="em-sel-card" onclick="showEMSector('cards')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px;">
+          <div>
+            <div class="em-sel-label">Tarjetas / Pagos</div>
+            <div class="em-sel-q">Q1 2026</div>
+          </div>
+        </div>
+        <div class="em-sel-title">El gasto con tarjeta sigue sano, con premium y pagos globales fuertes, pero travel/cross-border nota la geopol&iacute;tica</div>
+        <div style="font-size:0.73rem;color:var(--text-light);">American Express &middot; Capital One &middot; Mastercard &middot; Visa</div>
+      </div>
+      <div id="em-card-machinery" class="em-sel-card" onclick="showEMSector('machinery')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:4px;">
+          <div>
+            <div class="em-sel-label">Maquinaria / Capital Goods</div>
+            <div class="em-sel-q">Q1 2026</div>
+          </div>
+        </div>
+        <div class="em-sel-title">Capex industrial resiliente por IA, data centers e infraestructura, pero agricultura y residencial en zona baja del ciclo</div>
+        <div style="font-size:0.73rem;color:var(--text-light);">Caterpillar &middot; Deere &middot; Eaton</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QSR SUBSECTOR -->
+  <div id="em-sub-qsr" class="em-subsector" style="display:block;">
+  <!-- SUBSECTOR: Restaurantes / QSR Q1 2026 -->
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 56px;">
+
+    <!-- 1-3. Título, headline, cobertura temporal -->
+    <div style="padding:24px 0 24px;border-bottom:2px solid var(--border);margin-bottom:24px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Restaurantes / QSR</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;color:var(--text-dark);line-height:1.4;margin-bottom:16px;">1T26: el tr&aacute;fico resiste solo donde el value es cre&iacute;ble; el consumidor de menor renta sigue bajo presi&oacute;n.</div>
+      <p style="font-size:0.84rem;color:var(--text-light);margin:0;line-height:1.65;">McDonald&#39;s Q1 2026, Yum! Brands Q1 2026 y Chipotle Q1 2026 cubren enero-marzo 2026. Lectura sectorial aproximada: 1T natural 2026.</p>
+    </div>
+
+    <!-- 4. KPI Snapshot -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">KPI Snapshot</div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Core financial KPIs</div>
+      <div class="em-table-wrap" style="margin-bottom:22px;">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>McDonald&#39;s</th>
+              <th>Yum! Brands</th>
+              <th>Chipotle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Revenue&nbsp;/ System sales growth</td>
+              <td>+9% reportado&nbsp;/ +4% moneda constante</td>
+              <td>Systemwide sales +6% excl. FX</td>
+              <td>Revenue +7,4%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Comp sales&nbsp;/ SSS</td>
+              <td>+3,8% global; +3,9% EE.&nbsp;UU.</td>
+              <td>+3% global; Taco Bell EE.&nbsp;UU. +8%; KFC +2%; Pizza Hut 0%</td>
+              <td>+0,5%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Operating margin</td>
+              <td>46% ajustado</td>
+              <td>N/D</td>
+              <td>12,9% GAAP</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">EPS&nbsp;/ earnings growth</td>
+              <td>Net income +6% reportado</td>
+              <td>EPS ajustado +15%</td>
+              <td>EPS &minus;17%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Sector KPIs</div>
+      <div class="em-table-wrap">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>McDonald&#39;s</th>
+              <th>Yum! Brands</th>
+              <th>Chipotle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Traffic&nbsp;/ Transactions</td>
+              <td>Guest count gaps positivos vs pares en EE.&nbsp;UU.; tr&aacute;fico QSR internacional d&eacute;bil</td>
+              <td>Taco Bell EE.&nbsp;UU. +3&nbsp;pp en transacciones</td>
+              <td>Transacciones +0,6%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Ticket&nbsp;/ Check</td>
+              <td>SSS EE.&nbsp;UU. impulsadas principalmente por ticket positivo</td>
+              <td>N/D</td>
+              <td>Average check &minus;10&nbsp;bps</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Digital&nbsp;/ Loyalty</td>
+              <td>Loyalty sales &gt;9.000&nbsp;M$ en 70 mercados</td>
+              <td>Mix digital r&eacute;cord 63%, ~11.000&nbsp;M$ de ventas</td>
+              <td>Digital sales 38,6% del total</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Restaurant-level margin</td>
+              <td>M&aacute;rgenes de restaurantes propios EE.&nbsp;UU. bajo presi&oacute;n</td>
+              <td>Taco Bell EE.&nbsp;UU. 23,9%; KFC 10,3%, +100&nbsp;bps</td>
+              <td>23,7% ajustado, &minus;250&nbsp;bps</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Unit growth&nbsp;/ openings</td>
+              <td>N/D</td>
+              <td>Unidades +5%; 1.030 aperturas brutas</td>
+              <td>49 aperturas en Q1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sector read -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Sector read</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">El subsector Restaurantes&nbsp;/ QSR muestra un consumo todav&iacute;a activo, pero mucho m&aacute;s sensible al precio y al value. McDonald&#39;s mantiene crecimiento en ventas comparables, pero apoyado principalmente en ticket, mientras que Yum!&nbsp;&mdash;especialmente Taco Bell&mdash; y Chipotle muestran mejores se&ntilde;ales de tr&aacute;fico real. La lectura conjunta apunta a que el consumidor sigue comiendo fuera, pero exige precios de entrada m&aacute;s bajos, promociones m&aacute;s claras y una propuesta de valor m&aacute;s convincente.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">La presi&oacute;n es m&aacute;s visible en el consumidor de menor renta. McDonald&#39;s se&ntilde;ala ca&iacute;da absoluta en visitas de clientes low-income, mientras Taco Bell parece capturar parte de esa demanda con value menu y mayor frecuencia. Chipotle, m&aacute;s expuesta a fast casual&nbsp;/ premium, mantiene tr&aacute;fico positivo, pero con ticket ligeramente negativo y presi&oacute;n en m&aacute;rgenes. La conclusi&oacute;n no es &laquo;QSR fuerte&raquo; en bloque, sino un sector donde el tr&aacute;fico depende cada vez m&aacute;s de value, promociones, innovaci&oacute;n y eficiencia operativa.</p>
+    </div>
+
+    <!-- Evidence from earnings -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">Evidence from earnings</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">McDonald&#39;s Q1 2026: comp sales +3,8% global y +3,9% en EE.&nbsp;UU., pero el crecimiento en EE.&nbsp;UU. estuvo impulsado principalmente por ticket positivo. Esto sugiere que parte del crecimiento viene de precio&nbsp;/ mix, no necesariamente de mayor volumen.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">McDonald&#39;s: management se&ntilde;al&oacute; ansiedad del consumidor y ca&iacute;da absoluta del segmento low-income por inflaci&oacute;n acumulada y gasolina. El relanzamiento de McValue y productos por debajo de 3 d&oacute;lares busca recuperar tr&aacute;fico sensible a precio.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Yum! Brands Q1 2026: comp sales +3% global, con Taco Bell EE.&nbsp;UU. +8% y crecimiento de transacciones de 3 puntos porcentuales. Taco Bell muestra una de las mejores se&ntilde;ales de demanda real dentro del grupo.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Yum! Brands: un tercio de los pedidos de Taco Bell incluye art&iacute;culos del men&uacute; de valor. Esto refuerza la tesis de que value y relevancia cultural est&aacute;n ganando cuota en un entorno de consumidor m&aacute;s selectivo.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Yum! Brands: mix digital r&eacute;cord del 63% y ventas digitales de unos 11.000&nbsp;M$. La digitalizaci&oacute;n mejora recurrencia, personalizaci&oacute;n y eficiencia operativa.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Chipotle Q1 2026: revenue +7,4%, comp sales +0,5%, transacciones +0,6% y average check &minus;10&nbsp;bps. La cadena atrae m&aacute;s visitas, pero el gasto por pedido es m&aacute;s d&eacute;bil.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Chipotle: restaurant-level margin ajustado cay&oacute; 250&nbsp;bps hasta 23,7%. La estrategia de mantener precios por debajo de la inflaci&oacute;n protege tr&aacute;fico, pero presiona rentabilidad.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">La carne de vacuno sigue siendo un coste relevante para el subsector. Las compa&ntilde;&iacute;as apuntan a presi&oacute;n persistente en beef, lo que favorece iniciativas hacia pollo, innovaci&oacute;n de men&uacute; y eficiencia operativa.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">McDonald&#39;s, Yum! y Chipotle est&aacute;n acelerando tecnolog&iacute;a, IA, digital y eficiencia en tienda para compensar presi&oacute;n salarial, costes y necesidad de mantener precios competitivos.</span></li>
+      </ul>
+    </div>
+
+    <!-- Macro read-through -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Macro read-through</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">Los resultados sugieren que el consumidor no ha abandonado el canal QSR, pero se ha vuelto m&aacute;s exigente, m&aacute;s sensible a precio y m&aacute;s dependiente de promociones. El crecimiento de ventas ya no puede leerse de forma aislada: cuando viene de ticket&nbsp;/ precio, la se&ntilde;al macro es menos limpia que cuando viene de tr&aacute;fico o transacciones.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">A nivel macro, el subsector apunta a una presi&oacute;n persistente en hogares de menor renta y a una mayor competencia por capturar gasto diario. Las cadenas con value cre&iacute;ble, escala, digitalizaci&oacute;n y eficiencia operativa pueden sostener tr&aacute;fico, mientras que aquellas que dependen m&aacute;s de precio corren mayor riesgo de deterioro en volumen. La inflaci&oacute;n alimentaria y salarial sigue pesando en m&aacute;rgenes, limitando la capacidad de trasladar costes sin afectar demanda.</p>
+    </div>
+
+    <!-- What to watch -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">What to watch</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si las comp sales siguen apoyadas en tr&aacute;fico o pasan a depender m&aacute;s de ticket&nbsp;/ precio.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Evoluci&oacute;n del consumidor low-income y su respuesta a value menus.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Eficacia de promociones, meal deals y men&uacute;s por debajo de 3 d&oacute;lares.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Presi&oacute;n de food inflation, especialmente carne de vacuno, y wage inflation.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Restaurant-level margin frente a estrategia de precios bajos.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Digital, loyalty y delivery como palancas de frecuencia y eficiencia.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Diferencia entre EE.&nbsp;UU. e internacional en tr&aacute;fico y sensibilidad a precio.</span></li>
+      </ul>
+    </div>
+
+    <!-- Glossary -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px 28px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Glossary</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">SSS&nbsp;/ Comp Sales:</strong> ventas comparables de restaurantes abiertos durante un periodo m&iacute;nimo; mide el crecimiento org&aacute;nico.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Traffic&nbsp;/ Transactions:</strong> n&uacute;mero de visitas o pedidos; mejor se&ntilde;al de demanda real que el ticket.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Average Check:</strong> importe medio por transacci&oacute;n; puede subir por precio, mix o mayor cesta.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Value Menu:</strong> men&uacute; de bajo precio dise&ntilde;ado para atraer clientes sensibles a affordability.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Systemwide Sales:</strong> ventas totales del sistema, incluyendo restaurantes franquiciados.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Restaurant-level Margin:</strong> margen operativo a nivel restaurante tras costes directos como comida, papel y labor.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">LTO:</strong> producto de edici&oacute;n limitada usado para generar novedad, tr&aacute;fico y frecuencia.</li>
+      </ul>
+    </div>
+
+  </div><!-- /subsector -->
+  </div><!-- /em-sub-qsr -->
+
+  <!-- RETAIL VALUE SUBSECTOR -->
+  <div id="em-sub-retail" class="em-subsector" style="display:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 56px;">
+
+    <!-- 1-3. Título, headline, cobertura temporal -->
+    <div style="padding:24px 0 24px;border-bottom:2px solid var(--border);margin-bottom:24px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Retail Value</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;color:var(--text-dark);line-height:1.4;margin-bottom:16px;">Q2 2026: value retail fuerte, pero impulsado por b&uacute;squeda de valor y bifurcaci&oacute;n del consumidor.</div>
+      <p style="font-size:0.84rem;color:var(--text-light);margin:0;line-height:1.65;">Walmart Q1&nbsp;FY2027, periodo abril 2026 (pub. 21&nbsp;may&nbsp;2026); Costco Q3&nbsp;FY2026, periodo cerrado el 10-may-2026 (pub. 28&nbsp;may&nbsp;2026); Dollar General Q1&nbsp;FY2027, periodo mayo 2026 (pub. 2&nbsp;jun&nbsp;2026). Lectura sectorial aproximada: Q2 natural 2026.</p>
+    </div>
+
+    <!-- 4. KPI Snapshot -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">KPI Snapshot</div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Core financial KPIs</div>
+      <div class="em-table-wrap" style="margin-bottom:22px;">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>Walmart</th>
+              <th>Costco</th>
+              <th>Dollar General</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Comps&nbsp;/ SSS growth</td>
+              <td>+4,1% EE.&nbsp;UU.; ~+6% const.&nbsp;FX</td>
+              <td>+9,8% total; +6,6% ajustado ex gas/FX</td>
+              <td>+2,0%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Tr&aacute;fico</td>
+              <td>+3% WMT EE.&nbsp;UU.; +6% Sam&#39;s Club</td>
+              <td>+2,4% mundial</td>
+              <td>+1,4% (4.&ordm;&nbsp;Q consecutivo positivo)</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Ticket&nbsp;/ basket</td>
+              <td>Mix de general merchandise positivo (1.&ordm; vez en 18&nbsp;Q)</td>
+              <td>+7,3% mundial; +4,2% ex gas/FX</td>
+              <td>+0,5%; m&aacute;s visitas, cestas peque&ntilde;as</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Margen bruto&nbsp;/ costes</td>
+              <td>MB EE.&nbsp;UU. +29&nbsp;pb; combustible &minus;175&nbsp;M$</td>
+              <td>MB 11,04%; &minus;21&nbsp;pb por inversi&oacute;n en precios</td>
+              <td>MB 31,6%; +65&nbsp;pb; shrink &minus;28&nbsp;pb</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Sector KPIs</div>
+      <div class="em-table-wrap">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>Walmart</th>
+              <th>Costco</th>
+              <th>Dollar General</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Discrecional&nbsp;/ general merchandise</td>
+              <td>Moda&nbsp;/ belleza: mayor cuota en 5 a&ntilde;os; mix de general merchandise positivo</td>
+              <td>No-alimentaci&oacute;n d&iacute;gito alto; frescos ~+10%; fuerte en saunas, sillas de masaje, oro&nbsp;/ joyer&iacute;a, home furnishings, housewares, majors y neum&aacute;ticos</td>
+              <td>No-consumibles +4,6% (5.&ordm;&nbsp;Q consecutivo)</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Membres&iacute;a&nbsp;/ fidelizaci&oacute;n</td>
+              <td>Ingresos por membres&iacute;a +17%; Walmart+ gasta 4x m&aacute;s</td>
+              <td>Renovaci&oacute;n EE.&nbsp;UU.&nbsp;/ Canad&aacute; 92,2%; Kirkland con ahorro del 15%-20%</td>
+              <td>Value Valley de 1 d&oacute;lar como refugio defensivo para el cliente base</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Private label&nbsp;/ marca propia</td>
+              <td>bettergoods, Freshness Guaranteed y Great Value: crecimiento a doble d&iacute;gito en general merchandise; +175&nbsp;pb de peso en el mix</td>
+              <td>Kirkland Signature: reducci&oacute;n de precios en varios productos para reforzar su imagen de price authority</td>
+              <td>Al menos 15 nuevas marcas propias previstas en non-consumables para FY26</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sector read -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Sector read</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">El subsector Retail Value muestra una econom&iacute;a de consumo todav&iacute;a activa, pero cada vez m&aacute;s orientada a la b&uacute;squeda de valor. Walmart, Costco y Dollar General reportan tr&aacute;fico positivo, lo que indica que el consumidor sigue comprando. Sin embargo, la calidad de la demanda es desigual: Walmart y Costco muestran una se&ntilde;al fuerte, con captaci&oacute;n de cuota, tr&aacute;fico positivo y recuperaci&oacute;n en categor&iacute;as discrecionales o de mayor ticket, mientras que Dollar General presenta una lectura m&aacute;s fr&aacute;gil, con crecimiento apoyado en m&aacute;s visitas y un cliente base de bajos ingresos que sigue presionado.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">El trade-down no solo est&aacute; impulsando tr&aacute;fico hacia formatos value, sino tambi&eacute;n aumentando la relevancia de las marcas propias. Walmart, Costco y Dollar General usan el private label de forma distinta: Walmart para captar consumidores de mayor renta que buscan valor, Costco para reforzar fidelizaci&oacute;n y percepci&oacute;n de ahorro con Kirkland, y Dollar General como herramienta defensiva para clientes de menor renta. La conclusi&oacute;n macro es que el consumidor no est&aacute; muerto, pero est&aacute; cambiando de canal: hay trade-down desde formatos m&aacute;s caros hacia retailers value, y esa migraci&oacute;n compensa parcialmente la presi&oacute;n sobre rentas bajas.</p>
+    </div>
+
+    <!-- Evidence from earnings -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">Evidence from earnings</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Walmart Q1&nbsp;FY2027: comp sales EE.&nbsp;UU. +4,1% (~+6% a tipos constantes), tr&aacute;fico +3% &mdash;el m&aacute;s fuerte en 6 trimestres&mdash; y mix de general merchandise positivo por primera vez en 18 trimestres, lo que sugiere que el trade-down de rentas medias y altas est&aacute; beneficiando a Walmart.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Walmart: las marcas propias bettergoods, Freshness Guaranteed y Great Value ganan relevancia en el contexto de trade-down. En general merchandise, el private label creci&oacute; a doble d&iacute;gito y aument&oacute; su peso en el mix en 175&nbsp;bps, ayudando a atraer tambi&eacute;n hogares de mayor renta.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Costco Q3&nbsp;FY2026: comps totales +9,8% (+6,6% ajustados ex gasolina/FX), con tr&aacute;fico mundial +2,4%, ticket +7,3% y renovaci&oacute;n de membres&iacute;a del 92,2% en EE.&nbsp;UU.&nbsp;/ Canad&aacute;.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Costco: Kirkland Signature refuerza la fidelizaci&oacute;n al ofrecer calidad igual o superior a marcas nacionales con un ahorro del 15%-20%; la compa&ntilde;&iacute;a redujo precios en varios productos Kirkland, reforzando su imagen de price authority.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Costco: el crecimiento en categor&iacute;as discrecionales de alto ticket &mdash;saunas, sillas de masaje, oro&nbsp;/ joyer&iacute;a, home furnishings, housewares, majors y neum&aacute;ticos&mdash; sugiere que su base de socios mantiene capacidad de gasto cuando percibe valor extremo.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Dollar General Q1&nbsp;FY2027: comps +2,0%, con tr&aacute;fico positivo por cuarto trimestre consecutivo (+1,4%), pero ticket medio de solo +0,5%, reflejando m&aacute;s visitas con cestas m&aacute;s peque&ntilde;as.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Dollar General: el Value Valley de 1 d&oacute;lar funciona como refugio para el cliente base bajo presi&oacute;n, mientras que las nuevas marcas propias en non-consumables buscan mejorar mix, margen y captaci&oacute;n de hogares de mayor renta.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Dollar General: la compa&ntilde;&iacute;a prev&eacute; lanzar al menos 15 nuevas marcas propias en categor&iacute;as no consumibles en FY26, con el objetivo de reforzar categor&iacute;as de mayor margen y apoyar la penetraci&oacute;n de non-consumables.</span></li>
+      </ul>
+    </div>
+
+    <!-- Macro read-through -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Macro read-through</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">Los resultados confirman una demanda nominal y de tr&aacute;fico positiva, pero con una bifurcaci&oacute;n clara por nivel de renta: el consumidor de renta media-alta se mantiene resiliente y dispuesto a gastar en categor&iacute;as discrecionales si percibe valor, mientras que el consumidor de renta baja sigue presionado por precios, combustible y la retirada de est&iacute;mulos como SNAP.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">La marca propia se est&aacute; convirtiendo en una palanca macro-sectorial relevante: permite al consumidor defender poder adquisitivo, al retailer reforzar fidelizaci&oacute;n y, en algunos casos, proteger o mejorar margen. Esto hace que el trade-down no sea solo una se&ntilde;al defensiva, sino tambi&eacute;n una fuente de cuota y mix para los retailers mejor posicionados.</p>
+    </div>
+
+    <!-- What to watch -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">What to watch</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si la recuperaci&oacute;n de general merchandise en Walmart se mantiene o fue puntual.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si Costco mantiene crecimiento de ticket sin deteriorar tr&aacute;fico.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si Dollar General consigue aumentar ticket medio o sigue dependiendo solo de m&aacute;s visitas.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Evoluci&oacute;n del consumidor de renta baja.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Impacto del combustible en m&aacute;rgenes y gasto disponible.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si el trade-down sigue aceler&aacute;ndose desde consumidores de renta media y alta.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Evoluci&oacute;n de private label como palanca de tr&aacute;fico, fidelizaci&oacute;n y margen.</span></li>
+      </ul>
+    </div>
+
+    <!-- Glossary -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px 28px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Glossary</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Comps&nbsp;/ SSS:</strong> ventas comparables en tiendas abiertas al menos 12 meses; mide el crecimiento org&aacute;nico sin el efecto de aperturas.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Tr&aacute;fico:</strong> n&uacute;mero de transacciones o visitas; indica si el crecimiento viene de m&aacute;s clientes o de mayor gasto por cliente.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Ticket&nbsp;/ basket:</strong> importe medio por transacci&oacute;n.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Trade-down:</strong> migraci&oacute;n del consumidor hacia productos, marcas o formatos m&aacute;s baratos.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Shrink:</strong> p&eacute;rdida de inventario por robo, da&ntilde;os o errores; su reducci&oacute;n mejora el margen bruto.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Membership renewal rate:</strong> porcentaje de socios que renuevan la membres&iacute;a; mide la fidelizaci&oacute;n.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Private label:</strong> marca propia del retailer; suele reforzar la percepci&oacute;n de valor, la fidelizaci&oacute;n y el margen frente a las marcas nacionales.</li>
+      </ul>
+    </div>
+
+  </div>
+  </div><!-- /em-sub-retail -->
+
+  <!-- LUJO SUBSECTOR -->
+  <div id="em-sub-luxury" class="em-subsector" style="display:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 56px;">
+
+    <!-- 1-3. Título, headline, cobertura temporal -->
+    <div style="padding:24px 0 24px;border-bottom:2px solid var(--border);margin-bottom:24px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Lujo</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;color:var(--text-dark);line-height:1.4;margin-bottom:16px;">1T26: el ultra-lujo resiste, pero el lujo aspiracional sigue bajo presi&oacute;n.</div>
+      <p style="font-size:0.84rem;color:var(--text-light);margin:0;line-height:1.65;">LVMH Q1 2026 y Herm&egrave;s Q1 2026 cubren enero-marzo 2026. Richemont reporta FY26 cerrado el 31-mar-2026, aunque desglosa datos de su Q4 fiscal&nbsp;/ Q1 natural 2026. Lectura sectorial aproximada: 1T natural 2026, con Richemont como referencia parcialmente comparable.</p>
+    </div>
+
+    <!-- 4. KPI Snapshot -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">KPI Snapshot</div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Core financial KPIs</div>
+      <div class="em-table-wrap" style="margin-bottom:22px;">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>LVMH</th>
+              <th>Herm&egrave;s</th>
+              <th>Richemont</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Organic&nbsp;/ constant FX growth</td>
+              <td>+1% org&aacute;nico&nbsp;/ +2% ex Oriente Medio</td>
+              <td>+6% org&aacute;nico</td>
+              <td>+13% en Q4 natural; FY26 +11% CER</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Reported growth&nbsp;/ FX impact</td>
+              <td>&minus;6% reportado; FX &minus;7%</td>
+              <td>&minus;1% reportado; impacto FX negativo de unos 300&nbsp;M&euro;</td>
+              <td>FY26 +5% actual; FX rest&oacute; 210&nbsp;pb al margen bruto anual</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Categor&iacute;a fuerte</td>
+              <td>Relojer&iacute;a y Joyer&iacute;a +7% org&aacute;nico</td>
+              <td>Marroquiner&iacute;a y Siller&iacute;a +9%; Seda y Textiles +8%</td>
+              <td>Joyer&iacute;a +16% org&aacute;nico en Q4 natural</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Categor&iacute;a d&eacute;bil</td>
+              <td>Moda y Marroquiner&iacute;a &minus;2% org&aacute;nico</td>
+              <td>Relojer&iacute;a &minus;4%; Perfumer&iacute;a&nbsp;/ Belleza estable</td>
+              <td>Relojer&iacute;a especializada +2% en Q4 natural</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Sector KPIs</div>
+      <div class="em-table-wrap">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>LVMH</th>
+              <th>Herm&egrave;s</th>
+              <th>Richemont</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">China&nbsp;/ Asia</td>
+              <td>Asia ex-Jap&oacute;n +7% org&aacute;nico; China local s&oacute;lida</td>
+              <td>Asia ex-Jap&oacute;n +2%; China continental ligero crecimiento</td>
+              <td>Asia Pac&iacute;fico +14% en Q4 natural; China&nbsp;/ HK&nbsp;/ Macao +3% FY26</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Americas&nbsp;/ EE.&nbsp;UU.</td>
+              <td>+3% org&aacute;nico</td>
+              <td>+17% org&aacute;nico</td>
+              <td>+18% en Q4 natural</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Europa&nbsp;/ turismo</td>
+              <td>Europa &minus;3% org&aacute;nico; turismo menos din&aacute;mico</td>
+              <td>Europa ex-Francia +10%; Francia &minus;3% por menor turismo</td>
+              <td>Europa +5% en Q4 natural; desaceleraci&oacute;n por turismo y comparables</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Jap&oacute;n</td>
+              <td>&minus;3% org&aacute;nico</td>
+              <td>+10% org&aacute;nico</td>
+              <td>+28% en Q4 natural</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Retail vs wholesale</td>
+              <td>Foco en exclusividad de distribuci&oacute;n</td>
+              <td>Tiendas propias +7%; wholesale &minus;7%</td>
+              <td>Retail +12% FY26; 71% de ventas</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Pricing&nbsp;/ mix</td>
+              <td>Precio +2% en Moda y Marroquiner&iacute;a; mix ligeramente negativo</td>
+              <td>Precios +6% para cubrir costes de producci&oacute;n</td>
+              <td>Precios +5%-6% en joyer&iacute;a para compensar el oro</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. Sector read -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Sector read</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">El lujo no muestra una crisis generalizada de demanda, pero s&iacute; una fragmentaci&oacute;n clara. El crecimiento se concentra en marcas, categor&iacute;as y geograf&iacute;as con mayor exposici&oacute;n a consumidores de patrimonio elevado, mientras que el lujo aspiracional y parte de la moda amplia siguen m&aacute;s presionados. Herm&egrave;s y la joyer&iacute;a de Richemont muestran una resiliencia superior, mientras que LVMH refleja una recuperaci&oacute;n m&aacute;s moderada y mayor sensibilidad al mix, la divisa, el turismo y la moda.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">La lectura conjunta apunta a un consumidor high-end todav&iacute;a activo, especialmente en EE.&nbsp;UU., Jap&oacute;n y en categor&iacute;as como joyer&iacute;a o marroquiner&iacute;a ultra-premium. Sin embargo, el crecimiento es menos homog&eacute;neo que en ciclos anteriores: China se estabiliza, pero no acelera con fuerza; Europa est&aacute; afectada por turismo; Jap&oacute;n muestra se&ntilde;ales mixtas seg&uacute;n compa&ntilde;&iacute;a; y la fortaleza del euro distorsiona las cifras reportadas. La conclusi&oacute;n no es &quot;lujo fuerte&quot; en bloque, sino &quot;ultra-lujo resiliente, lujo aspiracional m&aacute;s fr&aacute;gil y crecimiento cada vez m&aacute;s selectivo&quot;.</p>
+    </div>
+
+    <!-- 6. Evidence from earnings -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">Evidence from earnings</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">LVMH Q1 2026: crecimiento org&aacute;nico de +1%, o +2% excluyendo el impacto de Oriente Medio, frente a una ca&iacute;da reportada del &minus;6% por un impacto negativo de divisa del &minus;7%. La lectura operativa es mejor que la cifra reportada, pero sigue siendo moderada.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">LVMH: Moda y Marroquiner&iacute;a cay&oacute; &minus;2% org&aacute;nico, mientras Relojer&iacute;a y Joyer&iacute;a creci&oacute; +7%. Esto sugiere que el gasto se est&aacute; desplazando hacia categor&iacute;as de mayor valor percibido y menor componente aspiracional.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Herm&egrave;s Q1 2026: crecimiento org&aacute;nico de +6%, con tiendas propias +7% y Marroquiner&iacute;a y Siller&iacute;a +9%. La compa&ntilde;&iacute;a sigue mostrando una calidad de crecimiento superior gracias a escasez, pricing power y clientela de muy alta renta.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Herm&egrave;s: Americas creci&oacute; +17% y Jap&oacute;n +10%, mientras Asia ex-Jap&oacute;n avanz&oacute; +2%. El dato apunta a resiliencia del consumidor de alta renta, aunque China todav&iacute;a parece m&aacute;s estabilizaci&oacute;n que boom.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Richemont Q4 natural: crecimiento de +13%, con Joyer&iacute;a +16%, Americas +18% y Jap&oacute;n +28%. La joyer&iacute;a high-end aparece como uno de los segmentos m&aacute;s s&oacute;lidos del lujo global.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Richemont: retail creci&oacute; +12% en FY26 y represent&oacute; el 71% de las ventas. La fortaleza del canal directo refuerza la idea de que las marcas con control de distribuci&oacute;n y relaci&oacute;n directa con cliente final est&aacute;n mejor posicionadas.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">El conflicto en Oriente Medio rest&oacute; entre 1 y 1,5 puntos de crecimiento org&aacute;nico a LVMH y Herm&egrave;s, y afect&oacute; tambi&eacute;n a Richemont en marzo. La geopol&iacute;tica est&aacute; pesando en turismo, aeropuertos y ciertas regiones de gasto internacional.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">La divisa es un factor relevante: LVMH sufri&oacute; un impacto FX de &minus;7%, Herm&egrave;s tuvo un impacto negativo de unos 300 millones &euro; y Richemont sufri&oacute; presi&oacute;n de FX en margen bruto. No debe confundirse debilidad reportada con debilidad org&aacute;nica.</span></li>
+      </ul>
+    </div>
+
+    <!-- 7. Macro read-through -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Macro read-through</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">Los resultados sugieren que el consumidor global de alta renta sigue gastando, pero de forma m&aacute;s selectiva. El gasto m&aacute;s resiliente se concentra en ultra-lujo, joyer&iacute;a high-end, marcas con escasez estructural y consumidores apoyados por wealth effect. EE.&nbsp;UU. y Jap&oacute;n aparecen como focos de fortaleza, mientras que China muestra se&ntilde;ales de estabilizaci&oacute;n, no de recuperaci&oacute;n explosiva.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">A nivel macro, el subsector apunta a una econom&iacute;a de consumo premium polarizada. El consumidor de muy alto patrimonio sigue protegido por activos financieros, real estate y menor sensibilidad al ciclo, mientras que el consumidor aspiracional muestra m&aacute;s cautela. El lujo sigue siendo resistente, pero la calidad del crecimiento depende cada vez m&aacute;s de categor&iacute;a, canal, geograf&iacute;a y nivel de exclusividad.</p>
+    </div>
+
+    <!-- 8. What to watch -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">What to watch</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si China pasa de estabilizaci&oacute;n a aceleraci&oacute;n real en consumo local.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Evoluci&oacute;n del consumidor aspiracional frente al ultra-lujo.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Diferencia entre joyer&iacute;a high-end y moda&nbsp;/ leather goods amplia.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Fortaleza del consumidor estadounidense si cambia el wealth effect.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Impacto del turismo y de Oriente Medio en Europa, aeropuertos y travel retail.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Presi&oacute;n de FX sobre cifras reportadas y m&aacute;rgenes.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Evoluci&oacute;n de wholesale frente a retail propio.</span></li>
+      </ul>
+    </div>
+
+    <!-- 9. Glossary -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px 28px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Glossary</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Organic growth:</strong> crecimiento excluyendo divisa y cambios de per&iacute;metro; refleja mejor la tendencia operativa real.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Constant FX&nbsp;/ CER:</strong> crecimiento a tipos de cambio constantes, &uacute;til para separar demanda real de impacto divisa.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">FX impact:</strong> efecto de las divisas sobre ventas o m&aacute;rgenes reportados.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Aspirational consumer:</strong> consumidor de renta media-alta que compra lujo de forma m&aacute;s discrecional y sensible al ciclo.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Ultra-luxury:</strong> segmento de lujo de m&aacute;xima exclusividad, menor sensibilidad a precio y mayor exposici&oacute;n a patrimonio.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Travel retail:</strong> ventas ligadas a aeropuertos, turismo y gasto internacional.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Wholesale:</strong> canal mayorista o concesiones, normalmente menos controlado que la venta directa en tiendas propias.</li>
+      </ul>
+    </div>
+
+  </div>
+  </div><!-- /em-sub-luxury -->
+
+  <!-- HOMEBUILDERS SUBSECTOR -->
+  <div id="em-sub-homebuilders" class="em-subsector" style="display:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 56px;">
+
+    <!-- 1-3. Título, headline, cobertura temporal -->
+    <div style="padding:24px 0 24px;border-bottom:2px solid var(--border);margin-bottom:24px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Homebuilders</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;color:var(--text-dark);line-height:1.4;margin-bottom:16px;">1T26: demanda resistente, pero cada vez m&aacute;s apoyada por incentivos y divergente por renta.</div>
+      <p style="font-size:0.84rem;color:var(--text-light);margin:0;line-height:1.65;">D.R. Horton Q2&nbsp;FY26, cerrado el 31-mar-2026; Lennar Q1&nbsp;FY26, cerrado el 28-feb-2026; Toll Brothers Q2&nbsp;FY26, cerrado el 30-abr-2026. Lectura sectorial aproximada: 1T natural 2026 / primeros meses de 2026.</p>
+    </div>
+
+    <!-- 4. KPI Snapshot -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">KPI Snapshot</div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Core financial KPIs</div>
+      <div class="em-table-wrap" style="margin-bottom:22px;">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>D.R. Horton</th>
+              <th>Lennar</th>
+              <th>Toll Brothers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Revenue&nbsp;/ HB revenue</td>
+              <td>$7.600M</td>
+              <td>$6.298,6M <span style="color:var(--text-light);">/ &minus;13% YoY</span></td>
+              <td>$2.512,5M <span style="color:var(--text-light);">/ &minus;7% YoY</span></td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Gross margin</td>
+              <td>20,1%</td>
+              <td>15,2%</td>
+              <td>26,2%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Net income&nbsp;/ EPS</td>
+              <td>$647,9M <span style="color:var(--text-light);">/ $2,24</span></td>
+              <td>$229,4M <span style="color:var(--text-light);">/ $0,93</span></td>
+              <td>$260,6M <span style="color:var(--text-light);">/ $2,72</span></td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Guidance&nbsp;/ outlook</td>
+              <td style="font-size:0.74rem;line-height:1.5;">FY26 ingresos $33.500-34.500M; cierres 86.000-87.500</td>
+              <td style="font-size:0.74rem;line-height:1.5;">Q2 FY26 orders 21.000-22.000; entregas 20.000-21.000; gross margin 15,5%-16%</td>
+              <td style="font-size:0.74rem;line-height:1.5;">FY26 entregas 10.400-10.700; ASP $985.000-1.000.000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Sector KPIs</div>
+      <div class="em-table-wrap">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>D.R. Horton</th>
+              <th>Lennar</th>
+              <th>Toll Brothers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Net orders&nbsp;/ contracts</td>
+              <td>24.992 <span style="color:var(--text-light);">/ +11,4% YoY</span></td>
+              <td>18.515 <span style="color:var(--text-light);">/ +1% aprox.</span></td>
+              <td>2.834 <span style="color:var(--text-light);">/ +7% YoY</span></td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Deliveries&nbsp;/ closings</td>
+              <td>19.486</td>
+              <td>16.863 <span style="color:var(--text-light);">/ &minus;5% YoY</span></td>
+              <td>2.491 <span style="color:var(--text-light);">/ &minus;14% YoY</span></td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Cancellation rate</td>
+              <td>16%</td>
+              <td>13%</td>
+              <td>2,9% del backlog inicial</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Incentives</td>
+              <td>~10% de ingresos</td>
+              <td>14% de ingresos</td>
+              <td>8% del precio de venta</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">ASP deliveries</td>
+              <td>$361.600</td>
+              <td>$374.000</td>
+              <td>$1.008.600</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. Sector read -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Sector read</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">La vivienda nueva en EE.UU. no muestra una ruptura de la demanda, pero la calidad del crecimiento es desigual. D.R. Horton aceler&oacute; pedidos en el trimestre y Toll Brothers mantuvo una demanda s&oacute;lida en lujo, mientras que Lennar reflej&oacute; mayor presi&oacute;n en ingresos, m&aacute;rgenes e incentivos. La lectura conjunta apunta a un mercado activo, pero todav&iacute;a muy condicionado por affordability, tipos hipotecarios y capacidad del comprador para absorber pagos mensuales elevados.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">En el segmento masivo, los builders est&aacute;n sosteniendo volumen mediante buydowns, descuentos, menor ASP y ajustes de producto. En cambio, Toll Brothers muestra una demanda m&aacute;s resiliente gracias a su exposici&oacute;n a compradores de mayor renta, mayor uso de efectivo y menor sensibilidad a financiaci&oacute;n. Por tanto, la conclusi&oacute;n no es &quot;housing fuerte&quot;, sino &quot;housing resistente, polarizado y apoyado por incentivos&quot;.</p>
+    </div>
+
+    <!-- 6. Evidence from earnings -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">Evidence from earnings</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">D.R. Horton Q2&nbsp;FY26: net orders de 24.992 viviendas, +11,4% interanual, con cancellation rate del 16%, estable YoY y menor que el 18% secuencial. La demanda sigue activa, pero no exenta de fricci&oacute;n.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">D.R. Horton: home sales gross margin del 20,1% e incentivos cercanos al 10% de ingresos. El volumen se est&aacute; defendiendo a costa de precio, margen y apoyo financiero al comprador.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">D.R. Horton: el 65% de cierres hipotecarios correspondi&oacute; a first-time buyers, lo que refuerza la sensibilidad del mix al pago mensual y a la affordability.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Lennar Q1&nbsp;FY26: homebuilding revenue de 6.298,6 millones de d&oacute;lares, -13% YoY, y margen bruto de ventas del 15,2% frente al 18,7% YoY. Es la se&ntilde;al m&aacute;s clara de presi&oacute;n en rentabilidad.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Lennar: incentivos del 14% de ingresos, frente a un rango hist&oacute;rico del 4%-6%, y management describiendo el mercado como &quot;obstinadamente desafiante&quot;. Esto sugiere que parte de la demanda est&aacute; siendo comprada.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Toll Brothers Q2&nbsp;FY26: net contracts +7% YoY, margen bruto ajustado del 26,2% y cancellation rate del 2,9% del backlog inicial. El segmento luxury muestra una resiliencia muy superior.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Toll Brothers: 23% de compradores en efectivo y LTV medio del 69% en financiados. La calidad del comprador reduce la sensibilidad a tipos frente al segmento entry-level.</span></li>
+      </ul>
+    </div>
+
+    <!-- 7. Macro read-through -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Macro read-through</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">Los resultados sugieren que el mercado de vivienda nueva sigue funcionando, pero no de forma plenamente org&aacute;nica. La affordability contin&uacute;a siendo el principal cuello de botella y obliga a los builders m&aacute;s expuestos al comprador masivo a utilizar incentivos, buydowns y reducci&oacute;n de ASP/mix para mantener actividad.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">La divergencia entre D.R. Horton/Lennar y Toll Brothers apunta a una econom&iacute;a residencial polarizada: el comprador entry-level sigue muy sensible al pago mensual, mientras que el comprador luxury est&aacute; m&aacute;s protegido por patrimonio, equity acumulada y menor apalancamiento. A nivel macro, esto es consistente con una econom&iacute;a resistente pero desigual, donde los tipos altos siguen pesando en los sectores m&aacute;s dependientes de financiaci&oacute;n.</p>
+    </div>
+
+    <!-- 8. What to watch -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">What to watch</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Evoluci&oacute;n de net orders sin necesidad de aumentar incentivos.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Cancellation rate, especialmente en compradores de primera vivienda.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Home sales gross margin y presi&oacute;n por buydowns.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">ASP, mix y reducci&oacute;n del tama&ntilde;o de vivienda.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Diferencia entre demanda entry-level y luxury.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Conversi&oacute;n del backlog en entregas.</span></li>
+      </ul>
+    </div>
+
+    <!-- 9. Glossary -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px 28px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Glossary</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Affordability:</strong> capacidad del comprador para asumir la cuota mensual de una vivienda con los precios y tipos actuales.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Buydown:</strong> incentivo por el que el builder subsidia el tipo hipotecario para reducir la cuota mensual del comprador.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Cancellation rate:</strong> porcentaje de pedidos o backlog que se cancela antes del cierre; mide fricci&oacute;n y calidad de la demanda.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">ASP:</strong> precio medio de venta por vivienda; ayuda a leer mix, pricing, descuentos e incentivos.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Entry-level buyer:</strong> comprador de primera vivienda, normalmente m&aacute;s sensible al pago mensual, tipos y affordability.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Backlog:</strong> viviendas vendidas pero todav&iacute;a no entregadas; da visibilidad sobre actividad futura.</li>
+      </ul>
+    </div>
+
+  </div>
+  </div><!-- /em-sub-homebuilders -->
+
+  <!-- HOME IMPROVEMENT SUBSECTOR -->
+  <div id="em-sub-homeimprovement" class="em-subsector" style="display:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 56px;">
+
+    <!-- 1-3. Título, headline, cobertura temporal -->
+    <div style="padding:24px 0 24px;border-bottom:2px solid var(--border);margin-bottom:24px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Home Improvement</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;color:var(--text-dark);line-height:1.4;margin-bottom:16px;">1T26: demanda estable pero fr&aacute;gil; el Pro resiste mientras el DIY sigue condicionado por tipos, baja rotaci&oacute;n de vivienda y gasto discrecional d&eacute;bil.</div>
+      <p style="font-size:0.84rem;color:var(--text-light);margin:0;line-height:1.65;">Home Depot Q1 2026, cerrado el 3-may-2026; Lowe&#39;s Q1 2026, cerrado el 1-may-2026; Sherwin-Williams Q1 2026, cerrado el 31-mar-2026. Lectura sectorial aproximada: primeros meses de 2026 / 1T natural ampliado, con Home Depot y Lowe&#39;s cubriendo febrero-abril.</p>
+    </div>
+
+    <!-- 4. KPI Snapshot -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">KPI Snapshot</div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Core financial KPIs</div>
+      <div class="em-table-wrap" style="margin-bottom:22px;">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>Home Depot</th>
+              <th>Lowe&#39;s</th>
+              <th>Sherwin-Williams</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Revenue Growth</td>
+              <td>+4,8%</td>
+              <td>+10,3%</td>
+              <td>+6,8%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Comp Sales</td>
+              <td>+0,6% <span style="color:var(--text-light);">/ U.S. +0,4%</span></td>
+              <td>+0,6%</td>
+              <td>Paint Stores Group +2,4%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Gross Margin</td>
+              <td>33,0%</td>
+              <td>32,7%</td>
+              <td>49,1%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Operating Margin</td>
+              <td>11,9% <span style="color:var(--text-light);">/ ajustado 12,3%</span></td>
+              <td>11,1% <span style="color:var(--text-light);">/ ajustado 11,5%</span></td>
+              <td>pre-tax margin 12,0%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Sector KPIs</div>
+      <div class="em-table-wrap">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>Home Depot</th>
+              <th>Lowe&#39;s</th>
+              <th>Sherwin-Williams</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Transactions&nbsp;/ Volume</td>
+              <td>comp transactions &minus;1,3%</td>
+              <td>comp customer transactions &minus;0,9%</td>
+              <td>PSG volumes +low-single digit</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Ticket&nbsp;/ Price-mix</td>
+              <td>average ticket +2,2%</td>
+              <td>average ticket +1,5% hasta $107,65</td>
+              <td>PSG price/mix +low-single digit</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Digital&nbsp;/ Online</td>
+              <td>online 16,5% de ventas; crecimiento +10,5%</td>
+              <td>online +15,5%</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Big-ticket&nbsp;/ Large projects</td>
+              <td>big-ticket &gt;$1.000 +0,8%</td>
+              <td>big-ticket estable / &gt;+2% impulsado por Pro y electrodom&eacute;sticos</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Inventory</td>
+              <td>$27.280M / +5,7% YoY</td>
+              <td>$18.447M</td>
+              <td>$2.473M</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sector read -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Sector read</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">Home Improvement muestra una estabilizaci&oacute;n superficial, pero la calidad de la demanda sigue siendo desigual. Las ventas comparables de Home Depot y Lowe&#39;s son ligeramente positivas, aunque apoyadas m&aacute;s en ticket que en transacciones. Esto sugiere que el sector todav&iacute;a no ha recuperado un crecimiento de volumen claro. El consumidor DIY sigue cauto, especialmente en grandes proyectos discrecionales, mientras que el cliente Pro mantiene mejor tono por mantenimiento necesario, reformas complejas y proyectos profesionales.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">Sherwin-Williams aporta una lectura m&aacute;s granular del mercado de vivienda existente. El repintado residencial crece a mid-single digit, mientras new residential cae a low-single digit. Esto refuerza la idea de que los propietarios est&aacute;n invirtiendo en mantener o modernizar la vivienda actual, pero el mercado de compraventa y nueva vivienda sigue frenado por tipos altos y baja affordability.</p>
+    </div>
+
+    <!-- Evidence from earnings -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">Evidence from earnings</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Home Depot Q1 2026: comp sales +0,6%, pero con transacciones &minus;1,3% y ticket +2,2%. El crecimiento parece venir m&aacute;s de precio/mix que de mayor tr&aacute;fico.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Home Depot: el cliente Pro super&oacute; al DIY. Management describe el entorno de vivienda como el m&aacute;s dif&iacute;cil desde la crisis financiera, con affordability y tipos altos pesando sobre la rotaci&oacute;n.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Lowe&#39;s Q1 2026: comp sales +0,6%, con transacciones &minus;0,9% y ticket +1,5%. La demanda mejora en Pro, online y home services, pero el DIY sigue condicionado por menor gasto discrecional.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Lowe&#39;s: online creci&oacute; +15,5%, y el asistente IA Mylow muestra una conversi&oacute;n triple frente a usuarios que no lo utilizan. La digitalizaci&oacute;n est&aacute; ayudando a compensar parte de la debilidad del canal f&iacute;sico.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Sherwin-Williams Q1 2026: net sales +6,8%, PSG comp sales +2,4% y margen bruto 49,1%, +90&nbsp;bps. Esto sugiere pricing power y eficiencia pese a un mercado de vivienda complicado.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Sherwin-Williams: residential repaint creci&oacute; a mid-single digit, mientras new residential cay&oacute; a low-single digit. El dato apunta a propietarios que renuevan vivienda existente en vez de mudarse.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Las tres compa&ntilde;&iacute;as se&ntilde;alan presi&oacute;n por tipos altos, baja rotaci&oacute;n de vivienda y cautela del consumidor. La demanda no est&aacute; colapsando, pero sigue muy condicionada por financiaci&oacute;n y affordability.</span></li>
+      </ul>
+    </div>
+
+    <!-- Macro read-through -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Macro read-through</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">El subsector sugiere que el mercado de mejora del hogar ha encontrado un suelo, pero no una recuperaci&oacute;n amplia. La baja rotaci&oacute;n de vivienda limita grandes proyectos vinculados a compraventa, mientras el lock-in effect empuja a algunos propietarios a invertir en mantenimiento, repintado y modernizaci&oacute;n de la vivienda actual.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">A nivel macro, la se&ntilde;al es de consumidor propietario prudente. El Pro y el mantenimiento necesario sostienen la actividad, pero el DIY discrecional y los proyectos grandes siguen sensibles a tipos, financiaci&oacute;n y confianza. El sector funciona como lectura adelantada de vivienda existente: estable, pero todav&iacute;a sin recuperaci&oacute;n org&aacute;nica fuerte.</p>
+    </div>
+
+    <!-- What to watch -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">What to watch</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si las comps pasan de ticket/precio a crecimiento real de transacciones.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Evoluci&oacute;n del cliente Pro frente al DIY.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Big-ticket y proyectos grandes sensibles a financiaci&oacute;n.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Housing turnover y ventas de vivienda existente.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Residential repaint frente a new residential.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Inflaci&oacute;n de materiales, tarifas y capacidad de trasladar precios.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Conversi&oacute;n digital, IA y servicios de instalaci&oacute;n como palancas de cuota.</span></li>
+      </ul>
+    </div>
+
+    <!-- Glossary -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px 28px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Glossary</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Comp sales:</strong> ventas comparables en tiendas/webs abiertas m&aacute;s de un a&ntilde;o.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Average ticket:</strong> importe medio por transacci&oacute;n.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Big-ticket:</strong> compras de alto valor, normalmente asociadas a reformas grandes.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">DIY:</strong> cliente particular que realiza proyectos por s&iacute; mismo.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Pro customer:</strong> contratista o profesional de construcci&oacute;n/mantenimiento.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Housing turnover:</strong> frecuencia con la que las viviendas cambian de propietario.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Residential repaint:</strong> repintado de viviendas existentes.</li>
+      </ul>
+    </div>
+
+  </div><!-- /subsector -->
+  </div><!-- /em-sub-homeimprovement -->
+
+  <!-- BANCOS SUBSECTOR -->
+  <div id="em-sub-banks" class="em-subsector" style="display:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 56px;">
+
+    <!-- 1-3. Título, headline, cobertura temporal -->
+    <div style="padding:24px 0 24px;border-bottom:2px solid var(--border);margin-bottom:24px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Bancos</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;color:var(--text-dark);line-height:1.4;margin-bottom:16px;">1T26: bancos fuertes por NII, mercados y consumidor resiliente, pero con se&ntilde;ales de normalizaci&oacute;n crediticia y bifurcaci&oacute;n por renta.</div>
+      <p style="font-size:0.84rem;color:var(--text-light);margin:0;line-height:1.65;">JPMorgan Chase 1Q26, cerrado el 31-mar-2026; Bank of America 1Q26, cerrado el 31-mar-2026; Wells Fargo 1Q26, cerrado el 31-mar-2026. Lectura sectorial: 1T natural 2026.</p>
+    </div>
+
+    <!-- 4. KPI Snapshot -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">KPI Snapshot</div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Core financial KPIs</div>
+      <div class="em-table-wrap" style="margin-bottom:22px;">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>JPMorgan</th>
+              <th>Bank of America</th>
+              <th>Wells Fargo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Revenue&nbsp;/ Managed revenue</td>
+              <td>$50,5B <span style="color:var(--text-light);">/ +10% YoY</span></td>
+              <td>$30,3B <span style="color:var(--text-light);">/ +7% YoY</span></td>
+              <td>$21,4B <span style="color:var(--text-light);">/ +6% YoY</span></td>
+            </tr>
+            <tr>
+              <td class="em-td-label">NII growth</td>
+              <td>$25,5B <span style="color:var(--text-light);">/ +9% YoY</span></td>
+              <td>$15,9B FTE <span style="color:var(--text-light);">/ +9% YoY</span></td>
+              <td>$12,1B <span style="color:var(--text-light);">/ +5% YoY</span></td>
+            </tr>
+            <tr>
+              <td class="em-td-label">ROTCE</td>
+              <td>23%</td>
+              <td>16%</td>
+              <td>14,5%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Efficiency ratio</td>
+              <td>53%</td>
+              <td>61%</td>
+              <td>67%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Sector KPIs</div>
+      <div class="em-table-wrap">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>JPMorgan</th>
+              <th>Bank of America</th>
+              <th>Wells Fargo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Average deposits</td>
+              <td>$2,6T <span style="color:var(--text-light);">/ +7% YoY</span></td>
+              <td>$2,0T <span style="color:var(--text-light);">/ +3% YoY</span></td>
+              <td>$1,4T <span style="color:var(--text-light);">/ +6% YoY</span></td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Average loans</td>
+              <td>$1,5T <span style="color:var(--text-light);">/ +11% YoY</span></td>
+              <td>$1,3T <span style="color:var(--text-light);">/ +9% YoY</span></td>
+              <td>$996B <span style="color:var(--text-light);">/ +10% YoY</span></td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Credit&nbsp;/ NCO</td>
+              <td>NCOs $2,3B; card NCO ratio 3,47%</td>
+              <td>NCO ratio 48&nbsp;bps</td>
+              <td>NCO ratio 45&nbsp;bps</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">CET1</td>
+              <td>14,3%</td>
+              <td>11,2%</td>
+              <td>10,3%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">IB&nbsp;/ Markets</td>
+              <td>IB fees +28%; Markets +20%</td>
+              <td>IB fees +21%; Sales &amp; Trading +12%</td>
+              <td>IB fees +13%; Markets +19%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sector read -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Sector read</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">Los grandes bancos estadounidenses muestran un trimestre s&oacute;lido, con crecimiento de ingresos, NII positivo, fuerte actividad de mercados y mejora en banca de inversi&oacute;n. La econom&iacute;a que reflejan no parece d&eacute;bil: dep&oacute;sitos y pr&eacute;stamos crecen, el gasto con tarjeta sigue avanzando y la calidad crediticia se mantiene controlada.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">La lectura, sin embargo, no es completamente complaciente. El cr&eacute;dito se est&aacute; normalizando, los hogares de renta baja muestran m&aacute;s estr&eacute;s y el entorno macro sigue rodeado de riesgos: tipos altos, d&eacute;ficits, geopol&iacute;tica, CRE y posible deterioro futuro del ciclo. El sistema bancario entra en esta fase con capital y liquidez fuertes, pero las entidades insisten en que el rango de resultados macro es amplio.</p>
+    </div>
+
+    <!-- Evidence from earnings -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">Evidence from earnings</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">JPMorgan 1Q26: managed revenue +10%, NII +9%, net income +13% y ROTCE 23%. La generaci&oacute;n de ingresos sigue muy robusta.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">JPMorgan: IB fees +28% y Markets +20%. La actividad corporativa y de mercados se ha reactivado, apoyada por volatilidad, emisiones y mayor apetito por riesgo.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Bank of America 1Q26: revenue +7%, NII +9%, EPS +25% y operating leverage de 290&nbsp;bps. La entidad combina crecimiento de ingresos con disciplina de costes.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Bank of America: card spend +6% YoY y dep&oacute;sitos medios +3%. Management destaca que el consumidor sigue moviendo la econom&iacute;a gracias al empleo y salarios.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Wells Fargo 1Q26: revenue +6%, NII +5%, EPS +15% y PTPP +14%. El crecimiento es amplio por segmentos tras a&ntilde;os de restricciones regulatorias.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Wells Fargo: nuevas cuentas corrientes +15% YoY y aperturas de tarjetas casi +60% YoY. La entidad est&aacute; recuperando capacidad comercial.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">La calidad crediticia sigue controlada: BofA NCO ratio 48&nbsp;bps, Wells Fargo 45&nbsp;bps y JPM sin deterioro sist&eacute;mico. La se&ntilde;al es de normalizaci&oacute;n, no crisis.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">CRE muestra signos de estabilizaci&oacute;n. BofA no registr&oacute; nuevas entradas en mora de oficina y Wells Fargo redujo cobertura en CRE oficina por mejor comportamiento.</span></li>
+      </ul>
+    </div>
+
+    <!-- Macro read-through -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Macro read-through</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">Los bancos apuntan a una econom&iacute;a estadounidense resistente. El empleo sigue sosteniendo consumo, pagos y capacidad de repago. La combinaci&oacute;n de crecimiento de pr&eacute;stamos, dep&oacute;sitos estables y gasto con tarjeta sugiere que la actividad privada a&uacute;n no se ha quebrado por los tipos altos.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">La lectura m&aacute;s importante es la bifurcaci&oacute;n. Los hogares de renta alta se benefician de empleo, bolsa y vivienda; los de renta baja sufren m&aacute;s por energ&iacute;a, tipos y acumulaci&oacute;n de inflaci&oacute;n. La normalizaci&oacute;n crediticia est&aacute; controlada, pero los bancos advierten que un ciclo m&aacute;s duro podr&iacute;a aparecer si se deterioran empleo, CRE o costes de financiaci&oacute;n.</p>
+    </div>
+
+    <!-- What to watch -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">What to watch</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Evoluci&oacute;n de NCOs y provisiones frente a niveles pre-pandemia.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si el crecimiento de pr&eacute;stamos refleja demanda sana o mayor riesgo futuro.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Coste y mix de dep&oacute;sitos.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">CRE, especialmente oficinas.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Gasto con tarjeta y se&ntilde;ales de presi&oacute;n en rentas bajas.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">IB fees y mercados como lectura de risk appetite.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Impacto de IA en eficiencia y reducci&oacute;n de costes unitarios.</span></li>
+      </ul>
+    </div>
+
+    <!-- Glossary -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px 28px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Glossary</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">NII:</strong> ingresos netos por intereses.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">NIM:</strong> margen neto de intereses sobre activos rentables.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Deposit beta:</strong> porcentaje de subida de tipos trasladada al depositante.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">NCO:</strong> pr&eacute;stamos dados por perdidos, netos de recuperaciones.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">CET1:</strong> capital regulatorio de m&aacute;xima calidad.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">ROTCE:</strong> rentabilidad sobre capital tangible ordinario.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">LCR:</strong> ratio de cobertura de liquidez a 30 d&iacute;as bajo estr&eacute;s.</li>
+      </ul>
+    </div>
+
+  </div><!-- /subsector -->
+  </div><!-- /em-sub-banks -->
+
+  <!-- TARJETAS / PAGOS SUBSECTOR -->
+  <div id="em-sub-cards" class="em-subsector" style="display:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 56px;">
+
+    <!-- 1-3. Título, headline, cobertura temporal -->
+    <div style="padding:24px 0 24px;border-bottom:2px solid var(--border);margin-bottom:24px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Tarjetas / Pagos</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;color:var(--text-dark);line-height:1.4;margin-bottom:16px;">1T26: el gasto con tarjeta sigue sano, con premium y pagos globales fuertes, pero travel/cross-border empieza a notar geopol&iacute;tica.</div>
+      <p style="font-size:0.84rem;color:var(--text-light);margin:0;line-height:1.65;">American Express 1Q26, cerrado el 31-mar-2026; Capital One 1Q26, cerrado el 31-mar-2026; Mastercard 1Q26, cerrado el 31-mar-2026; Visa fiscal 2Q26 cerrado el 31-mar-2026. Lectura sectorial: 1T natural 2026.</p>
+    </div>
+
+    <!-- 4. KPI Snapshot -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">KPI Snapshot</div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Core financial KPIs</div>
+      <div class="em-table-wrap" style="margin-bottom:22px;">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>American Express</th>
+              <th>Capital One</th>
+              <th>Mastercard</th>
+              <th>Visa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Revenue growth</td>
+              <td>+11%</td>
+              <td>+58% incluyendo Discover</td>
+              <td>+16% reportado <span style="color:var(--text-light);">/ +12% FX-neutral</span></td>
+              <td>+17%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">EPS growth</td>
+              <td>+18%</td>
+              <td>N/D</td>
+              <td>+18% ajustado</td>
+              <td>+20% ajustado</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Operating margin</td>
+              <td>N/D</td>
+              <td>N/D</td>
+              <td>60,8% ajustado</td>
+              <td>64,4% GAAP calc.</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">ROE&nbsp;/ profitability</td>
+              <td>ROE 35%</td>
+              <td>N/D</td>
+              <td>N/D</td>
+              <td>N/D</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Sector KPIs</div>
+      <div class="em-table-wrap">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>American Express</th>
+              <th>Capital One</th>
+              <th>Mastercard</th>
+              <th>Visa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Spending&nbsp;/ volume growth</td>
+              <td>billed business +9% FX-adjusted <span style="color:var(--text-light);">/ +10% reportado</span></td>
+              <td>purchase volume +8% ex-Discover</td>
+              <td>GDV +7% local currency</td>
+              <td>payments volume +9% constant dollar</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Transactions</td>
+              <td>+10%</td>
+              <td>N/D</td>
+              <td>switched transactions +9%</td>
+              <td>processed transactions +9%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Cross-border</td>
+              <td>N/D</td>
+              <td>N/D</td>
+              <td>+13%</td>
+              <td>+12%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Delinquency</td>
+              <td>1,3%</td>
+              <td>3,7%</td>
+              <td>N/D</td>
+              <td>N/D</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Net charge-offs</td>
+              <td>2,0%</td>
+              <td>5,1%</td>
+              <td>N/D</td>
+              <td>N/D</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sector read -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Sector read</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">Tarjetas y pagos muestran un trimestre fuerte: el volumen de gasto crece, las transacciones siguen avanzando y las redes globales mantienen elevada rentabilidad. La se&ntilde;al de consumo sigue siendo positiva, especialmente en consumidores premium y en pagos digitales. American Express confirma resiliencia del cliente de alta renta, mientras Visa y Mastercard reflejan una actividad global todav&iacute;a saludable.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">El matiz viene por dos v&iacute;as. Primero, el cr&eacute;dito al consumo se mantiene estable, pero en emisores como Capital One hay que vigilar mora, charge-offs y la integraci&oacute;n de Discover. Segundo, el travel/cross-border empieza a notar la geopol&iacute;tica, especialmente por Oriente Medio. La tesis no es debilidad del consumo, sino consumo resiliente con sensibilidad creciente a shocks externos.</p>
+    </div>
+
+    <!-- Evidence from earnings -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">Evidence from earnings</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">American Express 1Q26: billed business +10% reportado y transacciones +10%. El crecimiento parece venir de consumo real, no solo de ticket.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">American Express: nuevas tarjetas 3,1M, con 66% de Millennial/Gen-Z; Net Card Fees +9%; ROE 35%. El modelo premium y de suscripci&oacute;n sigue funcionando.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Capital One 1Q26: purchase volume +40% incluyendo Discover y +8% ex-Discover. El gasto crece m&aacute;s que pr&eacute;stamos ex-Discover, lo que sugiere mayor uso transaccional que financiaci&oacute;n de deuda.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Capital One: mora 3,7%, mejora 29&nbsp;bps QoQ; Domestic Card NCO 5,1%, &minus;109&nbsp;bps YoY. El cr&eacute;dito parece estabilizarse mejor de lo estacional.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Mastercard 1Q26: net revenue +16%, GDV +7%, switched transactions +9% y cross-border +13%. El negocio de red mantiene crecimiento amplio.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Mastercard: cross-border travel se ralentiza por el conflicto en Oriente Medio, con abril MTD en +2%. Es la se&ntilde;al macro m&aacute;s clara de impacto geopol&iacute;tico.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Visa fiscal 2Q26: revenue +17%, payments volume +9%, processed transactions +9%, cross-border +12% y Visa Direct +23%. El consumo global sigue estable.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Visa y Mastercard muestran fuerte crecimiento en VAS: Visa +27% y Mastercard +22%. La monetizaci&oacute;n de seguridad, datos y servicios crece m&aacute;s r&aacute;pido que el volumen puro de pagos.</span></li>
+      </ul>
+    </div>
+
+    <!-- Macro read-through -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Macro read-through</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">El sector confirma que el consumo global sigue activo. El crecimiento simult&aacute;neo de volumen, transacciones y pagos digitales indica que no hay una fatiga macro clara en el gasto agregado. AmEx sugiere fortaleza del consumidor premium, mientras Visa y Mastercard muestran estabilidad en consumo masivo y movilidad global.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">La lectura m&aacute;s cr&iacute;tica es que el consumo es resistente, pero no inmune. Cross-border y travel son sensibles a shocks geopol&iacute;ticos, y el cr&eacute;dito al consumo debe seguir vigil&aacute;ndose en emisores con m&aacute;s exposici&oacute;n a revolving y clientes de menor renta. El crecimiento de VAS e IA indica que el sector ya no depende solo del volumen de pagos, sino de monetizar datos, seguridad, fraude y nuevas formas de comercio digital.</p>
+    </div>
+
+    <!-- What to watch -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">What to watch</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si el crecimiento de gasto sigue alineado con transacciones o depende m&aacute;s de ticket.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Travel y cross-border tras el impacto de Oriente Medio.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Delinquencies y NCOs en Capital One y American Express.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Diferencia entre consumidor premium y consumidor masivo.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Crecimiento de VAS frente a volumen de red.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Visa Direct, B2B payments y commercial cards.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">IA y agentic commerce como nueva capa de pagos.</span></li>
+      </ul>
+    </div>
+
+    <!-- Glossary -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px 28px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Glossary</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Billed business:</strong> volumen total cargado en tarjetas de la red.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">GDV:</strong> valor bruto en d&oacute;lares de transacciones con una marca de tarjeta.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Switched transactions:</strong> transacciones procesadas por la red.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Cross-border volume:</strong> gasto donde emisor y comercio est&aacute;n en pa&iacute;ses distintos.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Net charge-offs:</strong> pr&eacute;stamos incobrables netos de recuperaciones.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">VAS:</strong> servicios de valor a&ntilde;adido como fraude, datos, seguridad o marketing.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Agentic commerce:</strong> compras ejecutadas por agentes de IA en nombre del usuario.</li>
+      </ul>
+    </div>
+
+  </div><!-- /subsector -->
+  </div><!-- /em-sub-cards -->
+
+  <!-- MAQUINARIA / CAPITAL GOODS SUBSECTOR -->
+  <div id="em-sub-machinery" class="em-subsector" style="display:none;">
+  <div style="max-width:1200px;margin:0 auto;padding:0 48px 56px;">
+
+    <!-- 1-3. Título, headline, cobertura temporal -->
+    <div style="padding:24px 0 24px;border-bottom:2px solid var(--border);margin-bottom:24px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Maquinaria / Capital Goods</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;color:var(--text-dark);line-height:1.4;margin-bottom:16px;">1T26: capex industrial resiliente por IA, data centers e infraestructura, pero con agricultura y residencial en zona baja del ciclo.</div>
+      <p style="font-size:0.84rem;color:var(--text-light);margin:0;line-height:1.65;">Caterpillar Q1 2026, cerrado el 31-mar-2026; Deere fiscal Q2 2026, cerrado el 3-may-2026; Eaton Q1 2026, cerrado el 31-mar-2026. Lectura sectorial aproximada: 1T natural 2026 / primeros meses de 2026, con Deere cubriendo febrero-abril.</p>
+    </div>
+
+    <!-- 4. KPI Snapshot -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">KPI Snapshot</div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Core financial KPIs</div>
+      <div class="em-table-wrap" style="margin-bottom:22px;">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>Caterpillar</th>
+              <th>Deere</th>
+              <th>Eaton</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Revenue Growth</td>
+              <td>+22%</td>
+              <td>+5%</td>
+              <td>+17%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Operating Margin</td>
+              <td>18,0% ajustado <span style="color:var(--text-light);">/ Construction 21,4%</span></td>
+              <td>Equipment Operations 16,9%</td>
+              <td>segment margin 22,7%; Electrical Americas 25,6%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Adj EPS</td>
+              <td>$5,54 <span style="color:var(--text-light);">/ +30%</span></td>
+              <td>$6,55 <span style="color:var(--text-light);">/ &minus;1%</span></td>
+              <td>$2,81 <span style="color:var(--text-light);">/ +3%</span></td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Guidance</td>
+              <td style="font-size:0.74rem;line-height:1.5;">FY26 revenue growth elevado a low double-digit</td>
+              <td style="font-size:0.74rem;line-height:1.5;">FY26 net income $5.000M</td>
+              <td style="font-size:0.74rem;line-height:1.5;">organic growth FY26 elevado a 9%-11%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);margin-bottom:8px;">Sector KPIs</div>
+      <div class="em-table-wrap">
+        <table class="em-trend-table">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th>Caterpillar</th>
+              <th>Deere</th>
+              <th>Eaton</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="em-td-label">Backlog</td>
+              <td>$62,7B <span style="color:var(--text-light);">/ +79% YoY</span></td>
+              <td>N/D</td>
+              <td>$22,8B; Electrical backlog +48%</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Data Centers&nbsp;/ AI</td>
+              <td>backlog de motores grandes x3,5 desde enero 2024</td>
+              <td>N/D</td>
+              <td>data center orders +240% en Americas</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Dealer inventory</td>
+              <td>dealer inventory +$2,0B / construction +$1,5B</td>
+              <td>inventario tractores 100+ hp y cosechadoras reducido &gt;50% desde pico de 2024</td>
+              <td>N/A</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Mega projects&nbsp;/ infrastructure</td>
+              <td>infraestructura y no residencial resilientes</td>
+              <td>roadbuilding global +10% en unidades</td>
+              <td>mega projects pipeline $3,3T / +31% YoY</td>
+            </tr>
+            <tr>
+              <td class="em-td-label">Tariffs&nbsp;/ costs</td>
+              <td>impacto arancelario ~$600M en el trimestre</td>
+              <td>impacto arancelario anual estimado ~$1,2B, mitigado por reembolso puntual</td>
+              <td>presi&oacute;n temporal por costes de arranque e inflaci&oacute;n, con precios en abril</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sector read -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Sector read</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">Maquinaria / Capital Goods muestra una divergencia clara de ciclos. La demanda ligada a data centers, IA, electrificaci&oacute;n, infraestructura y energ&iacute;a sigue muy fuerte, mientras agricultura y construcci&oacute;n residencial permanecen m&aacute;s d&eacute;biles. Caterpillar y Eaton est&aacute;n capturando una ola estructural de inversi&oacute;n en potencia el&eacute;ctrica, motores, grid y centros de datos. Deere, en cambio, refleja mejor el valle del ciclo agr&iacute;cola, aunque con se&ntilde;ales de estabilizaci&oacute;n de inventarios.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">La lectura sectorial no es de desaceleraci&oacute;n industrial amplia. Es un capex muy selectivo: fuerte donde hay electrificaci&oacute;n, infraestructura, IA, miner&iacute;a o reemplazo de flotas, y d&eacute;bil donde pesan tipos, farm income o vivienda residencial. Los m&aacute;rgenes aguantan, pero la expansi&oacute;n acelerada de capacidad, tarifas e inflaci&oacute;n de materiales est&aacute;n introduciendo costes temporales.</p>
+    </div>
+
+    <!-- Evidence from earnings -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">Evidence from earnings</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Caterpillar Q1 2026: sales and revenues +22%, operating profit +20%, adj EPS +30% y backlog r&eacute;cord de $62,7B, +79% YoY.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Caterpillar: el backlog de motores grandes ha crecido 3,5 veces desde enero de 2024, impulsado por data centers e IA. La compa&ntilde;&iacute;a planea llevar capacidad de motores grandes a casi 3x niveles de 2024 para 2030.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Caterpillar: North America sigue resiliente en construcci&oacute;n no residencial e infraestructura, compensando la debilidad residencial. Miner&iacute;a tambi&eacute;n mejora por cobre, oro y flotas envejecidas.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Deere fiscal Q2 2026: net sales +5%, pero operating profit de Equipment Operations &minus;13% y EPS &minus;1%. El ciclo agr&iacute;cola sigue presionado.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Deere: inventarios de tractores 100+ hp y cosechadoras en EE.&nbsp;UU./Canad&aacute; se han reducido m&aacute;s de 50% desde el pico de 2024. Esto mejora el punto de partida para una futura recuperaci&oacute;n.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Deere: large ag en EE.&nbsp;UU./Canad&aacute; previsto &minus;15%/&minus;20% en unidades, pero roadbuilding global +10%. La construcci&oacute;n de infraestructuras compensa parcialmente la debilidad agr&iacute;cola.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Eaton Q1 2026: net sales +17%, organic growth +10%, segment margin 22,7% y FCF +245%. La demanda el&eacute;ctrica sigue muy fuerte.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Eaton: pedidos de data centers en Americas +240%, book-to-bill del sector el&eacute;ctrico 1,2 y backlog Electrical Americas +44%. La visibilidad futura es muy elevada.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--burgundy);font-size:0.62rem;margin-top:3px;flex-shrink:0;">&#9632;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.65;">Eaton: la presi&oacute;n temporal de m&aacute;rgenes se explica por costes de arranque de capacidad, retraso en trasladar inflaci&oacute;n y expansi&oacute;n de f&aacute;bricas.</span></li>
+      </ul>
+    </div>
+
+    <!-- Macro read-through -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Macro read-through</div>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0 0 14px;">El subsector apunta a que el capex industrial no est&aacute; cayendo de forma generalizada. La inversi&oacute;n se est&aacute; concentrando en &aacute;reas estrat&eacute;gicas: IA, data centers, electrificaci&oacute;n, grid, infraestructura, energ&iacute;a y miner&iacute;a. Estos vectores parecen m&aacute;s estructurales que c&iacute;clicos y ofrecen visibilidad multianual.</p>
+      <p style="font-size:0.88rem;line-height:1.8;color:var(--text-mid);margin:0;">La se&ntilde;al macro relevante es la divergencia. Agricultura y residencial siguen en zona baja del ciclo por tipos, inventarios y rentabilidad del agricultor, mientras electrificaci&oacute;n e infraestructura funcionan como amortiguadores. Esto sugiere una econom&iacute;a industrial desigual: no hay boom amplio, pero s&iacute; pockets de capex muy fuertes con poder de pricing y backlog elevado.</p>
+    </div>
+
+    <!-- What to watch -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin-bottom:20px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:16px;">What to watch</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Durabilidad del boom de data centers e IA.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Evoluci&oacute;n de backlog y book-to-bill en Eaton y Caterpillar.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Si Deere confirma el suelo del ciclo agr&iacute;cola.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Dealer inventories y riesgo de destocking.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Impacto real de tarifas sobre m&aacute;rgenes.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Costes de arranque por expansi&oacute;n de capacidad.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Infraestructura, miner&iacute;a, roadbuilding y energ&iacute;a como amortiguadores del ciclo.</span></li>
+        <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--text-light);font-size:0.8rem;margin-top:2px;flex-shrink:0;">&#8594;</span><span style="font-size:0.85rem;color:var(--text-mid);line-height:1.6;">Pricing vs volumen como indicador de demanda real.</span></li>
+      </ul>
+    </div>
+
+    <!-- Glossary -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px 28px;">
+      <div style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--burgundy);margin-bottom:14px;">Glossary</div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Backlog:</strong> pedidos firmes pendientes de entregar o facturar.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Book-to-bill:</strong> pedidos recibidos dividido por ventas facturadas; &gt;1 indica expansi&oacute;n de demanda.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Dealer inventory:</strong> inventario en concesionarios/distribuidores.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Price/mix:</strong> impacto en ingresos por precios y composici&oacute;n de producto.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Replacement demand:</strong> demanda por sustituci&oacute;n de equipos envejecidos.</li>
+        <li style="font-size:0.8rem;color:var(--text-mid);line-height:1.6;"><strong style="color:var(--text-dark);">Data centers:</strong> centros de procesamiento con alta demanda de energ&iacute;a y refrigeraci&oacute;n.</li>
+      </ul>
+    </div>
+
+  </div><!-- /subsector -->
+  </div><!-- /em-sub-machinery -->
+
+</div><!-- /page-earnings -->
 
 <footer>
   <span class="footer-logo">ALS Investment Journal</span>
@@ -5324,7 +6777,7 @@ function showPage(id) {
   if (navEl) navEl.classList.add('active');
   const mNav = document.getElementById('mnav-' + id);
   if (mNav) mNav.classList.add('active');
-  if (id === 'macro' || id === 'macro-detail' || id === 'energy') {
+  if (id === 'macro' || id === 'macro-detail' || id === 'energy' || id === 'earnings') {
     const mv = document.getElementById('nav-market-view');
     if (mv) mv.classList.add('active');
   }
@@ -8135,6 +9588,16 @@ function renderEnergySnapshot() {
     const labels = { bullish:'Bullish', bearish:'Bearish', neutral:'Neutral', mixta:'Mixta', 'reserva-baja':'Reserva baja' };
     el.textContent = labels[signal] || signal;
   });
+}
+
+// ====== EARNINGS MONITOR SECTOR SWITCH ======
+function showEMSector(id) {
+  document.querySelectorAll('.em-sel-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.em-subsector').forEach(s => s.style.display = 'none');
+  const card = document.getElementById('em-card-' + id);
+  if (card) card.classList.add('active');
+  const sub = document.getElementById('em-sub-' + id);
+  if (sub) sub.style.display = 'block';
 }
 
 // ---- Init ----
