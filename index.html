@@ -1315,12 +1315,13 @@
     </div>
     <div class="recap-nav">
       <button class="recap-btn" onclick="changeRecap(1)">&larr; Anterior</button>
-      <div class="recap-date" id="recap-date-label">07 Jun 2026</div>
+      <div class="recap-date" id="recap-date-label">14 Jun 2026</div>
       <button class="recap-btn" onclick="changeRecap(-1)">Siguiente &rarr;</button>
     </div>
     <div class="recap-card" id="recap-content">
-      <h3>Semana del 01 al 07 de Junio de 2026</h3>
-      <p>La semana terminó con un cambio de tono claro respecto a las anteriores. Los mercados no cayeron por una señal inmediata de recesión, sino por la combinación de economía resistente, inflación todavía presente y tipos de mercado al alza. El ajuste fue especialmente visible en tecnología y compañías ligadas a inteligencia artificial. Europa mostró un comportamiento menos extremo, apoyada por una composición sectorial más diversificada. La próxima semana, CPI estadounidense, bancos centrales y petróleo serán los catalizadores clave.</p>
+      <h3>Semana del 08 al 14 de Junio de 2026</h3>
+      <p>Los mercados cerraron con un tono algo más constructivo que el observado en los episodios recientes de tensión, pero la semana no fue lineal. La rotación desde tecnología y semiconductores hacia una participación más amplia convivió con inflación energética elevada, debate sobre el rumbo de la Fed y una geopolítica todavía dominante por el Estrecho de Hormuz. La salida a bolsa de SpaceX funcionó como el gran evento de mercado de la semana y como prueba de profundidad para el apetito por riesgo.</p>
+      <div style="margin-top:18px"><button onclick="openArticle('recap-2026-06-14')" style="background:none;border:none;cursor:pointer;color:var(--burgundy);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;padding:0;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;">Leer informe completo →</button></div>
     </div>
   </div>
 
@@ -1778,13 +1779,49 @@
     <div class="divider"></div>
   </div>
 
+  <!-- ── Macro Regime Snapshot ── -->
+  <div id="macro-summary" style="max-width:1300px;margin:0 auto;padding:0 48px 32px;">
+    <div style="overflow-x:auto;margin-bottom:16px;margin-top:8px;">
+      <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-family:'DM Sans',sans-serif;font-size:0.78rem;white-space:nowrap;">
+        <colgroup>
+          <col style="width:16%"><col style="width:26%"><col style="width:12%"><col style="width:14%"><col style="width:14%"><col style="width:18%">
+        </colgroup>
+        <thead><tr>
+          <th style="padding:7px 14px;text-align:left;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;">Bloque</th>
+          <th style="padding:7px 14px;text-align:left;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;">Métrica</th>
+          <th style="padding:7px 14px;text-align:right;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;">Último</th>
+          <th style="padding:7px 14px;text-align:right;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;">Fecha</th>
+          <th style="padding:7px 14px;text-align:right;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;">3M</th>
+          <th style="padding:7px 14px;text-align:left;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);font-weight:600;border-bottom:1px solid var(--border);white-space:nowrap;">Lectura</th>
+        </tr></thead>
+        <tbody id="macro-snapshot-body"></tbody>
+      </table>
+    </div>
+
+    <div style="position:sticky;top:54px;z-index:20;background:var(--cream);padding:8px 0;margin:0 -48px;padding-left:48px;padding-right:48px;border-bottom:1px solid var(--border);">
+      <div id="macro-nav-btns" style="display:flex;gap:8px;overflow-x:auto;white-space:nowrap;">
+        <button class="mag7-btn active" onclick="scrollToMacroSection('macro-summary', this)">Resumen</button>
+        <button class="mag7-btn" onclick="scrollToMacroSection('macro-growth', this)">Growth</button>
+        <button class="mag7-btn" onclick="scrollToMacroSection('macro-inflation', this)">Inflation</button>
+        <button class="mag7-btn" onclick="scrollToMacroSection('macro-real-rates', this)">Real Rates</button>
+        <button class="mag7-btn" onclick="scrollToMacroSection('macro-financial-conditions', this)">Financial Conditions</button>
+        <button class="mag7-btn" onclick="scrollToMacroSection('macro-labour', this)">Empleo</button>
+        <button class="mag7-btn" onclick="scrollToMacroSection('macro-consumer', this)">Consumo</button>
+        <button class="mag7-btn" onclick="scrollToMacroSection('macro-sector', this)">Sectores</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── Growth / PMI Cycle ── -->
   <div style="max-width:1300px;margin:0 auto;padding:0 48px 64px;">
 
-    <div style="margin-bottom:20px;">
-      <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Growth</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Growth / PMI Cycle</div>
-      <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Track whether activity is expanding or contracting and whether growth momentum is improving or deteriorating.</div>
+    <div id="macro-growth" style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Growth</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Growth / PMI Cycle</div>
+        <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Track whether activity is expanding or contracting and whether growth momentum is improving or deteriorating.</div>
+      </div>
+      <a href="#macro-summary" onclick="event.preventDefault();scrollToMacroSection('macro-summary')" style="font-size:0.7rem;color:var(--text-light);text-decoration:none;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;">↑ Volver arriba</a>
     </div>
 
     <!-- PMI Latest Summary -->
@@ -1834,10 +1871,13 @@
     </div>
 
     <!-- ── Inflation / Price Pressure ── -->
-    <div style="margin-top:48px;margin-bottom:20px;">
-      <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Inflation</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Inflation / Price Pressure</div>
-      <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">The Fed's inflation target is based on PCE; CPI is useful as an earlier signal.</div>
+    <div id="macro-inflation" style="margin-top:48px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Inflation</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Inflation / Price Pressure</div>
+        <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">The Fed's inflation target is based on PCE; CPI is useful as an earlier signal.</div>
+      </div>
+      <a href="#macro-summary" onclick="event.preventDefault();scrollToMacroSection('macro-summary')" style="font-size:0.7rem;color:var(--text-light);text-decoration:none;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;">↑ Volver arriba</a>
     </div>
 
     <!-- Inflation Latest Summary -->
@@ -1879,10 +1919,13 @@
     </div>
 
     <!-- ── Real Rates / Monetary Restrictiveness ── -->
-    <div style="margin-top:48px;margin-bottom:20px;">
-      <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Rates</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Real Rates / Monetary Restrictiveness</div>
-      <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Tracks whether Fed policy rates and market real yields are restrictive or easing.</div>
+    <div id="macro-real-rates" style="margin-top:48px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Rates</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Real Rates / Monetary Restrictiveness</div>
+        <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Tracks whether Fed policy rates and market real yields are restrictive or easing.</div>
+      </div>
+      <a href="#macro-summary" onclick="event.preventDefault();scrollToMacroSection('macro-summary')" style="font-size:0.7rem;color:var(--text-light);text-decoration:none;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;">↑ Volver arriba</a>
     </div>
 
     <!-- Real Rates Latest Summary -->
@@ -1920,10 +1963,13 @@
     </div>
 
     <!-- ── Financial Conditions ── -->
-    <div style="margin-top:48px;margin-bottom:20px;">
-      <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Markets</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Financial Conditions</div>
-      <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Tracks whether financial markets are easing or tightening through credit, volatility, the dollar and risk appetite.</div>
+    <div id="macro-financial-conditions" style="margin-top:48px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Markets</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Financial Conditions</div>
+        <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Tracks whether financial markets are easing or tightening through credit, volatility, the dollar and risk appetite.</div>
+      </div>
+      <a href="#macro-summary" onclick="event.preventDefault();scrollToMacroSection('macro-summary')" style="font-size:0.7rem;color:var(--text-light);text-decoration:none;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;">↑ Volver arriba</a>
     </div>
 
     <!-- Financial Conditions Summary -->
@@ -1963,10 +2009,13 @@
     </div>
 
     <!-- ── Labour Market ── -->
-    <div style="margin-top:48px;margin-bottom:20px;">
-      <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Labour</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Empleo</div>
-      <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Tracks unemployment, jobless claims and payroll growth to assess the strength of the US labour market.</div>
+    <div id="macro-labour" style="margin-top:48px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Labour</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Empleo</div>
+        <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Tracks unemployment, jobless claims and payroll growth to assess the strength of the US labour market.</div>
+      </div>
+      <a href="#macro-summary" onclick="event.preventDefault();scrollToMacroSection('macro-summary')" style="font-size:0.7rem;color:var(--text-light);text-decoration:none;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;">↑ Volver arriba</a>
     </div>
 
     <!-- Labour Market Latest Summary (split by metric) -->
@@ -2018,10 +2067,13 @@
     </div>
 
     <!-- ── Consumer Demand ── -->
-    <div style="margin-top:48px;margin-bottom:20px;">
-      <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Consumption</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Consumo</div>
-      <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Tracks retail spending, real consumption and consumer sentiment to assess household demand.</div>
+    <div id="macro-consumer" style="margin-top:48px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Consumption</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Consumo</div>
+        <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Tracks retail spending, real consumption and consumer sentiment to assess household demand.</div>
+      </div>
+      <a href="#macro-summary" onclick="event.preventDefault();scrollToMacroSection('macro-summary')" style="font-size:0.7rem;color:var(--text-light);text-decoration:none;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;">↑ Volver arriba</a>
     </div>
 
     <!-- Consumer Demand Latest Summary -->
@@ -2079,10 +2131,13 @@
     </div>
 
     <!-- ── Retail Sales by Sector ── -->
-    <div style="margin-top:48px;margin-bottom:20px;">
-      <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Consumption</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Ventas Minoristas por Sector</div>
-      <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Breaks down retail sales growth by sector to identify where consumer spending is strengthening or weakening.</div>
+    <div id="macro-sector" style="margin-top:48px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--burgundy);font-family:'DM Sans',sans-serif;font-weight:600;margin-bottom:4px;">Consumption</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--text-dark);">Ventas Minoristas por Sector</div>
+        <div style="font-size:0.82rem;color:var(--text-light);margin-top:6px;line-height:1.5;font-family:'DM Sans',sans-serif;max-width:680px;">Breaks down retail sales growth by sector to identify where consumer spending is strengthening or weakening.</div>
+      </div>
+      <a href="#macro-summary" onclick="event.preventDefault();scrollToMacroSection('macro-summary')" style="font-size:0.7rem;color:var(--text-light);text-decoration:none;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;">↑ Volver arriba</a>
     </div>
 
     <!-- Sector Summary Table -->
@@ -4639,6 +4694,7 @@ const twrData = [
 ];
 
 const recaps = [
+  { date:"14 Jun 2026", title:"Semana del 08 al 14 de Junio de 2026", link:"recap-2026-06-14", content:"<p>Los mercados cerraron con un tono algo más constructivo que el observado en los episodios recientes de tensión, pero la semana no fue lineal. La rotación desde tecnología y semiconductores hacia una participación más amplia convivió con inflación energética elevada, debate sobre el rumbo de la Fed y una geopolítica todavía dominante por el Estrecho de Hormuz. La salida a bolsa de SpaceX funcionó como el gran evento de mercado de la semana y como prueba de profundidad para el apetito por riesgo.</p>" },
   { date:"07 Jun 2026", title:"Semana del 01 al 07 de Junio de 2026", link:"recap-2026-06-07", content:"<p>La semana terminó con un cambio de tono claro respecto a las anteriores. Los mercados no cayeron por una señal inmediata de recesión, sino por la combinación de economía resistente, inflación todavía presente y tipos de mercado al alza. El ajuste fue especialmente visible en tecnología y compañías ligadas a inteligencia artificial. Europa mostró un comportamiento menos extremo, apoyada por una composición sectorial más diversificada. La próxima semana, CPI estadounidense, bancos centrales y petróleo serán los catalizadores clave.</p>" },
   { date:"31 May 2026", title:"Semana del 25 al 31 de Mayo de 2026", link:"recap-2026-05-31", content:"<p>La semana mantiene un tono constructivo en los mercados, apoyado por un crecimiento todavía resistente, mejores resultados empresariales y cierta expectativa de desescalada geopolítica. No obstante, la lectura macro no es plenamente favorable: el repunte de los tipos reales, el riesgo de inflación por la energía y la fortaleza menos clara de algunos datos de actividad aconsejan mantener una posición selectiva. En cartera, el entorno favorece renta variable de calidad, crédito de mayor solvencia y activos de cobertura como oro o materias primas, con más cautela en deuda de larga duración y crédito de menor calidad.</p>" },
   { date:"18 May 2026", title:"Semana del 12 al 18 de Mayo de 2026", content:"<p>📝 <em>Añade aquí tu primer recap semanal. Puedes incluir movimientos del mercado, noticias relevantes de tus posiciones, cambios en la cartera o cualquier reflexión sobre la semana.</em></p><p style='color:var(--text-light);font-size:0.8rem'>— Próxima actualización: 25 May 2026</p>" },
@@ -7113,7 +7169,88 @@ function openMacroDetail() {
     initLabourMarketBlock();
     initConsumerDemandBlock();
     initSectorBlock();
+    renderMacroSnapshot();
   }
+}
+
+// ====== MACRO REGIME SNAPSHOT ======
+function scrollToMacroSection(id, btn) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (btn) {
+    document.querySelectorAll('#macro-nav-btns .mag7-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+
+function renderMacroSnapshot() {
+  const tbody = document.getElementById('macro-snapshot-body');
+  if (!tbody) return;
+
+  function trend(value, unit) {
+    if (value === null || value === undefined || isNaN(value)) return '<span style="color:var(--text-light);">—</span>';
+    const color = value > 0 ? 'var(--green)' : value < 0 ? 'var(--red)' : 'var(--text-light)';
+    const arrow = value > 0 ? '▲' : value < 0 ? '▼' : '▬';
+    const sign = value > 0 ? '+' : '';
+    return `<span style="color:${color};">${arrow} ${sign}${value.toFixed(2)}${unit}</span>`;
+  }
+
+  const rows = [];
+
+  // 1-4: PMIs (Growth)
+  const usaServices = growthDashboard.pmi.find(p => p.region === 'USA' && p.type === 'Services');
+  const usaManuf    = growthDashboard.pmi.find(p => p.region === 'USA' && p.type === 'Manufacturing');
+  const ezServices  = growthDashboard.pmi.find(p => p.region === 'Eurozone' && p.type === 'Services');
+  const ezManuf     = growthDashboard.pmi.find(p => p.region === 'Eurozone' && p.type === 'Manufacturing');
+
+  rows.push(['Growth', 'USA Services PMI',        usaServices.value.toFixed(1), usaServices.date, trend(usaServices.change3m, 'pts'), usaServices.level]);
+  rows.push(['Growth', 'USA Manufacturing PMI',   usaManuf.value.toFixed(1),    usaManuf.date,    trend(usaManuf.change3m, 'pts'),    usaManuf.level]);
+  rows.push(['Growth', 'Eurozone Services PMI',   ezServices.value.toFixed(1),  ezServices.date,  trend(ezServices.change3m, 'pts'),  ezServices.level]);
+  rows.push(['Growth', 'Eurozone Manufacturing PMI', ezManuf.value.toFixed(1),  ezManuf.date,     trend(ezManuf.change3m, 'pts'),     ezManuf.level]);
+
+  // 5-6: Core PCE (Inflation)
+  const corePceYoY = inflationHistorical.CorePCE.YoY;
+  const corePce3m  = inflationHistorical.CorePCE['3M_Annualized'];
+  const lastYoY = corePceYoY[corePceYoY.length - 1];
+  const last3m  = corePce3m[corePce3m.length - 1];
+  const yoyChg3m = corePceYoY.length > 3 ? lastYoY[1] - corePceYoY[corePceYoY.length - 4][1] : null;
+  const m3Chg3m  = corePce3m.length > 3 ? last3m[1] - corePce3m[corePce3m.length - 4][1] : null;
+
+  const yoyReading = lastYoY[1] >= 2.5 ? 'Inflación pegajosa' : (lastYoY[1] <= 2.1 ? 'Cerca del objetivo' : 'Ligeramente por encima');
+  const m3Reading  = last3m[1] >= 2.5 ? 'Presión reciente alta' : (last3m[1] <= 2.0 ? 'Presión reciente baja' : 'Presión moderada');
+
+  rows.push(['Inflation', 'Core PCE YoY',         lastYoY[1].toFixed(1) + '%', lastYoY[0], trend(yoyChg3m, 'pp'), yoyReading]);
+  rows.push(['Inflation', 'Core PCE 3M Ann.',     last3m[1].toFixed(1) + '%',  last3m[0],  trend(m3Chg3m, 'pp'),  m3Reading]);
+
+  // 7: 5Y Breakeven (Inflation)
+  const be = inflationHistorical.Breakeven5Y;
+  const lastBe = be[be.length - 1];
+  const beChg3m = be.length > 3 ? lastBe[1] - be[be.length - 4][1] : null;
+  const beReading = beChg3m === null ? '—' : (beChg3m > 0.1 ? 'Expectativas al alza' : (beChg3m < -0.1 ? 'Expectativas a la baja' : 'Expectativas ancladas'));
+  rows.push(['Inflation', '5Y Breakeven',          lastBe[1].toFixed(2) + '%', lastBe[0], trend(beChg3m, 'pp'), beReading]);
+
+  // 8-9: Real Rates
+  const rffr = REAL_RATES_SUMMARY.find(r => r.label === 'Real Fed Funds Rate');
+  const r10y = REAL_RATES_SUMMARY.find(r => r.label === 'US 10Y Real Yield');
+  const rffrReading = rffr.latest > 0.5 ? 'Restrictivo' : (rffr.latest < 0 ? 'Acomodaticio' : 'Neutral');
+  const r10yReading = r10y.latest > 1.5 ? 'Restrictivo' : (r10y.latest < 0 ? 'Acomodaticio' : 'Moderadamente restrictivo');
+  rows.push(['Real Rates', 'Real Fed Funds Rate',  rffr.latest.toFixed(2) + '%', rffr.date, trend(rffr.chg3m, 'pp'), rffrReading]);
+  rows.push(['Real Rates', 'US 10Y Real Yield',    r10y.latest.toFixed(2) + '%', r10y.date, trend(r10y.chg3m, 'pp'), r10yReading]);
+
+  // 10: Financial Conditions — HY OAS (proxy: High Yield Spread)
+  const hy = FINANCIAL_CONDITIONS_SUMMARY.find(f => f.label === 'High Yield Spread');
+  const hyChg3m = hy['3M'];
+  const hyReading = hy.latest < 3.5 ? 'Estrés de crédito bajo' : (hy.latest < 5 ? 'Estrés de crédito moderado' : 'Estrés de crédito elevado');
+  rows.push(['Financial Conditions', 'HY Credit Spread (OAS)', hy.latest.toFixed(2) + '%', hy.date, trend(hyChg3m, 'pp'), hyReading]);
+
+  tbody.innerHTML = rows.map(r => `<tr>
+    <td style="${GROWTH_TD}color:var(--text-dark);font-weight:600;">${r[0]}</td>
+    <td style="${GROWTH_TD}">${r[1]}</td>
+    <td style="${GROWTH_TD}text-align:right;font-weight:700;color:var(--text-dark);">${r[2]}</td>
+    <td style="${GROWTH_TD}text-align:right;color:var(--text-light);">${r[3]}</td>
+    <td style="${GROWTH_TD}text-align:right;">${r[4]}</td>
+    <td style="${GROWTH_TD}color:var(--text-mid);">${r[5]}</td>
+  </tr>`).join('');
 }
 
 // ---- Source data (from "Indicadores Macro.xlsx" — Growth & dashboard tabs) ----
@@ -9279,6 +9416,160 @@ setTimeout(() => {
 
 
 const articles = {
+  'recap-2026-06-14': {
+    title: 'Semana del 08 al 14 de Junio de 2026',
+    category: 'Recap Semanal · Macro',
+    date: '14 Junio 2026',
+    readTime: '~12 min lectura',
+    content: `<h1>Semana del 08 al 14 de Junio de 2026</h1>
+<p><em>14 Junio 2026 · Recap Semanal · Macro</em></p>
+<hr>
+<h2>1. Resumen ejecutivo</h2>
+<p>La semana estuvo dominada por una combinación poco limpia de recuperación del apetito por riesgo, inflación energética elevada y mayor dispersión dentro de la renta variable. No fue una semana de ruptura del ciclo ni de deterioro macro generalizado, sino una fase de transición: los índices estadounidenses terminaron al alza, las small caps destacaron frente a los grandes índices y Europa también cerró en positivo, pero el liderazgo dejó de estar tan concentrado en los nombres más ligados a inteligencia artificial. La lectura de fondo es que el mercado sigue apoyado por crecimiento y beneficios empresariales, aunque con más sensibilidad a tipos, petróleo y posicionamiento que en las semanas anteriores.</p>
+<p>El principal cambio semanal fue la mejora del tono hacia el final de la semana por la expectativa de una posible desescalada entre EE. UU. e Irán. La reducción de la tensión permitió cierta relajación en el petróleo y en las rentabilidades de la deuda pública, lo que ayudó a estabilizar la renta variable. Aun así, la geopolítica siguió siendo el eje que conectó varias partes del informe: energía, inflación, divisas emergentes, bancos centrales y transporte marítimo. La comunicación sobre operaciones estadounidenses para facilitar el paso de crudo y buques por el Estrecho de Hormuz añadió una capa adicional de ruido, especialmente porque las cifras no pudieron verificarse de forma independiente en la fuente consultada.</p>
+<p>La inflación volvió a ocupar un lugar central. En EE. UU., el IPC general repuntó con fuerza por el componente energético, mientras que la inflación subyacente mostró un comportamiento menos preocupante. Esta divergencia explica buena parte de la reacción de mercado: los bonos no interpretaron el dato como una señal inequívoca de endurecimiento monetario, pero tampoco permitió recuperar una narrativa cómoda de recortes de tipos. El mercado pasó a moverse dentro de una lógica de tipos altos durante más tiempo, aunque sin asumir necesariamente una nueva fase agresiva de subidas.</p>
+<p>En renta variable, la semana fue relevante por dos razones. Primero, el ajuste en semiconductores y otros valores ligados a inteligencia artificial mostró que el mercado empieza a diferenciar entre una tendencia estructural positiva y una fase de precios exigentes tras fuertes subidas. Segundo, la mejora de la amplitud del mercado, con mejor comportamiento de small caps, financieras, salud y sectores defensivos, suavizó la lectura negativa del retroceso tecnológico. Goldman Sachs interpretó el reciente ajuste de equities como resultado de varios factores simultáneos —tipos, datos de empleo, geopolítica y posicionamiento— más que como una señal aislada de deterioro del tema de inteligencia artificial.</p>
+<p>El otro gran evento fue la salida a bolsa de SpaceX. La operación, de tamaño récord, no fue solo un hecho corporativo, sino una prueba de la capacidad del mercado para absorber grandes emisiones de compañías de crecimiento, tecnología e inteligencia artificial. La acción subió con fuerza en su debut y la infraestructura de mercado funcionó sin problemas relevantes, lo que contrastó con la preocupación previa por el volumen de órdenes y el recuerdo de salidas a bolsa complejas en el pasado. El evento reforzó la percepción de que sigue existiendo demanda por activos de crecimiento, aunque también dejó patente que la valoración, el bajo free float y la concentración en grandes historias tecnológicas seguirán siendo focos de volatilidad.</p>
+<p>En economía, el foco se desplazó hacia los bancos centrales. La próxima semana concentra un número elevado de reuniones, con la Fed como referencia principal. Scotiabank subrayó que el primer encuentro bajo el nuevo presidente Kevin Warsh puede reducir el grado de forward guidance y elevar la sensibilidad del mercado a los datos. En emergentes, ODI destacó que muchos bancos centrales tienen menos margen que la Fed o el Banco de Inglaterra: el encarecimiento del petróleo y la presión sobre divisas obligan a mantener o endurecer la política monetaria incluso cuando la actividad doméstica empieza a necesitar alivio.</p>
+<hr>
+<h2>2. Mercados</h2>
+<p>La semana dejó una lectura de mercados más constructiva que la que sugerían los episodios de tensión intradiaria, pero también más compleja. El punto central no fue únicamente si los índices subieron o bajaron, sino cómo cambiaron los liderazgos y qué factores explicaron esa rotación. La mejora final del tono se apoyó en la expectativa de desescalada geopolítica y en la caída de parte de la prima de riesgo energética, mientras que la presión sobre semiconductores recordó que el tramo alcista de los últimos meses había generado un posicionamiento exigente.</p>
+<p><strong>Renta variable: mejor tono general, pero con rotación interna</strong></p>
+<p>Los principales índices estadounidenses terminaron la semana con ganancias moderadas. El Russell 2000 destacó con una subida cercana al 4%, mientras que el S&amp;P 500, el Nasdaq y el Dow Jones avanzaron de forma más contenida. El patrón fue relevante porque mostró una participación más amplia del mercado, no solo una continuación mecánica del liderazgo de las grandes compañías tecnológicas. En paralelo, el Russell 1000 Value volvió a superar al growth por segunda semana consecutiva, una señal consistente con cierta normalización de los liderazgos tras el fuerte avance acumulado de inteligencia artificial y semiconductores.</p>
+<p>La lectura europea fue también positiva en conjunto, aunque menos homogénea por países. El STOXX Europe 600 cerró al alza, con mejor comportamiento relativo en Italia y Francia, mientras Alemania quedó rezagada. En Japón, la semana fue más volátil y los índices cerraron a la baja pese al rebote final asociado a la expectativa de menor tensión en Oriente Medio. China mostró una lectura mixta: los datos comerciales fueron sólidos, pero el mercado siguió penalizando la debilidad de la demanda interna y las tensiones regulatorias con EE. UU. en sectores tecnológicos.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-14/picture-1.webp" alt="Renta variable global, semana 8-14 junio 2026" loading="lazy" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+</figure>
+<p><strong>Tecnología, inteligencia artificial y amplitud de mercado</strong></p>
+<p>El ajuste en tecnología fue uno de los elementos más importantes de la semana. El índice de semiconductores había casi duplicado su valor desde comienzos de año y llegó a corregir alrededor de un 12% antes de recuperar parte del movimiento. La caída se explicó más por toma de beneficios, niveles de valoración exigentes y posiciones acumuladas que por un deterioro claro de la demanda final. El debate de fondo no fue si la inteligencia artificial deja de ser relevante, sino si el mercado estaba descontando demasiado rápido y con demasiada concentración una historia que seguirá desplegándose durante varios años.</p>
+<p>La conversación de Goldman Sachs fue útil para ordenar esta lectura. La corrección de equities no se atribuyó a un único catalizador: tipos más altos, datos de empleo resistentes, incertidumbre geopolítica y posicionamiento elevado actuaron al mismo tiempo. También se destacó que una parte importante del ciclo de inversión en inteligencia artificial se está financiando con deuda, lo que introduce sensibilidad al coste de capital. Por ahora, el mercado de crédito no muestra una ruptura de confianza en los emisores de mayor calidad, pero la combinación de capex, emisiones corporativas y mayor emisión pública puede elevar gradualmente la prima exigida por duración y financiación si el ciclo avanza.</p>
+<p>La contrapartida positiva fue la mejora de la amplitud. El S&amp;P 500 equiponderado pasó a comportarse mejor que el índice ponderado por capitalización en lo que va de año, apoyado por financieras, salud, defensivos y small caps. Esta rotación no elimina la importancia de la inteligencia artificial, pero sí reduce la dependencia del mercado respecto a un grupo muy estrecho de compañías. La semana, por tanto, no fue tanto una señal de abandono del tema tecnológico como una advertencia de que el mercado empieza a exigir una narrativa más equilibrada entre crecimiento, beneficios, financiación y valoración.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-14/picture-2.webp" alt="Tecnología, semiconductores y amplitud de mercado" loading="lazy" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+</figure>
+<p><strong>SpaceX y el mercado primario: una prueba de apetito por riesgo</strong></p>
+<p>La salida a bolsa de SpaceX fue el evento corporativo más visible de la semana. La compañía colocó acciones por 75.000 millones de dólares a 135 dólares por acción, con una valoración inicial cercana a 1,77 billones de dólares, superando el récord previo de Saudi Aramco. En su debut en Nasdaq, las acciones abrieron a 150 dólares y cerraron cerca de 161 dólares, elevando la capitalización de mercado por encima de 2 billones de dólares. El volumen negociado fue muy elevado y el estreno se produjo sin los problemas técnicos que algunos participantes temían por el tamaño de la operación.</p>
+<p>Más allá del dato de mercado, la operación tuvo valor informativo. Permitió comprobar si existía demanda suficiente para absorber una emisión de tamaño extraordinario vinculada a tecnología, espacio, satélites e inteligencia artificial. El resultado inicial mostró profundidad de demanda, tanto institucional como minorista, aunque también dejó preguntas abiertas: la compañía todavía no es rentable, el múltiplo sobre ventas es muy superior al de otros grandes grupos cotizados y el free float es reducido. Reuters señaló además que la operación puede servir como referencia para futuras salidas a bolsa de grandes compañías privadas de AI, como OpenAI o Anthropic, si finalmente avanzan en esa dirección.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-14/picture-3.webp" alt="Salida a bolsa de SpaceX y mercado primario" loading="lazy" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+</figure>
+<p><strong>Bonos, tipos y crédito: menos tensión, pero sin una narrativa cómoda de recortes</strong></p>
+<p>Las rentabilidades de los Treasuries bajaron durante la semana, especialmente tras las señales de posible desescalada en Oriente Medio. El Treasury a 10 años pasó de niveles en torno al 4,52% al cierre de la semana anterior a aproximadamente el 4,48% hacia el viernes. La caída fue moderada, pero importante porque llegó después de varias semanas en las que el mercado había ido desplazándose desde un escenario de recortes de tipos hacia una probabilidad mayor de tipos elevados durante más tiempo.</p>
+<p>La inflación de mayo introdujo una lectura matizada. El IPC general repuntó hasta el 4,2% interanual por la energía, pero la inflación subyacente se mantuvo más contenida de lo que sugería el dato principal. Esta composición permitió que el mercado no interpretara el dato como una obligación inmediata de nuevas subidas agresivas, aunque tampoco despejó el dilema de la Fed. Edward Jones planteó que el banco central tiene margen para esperar mientras el shock siga concentrado en energía, mientras Scotiabank remarcó que el inicio de la etapa Warsh puede traer menos orientación explícita y, por tanto, más sensibilidad de mercado a cada dato.</p>
+<p>En crédito, la semana no mostró una señal clara de tensión sistémica en las fuentes revisadas. El debate se centró más en la financiación del ciclo de inteligencia artificial y en la posibilidad de que, a medida que avance el capex y aumenten las emisiones, los inversores pidan mayor compensación por duración o por diferenciales de crédito. Por ahora, la preocupación se mantiene más como tema de vigilancia que como deterioro observable de mercado.</p>
+<p><strong>Divisas, petróleo y materias primas: Ormuz sigue siendo el eje</strong></p>
+<p>El petróleo siguió marcando la lectura de inflación y tipos. La expectativa de una posible reapertura o normalización parcial del Estrecho de Hormuz ayudó a aliviar el precio del crudo durante parte de la semana, reduciendo presión sobre inflación esperada y bonos. Al mismo tiempo, la situación siguió siendo frágil: ABC News recogió las declaraciones de la Casa Blanca sobre el paso de más de 100 millones de barriles de petróleo y más de 200 buques comerciales por el Estrecho, pero también indicó que no pudo verificar de forma independiente esas cifras. Para los mercados, lo relevante fue que la energía continuó funcionando como el canal de transmisión más directo entre geopolítica, inflación y bancos centrales.</p>
+<p>En divisas, la mejora del tono geopolítico permitió cierta relajación del dólar frente al yen en algunos momentos, aunque el cruce USD/JPY se mantuvo en niveles elevados, alrededor de 160. En emergentes, la presión sobre divisas siguió siendo un elemento central: los países importadores de energía tuvieron que equilibrar crecimiento más débil, inflación importada y necesidad de defender sus monedas. ODI enmarcó esta dinámica dentro de un ciclo de "hawkish holds" y endurecimientos selectivos en bancos centrales emergentes, en el que la estabilidad externa pesa tanto como la evolución doméstica de la actividad.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-14/picture-4.webp" alt="Divisas, petróleo y materias primas, semana 8-14 junio 2026" loading="lazy" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+</figure>
+<hr>
+<h2>3. Economía</h2>
+<p>La lectura macro de la semana fue de resistencia con fricciones. El crecimiento no mostró una señal clara de deterioro inmediato, pero la inflación energética, los tipos de interés y la geopolítica volvieron a estrechar el margen de maniobra de los bancos centrales. La economía estadounidense continuó siendo el centro del debate, aunque Europa, Japón, China y emergentes añadieron matices importantes: el shock energético no se transmite igual en una economía con moneda fuerte y profundidad financiera que en países con divisas presionadas y mayor dependencia de importaciones de energía.</p>
+<p><strong>Estados Unidos: inflación energética y Fed en transición</strong></p>
+<p>El dato de inflación de mayo fue el principal indicador macro de la semana. El IPC general se situó en el 4,2% interanual, su nivel más alto desde abril de 2023, impulsado por la energía. Sin embargo, el avance mensual se moderó frente a abril y la inflación subyacente también perdió intensidad, con una subida mensual inferior a la del mes anterior. Esta composición ayuda a explicar por qué el mercado no reaccionó como si la Fed tuviera que endurecer de forma inmediata: la presión existe, pero sigue muy vinculada a energía y no a una aceleración generalizada de todos los componentes.</p>
+<p>El mercado laboral ofreció señales algo menos limpias. Las solicitudes iniciales de desempleo aumentaron por tercera semana consecutiva y las solicitudes continuadas también subieron, aunque desde niveles todavía compatibles con un mercado de trabajo resistente. Scotiabank añadió un matiz importante para las próximas semanas: parte de la fortaleza reciente del empleo puede estar distorsionada por contratación temporal vinculada al Mundial de fútbol y por efectos meteorológicos, por lo que conviene interpretar los datos con cautela antes de extrapolar una tendencia firme.</p>
+<p>La reunión de la Fed de la próxima semana adquirió una importancia especial por ser la primera bajo Kevin Warsh. Scotiabank espera que el banco central reduzca o elimine parte del lenguaje de forward guidance, lo que supondría un cambio de estilo respecto a la etapa Powell. Una Fed menos explícita no implica necesariamente un sesgo inmediato a subir tipos, pero sí puede elevar la volatilidad de mercado al hacer que cada dato de inflación, empleo o actividad tenga más peso en la formación de expectativas.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-14/picture-5.webp" alt="Inflación e indicadores económicos de Estados Unidos" loading="lazy" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+</figure>
+<p><strong>Europa: subida del BCE, inflación energética y crecimiento más débil</strong></p>
+<p>En Europa, el BCE subió tipos por primera vez desde 2023 y actualizó sus previsiones con una combinación menos favorable: más inflación en 2026-2027 y menor crecimiento esperado. El mensaje fue coherente con un shock de oferta: los precios de la energía empujan la inflación al alza, pero al mismo tiempo erosionan renta real, confianza y consumo. Este dilema explica por qué la política monetaria europea se volvió más restrictiva aun cuando las perspectivas de actividad no son especialmente fuertes.</p>
+<p>Los datos macro europeos siguieron mostrando divergencias por país. La producción industrial alemana mejoró ligeramente en abril, apoyada por construcción, química y metales, pero la industria automovilística volvió a retroceder. En Francia y Países Bajos, la inflación repuntó por energía y transporte. En Reino Unido, el PIB cayó un 0,1% mensual en abril tras crecer en marzo, con debilidad en servicios. La lectura conjunta fue la de una economía europea que aún evita una ruptura clara, pero que entra en una fase más incómoda por la combinación de energía, tipos y menor renta real.</p>
+<p><strong>China y emergentes: exportaciones sólidas, demanda interna desigual y bancos centrales defensivos</strong></p>
+<p>China ofreció una de las lecturas más divergentes de la semana. Las exportaciones crecieron con fuerza en mayo, impulsadas por semiconductores, vehículos eléctricos, equipos informáticos y productos ligados al ciclo global de inteligencia artificial. Sin embargo, la inflación al consumidor se mantuvo baja y la demanda interna continuó mostrando debilidad. El contraste entre precios industriales al alza y consumo contenido sugiere que la recuperación sigue siendo más externa e industrial que doméstica.</p>
+<p>En emergentes, el foco estuvo en política monetaria y divisas. ODI destacó que el aumento del petróleo desde el inicio de la guerra con Irán ha endurecido las condiciones para importadores de energía, especialmente en Asia y África. En ese contexto, algunos bancos centrales no pueden permitirse una lectura puramente doméstica: aunque el crecimiento pueda requerir alivio, la presión sobre divisa, inflación importada y flujos de capital obliga a mantener tipos altos o incluso subirlos. Indonesia, Sri Lanka, India, Brasil y Kenia aparecieron como ejemplos de un entorno en el que la estabilidad externa pesa de forma creciente.</p>
+<p><strong>Geopolítica y energía: el Estrecho de Hormuz como canal macro</strong></p>
+<p>El Estrecho de Hormuz volvió a conectar varias piezas de la semana. Por un lado, la expectativa de un entendimiento entre EE. UU. e Irán ayudó a mejorar el tono de los mercados y a moderar petróleo y yields. Por otro, la información disponible siguió siendo incompleta y cambiante, con declaraciones políticas sobre el tránsito de petróleo y buques que no pudieron verificarse de forma independiente. Esta combinación explica por qué el mercado respondió positivamente a las noticias de desescalada, pero no eliminó la prima de riesgo geopolítica.</p>
+<p>La importancia macro de Hormuz va más allá del precio puntual del crudo. Afecta al transporte marítimo, a los costes energéticos de Asia, a la inflación importada de emergentes, al margen de actuación de bancos centrales y a la confianza empresarial. Por eso varias fuentes trataron la geopolítica no como un evento aislado, sino como un factor que condiciona simultáneamente inflación, comercio y tipos de interés.</p>
+<hr>
+<h2>4. Temas clave de la semana</h2>
+<p>La semana puede resumirse en cuatro temas que conectan mercados y economía. No son historias independientes, sino distintas manifestaciones de una misma tensión: crecimiento todavía resistente, inflación energética elevada, tipos menos cómodos y un mercado que empieza a diversificar liderazgos después de un tramo muy concentrado en inteligencia artificial.</p>
+<p>Primero, la inflación energética volvió a condicionar la reacción de bancos centrales y bonos. El dato general de inflación en EE. UU. y las nuevas proyecciones del BCE recordaron que la energía puede alterar rápidamente la narrativa de política monetaria, aunque los componentes subyacentes no muestren la misma intensidad. Segundo, la tecnología corrigió sin romper la historia estructural de AI: el mercado distinguió entre tendencia de largo plazo y precios que habían corrido demasiado rápido. Tercero, SpaceX puso a prueba la profundidad del mercado primario y mostró que todavía existe demanda por grandes historias de crecimiento, aunque con valoraciones exigentes y riesgos de volatilidad. Cuarto, emergentes entraron en una fase más defensiva: petróleo, dólar, divisas y tipos obligan a algunos bancos centrales a priorizar estabilidad financiera frente a alivio monetario.</p>
+<hr>
+<h2>5. Lectura sectorial y regional</h2>
+<table style="width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:0.8rem;margin:24px 0 28px;">
+  <thead>
+    <tr style="background:var(--cream-dark);">
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Sector / región</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Lectura semanal</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Driver macro o de mercado</th>
+      <th style="padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-light);border-bottom:2px solid var(--border);font-weight:600;">Efecto observado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Tecnología / semiconductores</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Corrección tras fuerte rally acumulado, sin ruptura clara de la narrativa de AI.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Toma de beneficios, tipos, posicionamiento y sensibilidad al coste de capital.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mayor dispersión dentro del mercado y rotación hacia otros sectores.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Small caps EE. UU.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mejor comportamiento relativo durante la semana.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Descenso de yields y mejora del apetito por riesgo al final de la semana.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Participación de mercado más amplia que en semanas previas.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Europa</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Cierre positivo agregado, pero con divergencias por país.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">BCE más restrictivo, inflación energética y crecimiento más débil.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mercados europeos apoyados por rotación sectorial, aunque con presión macro.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Japón</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Semana volátil y cierre negativo pese al rebote final.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">BoJ, yen débil y presión de precios de importación.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">El mercado siguió sensible a energía y expectativas de subida de tipos.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">China</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Datos externos sólidos, demanda doméstica aún débil.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Exportaciones ligadas a semiconductores, EVs y AI; consumo contenido.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mercado mixto entre soporte industrial y dudas internas.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Emergentes</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Entorno más defensivo para bancos centrales.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Petróleo, divisas, inflación importada y flujos de capital.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Mayor probabilidad de pausas restrictivas o subidas selectivas.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Energía / petróleo</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">La desescalada alivió parcialmente precios, pero la prima geopolítica persistió.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Hormuz, declaraciones políticas y seguridad marítima.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Canal directo hacia inflación, bonos y divisas emergentes.</td>
+    </tr>
+    <tr style="border-bottom:1px solid var(--border);">
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-dark);font-weight:600;">Mercado primario / IPOs</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">SpaceX marcó un hito de tamaño y demanda.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">Apetito por crecimiento, AI, tecnología y liquidez del mercado.</td>
+      <td style="padding:9px 12px;vertical-align:top;color:var(--text-mid);">La operación funcionó como prueba de absorción para futuras mega-IPOs.</td>
+    </tr>
+  </tbody>
+</table>
+<hr>
+<h2>6. Conclusión semanal</h2>
+<p>La semana cerró con un tono de mercado más favorable que el que sugerían los episodios de tensión de los días previos, pero la mejora no eliminó los principales focos de incertidumbre. La renta variable avanzó con una composición más amplia, los bonos recuperaron algo de terreno y el petróleo cedió parte de la presión al compás de las noticias sobre Oriente Medio.</p>
+<p>El cambio más relevante fue la transición desde un mercado liderado casi exclusivamente por tecnología y AI hacia una estructura algo más equilibrada, con small caps, financieras, salud y defensivos participando en el movimiento. El retroceso de semiconductores no supuso un abandono del tema de inteligencia artificial, pero sí introdujo una lectura más exigente sobre valoración, financiación y posicionamiento.</p>
+<p>En macro, el dato de inflación estadounidense mostró una presión clara en energía, pero menos tensión en la subyacente. Esto mantuvo abierto el dilema de la Fed: no hay una señal suficientemente limpia para volver a una narrativa de recortes, pero tampoco una evidencia clara de que el banco central deba responder con dureza inmediata. La próxima reunión del FOMC será relevante no solo por la decisión, sino por el cambio de tono comunicativo bajo Warsh.</p>
+<p>Fuera de EE. UU., Europa afrontó una combinación de BCE más restrictivo, inflación revisada al alza y menor crecimiento previsto. China siguió mostrando fortaleza exportadora, especialmente en sectores ligados a tecnología y AI, pero con consumo interno más débil. En emergentes, el shock energético y la presión sobre divisas reforzaron un giro hacia políticas monetarias más defensivas.</p>
+<p>Los puntos a seguir la próxima semana serán la reunión de la Fed, el conjunto de decisiones de bancos centrales globales, la evolución del petróleo y del Estrecho de Hormuz, la continuidad de la rotación fuera de semiconductores y la digestión del debut bursátil de SpaceX como señal de profundidad del mercado primario.</p>
+<hr>
+<h2>Bibliografía</h2>
+<ol>
+<li>T. Rowe Price — Global Markets Weekly Update</li>
+<li>Scotiabank Economics — The Global Week Ahead: Warsh's Grand Entrance</li>
+<li>Goldman Sachs — The Outlook for AI-Related Stocks and US Interest Rates</li>
+<li>ODI — Monetary tightening and "hawkish holds" set to unfold across emerging markets</li>
+<li>Edward Jones — Weekly Stock Market Update: Tech Rotation, IPO Fever, and the Fed</li>
+<li>Reuters — Musk's SpaceX prices record $75 billion IPO at $135 a share</li>
+<li>Reuters — With smooth SpaceX debut, Wall Street sets new template for mega IPOs</li>
+<li>Reuters — SpaceX surges past $2 trillion in Nasdaq debut, closes in on Amazon</li>
+<li>ABC News — Trump claims more than 100 million barrels of oil, 200 ships have safely made way through Strait of Hormuz</li>
+<li>Expansión — Artículo de economía, 14 de junio de 2026</li>
+</ol>`
+  },
   'recap-2026-06-07': {
     title: 'Semana del 01 al 07 de Junio de 2026',
     category: 'Recap Semanal',
