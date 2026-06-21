@@ -1315,13 +1315,13 @@
     </div>
     <div class="recap-nav">
       <button class="recap-btn" onclick="changeRecap(1)">&larr; Anterior</button>
-      <div class="recap-date" id="recap-date-label">14 Jun 2026</div>
+      <div class="recap-date" id="recap-date-label">21 Jun 2026</div>
       <button class="recap-btn" onclick="changeRecap(-1)">Siguiente &rarr;</button>
     </div>
     <div class="recap-card" id="recap-content">
-      <h3>Semana del 08 al 14 de Junio de 2026</h3>
-      <p>Los mercados cerraron con un tono algo más constructivo que el observado en los episodios recientes de tensión, pero la semana no fue lineal. La rotación desde tecnología y semiconductores hacia una participación más amplia convivió con inflación energética elevada, debate sobre el rumbo de la Fed y una geopolítica todavía dominante por el Estrecho de Hormuz. La salida a bolsa de SpaceX funcionó como el gran evento de mercado de la semana y como prueba de profundidad para el apetito por riesgo.</p>
-      <div style="margin-top:18px"><button onclick="openArticle('recap-2026-06-14')" style="background:none;border:none;cursor:pointer;color:var(--burgundy);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;padding:0;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;">Leer informe completo →</button></div>
+      <h3>Semana del 15 al 21 de Junio de 2026</h3>
+      <p>La semana deja un mercado más constructivo, pero apoyado en un equilibrio frágil: alivio geopolítico, fortaleza tecnológica y flujos favorables convivieron con una Fed más hawkish y con inflación todavía incómoda. La clave de la próxima semana será comprobar si los datos de PCE, PMIs y precios confirman que la presión inflacionista sigue contenida o si refuerzan la idea de tipos altos durante más tiempo. Mientras tanto, la composición interna del mercado siguió transmitiendo una señal de recuperación selectiva, no de euforia generalizada.</p>
+      <div style="margin-top:18px"><button onclick="openArticle('recap-2026-06-21')" style="background:none;border:none;cursor:pointer;color:var(--burgundy);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;padding:0;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;">Leer informe completo →</button></div>
     </div>
   </div>
 
@@ -4694,6 +4694,7 @@ const twrData = [
 ];
 
 const recaps = [
+  { date:"21 Jun 2026", title:"Semana del 15 al 21 de Junio de 2026", link:"recap-2026-06-21", content:"<p>La semana deja un mercado más constructivo, pero apoyado en un equilibrio frágil: alivio geopolítico, fortaleza tecnológica y flujos favorables convivieron con una Fed más hawkish y con inflación todavía incómoda. La clave de la próxima semana será comprobar si los datos de PCE, PMIs y precios confirman que la presión inflacionista sigue contenida o si refuerzan la idea de tipos altos durante más tiempo. Mientras tanto, la composición interna del mercado siguió transmitiendo una señal de recuperación selectiva, no de euforia generalizada.</p>" },
   { date:"14 Jun 2026", title:"Semana del 08 al 14 de Junio de 2026", link:"recap-2026-06-14", content:"<p>Los mercados cerraron con un tono algo más constructivo que el observado en los episodios recientes de tensión, pero la semana no fue lineal. La rotación desde tecnología y semiconductores hacia una participación más amplia convivió con inflación energética elevada, debate sobre el rumbo de la Fed y una geopolítica todavía dominante por el Estrecho de Hormuz. La salida a bolsa de SpaceX funcionó como el gran evento de mercado de la semana y como prueba de profundidad para el apetito por riesgo.</p>" },
   { date:"07 Jun 2026", title:"Semana del 01 al 07 de Junio de 2026", link:"recap-2026-06-07", content:"<p>La semana terminó con un cambio de tono claro respecto a las anteriores. Los mercados no cayeron por una señal inmediata de recesión, sino por la combinación de economía resistente, inflación todavía presente y tipos de mercado al alza. El ajuste fue especialmente visible en tecnología y compañías ligadas a inteligencia artificial. Europa mostró un comportamiento menos extremo, apoyada por una composición sectorial más diversificada. La próxima semana, CPI estadounidense, bancos centrales y petróleo serán los catalizadores clave.</p>" },
   { date:"31 May 2026", title:"Semana del 25 al 31 de Mayo de 2026", link:"recap-2026-05-31", content:"<p>La semana mantiene un tono constructivo en los mercados, apoyado por un crecimiento todavía resistente, mejores resultados empresariales y cierta expectativa de desescalada geopolítica. No obstante, la lectura macro no es plenamente favorable: el repunte de los tipos reales, el riesgo de inflación por la energía y la fortaleza menos clara de algunos datos de actividad aconsejan mantener una posición selectiva. En cartera, el entorno favorece renta variable de calidad, crédito de mayor solvencia y activos de cobertura como oro o materias primas, con más cautela en deuda de larga duración y crédito de menor calidad.</p>" },
@@ -9416,6 +9417,103 @@ setTimeout(() => {
 
 
 const articles = {
+  'recap-2026-06-21': {
+    title: 'Semana del 15 al 21 de Junio de 2026',
+    category: 'Recap Semanal · Macro',
+    date: '21 Junio 2026',
+    readTime: '~10 min lectura',
+    content: `<h1>Semana del 15 al 21 de Junio de 2026</h1>
+<p><em>21 Junio 2026 · Recap Semanal · Macro</em></p>
+<hr>
+<h2>Primer vistazo visual</h2>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-21/picture-1.webp" loading="lazy" alt="Mapa de calor S&amp;P 500 semana 15-21 junio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">Predominó un tono constructivo en renta variable estadounidense, aunque con liderazgo concentrado en tecnología, semiconductores e industriales; energía y salud quedaron como focos claros de debilidad.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-21/picture-2.webp" loading="lazy" alt="Rotación sectorial semana 15-21 junio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">La rotación sectorial favoreció a industriales, tecnología y financieras, mientras energía, salud y defensivos quedaron rezagados; la mejora fue visible, pero no plenamente homogénea.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-21/picture-3.webp" loading="lazy" alt="Fear &amp; Greed Index semana 15-21 junio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El Fear &amp; Greed se mantuvo en zona de miedo, con ligera mejora frente a la semana anterior pero aún lejos de una señal de complacencia.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-21/picture-4.webp" loading="lazy" alt="AAII Sentiment Survey semana 15-21 junio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">La encuesta AAII mostró una reducción del pesimismo minorista, aunque el porcentaje de bajistas siguió por encima de los alcistas y de su media histórica.</figcaption>
+</figure>
+<hr>
+<h2>Resumen ejecutivo</h2>
+<p>La semana dejó una lectura de mercado más constructiva que la de semanas anteriores, pero todavía condicionada por una tensión evidente entre alivio geopolítico y endurecimiento de la narrativa monetaria. La reapertura prevista del Estrecho de Ormuz y el acuerdo temporal entre Estados Unidos e Irán redujeron la presión inmediata sobre el petróleo y permitieron una recuperación del apetito por riesgo. Esa mejora se reflejó en la renta variable estadounidense, especialmente en tecnología, semiconductores e industriales, mientras que energía y salud quedaron rezagadas.</p>
+<p>El primer vistazo visual apuntó a una recuperación selectiva, no a una señal de euforia. El mapa de mercado mostró liderazgo claro en semiconductores, grandes compañías tecnológicas e industriales; la lectura sectorial confirmó que la mejora se concentró en áreas cíclicas y de crecimiento. Sin embargo, los indicadores de sentimiento siguieron siendo prudentes: el Fear &amp; Greed permaneció en zona de miedo y la encuesta AAII, aunque mejoró, continuó mostrando un saldo minorista más cauto que complaciente.</p>
+<p>El principal contrapeso fue la Reserva Federal. La primera reunión presidida por Kevin Warsh no cambió los tipos oficiales, pero sí cambió el tono. La Fed mantuvo el rango objetivo en 3,50%-3,75%, eliminó el sesgo previo hacia recortes y trasladó una comunicación menos guiada y más centrada en inflación. El mercado interpretó el mensaje como una pausa de carácter hawkish: menos visibilidad sobre recortes, más debate sobre tipos altos durante más tiempo y mayor sensibilidad del tramo corto de la curva.</p>
+<p>La lectura macro fue mixta. El consumo estadounidense volvió a mostrar resiliencia, con ventas minoristas por encima de lo esperado, pero la vivienda siguió reflejando el impacto de la accesibilidad y de los costes de financiación. Fuera de Estados Unidos, Japón avanzó en su normalización monetaria con una subida de tipos del Banco de Japón, mientras China volvió a mostrar una recuperación desigual: mejor comportamiento de la industria y las exportaciones, pero demanda interna y sector inmobiliario todavía débiles.</p>
+<p>La geopolítica dejó una señal ambigua. El alivio del crudo y la mejora de flujos hacia renta variable sugirieron que el mercado compró la idea de desescalada táctica. Sin embargo, los nuevos ataques en Líbano tras el alto el fuego recordaron que el riesgo regional no desapareció y que el canal energético sigue siendo una fuente potencial de inflación y volatilidad. La semana, por tanto, cerró con mejor tono de mercado, pero con una narrativa macro menos limpia: crecimiento resistente, inflación aún incómoda y bancos centrales menos dispuestos a validar una relajación prematura de las condiciones monetarias.</p>
+<hr>
+<h2>1. Mercados</h2>
+<p><strong>Renta variable y rotación sectorial</strong></p>
+<p>La renta variable estadounidense cerró la semana con un tono favorable, impulsada por la relajación del riesgo energético y por el liderazgo de tecnología. El avance no fue uniforme: la mejora se concentró en semiconductores, grandes plataformas digitales, industriales y financieras, mientras que energía sufrió el ajuste del petróleo y salud quedó claramente rezagada. La composición interna fue importante porque el mercado no se limitó a subir por unas pocas compañías mega cap, sino que también aparecieron señales de rotación hacia industriales y financieras, aunque sin una amplitud plena.</p>
+<p>El movimiento en tecnología tuvo una lectura doble. Por un lado, continuó la fortaleza del complejo ligado a inteligencia artificial, semiconductores y hardware, visible en el comportamiento de nombres como NVIDIA, Broadcom, Micron, AMD o Intel. Por otro, el avance convivió con debilidad puntual en software y algunos nombres de crecimiento, lo que dejó un mercado más discriminado. La lectura semanal fue de mayor apetito por riesgo, pero aún selectivo: se premió el crecimiento visible, la exposición a capex tecnológico y la mejora de expectativas tras el alivio del petróleo.</p>
+<p>Los flujos acompañaron ese cambio de tono. Los datos de LSEG Lipper recogidos por Reuters mostraron entradas netas muy fuertes en fondos de renta variable estadounidense durante la semana hasta el 17 de junio, con una concentración extraordinaria en tecnología. También hubo entradas en small caps, mid caps e industriales, lo que encaja con la mejora del mapa sectorial y con una lectura menos defensiva del mercado. Al mismo tiempo, el mantenimiento del Fear &amp; Greed en zona de miedo sugiere que ese flujo no se produjo en un contexto de complacencia generalizada, sino más bien de recomposición tras un shock geopolítico que perdió intensidad.</p>
+<p><strong>Tipos, crédito y curva de rendimientos</strong></p>
+<p>El mercado de bonos actuó como límite a la mejora de la renta variable. La reunión de la Fed empujó al alza el tramo corto de la curva estadounidense, al reforzar la idea de que los recortes han dejado de ser el escenario central a corto plazo. La presión se concentró en los vencimientos más sensibles a expectativas de política monetaria, mientras el crédito investment grade tuvo un comportamiento más débil que los Treasuries. El high yield, en cambio, resistió mejor dentro del tono de mayor apetito por riesgo, apoyado por el rebote de equities y por la estabilización del petróleo.</p>
+<p>La clave de la semana fue que el mercado tuvo que digerir dos señales opuestas: por un lado, menor riesgo energético inmediato; por otro, una Fed más incómoda con la inflación. Esa combinación favoreció los activos de riesgo, pero no permitió una relajación clara en tipos. El mensaje de Warsh, con menos forward guidance y mayor foco en estabilidad de precios, elevó la incertidumbre sobre la función de reacción de la Fed. En términos prácticos, el mercado pasó de debatir cuándo empezarían los recortes a debatir cuánto tiempo pueden permanecer los tipos en niveles elevados y si el siguiente movimiento podría incluso ser una subida si la inflación vuelve a tensionarse.</p>
+<p><strong>Divisas, petróleo y materias primas</strong></p>
+<p>El petróleo fue el principal canal de transmisión entre geopolítica, inflación y mercado. La expectativa de reapertura del Estrecho de Ormuz alivió el precio del crudo y redujo temporalmente el riesgo de un shock energético más severo. Esa caída explicó parte del castigo semanal a energía y, al mismo tiempo, apoyó la mejora de sentimiento en renta variable. La lectura no fue, sin embargo, una eliminación completa del riesgo: la situación regional siguió mostrando fricciones y el mercado mantuvo sensibilidad a cualquier noticia que afecte al tráfico marítimo o a la oferta de crudo.</p>
+<p>En divisas, el foco volvió a estar en el yen. El Banco de Japón elevó su tipo de referencia hasta el 1%, el nivel más alto desde mediados de los noventa, pero la divisa japonesa continuó débil frente al dólar. Esa combinación dejó una señal importante: la normalización japonesa avanza, pero la presión sobre la moneda no ha desaparecido, lo que mantiene vivo el debate sobre intervención y sobre el grado de endurecimiento monetario necesario para contener las presiones importadas de inflación.</p>
+<p><strong>Sentimiento y flujos</strong></p>
+<p>Sentimiento: los indicadores agregados no reflejaron euforia. El Fear &amp; Greed permaneció en miedo y el sentimiento minorista mejoró desde niveles muy pesimistas, pero siguió con una proporción elevada de bajistas. Esto matizó el rebote de la renta variable: el mercado subió, pero la recuperación no vino acompañada de una señal clara de complacencia.</p>
+<p>Flujos: la entrada en fondos de renta variable estadounidense y, en particular, en tecnología, fue uno de los datos más relevantes de la semana. También siguieron entrando recursos en fondos de bonos y en mercado monetario, lo que sugiere una combinación de mayor apetito por riesgo en equities con demanda persistente de liquidez y renta fija de vencimiento corto o intermedio.</p>
+<hr>
+<h2>2. Macro</h2>
+<p><strong>Estados Unidos: Fed más hawkish y consumo todavía resistente</strong></p>
+<p>La semana macro en Estados Unidos estuvo dominada por la Fed. La decisión de mantener tipos no sorprendió; lo relevante fue el cambio de tono. La actualización de proyecciones mostró mayor preocupación por inflación, menos sesgo hacia recortes y una división interna más visible sobre el siguiente movimiento. La comunicación fue más corta y menos guiada, coherente con la preferencia de Warsh por reducir la dependencia del mercado respecto a la orientación explícita del banco central.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-21/fedwatch.webp" loading="lazy" alt="FedWatch Tool CME Group semana 15-21 junio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El FedWatch reflejó un repricing hawkish frente a 1W y 1M: para la reunión del 29 de julio, el mercado asignó un 61,5% a tipos sin cambios y un 38,5% a subida, sin probabilidad de recorte.</figcaption>
+</figure>
+<p>El dato de consumo añadió complejidad a la lectura. Las ventas minoristas de mayo superaron las expectativas y mostraron un avance broad-based, con fortaleza también en el grupo de control utilizado para el cálculo del PIB. Esto sostuvo la idea de que el consumidor estadounidense sigue siendo resistente, incluso en un entorno de tipos elevados y energía todavía sensible a la geopolítica. La vivienda ofreció la cara opuesta: el índice de confianza de los constructores bajó y los inicios de vivienda cayeron con fuerza, afectados por costes, tipos hipotecarios y problemas de accesibilidad.</p>
+<p>La inflación volvió a ocupar el centro del debate. Scotiabank subrayó que el descenso de commodities desde los picos del conflicto no debe interpretarse como victoria definitiva, porque persisten presiones previas en servicios, salarios, costes de importación, inventarios preventivos, shipping y energía. En esa línea, el foco de la próxima semana estará en PCE, PMIs y señales de precios dentro de las encuestas de actividad.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-21/picture-6.webp" loading="lazy" alt="Indicadores macro Estados Unidos semana 15-21 junio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+</figure>
+<p><strong>Condiciones financieras</strong></p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-06-21/picture-5.webp" loading="lazy" alt="National Financial Conditions Index (NFCI) semana 15-21 junio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El NFCI siguió en terreno claramente laxo frente a su media histórica, con pocos signos de endurecimiento amplio pese al repricing hawkish de la Fed.</figcaption>
+</figure>
+<p>La lectura del NFCI ayuda a explicar por qué el mercado pudo absorber una Fed más dura sin un deterioro amplio de activos de riesgo. Las condiciones financieras siguieron más laxas que la media histórica, lo que sugiere que la subida del tramo corto de la curva aún no se ha traducido en una restricción generalizada de crédito, financiación y liquidez. Esa divergencia —Fed más hawkish, pero condiciones todavía acomodaticias— fue una de las tensiones centrales de la semana.</p>
+<p><strong>Japón, China y emergentes</strong></p>
+<p>Japón aportó una de las señales macro más relevantes fuera de Estados Unidos. El Banco de Japón subió el tipo de referencia al 1%, en un contexto de inflación todavía condicionada por energía, yen débil y salarios al alza. La normalización japonesa no fue suficiente para estabilizar la divisa, lo que mantuvo el foco en el riesgo de intervención y en la posibilidad de nuevas subidas si las presiones importadas se trasladan con más fuerza a precios finales.</p>
+<p>China volvió a mostrar una recuperación a dos velocidades. La producción industrial y los sectores exportadores se mantuvieron relativamente sólidos, apoyados por manufacturas y tecnología, pero las ventas minoristas, la inversión y el inmobiliario siguieron débiles. La lectura agregada fue de crecimiento apoyado por el frente exterior, pero sin una recuperación clara de demanda interna. Esa combinación mantiene la expectativa de más apoyo fiscal o de infraestructura durante la segunda mitad del año.</p>
+<p>En emergentes, el foco estuvo más en bancos centrales y política regional que en una señal global homogénea. En América Latina, Banxico aparece como el principal evento de la próxima semana, con el mercado pendiente no tanto del movimiento de tipos —el consenso apunta a pausa— como del mensaje posterior. En Colombia y Perú, los procesos electorales y su traducción a política económica siguieron siendo relevantes, aunque con impacto más regional que global.</p>
+<p><strong>Geopolítica y riesgo energético</strong></p>
+<p>El acuerdo temporal entre Estados Unidos e Irán fue el catalizador de alivio más visible. La reapertura del Estrecho de Ormuz y la reducción del riesgo inmediato de interrupción del tráfico marítimo rebajaron el precio del petróleo y ayudaron a mejorar el tono de mercado. Sin embargo, la noticia no cerró la discusión sobre inflación: varias lecturas externas insistieron en que los costes energéticos, la logística y los inventarios siguen siendo canales de presión, incluso con el crudo por debajo de los máximos del conflicto.</p>
+<p>La situación en Líbano recordó que el riesgo regional seguía activo. Los ataques israelíes tras el alto el fuego y la respuesta de Hezbollah mantuvieron la sensación de una desescalada incompleta. Para mercados, la señal fue clara: el alivio energético puede sostener el apetito por riesgo en el corto plazo, pero la geopolítica no desapareció como fuente de volatilidad ni como amenaza potencial para inflación.</p>
+<hr>
+<h2>Cierre</h2>
+<p>La semana deja un mercado más constructivo, pero apoyado en un equilibrio frágil: alivio geopolítico, fortaleza tecnológica y flujos favorables convivieron con una Fed más hawkish y con inflación todavía incómoda. La clave de la próxima semana será comprobar si los datos de PCE, PMIs y precios confirman que la presión inflacionista sigue contenida o si refuerzan la idea de tipos altos durante más tiempo. Mientras tanto, la composición interna del mercado siguió transmitiendo una señal de recuperación selectiva, no de euforia generalizada.</p>
+<hr>
+<h2>Bibliografía</h2>
+<ol>
+<li>Finviz — S&amp;P 500 performance map — web</li>
+<li>Finviz Groups — sector performance — web</li>
+<li>CNN — Fear &amp; Greed Index — web</li>
+<li>AAII — Investor Sentiment Survey — web</li>
+<li>CME Group — FedWatch Tool — PDF/web</li>
+<li>Federal Reserve Bank of Chicago — National Financial Conditions Index — web</li>
+<li>Scotiabank Economics — The Global Week Ahead: So, You Think It's Over? — web</li>
+<li>T. Rowe Price — Global markets weekly update — web</li>
+<li>Scotiabank Economics — Latam Weekly: Banxico Decision, Colombia Results, Mixed Data Slate — web</li>
+<li>Edward Jones — Weekly Stock Market Update — web</li>
+<li>Reuters — US equity fund inflows surge on Iran deal, tech draws record weekly investments — web</li>
+<li>Reuters — Israeli strikes kill at least 20 in Lebanon hours after ceasefire — web</li>
+<li>Russell Investments — New Fed Chair changes the conversation — web</li>
+<li>Russell Investments — Market Week in Review — web</li>
+<li>CNBC — UK PM Starmer reportedly ready to quit — web</li>
+<li>Expansión — artículo de economía, 20 de junio de 2026 — web</li>
+</ol>`
+  },
   'recap-2026-06-14': {
     title: 'Semana del 08 al 14 de Junio de 2026',
     category: 'Recap Semanal · Macro',
