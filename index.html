@@ -999,7 +999,7 @@
   .energy-snap-signal.mixta   { color:#9B8500; }
   .energy-snap-signal.reserva-baja { color:#C26000; }
 
-  .energy-section { max-width:1100px; margin:0 auto; padding:0 48px 36px; }
+  .energy-section { max-width:1100px; margin:0 auto; padding:28px 48px 36px; }
   .energy-section-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:600; color:var(--text-dark); margin-bottom:3px; }
   .energy-section-sub { font-size:0.76rem; color:var(--text-light); margin-bottom:16px; }
   /* Energy tab bar */
@@ -2451,45 +2451,54 @@
     <!-- Fila 1: Disrupciones Ormuz (ancha) + Importaciones marítimas -->
     <div class="vg-grid">
       <div class="vg-fig vg-col-4">
-        <img src="assets/img/energy/vision-general/06-2026/picture-1.png" alt="Hormuz disruptions in crude oil production" loading="lazy">
+        <img src="assets/img/energy/vision-general/06-2026/picture-1.png" alt="Hormuz disruptions in crude oil production" loading="lazy"
+          onclick="lbOpen(this.src, this.alt, this.closest('.vg-fig').querySelector('.vg-fig-cap').textContent)">
         <div class="vg-fig-cap">EIA — Strait of Hormuz: estimated shut-ins by country (Mar–May 2026 actual, Jun–4Q26 forecast)</div>
       </div>
       <div class="vg-fig vg-col-2">
-        <img src="assets/img/energy/vision-general/06-2026/picture-2.png" alt="May seaborne crude oil imports" loading="lazy">
+        <img src="assets/img/energy/vision-general/06-2026/picture-2.png" alt="May seaborne crude oil imports" loading="lazy"
+          onclick="lbOpen(this.src, this.alt, this.closest('.vg-fig').querySelector('.vg-fig-cap').textContent)">
         <div class="vg-fig-cap">Kpler — May seaborne crude oil imports by country (kbd vs prior month)</div>
       </div>
 
       <!-- Fila 2: Precio Brent + inventarios (ancho) + importaciones China -->
       <div class="vg-fig vg-col-4">
-        <img src="assets/img/energy/vision-general/06-2026/picture-3.png" alt="Brent spot price and global inventory changes" loading="lazy">
+        <img src="assets/img/energy/vision-general/06-2026/picture-3.png" alt="Brent spot price and global inventory changes" loading="lazy"
+          onclick="lbOpen(this.src, this.alt, this.closest('.vg-fig').querySelector('.vg-fig-cap').textContent)">
         <div class="vg-fig-cap">EIA STEO Jun 2026 — Brent spot price ($/bbl) y variación de inventarios globales implícita</div>
       </div>
       <div class="vg-fig vg-col-2">
-        <img src="assets/img/energy/vision-general/06-2026/picture-4.png" alt="China crude oil imports plunge" loading="lazy">
+        <img src="assets/img/energy/vision-general/06-2026/picture-4.png" alt="China crude oil imports plunge" loading="lazy"
+          onclick="lbOpen(this.src, this.alt, this.closest('.vg-fig').querySelector('.vg-fig-cap').textContent)">
         <div class="vg-fig-cap">Vortexa — Importaciones de crudo de China (mb/d): caída pronunciada en abril–mayo 2026</div>
       </div>
 
       <!-- Fila 3: Inventarios OCDE (bb) + Inventarios OCDE (días) + Exportaciones vs pre-guerra -->
       <div class="vg-fig vg-col-2">
-        <img src="assets/img/energy/vision-general/06-2026/picture-5.png" alt="OECD commercial inventories billion barrels" loading="lazy">
+        <img src="assets/img/energy/vision-general/06-2026/picture-5.png" alt="OECD commercial inventories billion barrels" loading="lazy"
+          onclick="lbOpen(this.src, this.alt, this.closest('.vg-fig').querySelector('.vg-fig-cap').textContent)">
         <div class="vg-fig-cap">EIA STEO Jun 2026 — Inventarios comerciales OCDE (billones de barriles)</div>
       </div>
       <div class="vg-fig vg-col-2">
-        <img src="assets/img/energy/vision-general/06-2026/picture-6.png" alt="OECD inventories days of supply" loading="lazy">
+        <img src="assets/img/energy/vision-general/06-2026/picture-6.png" alt="OECD inventories days of supply" loading="lazy"
+          onclick="lbOpen(this.src, this.alt, this.closest('.vg-fig').querySelector('.vg-fig-cap').textContent)">
         <div class="vg-fig-cap">EIA STEO Jun 2026 — Inventarios OCDE en días de suministro: escenario pre-conflicto vs junio 2026</div>
       </div>
       <div class="vg-fig vg-col-2">
-        <img src="assets/img/energy/vision-general/06-2026/picture-7.png" alt="May oil exports vs pre-war levels" loading="lazy">
+        <img src="assets/img/energy/vision-general/06-2026/picture-7.png" alt="May oil exports vs pre-war levels" loading="lazy"
+          onclick="lbOpen(this.src, this.alt, this.closest('.vg-fig').querySelector('.vg-fig-cap').textContent)">
         <div class="vg-fig-cap">May 2026 — Exportaciones de petróleo vs niveles pre-guerra (kbd): ganancias y pérdidas por país</div>
       </div>
 
       <!-- Fila 4: Rig count + Cambio consumo mundial -->
       <div class="vg-fig vg-col-3">
-        <img src="assets/img/energy/vision-general/06-2026/picture-8.png" alt="Rig count overview" loading="lazy">
+        <img src="assets/img/energy/vision-general/06-2026/picture-8.png" alt="Rig count overview" loading="lazy"
+          onclick="lbOpen(this.src, this.alt, this.closest('.vg-fig').querySelector('.vg-fig-cap').textContent)">
         <div class="vg-fig-cap">Baker Hughes / Enverus — Rig Count (jun 2026): EE.UU. +26 YoY, Canadá +57 YoY, Internacional –25 YoY</div>
       </div>
       <div class="vg-fig vg-col-3">
-        <img src="assets/img/energy/vision-general/06-2026/picture-9.png" alt="Annual change in world liquid fuels consumption" loading="lazy">
+        <img src="assets/img/energy/vision-general/06-2026/picture-9.png" alt="Annual change in world liquid fuels consumption" loading="lazy"
+          onclick="lbOpen(this.src, this.alt, this.closest('.vg-fig').querySelector('.vg-fig-cap').textContent)">
         <div class="vg-fig-cap">EIA STEO Jun 2026 — Variación anual del consumo mundial de combustibles líquidos (mb/d): –1,1 en 2026, +2,5 en 2027</div>
       </div>
     </div>
@@ -13562,6 +13571,27 @@ function gopRenderTable() {
   tbody.innerHTML = html;
 }
 
+// ── Lightbox ─────────────────────────────────────────────────────────────────
+function lbOpen(src, alt, caption) {
+  const overlay = document.getElementById('lb-overlay');
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = alt || '';
+  document.getElementById('lb-caption').textContent = caption || '';
+  overlay.classList.add('open');
+  document.addEventListener('keydown', lbKeyClose);
+}
+
+function lbClose(e) {
+  if (e && e.target !== document.getElementById('lb-overlay') && e.target.className !== 'lb-close') return;
+  document.getElementById('lb-overlay').classList.remove('open');
+  document.getElementById('lb-img').src = '';
+  document.removeEventListener('keydown', lbKeyClose);
+}
+
+function lbKeyClose(e) {
+  if (e.key === 'Escape') lbClose(null);
+}
+
 // ── Hash routing ──────────────────────────────────────────────────────────────
 window.addEventListener('popstate', function() {
   const hash = window.location.hash.slice(1);
@@ -13582,4 +13612,13 @@ window.addEventListener('popstate', function() {
   else if (!hash.includes('/')) { showPage(hash, true); }
 })();
 </script>
-<!-- LIGHTBOX -->
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lb-overlay" onclick="lbClose(event)">
+  <div class="lb-img-wrap">
+    <button class="lb-close" onclick="lbClose(null)" title="Cerrar">&times;</button>
+    <img id="lb-img" src="" alt="">
+    <div class="lb-caption" id="lb-caption"></div>
+  </div>
+</div>
+</body>
+</html>
