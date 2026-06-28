@@ -1229,6 +1229,94 @@
   .gop-table tr:not(.gop-row-world):hover td { background:var(--cream); }
   .gop-note { font-size:0.69rem; color:var(--text-light); margin-top:10px; line-height:1.6; }
 
+  /* ITAS POSITION TOOLTIP */
+  #itas-tooltip {
+    display:none; position:fixed; z-index:9999;
+    background:var(--card-bg); border:1px solid var(--border);
+    border-radius:10px; padding:14px 18px;
+    box-shadow:0 6px 24px rgba(107,39,55,0.13);
+    min-width:230px; pointer-events:none;
+  }
+  .itas-tt-ticker {
+    font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--burgundy); margin-bottom:10px; font-weight:500;
+  }
+  .itas-tt-row {
+    display:flex; justify-content:space-between; align-items:center;
+    gap:24px; margin-bottom:5px;
+  }
+  .itas-tt-row:last-child { margin-bottom:0; }
+  .itas-tt-label { font-size:0.74rem; color:var(--text-light); }
+  .itas-tt-val   { font-size:0.78rem; font-weight:500; }
+  .itas-tt-divider {
+    border:none; border-top:1px solid var(--border);
+    margin:8px 0;
+  }
+  .itas-tt-row.total .itas-tt-label,
+  .itas-tt-row.total .itas-tt-val { font-weight:600; color:var(--text-dark); }
+
+
+  #als-tooltip {
+    display:none; position:fixed; z-index:9999;
+    background:var(--card-bg); border:1px solid var(--border);
+    border-radius:10px; padding:14px 18px;
+    box-shadow:0 6px 24px rgba(107,39,55,0.13);
+    min-width:230px; pointer-events:none;
+  }
+  .als-tt-ticker {
+    font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--burgundy); margin-bottom:10px; font-weight:500;
+  }
+  .als-tt-row {
+    display:flex; justify-content:space-between; align-items:center;
+    gap:24px; margin-bottom:5px;
+  }
+  .als-tt-row:last-child { margin-bottom:0; }
+  .als-tt-label { font-size:0.74rem; color:var(--text-light); }
+  .als-tt-val   { font-size:0.78rem; font-weight:500; }
+  .als-tt-divider {
+    border:none; border-top:1px solid var(--border);
+    margin:8px 0;
+  }
+  .als-tt-row.total .als-tt-label,
+  .als-tt-row.total .als-tt-val { font-weight:600; color:var(--text-dark); }
+
+  /* ====== PORTFOLIO SUB-TABS ====== */
+  #portfolio-tabs {
+    display: flex;
+    position: sticky;
+    top: 54px;
+    left: 0; right: 0;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+    box-shadow: 0 4px 12px rgba(107,39,55,0.07);
+    padding: 10px 24px;
+    gap: 12px;
+  }
+  .ptab {
+    padding: 7px 28px;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .ptab.active {
+    background: var(--burgundy);
+    border-color: var(--burgundy);
+    color: #fff;
+  }
+  .ptab:hover:not(.active) {
+    border-color: var(--burgundy);
+    color: var(--burgundy);
+  }
   </style>
 </head>
 <body>
@@ -1251,8 +1339,7 @@
   <div class="nav-logo" onclick="showPage('home');closeMobileMenu()">ALS Investment Journal</div>
   <ul class="nav-links">
     <li><a onclick="showPage('home')" id="nav-home" class="active">Inicio</a></li>
-    <li><a onclick="showPage('portfolio'); closeCompany();" id="nav-portfolio">Portfolio ALS</a></li>
-    <li><a onclick="showPage('itas')" id="nav-itas">Portfolio ITAS</a></li>
+    <li><a onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');" id="nav-portfolio">Portfolio</a></li>
     <li><a onclick="showPage('watchlist')" id="nav-watchlist">Watchlist</a></li>
     <li class="nav-dropdown">
       <a id="nav-market-view">Market View<svg class="nav-chevron" width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg></a>
@@ -1272,8 +1359,7 @@
 
 <div class="mobile-menu" id="mobile-menu">
   <a onclick="showPage('home');closeMobileMenu()" id="mnav-home" class="active">Inicio</a>
-  <a onclick="showPage('portfolio');closeCompany();closeMobileMenu()" id="mnav-portfolio">Portfolio ALS</a>
-  <a onclick="showPage('itas');closeMobileMenu()" id="mnav-itas">Portfolio ITAS</a>
+  <a onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');closeMobileMenu()" id="mnav-portfolio">Portfolio</a>
   <a onclick="showPage('watchlist');closeMobileMenu()" id="mnav-watchlist">Watchlist</a>
   <div class="mobile-menu-group-label">Market View</div>
   <a onclick="showPage('macro');closeMobileMenu()" id="mnav-macro" style="padding-left:10px">Mercados</a>
@@ -1432,6 +1518,10 @@
 </div>
 <!-- ===================== PORTFOLIO ALS ===================== -->
 <div id="page-portfolio" class="page">
+  <div id="portfolio-tabs">
+    <button onclick="switchPortfolioTab('als')" id="ptab-als" class="ptab active">Portfolio ALS</button>
+    <button onclick="switchPortfolioTab('itas')" id="ptab-itas" class="ptab">Portfolio ITAS</button>
+  </div>
   <div id="company-detail" style="display:none">
     <div class="section" style="padding-top:40px">
       <div class="back-btn" onclick="closeCompany()">← Volver al Portfolio</div>
@@ -1571,6 +1661,7 @@
     </div>
   </div>
 
+  <div id="portfolio-sub-als">
   <div id="portfolio-list">
     <div style="padding: 48px 48px 16px; max-width: 1200px; margin: 0 auto;">
       <div class="section-label">Cartera principal</div>
@@ -1641,10 +1732,10 @@
       </div>
     </div>
   </div>
-</div>
 
-<!-- ===================== ITAS ===================== -->
-<div id="page-itas" class="page">
+  </div><!-- /portfolio-sub-als -->
+
+  <div id="portfolio-sub-itas" style="display:none">
   <div style="padding: 48px 48px 16px; max-width: 1100px; margin: 0 auto;">
     <div class="section-label">Cartera gestionada</div>
     <div class="section-title">Portfolio ITAS</div>
@@ -1714,7 +1805,9 @@
       </div>
     </div>
   </div>
-</div>
+
+  </div><!-- /portfolio-sub-itas -->
+</div><!-- /page-portfolio -->
 
 <!-- ===================== WATCHLIST ===================== -->
 <div id="page-watchlist" class="page">
@@ -5008,101 +5101,151 @@ const priceHistory = {
 };
 
 const alsPositions = [
-  { ticker:"ASTS", name:"AST SpaceMobile", country:"EE.UU.", sector:"Comunicaciones satelitales", costBasis:569.36, currency:"USD", currentPrice:85.52, shares:8.0, conviction:"Pendiente" },
-  { ticker:"CERT", name:"Cerrado Gold", country:"Canadá", sector:"Minería / Oro", costBasis:340.0, currency:"CAD", currentPrice:1.77, shares:200.0, conviction:"Pendiente" },
-  { ticker:"CVE", name:"Cenovus Energy", country:"Canadá", sector:"Energía / O&G", costBasis:930.0306, currency:"CAD", currentPrice:42.41, shares:23.6649, conviction:"Pendiente" },
-  { ticker:"GLNG", name:"Golar LNG", country:"Bermudas", sector:"Energía / LNG", costBasis:876.26, currency:"USD", currentPrice:56.79, shares:22.0, conviction:"Pendiente" },
-  { ticker:"GMS", name:"Gulf Marine Services", country:"Reino Unido", sector:"Offshore Services", costBasis:428.1032, currency:"GBP", currentPrice:19.54, shares:1835.777, conviction:"Pendiente", gbx:true },
-  { ticker:"GRF", name:"Grifols SA", country:"España", sector:"Salud / Plasma", costBasis:467.6301, currency:"EUR", currentPrice:9.194, shares:46.3459, conviction:"Pendiente" },
-  { ticker:"IVN", name:"Ivanhoe Mines", country:"Canadá", sector:"Minería / Cobre", costBasis:606.6, currency:"CAD", currentPrice:11.76, shares:45.0, conviction:"Pendiente" },
-  { ticker:"KOS", name:"Kosmos Energy", country:"EE.UU.", sector:"E&P Oil & Gas", costBasis:401.9511, currency:"USD", currentPrice:3.27, shares:195.1219, conviction:"Pendiente" },
-  { ticker:"LGCY", name:"Legacy Education", country:"EE.UU.", sector:"Educación", costBasis:247.2, currency:"USD", currentPrice:11.69, shares:30.0, conviction:"Pendiente" },
-  { ticker:"MAU", name:"Maurel et Prom", country:"Francia", sector:"E&P Oil & Gas", costBasis:350.08, currency:"EUR", currentPrice:10.35, shares:32.0, conviction:"Pendiente" },
-  { ticker:"SOIL", name:"Saturn Oil & Gas", country:"Canadá", sector:"E&P Oil & Gas", costBasis:494.9, currency:"CAD", currentPrice:7.3, shares:70.0, conviction:"Pendiente" },
-  { ticker:"SU", name:"Suncor Energy", country:"Canadá", sector:"Energía / O&G", costBasis:1196.1817, currency:"CAD", currentPrice:93.99, shares:12.8387, conviction:"Pendiente" },
-  { ticker:"U.UN", name:"Sprott Physical Uranium", country:"Canadá", sector:"Uranio", costBasis:722.12, currency:"CAD", currentPrice:27.09, shares:28.0, conviction:"Pendiente" },
-  { ticker:"WCP", name:"Whitecap Resources", country:"Canadá", sector:"E&P Oil & Gas", costBasis:1297.1, currency:"CAD", currentPrice:16.74, shares:85.0, conviction:"Pendiente" },
-  { ticker:"YAL", name:"Yancoal Australia", country:"Australia", sector:"Minería / Carbón", costBasis:877.92, currency:"AUD", currentPrice:6.67, shares:118.0, conviction:"Pendiente" }
+  { ticker:"ASTS",    name:"AST SpaceMobile",           country:"EE.UU.",       sector:"Comunicaciones satelitales",
+    pct:5.45,   ret:6.08,   retTotal:6.08,  divRet:0,    retHist:40.75,
+    avgLocal:"67.35",  currentPrice:71.45,  currency:"USD",
+    costBasis:538.82,  shares:8,       firstTradeDate:"2025-11-18", holdingDays:220 },
+  { ticker:"AXL.V",   name:"Arrow Exploration",          country:"Canadá",      sector:"E&P Oil & Gas",
+    pct:10.20,  ret:-5.46,  retTotal:-5.46, divRet:0,    retHist:-5.46,
+    avgLocal:"0.4865", currentPrice:0.46,   currency:"CAD",
+    costBasis:1605.59, shares:3300,    firstTradeDate:"2026-05-29", holdingDays:28 },
+  { ticker:"CERT.V",  name:"Cerrado Gold",               country:"Canadá",      sector:"Minería / Oro",
+    pct:5.51,   ret:-8.04,  retTotal:-8.04, divRet:0,    retHist:-8.04,
+    avgLocal:"1.78",   currentPrice:1.64,   currency:"CAD",
+    costBasis:891.69,  shares:500,     firstTradeDate:"2025-12-19", holdingDays:189 },
+  { ticker:"COSH.OL", name:"Constellation Oil Services", country:"Noruega",     sector:"Offshore Services",
+    pct:16.98,  ret:-5.00,  retTotal:-4.59, divRet:0.41, retHist:-4.98,
+    avgLocal:"140.01", currentPrice:133.0,  currency:"NOK",
+    costBasis:18620.96,shares:133,     firstTradeDate:"2026-06-01", holdingDays:25 },
+  { ticker:"GLNG",    name:"Golar LNG",                  country:"Bermudas",    sector:"Energía / LNG",
+    pct:14.75,  ret:16.64,  retTotal:18.54, divRet:1.90, retHist:13.03,
+    avgLocal:"42.66",  currentPrice:49.76,  currency:"USD",
+    costBasis:1326.28, shares:31.0891, firstTradeDate:"2025-08-12", holdingDays:318 },
+  { ticker:"GMS.L",   name:"Gulf Marine Services",       country:"Reino Unido", sector:"Offshore Services",
+    pct:4.31,   ret:-20.07, retTotal:-20.07,divRet:0,    retHist:-20.07,
+    avgLocal:"0.2332", currentPrice:0.1864, currency:"GBP",
+    costBasis:428.10,  shares:1835.777,firstTradeDate:"2026-01-28", holdingDays:149 },
+  { ticker:"GRF.MC",  name:"Grifols SA",                 country:"España",      sector:"Salud / Plasma",
+    pct:4.59,   ret:-9.53,  retTotal:-9.53, divRet:0,    retHist:-9.53,
+    avgLocal:"10.09",  currentPrice:9.126,  currency:"EUR",
+    costBasis:467.50,  shares:46.3459, firstTradeDate:"2025-10-28", holdingDays:241 },
+  { ticker:"KOS",     name:"Kosmos Energy",              country:"EE.UU.",      sector:"E&P Oil & Gas",
+    pct:6.70,   ret:0.15,   retTotal:0.15,  divRet:0,    retHist:-1.98,
+    avgLocal:"2.18",   currentPrice:2.18,   currency:"USD",
+    costBasis:702.00,  shares:322.5096,firstTradeDate:"2026-03-02", holdingDays:116 },
+  { ticker:"LGCY",    name:"Legacy Education",           country:"EE.UU.",      sector:"Educación",
+    pct:3.26,   ret:38.29,  retTotal:38.29, divRet:0,    retHist:38.29,
+    avgLocal:"8.24",   currentPrice:11.4,   currency:"USD",
+    costBasis:247.30,  shares:30,      firstTradeDate:"2025-11-18", holdingDays:220 },
+  { ticker:"SOIL.TO", name:"Saturn Oil & Gas",           country:"Canadá",      sector:"E&P Oil & Gas",
+    pct:6.83,   ret:-21.58, retTotal:-21.58,divRet:0,    retHist:-21.58,
+    avgLocal:"6.52",   currentPrice:5.11,   currency:"CAD",
+    costBasis:1297.20, shares:199.076, firstTradeDate:"2026-05-05", holdingDays:52 },
+  { ticker:"SU.TO",   name:"Suncor Energy",              country:"Canadá",      sector:"Energía / O&G",
+    pct:4.54,   ret:-17.93, retTotal:-17.14,divRet:0.79, retHist:-17.29,
+    avgLocal:"93.13",  currentPrice:76.43,  currency:"CAD",
+    costBasis:823.16,  shares:8.8387,  firstTradeDate:"2026-03-30", holdingDays:88 },
+  { ticker:"U-UN.TO", name:"Sprott Physical Uranium",    country:"Canadá",      sector:"Uranio",
+    pct:4.92,   ret:1.37,   retTotal:1.37,  divRet:0,    retHist:1.37,
+    avgLocal:"25.79",  currentPrice:26.14,  currency:"CAD",
+    costBasis:722.04,  shares:28,      firstTradeDate:"2025-12-15", holdingDays:193 },
+  { ticker:"WCP.TO",  name:"Whitecap Resources",         country:"Canadá",      sector:"E&P Oil & Gas",
+    pct:5.53,   ret:-5.05,  retTotal:-4.07, divRet:0.98, retHist:-1.05,
+    avgLocal:"15.77",  currentPrice:14.97,  currency:"CAD",
+    costBasis:867.15,  shares:55,      firstTradeDate:"2026-03-16", holdingDays:102 },
+  { ticker:"YAL.AX",  name:"Yancoal Australia",          country:"Australia",   sector:"Minería / Carbón",
+    pct:4.29,   ret:-25.63, retTotal:-24.69,divRet:0.95, retHist:-24.69,
+    avgLocal:"7.44",   currentPrice:5.53,   currency:"AUD",
+    costBasis:877.44,  shares:118,     firstTradeDate:"2026-03-17", holdingDays:101 },
+  { ticker:"CASH",    name:"IBKR",                       country:"—",           sector:"Cash",
+    pct:2.17,   ret:null,   retTotal:null,  divRet:null, retHist:null,
+    avgLocal:null, currentPrice:null, currency:"EUR",
+    costBasis:null, shares:null, firstTradeDate:null, holdingDays:null }
 ];
 
 const itasPositions = [
-  { ticker:"ASTS", name:"AST SpaceMobile",        country:"EE.UU.",       sector:"Comunicaciones satelitales", pct:8.75,  ret:152.74, costBasis:748.78,    shares:22,       currentPrice:86.02,  currency:"USD" },
-  { ticker:"CERT", name:"Cerrado Gold",            country:"Canadá",       sector:"Minería / Oro",               pct:3.4,   ret:2.48,   costBasis:999.99,    shares:579,      currentPrice:1.77,   currency:"CAD" },
-  { ticker:"CGEO", name:"Georgia Capital",         country:"Reino Unido",  sector:"Financials",                  pct:0.1,   ret:-12.48, costBasis:18.808,    shares:40,       currentPrice:41.15,  currency:"GBP", gbx:true },
-  { ticker:"CVE",  name:"Cenovus Energy",          country:"Canadá",       sector:"Energía / O&G",               pct:1.65,  ret:1.02,   costBasis:493.0509,  shares:11.7449,  currentPrice:42.41,  currency:"CAD" },
-  { ticker:"GLNG", name:"Golar LNG",               country:"Bermudas",     sector:"Energía / LNG",               pct:11.02, ret:42.64,  costBasis:1671.243,  shares:42,       currentPrice:56.76,  currency:"USD" },
-  { ticker:"GMS",  name:"Gulf Marine Services",    country:"Reino Unido",  sector:"Offshore Services",           pct:4.34,  ret:-10.41, costBasis:823.7168,  shares:3776.7849,currentPrice:19.54,  currency:"GBP", gbx:true },
-  { ticker:"GRF",  name:"Grifols SA",              country:"España",       sector:"Salud / Plasma",              pct:8.64,  ret:-7.01,  costBasis:1848.8789, shares:187,      currentPrice:9.194,  currency:"EUR" },
-  { ticker:"IBKR", name:"Interactive Brokers",     country:"EE.UU.",       sector:"Financials",                  pct:0.53,  ret:21.31,  costBasis:94.9717,   shares:1.3365,   currentPrice:86.2,   currency:"USD" },
-  { ticker:"IVN",  name:"Ivanhoe Mines",           country:"Canadá",       sector:"Minería / Cobre",             pct:2.28,  ret:-29.24, costBasis:971.1681,  shares:58.4337,  currentPrice:11.76,  currency:"CAD" },
-  { ticker:"KOS",  name:"Kosmos Energy",           country:"EE.UU.",       sector:"E&P Oil & Gas",               pct:3.71,  ret:60.29,  costBasis:500.726,   shares:245.4539, currentPrice:3.27,   currency:"USD" },
-  { ticker:"LGCY", name:"Legacy Education",        country:"EE.UU.",       sector:"Educación",                   pct:7.96,  ret:43.41,  costBasis:1201.1638, shares:145,      currentPrice:11.88,  currency:"USD" },
-  { ticker:"MEGP", name:"ME Group International",  country:"Reino Unido",  sector:"Cons. Discret.",              pct:0.03,  ret:-24.6,  costBasis:7.48,      shares:400,      currentPrice:1.41,   currency:"GBP", gbx:true },
-  { ticker:"PLX",  name:"Pluxee NV",               country:"Países Bajos", sector:"Technology",                  pct:0.85,  ret:7.14,   costBasis:156.94,    shares:14,       currentPrice:12.01,  currency:"EUR" },
-  { ticker:"PUIG", name:"Puig Brands",             country:"España",       sector:"Cons. Discret.",              pct:2.24,  ret:24.18,  costBasis:358.75,    shares:25,       currentPrice:17.82,  currency:"EUR" },
-  { ticker:"PYPL", name:"PayPal Holdings",         country:"EE.UU.",       sector:"Financials",                  pct:1.85,  ret:8.83,   costBasis:367.47,    shares:9,        currentPrice:44.435, currency:"USD" },
-  { ticker:"REG",  name:"Regulus Resources",       country:"Canadá",       sector:"Minería / Cobre",             pct:3.96,  ret:6.99,   costBasis:1116.0,    shares:300,      currentPrice:3.98,   currency:"CAD" },
-  { ticker:"SMR",  name:"Stanmore Resources",      country:"Australia",    sector:"Minería / Carbón",            pct:1.22,  ret:-20.54, costBasis:519.75,    shares:175,      currentPrice:2.36,   currency:"AUD" },
-  { ticker:"SOIL", name:"Saturn Oil & Gas",        country:"Canadá",       sector:"E&P Oil & Gas",               pct:2.23,  ret:5.49,   costBasis:636.64,    shares:92,       currentPrice:7.3,    currency:"CAD" },
-  { ticker:"SU",   name:"Suncor Energy",           country:"Canadá",       sector:"Energía / O&G",               pct:3.12,  ret:-1.76,  costBasis:956.7,     shares:10,       currentPrice:93.99,  currency:"CAD" },
-  { ticker:"TGS",  name:"TGS ASA",                 country:"Noruega",      sector:"Energía / O&G",               pct:3.87,  ret:49.94,  costBasis:5906.72,   shares:58,       currentPrice:152.7,  currency:"NOK" },
-  { ticker:"U.UN", name:"Sprott Physical Uranium",  country:"Canadá",       sector:"Uranio",                      pct:1.8,   ret:-0.99,  costBasis:547.2,     shares:20,       currentPrice:27.09,  currency:"CAD" },
-  { ticker:"WCP",  name:"Whitecap Resources",      country:"Canadá",       sector:"E&P Oil & Gas",               pct:8.61,  ret:11.12,  costBasis:2335.1,    shares:155,      currentPrice:16.74,  currency:"CAD" },
-  { ticker:"YAL",  name:"Yancoal Australia",       country:"Australia",    sector:"Minería / Carbón",            pct:5.34,  ret:-5.32,  costBasis:1902.1,    shares:270,      currentPrice:6.67,   currency:"AUD" },
-  { ticker:"CASH", name:"Efectivo en cuenta",      country:"—",            sector:"Cash",                        pct:12.5,  ret:null,   costBasis:null,      shares:null,     currentPrice:null,   currency:"EUR" }
+  { ticker:"GLNG", name:"Golar LNG",                      country:"Bermudas",    sector:"Energía / LNG",                pct:9.11,  ret:31.14, retTotal:34.86, divRet:3.73, retHist:16.04,  avgLocal:"37.95",  currentPrice:49.76,   currency:"USD", firstTradeDate:"2025-08-05", holdingDays:278 },
+  { ticker:"CGEO", name:"Georgia Capital",                country:"Reino Unido", sector:"Financials",                   pct:8.95,  ret:94.28, retTotal:94.28, divRet:0,    retHist:94.28,  avgLocal:"20.00",  currentPrice:38.85,   currency:"GBP", firstTradeDate:"2025-05-12", holdingDays:412 },
+  { ticker:"GRF",  name:"Grifols SA",                     country:"España",      sector:"Salud / Plasma",               pct:8.48,  ret:-9.87, retTotal:-8.83, divRet:1.04, retHist:-1.31,  avgLocal:"10.12",  currentPrice:9.13,    currency:"EUR", firstTradeDate:"2024-08-12", holdingDays:510 },
+  { ticker:"LGCY", name:"Legacy Education",               country:"EE.UU.",      sector:"Educación",                    pct:7.20,  ret:28.25, retTotal:28.25, divRet:0,    retHist:31.42,  avgLocal:"8.89",   currentPrice:11.40,   currency:"USD", firstTradeDate:"2025-02-12", holdingDays:501 },
+  { ticker:"WCP",  name:"Whitecap Resources",             country:"Canadá",      sector:"E&P Oil & Gas",                pct:7.13,  ret:-3.16, retTotal:-2.47, divRet:0.69, retHist:-2.47,  avgLocal:"15.46",  currentPrice:14.97,   currency:"CAD", firstTradeDate:"2026-03-16", holdingDays:104 },
+  { ticker:"COSH", name:"Constellation Oil Services",     country:"Noruega",     sector:"Offshore Services",            pct:5.26,  ret:-11.48,retTotal:-10.57,divRet:0.92, retHist:-10.57, avgLocal:"150.25", currentPrice:133.0,   currency:"NOK", firstTradeDate:"2026-06-01", holdingDays:27  },
+  { ticker:"GMS",  name:"Gulf Marine Services",           country:"Reino Unido", sector:"Offshore Services",            pct:4.06,  ret:-14.13,retTotal:-14.13,divRet:0,    retHist:-14.13, avgLocal:"0.2171", currentPrice:0.1864,  currency:"GBP", firstTradeDate:"2026-01-28", holdingDays:151 },
+  { ticker:"CERT", name:"Cerrado Gold",                   country:"Canadá",      sector:"Minería / Oro",                pct:4.02,  ret:-6.93, retTotal:-6.93, divRet:0,    retHist:-6.93,  avgLocal:"1.76",   currentPrice:1.64,    currency:"CAD", firstTradeDate:"2025-12-19", holdingDays:191 },
+  { ticker:"TGS",  name:"TGS ASA",                        country:"Noruega",     sector:"Energía / O&G",                pct:3.35,  ret:33.88, retTotal:36.12, divRet:2.24, retHist:36.12,  avgLocal:"98.07",  currentPrice:131.3,   currency:"NOK", firstTradeDate:"2026-01-14", holdingDays:165 },
+  { ticker:"AXL",  name:"Arrow Exploration",              country:"Canadá",      sector:"E&P Oil & Gas",                pct:3.28,  ret:-11.83,retTotal:-11.83,divRet:0,    retHist:-11.83, avgLocal:"0.522",  currentPrice:0.46,    currency:"CAD", firstTradeDate:"2026-06-01", holdingDays:27  },
+  { ticker:"REG",  name:"Regulus Resources",              country:"Canadá",      sector:"Minería / Cobre",              pct:3.66,  ret:4.72,  retTotal:4.72,  divRet:0,    retHist:4.72,   avgLocal:"3.79",   currentPrice:3.97,    currency:"CAD", firstTradeDate:"2026-03-23", holdingDays:97  },
+  { ticker:"KOS",  name:"Kosmos Energy",                  country:"EE.UU.",      sector:"E&P Oil & Gas",                pct:2.33,  ret:8.21,  retTotal:8.21,  divRet:0,    retHist:8.21,   avgLocal:"2.01",   currentPrice:2.18,    currency:"USD", firstTradeDate:"2026-03-11", holdingDays:109 },
+  { ticker:"ASTS", name:"AST SpaceMobile",                country:"EE.UU.",      sector:"Comunicaciones satelitales",   pct:2.18,  ret:25.35, retTotal:25.35, divRet:0,    retHist:225.63, avgLocal:"57.00",  currentPrice:71.45,   currency:"USD", firstTradeDate:"2025-04-30", holdingDays:424 },
+  { ticker:"SU",   name:"Suncor Energy",                  country:"Canadá",      sector:"Energía / O&G",                pct:2.35,  ret:-21.32,retTotal:-20.79,divRet:0.53, retHist:-20.79, avgLocal:"97.13",  currentPrice:76.43,   currency:"CAD", firstTradeDate:"2026-05-05", holdingDays:54  },
+  { ticker:"PYPL", name:"PayPal Holdings",                country:"EE.UU.",      sector:"Financials",                   pct:1.74,  ret:12.41, retTotal:13.01, divRet:0.60, retHist:13.01,  avgLocal:"39.40",  currentPrice:44.29,   currency:"USD", firstTradeDate:"2026-02-10", holdingDays:138 },
+  { ticker:"IVN",  name:"Ivanhoe Mines",                  country:"Canadá",      sector:"Minería / Cobre",              pct:1.91,  ret:-35.87,retTotal:-35.87,divRet:0,    retHist:-35.87, avgLocal:"16.62",  currentPrice:10.66,   currency:"CAD", firstTradeDate:"2026-01-14", holdingDays:165 },
+  { ticker:"U-UN", name:"Sprott Physical Uranium",        country:"Canadá",      sector:"Uranio",                       pct:1.61,  ret:-6.51, retTotal:-6.51, divRet:0,    retHist:-6.51,  avgLocal:"27.96",  currentPrice:26.14,   currency:"CAD", firstTradeDate:"2026-03-05", holdingDays:115 },
+  { ticker:"SMR",  name:"Stanmore Resources",             country:"Australia",   sector:"Minería / Carbón",             pct:1.26,  ret:-20.04,retTotal:-20.04,divRet:0,    retHist:-20.04, avgLocal:"2.99",   currentPrice:2.39,    currency:"AUD", firstTradeDate:"2026-03-04", holdingDays:116 },
+  { ticker:"YAL",  name:"Yancoal Australia",              country:"Australia",   sector:"Minería / Carbón",             pct:4.49,  ret:-22.72,retTotal:-21.49,divRet:1.23, retHist:-21.49, avgLocal:"7.16",   currentPrice:5.53,    currency:"AUD", firstTradeDate:"2026-03-04", holdingDays:116 },
+  { ticker:"SOIL", name:"Saturn Oil & Gas",               country:"Canadá",      sector:"E&P Oil & Gas",                pct:1.44,  ret:-27.28,retTotal:-27.28,divRet:0,    retHist:-27.28, avgLocal:"7.03",   currentPrice:5.11,    currency:"CAD", firstTradeDate:"2026-05-05", holdingDays:54  },
+  { ticker:"CVE",  name:"Cenovus Energy",                 country:"Canadá",      sector:"Energía / O&G",                pct:0.00,  ret:-14.93,retTotal:-14.93,divRet:0,    retHist:-18.32, avgLocal:"41.34",  currentPrice:35.17,   currency:"CAD", firstTradeDate:"2026-05-05", holdingDays:54  },
+  { ticker:"CASH", name:"DEGIRO + IBKR",                  country:"—",           sector:"Cash",                         pct:16.18, ret:null,  retTotal:null,  divRet:null, retHist:null,   avgLocal:null,     currentPrice:null,    currency:"EUR", firstTradeDate:null, holdingDays:null }
 ];
 
 const twrData = [
-  {date:"2025-07-24",twr:0},{date:"2025-07-25",twr:-2.21},{date:"2025-07-26",twr:-2.21},{date:"2025-07-27",twr:-2.21},{date:"2025-07-28",twr:-2.3567},{date:"2025-07-29",twr:-4.2412},
-  {date:"2025-07-30",twr:-4.6913},{date:"2025-07-31",twr:-4.453},{date:"2025-08-01",twr:-5.0263},{date:"2025-08-02",twr:-5.0263},{date:"2025-08-03",twr:-5.0263},{date:"2025-08-04",twr:-4.3615},
-  {date:"2025-08-05",twr:-3.6824},{date:"2025-08-06",twr:-5.8399},{date:"2025-08-07",twr:-5.388},{date:"2025-08-08",twr:-5.3691},{date:"2025-08-09",twr:-5.3691},{date:"2025-08-10",twr:-5.3691},
-  {date:"2025-08-11",twr:-5.0852},{date:"2025-08-12",twr:-4.8763},{date:"2025-08-13",twr:-5.39},{date:"2025-08-14",twr:-4.9832},{date:"2025-08-15",twr:-4.9262},{date:"2025-08-16",twr:-4.9262},
-  {date:"2025-08-17",twr:-4.9262},{date:"2025-08-18",twr:-4.1181},{date:"2025-08-19",twr:-4.0797},{date:"2025-08-20",twr:-4.0701},{date:"2025-08-21",twr:-2.6983},{date:"2025-08-22",twr:-1.5404},
-  {date:"2025-08-23",twr:-1.5404},{date:"2025-08-24",twr:-1.5404},{date:"2025-08-25",twr:-1.7373},{date:"2025-08-26",twr:-1.2165},{date:"2025-08-27",twr:-1.9574},{date:"2025-08-28",twr:-2.4476},
-  {date:"2025-08-29",twr:-3.4524},{date:"2025-08-30",twr:-3.4524},{date:"2025-08-31",twr:-3.4524},{date:"2025-09-01",twr:-3.2014},{date:"2025-09-02",twr:-4.3146},{date:"2025-09-03",twr:-4.2093},
-  {date:"2025-09-04",twr:-3.079},{date:"2025-09-05",twr:-2.6235},{date:"2025-09-06",twr:-2.6235},{date:"2025-09-07",twr:-2.6235},{date:"2025-09-08",twr:-3.9867},{date:"2025-09-09",twr:-3.8907},
-  {date:"2025-09-10",twr:-4.0445},{date:"2025-09-11",twr:-4.3995},{date:"2025-09-12",twr:-4.5812},{date:"2025-09-13",twr:-4.5812},{date:"2025-09-14",twr:-4.5812},{date:"2025-09-15",twr:-4.7339},
-  {date:"2025-09-16",twr:-6.9059},{date:"2025-09-17",twr:-6.6825},{date:"2025-09-18",twr:-6.4679},{date:"2025-09-19",twr:-7.2816},{date:"2025-09-20",twr:-7.2816},{date:"2025-09-21",twr:-7.2816},
-  {date:"2025-09-22",twr:-6.8458},{date:"2025-09-23",twr:-6.1285},{date:"2025-09-24",twr:-5.5278},{date:"2025-09-25",twr:-6.6331},{date:"2025-09-26",twr:-6.353},{date:"2025-09-27",twr:-6.353},
-  {date:"2025-09-28",twr:-6.353},{date:"2025-09-29",twr:-6.3717},{date:"2025-09-30",twr:-6.1283},{date:"2025-10-01",twr:-7.1233},{date:"2025-10-02",twr:-7.2255},{date:"2025-10-03",twr:-5.8431},
-  {date:"2025-10-04",twr:-5.8431},{date:"2025-10-05",twr:-5.8431},{date:"2025-10-06",twr:-5.8431},{date:"2025-10-07",twr:-6.4928},{date:"2025-10-08",twr:-6.5209},{date:"2025-10-09",twr:-5.5206},
-  {date:"2025-10-10",twr:-6.541},{date:"2025-10-11",twr:-6.541},{date:"2025-10-12",twr:-6.541},{date:"2025-10-13",twr:-5.298},{date:"2025-10-14",twr:-6.9364},{date:"2025-10-15",twr:-5.9499},
-  {date:"2025-10-16",twr:-7.1349},{date:"2025-10-17",twr:-7.9057},{date:"2025-10-18",twr:-7.9057},{date:"2025-10-19",twr:-7.9057},{date:"2025-10-20",twr:-7.1597},{date:"2025-10-21",twr:-7.1133},
-  {date:"2025-10-22",twr:-6.0173},{date:"2025-10-23",twr:-5.5943},{date:"2025-10-24",twr:-6.3401},{date:"2025-10-25",twr:-6.3401},{date:"2025-10-26",twr:-6.3401},{date:"2025-10-27",twr:-3.6896},
-  {date:"2025-10-28",twr:-4.6816},{date:"2025-10-29",twr:-5.5871},{date:"2025-10-30",twr:-5.1528},{date:"2025-10-31",twr:-4.8018},{date:"2025-11-01",twr:-4.8018},{date:"2025-11-02",twr:-4.8018},
-  {date:"2025-11-03",twr:-4.6019},{date:"2025-11-04",twr:-6.0329},{date:"2025-11-05",twr:-5.8826},{date:"2025-11-06",twr:-6.8896},{date:"2025-11-07",twr:-9.3198},{date:"2025-11-08",twr:-9.3198},
-  {date:"2025-11-09",twr:-9.3198},{date:"2025-11-10",twr:-9.7007},{date:"2025-11-11",twr:-10.5133},{date:"2025-11-12",twr:-10.6565},{date:"2025-11-13",twr:-11.2462},{date:"2025-11-14",twr:-11.9207},
-  {date:"2025-11-15",twr:-11.9207},{date:"2025-11-16",twr:-11.9207},{date:"2025-11-17",twr:-12.5109},{date:"2025-11-18",twr:-12.3096},{date:"2025-11-19",twr:-12.713},{date:"2025-11-20",twr:-13.7604},
-  {date:"2025-11-21",twr:-12.8808},{date:"2025-11-22",twr:-12.8808},{date:"2025-11-23",twr:-12.8808},{date:"2025-11-24",twr:-12.8024},{date:"2025-11-25",twr:-11.4072},{date:"2025-11-26",twr:-11.0972},
-  {date:"2025-11-27",twr:-10.6704},{date:"2025-11-28",twr:-9.9647},{date:"2025-11-29",twr:-9.9647},{date:"2025-11-30",twr:-9.9647},{date:"2025-12-01",twr:-10.9821},{date:"2025-12-02",twr:-10.448},
-  {date:"2025-12-03",twr:-9.4182},{date:"2025-12-04",twr:-7.7243},{date:"2025-12-05",twr:-8.2041},{date:"2025-12-06",twr:-8.2041},{date:"2025-12-07",twr:-8.2041},{date:"2025-12-08",twr:-7.8461},
-  {date:"2025-12-09",twr:-7.5512},{date:"2025-12-10",twr:-8.6051},{date:"2025-12-11",twr:-8.2761},{date:"2025-12-12",twr:-9.3126},{date:"2025-12-13",twr:-9.3126},{date:"2025-12-14",twr:-9.3126},
-  {date:"2025-12-15",twr:-10.0018},{date:"2025-12-16",twr:-10.3078},{date:"2025-12-17",twr:-10.9088},{date:"2025-12-18",twr:-9.6615},{date:"2025-12-19",twr:-8.0354},{date:"2025-12-20",twr:-8.0354},
-  {date:"2025-12-21",twr:-8.0354},{date:"2025-12-22",twr:-8.2009},{date:"2025-12-23",twr:-8.5498},{date:"2025-12-24",twr:-9.2814},{date:"2025-12-25",twr:-9.2904},{date:"2025-12-26",twr:-9.6261},
-  {date:"2025-12-27",twr:-9.6261},{date:"2025-12-28",twr:-9.6261},{date:"2025-12-29",twr:-9.9695},{date:"2025-12-30",twr:-9.5823},{date:"2025-12-31",twr:-10.2966},{date:"2026-01-01",twr:-10.2966},
-  {date:"2026-01-02",twr:-8.5115},{date:"2026-01-03",twr:-8.5115},{date:"2026-01-04",twr:-8.5115},{date:"2026-01-05",twr:-6.7458},{date:"2026-01-06",twr:-5.7666},{date:"2026-01-07",twr:-6.6336},
-  {date:"2026-01-08",twr:-5.8867},{date:"2026-01-09",twr:-4.5879},{date:"2026-01-10",twr:-4.5879},{date:"2026-01-11",twr:-4.5879},{date:"2026-01-12",twr:-4.9886},{date:"2026-01-13",twr:-5.6632},
-  {date:"2026-01-14",twr:-5.1727},{date:"2026-01-15",twr:-3.9304},{date:"2026-01-16",twr:-1.9514},{date:"2026-01-17",twr:-1.9514},{date:"2026-01-18",twr:-1.9514},{date:"2026-01-19",twr:-1.0199},
-  {date:"2026-01-20",twr:-2.8115},{date:"2026-01-21",twr:-2.5393},{date:"2026-01-22",twr:-0.5317},{date:"2026-01-23",twr:-0.8599},{date:"2026-01-24",twr:-0.8599},{date:"2026-01-25",twr:-0.8599},
-  {date:"2026-01-26",twr:-2.3767},{date:"2026-01-27",twr:-1.5567},{date:"2026-01-28",twr:1.0816},{date:"2026-01-29",twr:1.213},{date:"2026-01-30",twr:-1.4995},{date:"2026-01-31",twr:-1.4995},
-  {date:"2026-02-01",twr:-1.4995},{date:"2026-02-02",twr:-2.4747},{date:"2026-02-03",twr:-0.9728},{date:"2026-02-04",twr:-2.9038},{date:"2026-02-05",twr:-4.6613},{date:"2026-02-06",twr:-2.7926},
-  {date:"2026-02-07",twr:-2.7926},{date:"2026-02-08",twr:-2.7926},{date:"2026-02-09",twr:-1.0429},{date:"2026-02-10",twr:-1.1814},{date:"2026-02-11",twr:-1.7348},{date:"2026-02-12",twr:-4.2995},
-  {date:"2026-02-13",twr:-2.5386},{date:"2026-02-14",twr:-2.5386},{date:"2026-02-15",twr:-2.5386},{date:"2026-02-16",twr:-2.7336},{date:"2026-02-17",twr:-2.9281},{date:"2026-02-18",twr:-1.2779},
-  {date:"2026-02-19",twr:-1.2088},{date:"2026-02-20",twr:-0.7247},{date:"2026-02-21",twr:-0.7247},{date:"2026-02-22",twr:-0.7247},{date:"2026-02-23",twr:-0.9927},{date:"2026-02-24",twr:-0.7452},
-  {date:"2026-02-25",twr:-1.7775},{date:"2026-02-26",twr:-0.8345},{date:"2026-02-27",twr:-0.8544},{date:"2026-02-28",twr:-0.8544},{date:"2026-03-01",twr:-0.8544},{date:"2026-03-02",twr:1.6937},
-  {date:"2026-03-03",twr:1.2259},{date:"2026-03-04",twr:1.8535},{date:"2026-03-05",twr:0.1118},{date:"2026-03-06",twr:-0.7992},{date:"2026-03-07",twr:-0.7992},{date:"2026-03-08",twr:-0.7992},
-  {date:"2026-03-09",twr:-1.5036},{date:"2026-03-10",twr:-1.1785},{date:"2026-03-11",twr:-2.4533},{date:"2026-03-12",twr:-2.8728},{date:"2026-03-13",twr:-4.2131},{date:"2026-03-14",twr:-4.2131},
-  {date:"2026-03-15",twr:-4.2131},{date:"2026-03-16",twr:-3.3894},{date:"2026-03-17",twr:-2.6648},{date:"2026-03-18",twr:-2.9081},{date:"2026-03-19",twr:-0.1604},{date:"2026-03-20",twr:-1.4184},
-  {date:"2026-03-21",twr:-1.4184},{date:"2026-03-22",twr:-1.4184},{date:"2026-03-23",twr:-1.9902},{date:"2026-03-24",twr:-0.7062},{date:"2026-03-25",twr:-0.1899},{date:"2026-03-26",twr:-0.5293},
-  {date:"2026-03-27",twr:-0.4497},{date:"2026-03-28",twr:-0.4497},{date:"2026-03-29",twr:-0.4497},{date:"2026-03-30",twr:-0.5791},{date:"2026-03-31",twr:-0.261},{date:"2026-04-01",twr:-1.5276},
-  {date:"2026-04-02",twr:0.6289},{date:"2026-04-03",twr:0.6993},{date:"2026-04-04",twr:0.6993},{date:"2026-04-05",twr:0.6993},{date:"2026-04-06",twr:1.6862},{date:"2026-04-07",twr:0.0287},
-  {date:"2026-04-08",twr:-0.9316},{date:"2026-04-09",twr:-2.2492},{date:"2026-04-10",twr:-2.0634},{date:"2026-04-11",twr:-2.0634},{date:"2026-04-12",twr:-2.0634},{date:"2026-04-13",twr:-1.1233},
-  {date:"2026-04-14",twr:-2.5866},{date:"2026-04-15",twr:-2.6256},{date:"2026-04-16",twr:-2.0998},{date:"2026-04-17",twr:-3.7934},{date:"2026-04-18",twr:-3.7934},{date:"2026-04-19",twr:-3.7934},
-  {date:"2026-04-20",twr:-4.0243},{date:"2026-04-21",twr:-4.1491},{date:"2026-04-22",twr:-2.5867},{date:"2026-04-23",twr:-2.5283},{date:"2026-04-24",twr:-3.62},{date:"2026-04-25",twr:-3.62},
-  {date:"2026-04-26",twr:-3.62},{date:"2026-04-27",twr:-2.7526},{date:"2026-04-28",twr:-2.9957},{date:"2026-04-29",twr:-1.6473},{date:"2026-04-30",twr:-0.3392},{date:"2026-05-01",twr:-0.0402},
-  {date:"2026-05-02",twr:-0.0402},{date:"2026-05-03",twr:-0.0402},{date:"2026-05-04",twr:0.2496},{date:"2026-05-05",twr:0.2797},{date:"2026-05-06",twr:-1.8763},{date:"2026-05-07",twr:-2.887},
-  {date:"2026-05-08",twr:-2.3917},{date:"2026-05-09",twr:-2.3917},{date:"2026-05-10",twr:-2.3917},{date:"2026-05-11",twr:-0.3126},{date:"2026-05-12",twr:0.0462},{date:"2026-05-13",twr:-0.0938},
-  {date:"2026-05-14",twr:1.0151},{date:"2026-05-15",twr:2.1263}
+  {date:"2025-07-24",twr:0.0},{date:"2025-07-25",twr:-2.2133},{date:"2025-07-26",twr:-2.2133},{date:"2025-07-27",twr:-2.2133},{date:"2025-07-28",twr:-2.3621},{date:"2025-07-29",twr:-4.2658},
+  {date:"2025-07-30",twr:-4.6428},{date:"2025-07-31",twr:-4.4259},{date:"2025-08-01",twr:-5.0539},{date:"2025-08-02",twr:-5.0539},{date:"2025-08-03",twr:-5.0539},{date:"2025-08-04",twr:-4.3743},
+  {date:"2025-08-05",twr:-3.6533},{date:"2025-08-06",twr:-5.8369},{date:"2025-08-07",twr:-5.4619},{date:"2025-08-08",twr:-5.4248},{date:"2025-08-09",twr:-5.4248},{date:"2025-08-10",twr:-5.4248},
+  {date:"2025-08-11",twr:-5.0663},{date:"2025-08-12",twr:-4.7666},{date:"2025-08-13",twr:-5.384},{date:"2025-08-14",twr:-5.0762},{date:"2025-08-15",twr:-4.8867},{date:"2025-08-16",twr:-4.8867},
+  {date:"2025-08-17",twr:-4.8867},{date:"2025-08-18",twr:-4.1394},{date:"2025-08-19",twr:-4.1358},{date:"2025-08-20",twr:-4.0664},{date:"2025-08-21",twr:-2.7551},{date:"2025-08-22",twr:-1.3237},
+  {date:"2025-08-23",twr:-1.3237},{date:"2025-08-24",twr:-1.3237},{date:"2025-08-25",twr:-1.8945},{date:"2025-08-26",twr:-1.412},{date:"2025-08-27",twr:-2.0083},{date:"2025-08-28",twr:-2.5714},
+  {date:"2025-08-29",twr:-3.5342},{date:"2025-08-30",twr:-3.5342},{date:"2025-08-31",twr:-3.5342},{date:"2025-09-01",twr:-3.3666},{date:"2025-09-02",twr:-4.324},{date:"2025-09-03",twr:-4.2066},
+  {date:"2025-09-04",twr:-3.0754},{date:"2025-09-05",twr:-2.579},{date:"2025-09-06",twr:-2.579},{date:"2025-09-07",twr:-2.579},{date:"2025-09-08",twr:-3.9132},{date:"2025-09-09",twr:-4.0055},
+  {date:"2025-09-10",twr:-4.0807},{date:"2025-09-11",twr:-4.3011},{date:"2025-09-12",twr:-4.5677},{date:"2025-09-13",twr:-4.5677},{date:"2025-09-14",twr:-4.5677},{date:"2025-09-15",twr:-4.802},
+  {date:"2025-09-16",twr:-6.7548},{date:"2025-09-17",twr:-6.753},{date:"2025-09-18",twr:-6.5228},{date:"2025-09-19",twr:-7.2585},{date:"2025-09-20",twr:-7.2585},{date:"2025-09-21",twr:-7.2585},
+  {date:"2025-09-22",twr:-6.9506},{date:"2025-09-23",twr:-6.2626},{date:"2025-09-24",twr:-5.6581},{date:"2025-09-25",twr:-6.8438},{date:"2025-09-26",twr:-6.278},{date:"2025-09-27",twr:-6.278},
+  {date:"2025-09-28",twr:-6.278},{date:"2025-09-29",twr:-6.3186},{date:"2025-09-30",twr:-6.1439},{date:"2025-10-01",twr:-7.0015},{date:"2025-10-02",twr:-7.2451},{date:"2025-10-03",twr:-5.8725},
+  {date:"2025-10-04",twr:-5.8725},{date:"2025-10-05",twr:-5.8725},{date:"2025-10-06",twr:-5.6786},{date:"2025-10-07",twr:-6.3731},{date:"2025-10-08",twr:-6.2281},{date:"2025-10-09",twr:-5.3042},
+  {date:"2025-10-10",twr:-6.1787},{date:"2025-10-11",twr:-6.1787},{date:"2025-10-12",twr:-6.1787},{date:"2025-10-13",twr:-4.8783},{date:"2025-10-14",twr:-6.4887},{date:"2025-10-15",twr:-5.6686},
+  {date:"2025-10-16",twr:-6.8193},{date:"2025-10-17",twr:-7.7978},{date:"2025-10-18",twr:-7.7978},{date:"2025-10-19",twr:-7.7978},{date:"2025-10-20",twr:-6.9589},{date:"2025-10-21",twr:-6.7507},
+  {date:"2025-10-22",twr:-5.6204},{date:"2025-10-23",twr:-5.224},{date:"2025-10-24",twr:-6.1198},{date:"2025-10-25",twr:-6.1198},{date:"2025-10-26",twr:-6.1198},{date:"2025-10-27",twr:-3.4931},
+  {date:"2025-10-28",twr:-4.5537},{date:"2025-10-29",twr:-5.6327},{date:"2025-10-30",twr:-4.9661},{date:"2025-10-31",twr:-4.6865},{date:"2025-11-01",twr:-4.6865},{date:"2025-11-02",twr:-4.6865},
+  {date:"2025-11-03",twr:-4.2091},{date:"2025-11-04",twr:-5.6534},{date:"2025-11-05",twr:-5.7363},{date:"2025-11-06",twr:-7.2319},{date:"2025-11-07",twr:-9.7357},{date:"2025-11-08",twr:-9.7357},
+  {date:"2025-11-09",twr:-9.7357},{date:"2025-11-10",twr:-10.0915},{date:"2025-11-11",twr:-10.9629},{date:"2025-11-12",twr:-11.1537},{date:"2025-11-13",twr:-11.8181},{date:"2025-11-14",twr:-12.6366},
+  {date:"2025-11-15",twr:-12.6366},{date:"2025-11-16",twr:-12.6366},{date:"2025-11-17",twr:-13.1484},{date:"2025-11-18",twr:-13.0163},{date:"2025-11-19",twr:-13.4162},{date:"2025-11-20",twr:-14.1426},
+  {date:"2025-11-21",twr:-13.267},{date:"2025-11-22",twr:-13.267},{date:"2025-11-23",twr:-13.267},{date:"2025-11-24",twr:-13.0091},{date:"2025-11-25",twr:-11.5498},{date:"2025-11-26",twr:-11.2924},
+  {date:"2025-11-27",twr:-10.8646},{date:"2025-11-28",twr:-9.6235},{date:"2025-11-29",twr:-9.6235},{date:"2025-11-30",twr:-9.6235},{date:"2025-12-01",twr:-10.9698},{date:"2025-12-02",twr:-10.3309},
+  {date:"2025-12-03",twr:-9.6517},{date:"2025-12-04",twr:-7.9208},{date:"2025-12-05",twr:-8.2812},{date:"2025-12-06",twr:-8.2812},{date:"2025-12-07",twr:-8.2812},{date:"2025-12-08",twr:-7.9573},
+  {date:"2025-12-09",twr:-7.5979},{date:"2025-12-10",twr:-8.5884},{date:"2025-12-11",twr:-8.5919},{date:"2025-12-12",twr:-9.7281},{date:"2025-12-13",twr:-9.7281},{date:"2025-12-14",twr:-9.7281},
+  {date:"2025-12-15",twr:-10.45},{date:"2025-12-16",twr:-10.8179},{date:"2025-12-17",twr:-11.2433},{date:"2025-12-18",twr:-9.9259},{date:"2025-12-19",twr:-8.3195},{date:"2025-12-20",twr:-8.3195},
+  {date:"2025-12-21",twr:-8.3195},{date:"2025-12-22",twr:-8.4642},{date:"2025-12-23",twr:-8.9212},{date:"2025-12-24",twr:-9.6667},{date:"2025-12-25",twr:-9.6667},{date:"2025-12-26",twr:-10.0247},
+  {date:"2025-12-27",twr:-10.0247},{date:"2025-12-28",twr:-10.0247},{date:"2025-12-29",twr:-10.2293},{date:"2025-12-30",twr:-9.7954},{date:"2025-12-31",twr:-10.4956},{date:"2026-01-01",twr:-10.4956},
+  {date:"2026-01-02",twr:-8.5831},{date:"2026-01-03",twr:-8.5831},{date:"2026-01-04",twr:-8.5831},{date:"2026-01-05",twr:-6.441},{date:"2026-01-06",twr:-5.8951},{date:"2026-01-07",twr:-6.7048},
+  {date:"2026-01-08",twr:-6.0357},{date:"2026-01-09",twr:-4.5887},{date:"2026-01-10",twr:-4.5887},{date:"2026-01-11",twr:-4.5887},{date:"2026-01-12",twr:-5.1772},{date:"2026-01-13",twr:-5.6283},
+  {date:"2026-01-14",twr:-5.1336},{date:"2026-01-15",twr:-3.8411},{date:"2026-01-16",twr:-1.775},{date:"2026-01-17",twr:-1.775},{date:"2026-01-18",twr:-1.775},{date:"2026-01-19",twr:-0.8482},
+  {date:"2026-01-20",twr:-3.0911},{date:"2026-01-21",twr:-2.9473},{date:"2026-01-22",twr:-0.6578},{date:"2026-01-23",twr:-0.8914},{date:"2026-01-24",twr:-0.8914},{date:"2026-01-25",twr:-0.8914},
+  {date:"2026-01-26",twr:-2.7023},{date:"2026-01-27",twr:-2.1188},{date:"2026-01-28",twr:0.3147},{date:"2026-01-29",twr:0.6006},{date:"2026-01-30",twr:-2.0328},{date:"2026-01-31",twr:-2.0328},
+  {date:"2026-02-01",twr:-2.0328},{date:"2026-02-02",twr:-2.8441},{date:"2026-02-03",twr:-1.0646},{date:"2026-02-04",twr:-3.3419},{date:"2026-02-05",twr:-5.2862},{date:"2026-02-06",twr:-3.2866},
+  {date:"2026-02-07",twr:-3.2866},{date:"2026-02-08",twr:-3.2866},{date:"2026-02-09",twr:-1.7606},{date:"2026-02-10",twr:-1.9257},{date:"2026-02-11",twr:-2.5443},{date:"2026-02-12",twr:-5.0115},
+  {date:"2026-02-13",twr:-3.2836},{date:"2026-02-14",twr:-3.2836},{date:"2026-02-15",twr:-3.2836},{date:"2026-02-16",twr:-3.3591},{date:"2026-02-17",twr:-3.5635},{date:"2026-02-18",twr:-2.045},
+  {date:"2026-02-19",twr:-1.6196},{date:"2026-02-20",twr:-1.1843},{date:"2026-02-21",twr:-1.1843},{date:"2026-02-22",twr:-1.1843},{date:"2026-02-23",twr:-1.4879},{date:"2026-02-24",twr:-1.2474},
+  {date:"2026-02-25",twr:-2.1632},{date:"2026-02-26",twr:-1.3707},{date:"2026-02-27",twr:-1.4883},{date:"2026-02-28",twr:-1.4883},{date:"2026-03-01",twr:-1.4883},{date:"2026-03-02",twr:-5.2734},
+  {date:"2026-03-03",twr:-5.7024},{date:"2026-03-04",twr:-5.4623},{date:"2026-03-05",twr:-7.138},{date:"2026-03-06",twr:-7.8956},{date:"2026-03-07",twr:-7.8956},{date:"2026-03-08",twr:-7.8956},
+  {date:"2026-03-09",twr:-8.4176},{date:"2026-03-10",twr:-8.6749},{date:"2026-03-11",twr:-9.944},{date:"2026-03-12",twr:-10.3907},{date:"2026-03-13",twr:-11.9165},{date:"2026-03-14",twr:-11.9165},
+  {date:"2026-03-15",twr:-11.9165},{date:"2026-03-16",twr:-3.7411},{date:"2026-03-17",twr:-3.1351},{date:"2026-03-18",twr:-3.5482},{date:"2026-03-19",twr:-0.1702},{date:"2026-03-20",twr:-1.7932},
+  {date:"2026-03-21",twr:-1.7932},{date:"2026-03-22",twr:-1.7932},{date:"2026-03-23",twr:-2.5131},{date:"2026-03-24",twr:-1.2002},{date:"2026-03-25",twr:-1.0952},{date:"2026-03-26",twr:-1.3391},
+  {date:"2026-03-27",twr:-1.2145},{date:"2026-03-28",twr:-1.2145},{date:"2026-03-29",twr:-1.2145},{date:"2026-03-30",twr:-1.4598},{date:"2026-03-31",twr:-0.6952},{date:"2026-04-01",twr:-2.3949},
+  {date:"2026-04-02",twr:0.0228},{date:"2026-04-03",twr:0.0228},{date:"2026-04-04",twr:0.0228},{date:"2026-04-05",twr:0.0228},{date:"2026-04-06",twr:1.0759},{date:"2026-04-07",twr:-0.4821},
+  {date:"2026-04-08",twr:-1.8929},{date:"2026-04-09",twr:-2.8921},{date:"2026-04-10",twr:-2.6454},{date:"2026-04-11",twr:-2.6454},{date:"2026-04-12",twr:-2.6454},{date:"2026-04-13",twr:-1.5047},
+  {date:"2026-04-14",twr:-3.2412},{date:"2026-04-15",twr:-3.1359},{date:"2026-04-16",twr:-2.5641},{date:"2026-04-17",twr:-4.3242},{date:"2026-04-18",twr:-4.3242},{date:"2026-04-19",twr:-4.3242},
+  {date:"2026-04-20",twr:-4.2967},{date:"2026-04-21",twr:-4.598},{date:"2026-04-22",twr:-3.0962},{date:"2026-04-23",twr:-2.8364},{date:"2026-04-24",twr:-3.9896},{date:"2026-04-25",twr:-3.9896},
+  {date:"2026-04-26",twr:-3.9896},{date:"2026-04-27",twr:-3.1256},{date:"2026-04-28",twr:-3.1211},{date:"2026-04-29",twr:-2.1001},{date:"2026-04-30",twr:-0.7411},{date:"2026-05-01",twr:-0.4295},
+  {date:"2026-05-02",twr:-0.4295},{date:"2026-05-03",twr:-0.4295},{date:"2026-05-04",twr:-0.0278},{date:"2026-05-05",twr:0.0147},{date:"2026-05-06",twr:-2.2966},{date:"2026-05-07",twr:-3.4564},
+  {date:"2026-05-08",twr:-2.8096},{date:"2026-05-09",twr:-2.8096},{date:"2026-05-10",twr:-2.8096},{date:"2026-05-11",twr:-0.7687},{date:"2026-05-12",twr:-0.4769},{date:"2026-05-13",twr:-0.5031},
+  {date:"2026-05-14",twr:0.5319},{date:"2026-05-15",twr:1.8267},{date:"2026-05-16",twr:1.8267},{date:"2026-05-17",twr:1.8267},{date:"2026-05-18",twr:2.0057},{date:"2026-05-19",twr:2.2263},
+  {date:"2026-05-20",twr:1.7151},{date:"2026-05-21",twr:1.338},{date:"2026-05-22",twr:1.4856},{date:"2026-05-23",twr:1.4856},{date:"2026-05-24",twr:1.4856},{date:"2026-05-25",twr:0.8123},
+  {date:"2026-05-26",twr:1.611},{date:"2026-05-27",twr:0.265},{date:"2026-05-28",twr:0.2622},{date:"2026-05-29",twr:-0.5126},{date:"2026-05-30",twr:-0.5126},{date:"2026-05-31",twr:-0.5126},
+  {date:"2026-06-01",twr:1.5379},{date:"2026-06-02",twr:2.4943},{date:"2026-06-03",twr:3.0565},{date:"2026-06-04",twr:3.1643},{date:"2026-06-05",twr:-0.0128},{date:"2026-06-06",twr:-0.0128},
+  {date:"2026-06-07",twr:-0.0128},{date:"2026-06-08",twr:0.8653},{date:"2026-06-09",twr:-1.1906},{date:"2026-06-10",twr:-0.5982},{date:"2026-06-11",twr:-0.255},{date:"2026-06-12",twr:-1.1814},
+  {date:"2026-06-13",twr:-1.1814},{date:"2026-06-14",twr:-1.1814},{date:"2026-06-15",twr:-2.2338},{date:"2026-06-16",twr:-3.5968},{date:"2026-06-17",twr:-3.9369},{date:"2026-06-18",twr:-4.8178},
+  {date:"2026-06-19",twr:-5.1536},{date:"2026-06-20",twr:-5.1536},{date:"2026-06-21",twr:-5.1536},{date:"2026-06-22",twr:-4.7342},{date:"2026-06-23",twr:-5.1373},{date:"2026-06-24",twr:-9.337},
+  {date:"2026-06-25",twr:-9.6212},{date:"2026-06-26",twr:-8.9667},{date:"2026-06-27",twr:-8.9667},{date:"2026-06-28",twr:-8.9667}
 ];
 
 const recaps = [
@@ -5117,8 +5260,8 @@ const recaps = [
 let currentRecapIdx = 0;
 
 // ====== HELPERS ======
-const alsCashEUR = 1531.46;
-const itasCashEUR = 2486.8;
+const alsCashEUR = 204.8;
+const itasCashEUR = 3256.43;
 
 const itasTwrData = [
   {date:"2023-10-22",twr:0},{date:"2023-10-23",twr:0.52},{date:"2023-10-24",twr:1.37},{date:"2023-10-25",twr:1.19},{date:"2023-10-26",twr:-0.02},{date:"2023-10-27",twr:-0.59},
@@ -5223,61 +5366,68 @@ const itasTwrData = [
   {date:"2025-06-07",twr:8.33},{date:"2025-06-08",twr:8.33},{date:"2025-06-09",twr:9.0},{date:"2025-06-10",twr:9.61},{date:"2025-06-11",twr:10.22},{date:"2025-06-12",twr:10.16},
   {date:"2025-06-13",twr:9.51},{date:"2025-06-14",twr:9.51},{date:"2025-06-15",twr:9.51},{date:"2025-06-16",twr:12.29},{date:"2025-06-17",twr:11.16},{date:"2025-06-18",twr:12.17},
   {date:"2025-06-19",twr:10.96},{date:"2025-06-20",twr:11.67},{date:"2025-06-21",twr:11.67},{date:"2025-06-22",twr:11.67},{date:"2025-06-23",twr:13.03},{date:"2025-06-24",twr:13.96},
-  {date:"2025-06-25",twr:13.35},{date:"2025-06-26",twr:13.96},{date:"2025-06-27",twr:14.92},{date:"2025-06-28",twr:14.92},{date:"2025-06-29",twr:14.92},{date:"2025-06-30",twr:13.72},
-  {date:"2025-07-01",twr:13.66},{date:"2025-07-02",twr:14.27},{date:"2025-07-03",twr:14.67},{date:"2025-07-04",twr:14.05},{date:"2025-07-05",twr:14.05},{date:"2025-07-06",twr:14.05},
-  {date:"2025-07-07",twr:13.92},{date:"2025-07-08",twr:14.36},{date:"2025-07-09",twr:15.53},{date:"2025-07-10",twr:16.3},{date:"2025-07-11",twr:16.25},{date:"2025-07-12",twr:16.25},
-  {date:"2025-07-13",twr:16.25},{date:"2025-07-14",twr:16.11},{date:"2025-07-15",twr:16.18},{date:"2025-07-16",twr:16.75},{date:"2025-07-17",twr:18.65},{date:"2025-07-18",twr:18.61},
-  {date:"2025-07-19",twr:18.61},{date:"2025-07-20",twr:18.61},{date:"2025-07-21",twr:19.01},{date:"2025-07-22",twr:18.07},{date:"2025-07-23",twr:19.05},{date:"2025-07-24",twr:18.82},
-  {date:"2025-07-25",twr:18.44},{date:"2025-07-26",twr:18.44},{date:"2025-07-27",twr:18.44},{date:"2025-07-28",twr:18.44},{date:"2025-07-29",twr:17.03},{date:"2025-07-30",twr:19.55},
-  {date:"2025-07-31",twr:19.31},{date:"2025-08-01",twr:17.61},{date:"2025-08-02",twr:17.61},{date:"2025-08-03",twr:17.61},{date:"2025-08-04",twr:17.67},{date:"2025-08-05",twr:17.45},
-  {date:"2025-08-06",twr:18.04},{date:"2025-08-07",twr:18.41},{date:"2025-08-08",twr:18.35},{date:"2025-08-09",twr:18.35},{date:"2025-08-10",twr:18.35},{date:"2025-08-11",twr:18.05},
-  {date:"2025-08-12",twr:19.33},{date:"2025-08-13",twr:19.8},{date:"2025-08-14",twr:19.89},{date:"2025-08-15",twr:19.41},{date:"2025-08-16",twr:19.41},{date:"2025-08-17",twr:19.41},
-  {date:"2025-08-18",twr:20.25},{date:"2025-08-19",twr:19.9},{date:"2025-08-20",twr:20.57},{date:"2025-08-21",twr:20.99},{date:"2025-08-22",twr:22.46},{date:"2025-08-23",twr:22.46},
-  {date:"2025-08-24",twr:22.46},{date:"2025-08-25",twr:22.34},{date:"2025-08-26",twr:22.69},{date:"2025-08-27",twr:23.45},{date:"2025-08-28",twr:23.26},{date:"2025-08-29",twr:21.86},
-  {date:"2025-08-30",twr:21.86},{date:"2025-08-31",twr:21.86},{date:"2025-09-01",twr:21.83},{date:"2025-09-02",twr:21.18},{date:"2025-09-03",twr:21.26},{date:"2025-09-04",twr:22.03},
-  {date:"2025-09-05",twr:22.29},{date:"2025-09-06",twr:22.29},{date:"2025-09-07",twr:22.29},{date:"2025-09-08",twr:22.31},{date:"2025-09-09",twr:21.26},{date:"2025-09-10",twr:21.44},
-  {date:"2025-09-11",twr:21.88},{date:"2025-09-12",twr:21.68},{date:"2025-09-13",twr:21.68},{date:"2025-09-14",twr:21.68},{date:"2025-09-15",twr:23.33},{date:"2025-09-16",twr:21.86},
-  {date:"2025-09-17",twr:21.09},{date:"2025-09-18",twr:21.72},{date:"2025-09-19",twr:22.43},{date:"2025-09-20",twr:22.43},{date:"2025-09-21",twr:22.43},{date:"2025-09-22",twr:22.53},
-  {date:"2025-09-23",twr:23.85},{date:"2025-09-24",twr:23.84},{date:"2025-09-25",twr:21.75},{date:"2025-09-26",twr:19.86},{date:"2025-09-27",twr:19.86},{date:"2025-09-28",twr:19.86},
-  {date:"2025-09-29",twr:20.11},{date:"2025-09-30",twr:19.42},{date:"2025-10-01",twr:20.13},{date:"2025-10-02",twr:21.78},{date:"2025-10-03",twr:22.8},{date:"2025-10-04",twr:22.8},
-  {date:"2025-10-05",twr:22.8},{date:"2025-10-06",twr:23.35},{date:"2025-10-07",twr:23.18},{date:"2025-10-08",twr:24.87},{date:"2025-10-09",twr:25.9},{date:"2025-10-10",twr:23.8},
-  {date:"2025-10-11",twr:23.8},{date:"2025-10-12",twr:23.8},{date:"2025-10-13",twr:26.58},{date:"2025-10-14",twr:25.84},{date:"2025-10-15",twr:27.85},{date:"2025-10-16",twr:25.73},
-  {date:"2025-10-17",twr:24.04},{date:"2025-10-18",twr:24.04},{date:"2025-10-19",twr:24.04},{date:"2025-10-20",twr:24.97},{date:"2025-10-21",twr:24.23},{date:"2025-10-22",twr:23.58},
-  {date:"2025-10-23",twr:24.21},{date:"2025-10-24",twr:23.97},{date:"2025-10-25",twr:23.97},{date:"2025-10-26",twr:23.97},{date:"2025-10-27",twr:26.36},{date:"2025-10-28",twr:25.71},
-  {date:"2025-10-29",twr:24.73},{date:"2025-10-30",twr:23.4},{date:"2025-10-31",twr:23.66},{date:"2025-11-01",twr:23.66},{date:"2025-11-02",twr:23.66},{date:"2025-11-03",twr:22.77},
-  {date:"2025-11-04",twr:20.93},{date:"2025-11-05",twr:20.4},{date:"2025-11-06",twr:17.29},{date:"2025-11-07",twr:16.7},{date:"2025-11-08",twr:16.7},{date:"2025-11-09",twr:16.7},
-  {date:"2025-11-10",twr:17.9},{date:"2025-11-11",twr:17.47},{date:"2025-11-12",twr:17.13},{date:"2025-11-13",twr:15.53},{date:"2025-11-14",twr:15.71},{date:"2025-11-15",twr:15.71},
-  {date:"2025-11-16",twr:15.71},{date:"2025-11-17",twr:13.0},{date:"2025-11-18",twr:10.69},{date:"2025-11-19",twr:11.18},{date:"2025-11-20",twr:10.71},{date:"2025-11-21",twr:11.72},
-  {date:"2025-11-22",twr:11.72},{date:"2025-11-23",twr:11.72},{date:"2025-11-24",twr:12.58},{date:"2025-11-25",twr:13.71},{date:"2025-11-26",twr:14.32},{date:"2025-11-27",twr:14.83},
-  {date:"2025-11-28",twr:15.92},{date:"2025-11-29",twr:15.92},{date:"2025-11-30",twr:15.92},{date:"2025-12-01",twr:14.52},{date:"2025-12-02",twr:15.2},{date:"2025-12-03",twr:16.23},
-  {date:"2025-12-04",twr:19.21},{date:"2025-12-05",twr:19.38},{date:"2025-12-06",twr:19.38},{date:"2025-12-07",twr:19.38},{date:"2025-12-08",twr:19.51},{date:"2025-12-09",twr:19.97},
-  {date:"2025-12-10",twr:20.04},{date:"2025-12-11",twr:20.89},{date:"2025-12-12",twr:19.39},{date:"2025-12-13",twr:19.39},{date:"2025-12-14",twr:19.39},{date:"2025-12-15",twr:18.42},
-  {date:"2025-12-16",twr:18.13},{date:"2025-12-17",twr:17.12},{date:"2025-12-18",twr:18.88},{date:"2025-12-19",twr:20.9},{date:"2025-12-20",twr:20.9},{date:"2025-12-21",twr:20.9},
-  {date:"2025-12-22",twr:22.23},{date:"2025-12-23",twr:21.38},{date:"2025-12-24",twr:20.68},{date:"2025-12-25",twr:20.68},{date:"2025-12-26",twr:20.17},{date:"2025-12-27",twr:20.17},
-  {date:"2025-12-28",twr:20.17},{date:"2025-12-29",twr:19.65},{date:"2025-12-30",twr:20.55},{date:"2025-12-31",twr:20.11},{date:"2026-01-01",twr:20.11},{date:"2026-01-02",twr:22.26},
-  {date:"2026-01-03",twr:22.26},{date:"2026-01-04",twr:22.26},{date:"2026-01-05",twr:24.14},{date:"2026-01-06",twr:25.47},{date:"2026-01-07",twr:24.26},{date:"2026-01-08",twr:24.96},
-  {date:"2026-01-09",twr:26.14},{date:"2026-01-10",twr:26.14},{date:"2026-01-11",twr:26.14},{date:"2026-01-12",twr:25.31},{date:"2026-01-13",twr:24.08},{date:"2026-01-14",twr:25.58},
-  {date:"2026-01-15",twr:25.65},{date:"2026-01-16",twr:26.76},{date:"2026-01-17",twr:26.76},{date:"2026-01-18",twr:26.76},{date:"2026-01-19",twr:26.07},{date:"2026-01-20",twr:23.68},
-  {date:"2026-01-21",twr:23.72},{date:"2026-01-22",twr:27.02},{date:"2026-01-23",twr:26.27},{date:"2026-01-24",twr:26.27},{date:"2026-01-25",twr:26.27},{date:"2026-01-26",twr:25.61},
-  {date:"2026-01-27",twr:26.17},{date:"2026-01-28",twr:27.51},{date:"2026-01-29",twr:27.63},{date:"2026-01-30",twr:25.14},{date:"2026-01-31",twr:25.14},{date:"2026-02-01",twr:25.14},
-  {date:"2026-02-02",twr:24.05},{date:"2026-02-03",twr:26.04},{date:"2026-02-04",twr:25.21},{date:"2026-02-05",twr:22.0},{date:"2026-02-06",twr:24.18},{date:"2026-02-07",twr:24.18},
-  {date:"2026-02-08",twr:24.18},{date:"2026-02-09",twr:26.77},{date:"2026-02-10",twr:27.99},{date:"2026-02-11",twr:26.84},{date:"2026-02-12",twr:24.42},{date:"2026-02-13",twr:25.92},
-  {date:"2026-02-14",twr:25.92},{date:"2026-02-15",twr:25.92},{date:"2026-02-16",twr:26.07},{date:"2026-02-17",twr:27.0},{date:"2026-02-18",twr:28.43},{date:"2026-02-19",twr:28.62},
-  {date:"2026-02-20",twr:30.46},{date:"2026-02-21",twr:30.46},{date:"2026-02-22",twr:30.46},{date:"2026-02-23",twr:30.95},{date:"2026-02-24",twr:31.32},{date:"2026-02-25",twr:31.06},
-  {date:"2026-02-26",twr:32.68},{date:"2026-02-27",twr:32.25},{date:"2026-02-28",twr:32.25},{date:"2026-03-01",twr:32.25},{date:"2026-03-02",twr:29.64},{date:"2026-03-03",twr:27.21},
-  {date:"2026-03-04",twr:29.19},{date:"2026-03-05",twr:27.33},{date:"2026-03-06",twr:25.76},{date:"2026-03-07",twr:25.76},{date:"2026-03-08",twr:25.76},{date:"2026-03-09",twr:24.7},
-  {date:"2026-03-10",twr:25.45},{date:"2026-03-11",twr:24.73},{date:"2026-03-12",twr:22.99},{date:"2026-03-13",twr:21.16},{date:"2026-03-14",twr:21.16},{date:"2026-03-15",twr:21.16},
-  {date:"2026-03-16",twr:22.44},{date:"2026-03-17",twr:23.6},{date:"2026-03-18",twr:26.59},{date:"2026-03-19",twr:29.06},{date:"2026-03-20",twr:27.32},{date:"2026-03-21",twr:27.32},
-  {date:"2026-03-22",twr:27.32},{date:"2026-03-23",twr:26.99},{date:"2026-03-24",twr:28.62},{date:"2026-03-25",twr:29.73},{date:"2026-03-26",twr:28.81},{date:"2026-03-27",twr:27.94},
-  {date:"2026-03-28",twr:27.94},{date:"2026-03-29",twr:27.94},{date:"2026-03-30",twr:27.88},{date:"2026-03-31",twr:29.65},{date:"2026-04-01",twr:29.55},{date:"2026-04-02",twr:31.37},
-  {date:"2026-04-03",twr:31.37},{date:"2026-04-04",twr:31.37},{date:"2026-04-05",twr:31.37},{date:"2026-04-06",twr:32.04},{date:"2026-04-07",twr:30.4},{date:"2026-04-08",twr:31.21},
-  {date:"2026-04-09",twr:30.73},{date:"2026-04-10",twr:31.11},{date:"2026-04-11",twr:31.11},{date:"2026-04-12",twr:31.11},{date:"2026-04-13",twr:32.41},{date:"2026-04-14",twr:31.97},
-  {date:"2026-04-15",twr:31.76},{date:"2026-04-16",twr:31.92},{date:"2026-04-17",twr:31.51},{date:"2026-04-18",twr:31.51},{date:"2026-04-19",twr:31.51},{date:"2026-04-20",twr:31.16},
-  {date:"2026-04-21",twr:30.28},{date:"2026-04-22",twr:31.72},{date:"2026-04-23",twr:31.1},{date:"2026-04-24",twr:29.86},{date:"2026-04-25",twr:29.86},{date:"2026-04-26",twr:29.86},
-  {date:"2026-04-27",twr:30.32},{date:"2026-04-28",twr:29.22},{date:"2026-04-29",twr:29.18},{date:"2026-04-30",twr:30.0},{date:"2026-05-01",twr:30.17},{date:"2026-05-02",twr:30.17},
-  {date:"2026-05-03",twr:30.17},{date:"2026-05-04",twr:30.76},{date:"2026-05-05",twr:30.05},{date:"2026-05-06",twr:29.24},{date:"2026-05-07",twr:28.03},{date:"2026-05-08",twr:29.24},
-  {date:"2026-05-09",twr:29.24},{date:"2026-05-10",twr:29.24},{date:"2026-05-11",twr:31.15},{date:"2026-05-12",twr:30.56},{date:"2026-05-13",twr:31.11},{date:"2026-05-14",twr:33.13},
-  {date:"2026-05-15",twr:33.32},{date:"2026-05-16",twr:33.32},{date:"2026-05-17",twr:33.32},{date:"2026-05-18",twr:33.58}
+  {date:"2025-06-25",twr:13.35},{date:"2025-06-26",twr:13.96},{date:"2025-06-27",twr:14.92},
+  {date:"2025-06-28",twr:14.92},{date:"2025-06-29",twr:14.92},{date:"2025-06-30",twr:13.71},{date:"2025-07-01",twr:13.66},{date:"2025-07-02",twr:14.28},{date:"2025-07-03",twr:14.7},
+  {date:"2025-07-04",twr:14.07},{date:"2025-07-05",twr:14.07},{date:"2025-07-06",twr:14.07},{date:"2025-07-07",twr:13.93},{date:"2025-07-08",twr:14.38},{date:"2025-07-09",twr:15.56},
+  {date:"2025-07-10",twr:16.35},{date:"2025-07-11",twr:16.3},{date:"2025-07-12",twr:16.3},{date:"2025-07-13",twr:16.3},{date:"2025-07-14",twr:16.16},{date:"2025-07-15",twr:16.24},
+  {date:"2025-07-16",twr:16.78},{date:"2025-07-17",twr:18.75},{date:"2025-07-18",twr:18.7},{date:"2025-07-19",twr:18.7},{date:"2025-07-20",twr:18.7},{date:"2025-07-21",twr:19.11},
+  {date:"2025-07-22",twr:18.17},{date:"2025-07-23",twr:19.16},{date:"2025-07-24",twr:18.93},{date:"2025-07-25",twr:18.56},{date:"2025-07-26",twr:18.56},{date:"2025-07-27",twr:18.56},
+  {date:"2025-07-28",twr:18.56},{date:"2025-07-29",twr:17.14},{date:"2025-07-30",twr:19.69},{date:"2025-07-31",twr:19.44},{date:"2025-08-01",twr:17.72},{date:"2025-08-02",twr:17.72},
+  {date:"2025-08-03",twr:17.72},{date:"2025-08-04",twr:17.77},{date:"2025-08-05",twr:17.56},{date:"2025-08-06",twr:18.2},{date:"2025-08-07",twr:18.57},{date:"2025-08-08",twr:18.43},
+  {date:"2025-08-09",twr:18.43},{date:"2025-08-10",twr:18.43},{date:"2025-08-11",twr:18.15},{date:"2025-08-12",twr:19.32},{date:"2025-08-13",twr:19.76},{date:"2025-08-14",twr:19.9},
+  {date:"2025-08-15",twr:19.31},{date:"2025-08-16",twr:19.31},{date:"2025-08-17",twr:19.31},{date:"2025-08-18",twr:20.18},{date:"2025-08-19",twr:19.75},{date:"2025-08-20",twr:20.4},
+  {date:"2025-08-21",twr:20.85},{date:"2025-08-22",twr:22.18},{date:"2025-08-23",twr:22.18},{date:"2025-08-24",twr:22.18},{date:"2025-08-25",twr:22.17},{date:"2025-08-26",twr:22.52},
+  {date:"2025-08-27",twr:23.25},{date:"2025-08-28",twr:23.11},{date:"2025-08-29",twr:21.67},{date:"2025-08-30",twr:21.67},{date:"2025-08-31",twr:21.67},{date:"2025-09-01",twr:21.65},
+  {date:"2025-09-02",twr:21.0},{date:"2025-09-03",twr:21.06},{date:"2025-09-04",twr:21.76},{date:"2025-09-05",twr:21.96},{date:"2025-09-06",twr:21.96},{date:"2025-09-07",twr:21.96},
+  {date:"2025-09-08",twr:21.95},{date:"2025-09-09",twr:20.95},{date:"2025-09-10",twr:21.17},{date:"2025-09-11",twr:21.5},{date:"2025-09-12",twr:21.33},{date:"2025-09-13",twr:21.33},
+  {date:"2025-09-14",twr:21.33},{date:"2025-09-15",twr:23.02},{date:"2025-09-16",twr:21.55},{date:"2025-09-17",twr:20.82},{date:"2025-09-18",twr:21.42},{date:"2025-09-19",twr:22.15},
+  {date:"2025-09-20",twr:22.15},{date:"2025-09-21",twr:22.15},{date:"2025-09-22",twr:22.36},{date:"2025-09-23",twr:23.68},{date:"2025-09-24",twr:23.7},{date:"2025-09-25",twr:21.61},
+  {date:"2025-09-26",twr:19.65},{date:"2025-09-27",twr:19.65},{date:"2025-09-28",twr:19.65},{date:"2025-09-29",twr:19.99},{date:"2025-09-30",twr:19.32},{date:"2025-10-01",twr:20.07},
+  {date:"2025-10-02",twr:21.75},{date:"2025-10-03",twr:22.79},{date:"2025-10-04",twr:22.79},{date:"2025-10-05",twr:22.79},{date:"2025-10-06",twr:23.4},{date:"2025-10-07",twr:23.24},
+  {date:"2025-10-08",twr:24.94},{date:"2025-10-09",twr:26.04},{date:"2025-10-10",twr:23.79},{date:"2025-10-11",twr:23.79},{date:"2025-10-12",twr:23.79},{date:"2025-10-13",twr:26.56},
+  {date:"2025-10-14",twr:25.7},{date:"2025-10-15",twr:27.75},{date:"2025-10-16",twr:25.6},{date:"2025-10-17",twr:23.88},{date:"2025-10-18",twr:23.88},{date:"2025-10-19",twr:23.88},
+  {date:"2025-10-20",twr:24.84},{date:"2025-10-21",twr:24.03},{date:"2025-10-22",twr:23.4},{date:"2025-10-23",twr:24.0},{date:"2025-10-24",twr:23.78},{date:"2025-10-25",twr:23.78},
+  {date:"2025-10-26",twr:23.78},{date:"2025-10-27",twr:26.18},{date:"2025-10-28",twr:25.49},{date:"2025-10-29",twr:24.61},{date:"2025-10-30",twr:23.22},{date:"2025-10-31",twr:23.5},
+  {date:"2025-11-01",twr:23.5},{date:"2025-11-02",twr:23.5},{date:"2025-11-03",twr:22.64},{date:"2025-11-04",twr:20.73},{date:"2025-11-05",twr:20.25},{date:"2025-11-06",twr:17.18},
+  {date:"2025-11-07",twr:16.57},{date:"2025-11-08",twr:16.57},{date:"2025-11-09",twr:16.57},{date:"2025-11-10",twr:17.79},{date:"2025-11-11",twr:17.4},{date:"2025-11-12",twr:17.2},
+  {date:"2025-11-13",twr:15.63},{date:"2025-11-14",twr:15.69},{date:"2025-11-15",twr:15.69},{date:"2025-11-16",twr:15.69},{date:"2025-11-17",twr:12.98},{date:"2025-11-18",twr:12.63},
+  {date:"2025-11-19",twr:13.14},{date:"2025-11-20",twr:12.67},{date:"2025-11-21",twr:13.76},{date:"2025-11-22",twr:13.76},{date:"2025-11-23",twr:13.76},{date:"2025-11-24",twr:14.77},
+  {date:"2025-11-25",twr:15.9},{date:"2025-11-26",twr:16.52},{date:"2025-11-27",twr:17.03},{date:"2025-11-28",twr:18.38},{date:"2025-11-29",twr:18.38},{date:"2025-11-30",twr:18.38},
+  {date:"2025-12-01",twr:16.72},{date:"2025-12-02",twr:17.4},{date:"2025-12-03",twr:18.44},{date:"2025-12-04",twr:21.59},{date:"2025-12-05",twr:21.71},{date:"2025-12-06",twr:21.71},
+  {date:"2025-12-07",twr:21.71},{date:"2025-12-08",twr:21.83},{date:"2025-12-09",twr:22.3},{date:"2025-12-10",twr:22.37},{date:"2025-12-11",twr:23.23},{date:"2025-12-12",twr:21.71},
+  {date:"2025-12-13",twr:21.71},{date:"2025-12-14",twr:21.71},{date:"2025-12-15",twr:20.73},{date:"2025-12-16",twr:20.44},{date:"2025-12-17",twr:19.42},{date:"2025-12-18",twr:21.19},
+  {date:"2025-12-19",twr:23.17},{date:"2025-12-20",twr:23.17},{date:"2025-12-21",twr:23.17},{date:"2025-12-22",twr:24.84},{date:"2025-12-23",twr:23.85},{date:"2025-12-24",twr:23.07},
+  {date:"2025-12-25",twr:23.07},{date:"2025-12-26",twr:22.55},{date:"2025-12-27",twr:22.55},{date:"2025-12-28",twr:22.55},{date:"2025-12-29",twr:22.02},{date:"2025-12-30",twr:22.93},
+  {date:"2025-12-31",twr:22.49},{date:"2026-01-01",twr:22.49},{date:"2026-01-02",twr:24.64},{date:"2026-01-03",twr:24.64},{date:"2026-01-04",twr:24.64},{date:"2026-01-05",twr:26.54},
+  {date:"2026-01-06",twr:27.88},{date:"2026-01-07",twr:26.68},{date:"2026-01-08",twr:27.38},{date:"2026-01-09",twr:28.57},{date:"2026-01-10",twr:28.57},{date:"2026-01-11",twr:28.57},
+  {date:"2026-01-12",twr:27.73},{date:"2026-01-13",twr:26.43},{date:"2026-01-14",twr:27.93},{date:"2026-01-15",twr:28.02},{date:"2026-01-16",twr:29.14},{date:"2026-01-17",twr:29.14},
+  {date:"2026-01-18",twr:29.14},{date:"2026-01-19",twr:28.43},{date:"2026-01-20",twr:26.02},{date:"2026-01-21",twr:26.07},{date:"2026-01-22",twr:29.4},{date:"2026-01-23",twr:28.65},
+  {date:"2026-01-24",twr:28.65},{date:"2026-01-25",twr:28.65},{date:"2026-01-26",twr:27.97},{date:"2026-01-27",twr:28.55},{date:"2026-01-28",twr:29.84},{date:"2026-01-29",twr:30.11},
+  {date:"2026-01-30",twr:27.93},{date:"2026-01-31",twr:27.83},{date:"2026-02-01",twr:27.83},{date:"2026-02-02",twr:26.88},{date:"2026-02-03",twr:28.65},{date:"2026-02-04",twr:27.77},
+  {date:"2026-02-05",twr:24.78},{date:"2026-02-06",twr:26.96},{date:"2026-02-07",twr:26.96},{date:"2026-02-08",twr:26.96},{date:"2026-02-09",twr:29.58},{date:"2026-02-10",twr:29.73},
+  {date:"2026-02-11",twr:28.46},{date:"2026-02-12",twr:25.86},{date:"2026-02-13",twr:27.46},{date:"2026-02-14",twr:27.46},{date:"2026-02-15",twr:27.46},{date:"2026-02-16",twr:27.71},
+  {date:"2026-02-17",twr:28.76},{date:"2026-02-18",twr:30.1},{date:"2026-02-19",twr:30.25},{date:"2026-02-20",twr:32.02},{date:"2026-02-21",twr:32.02},{date:"2026-02-22",twr:32.02},
+  {date:"2026-02-23",twr:32.31},{date:"2026-02-24",twr:32.68},{date:"2026-02-25",twr:32.28},{date:"2026-02-26",twr:33.9},{date:"2026-02-27",twr:33.47},{date:"2026-02-28",twr:33.47},
+  {date:"2026-03-01",twr:33.47},{date:"2026-03-02",twr:30.82},{date:"2026-03-03",twr:28.47},{date:"2026-03-04",twr:30.35},{date:"2026-03-05",twr:28.56},{date:"2026-03-06",twr:26.99},
+  {date:"2026-03-07",twr:26.99},{date:"2026-03-08",twr:26.99},{date:"2026-03-09",twr:26.15},{date:"2026-03-10",twr:26.71},{date:"2026-03-11",twr:26.02},{date:"2026-03-12",twr:24.42},
+  {date:"2026-03-13",twr:22.77},{date:"2026-03-14",twr:22.77},{date:"2026-03-15",twr:22.77},{date:"2026-03-16",twr:28.08},{date:"2026-03-17",twr:29.2},{date:"2026-03-18",twr:28.43},
+  {date:"2026-03-19",twr:30.97},{date:"2026-03-20",twr:29.19},{date:"2026-03-21",twr:29.19},{date:"2026-03-22",twr:29.19},{date:"2026-03-23",twr:28.89},{date:"2026-03-24",twr:30.42},
+  {date:"2026-03-25",twr:31.48},{date:"2026-03-26",twr:30.61},{date:"2026-03-27",twr:29.73},{date:"2026-03-28",twr:29.73},{date:"2026-03-29",twr:29.73},{date:"2026-03-30",twr:29.7},
+  {date:"2026-03-31",twr:31.43},{date:"2026-04-01",twr:31.23},{date:"2026-04-02",twr:33.25},{date:"2026-04-03",twr:33.25},{date:"2026-04-04",twr:33.25},{date:"2026-04-05",twr:33.25},
+  {date:"2026-04-06",twr:33.92},{date:"2026-04-07",twr:32.24},{date:"2026-04-08",twr:32.79},{date:"2026-04-09",twr:32.33},{date:"2026-04-10",twr:32.69},{date:"2026-04-11",twr:32.69},
+  {date:"2026-04-12",twr:32.69},{date:"2026-04-13",twr:33.99},{date:"2026-04-14",twr:33.36},{date:"2026-04-15",twr:33.11},{date:"2026-04-16",twr:33.27},{date:"2026-04-17",twr:32.81},
+  {date:"2026-04-18",twr:32.81},{date:"2026-04-19",twr:32.81},{date:"2026-04-20",twr:32.55},{date:"2026-04-21",twr:31.7},{date:"2026-04-22",twr:33.16},{date:"2026-04-23",twr:32.72},
+  {date:"2026-04-24",twr:31.55},{date:"2026-04-25",twr:31.55},{date:"2026-04-26",twr:31.55},{date:"2026-04-27",twr:31.96},{date:"2026-04-28",twr:30.97},{date:"2026-04-29",twr:31.01},
+  {date:"2026-04-30",twr:31.86},{date:"2026-05-01",twr:32.01},{date:"2026-05-02",twr:32.01},{date:"2026-05-03",twr:32.01},{date:"2026-05-04",twr:32.54},{date:"2026-05-05",twr:31.84},
+  {date:"2026-05-06",twr:30.66},{date:"2026-05-07",twr:29.14},{date:"2026-05-08",twr:30.3},{date:"2026-05-09",twr:30.3},{date:"2026-05-10",twr:30.3},{date:"2026-05-11",twr:32.3},
+  {date:"2026-05-12",twr:31.76},{date:"2026-05-13",twr:32.31},{date:"2026-05-14",twr:34.35},{date:"2026-05-15",twr:34.84},{date:"2026-05-16",twr:34.84},{date:"2026-05-17",twr:34.84},
+  {date:"2026-05-18",twr:35.58},{date:"2026-05-19",twr:35.24},{date:"2026-05-20",twr:35.97},{date:"2026-05-21",twr:35.18},{date:"2026-05-22",twr:35.11},{date:"2026-05-23",twr:35.11},
+  {date:"2026-05-24",twr:35.11},{date:"2026-05-25",twr:35.38},{date:"2026-05-26",twr:36.72},{date:"2026-05-27",twr:36.28},{date:"2026-05-28",twr:37.17},{date:"2026-05-29",twr:36.51},
+  {date:"2026-05-30",twr:36.51},{date:"2026-05-31",twr:36.51},{date:"2026-06-01",twr:36.57},{date:"2026-06-02",twr:37.04},{date:"2026-06-03",twr:36.19},{date:"2026-06-04",twr:36.17},
+  {date:"2026-06-05",twr:33.0},{date:"2026-06-06",twr:33.0},{date:"2026-06-07",twr:33.0},{date:"2026-06-08",twr:34.08},{date:"2026-06-09",twr:32.08},{date:"2026-06-10",twr:32.18},
+  {date:"2026-06-11",twr:33.03},{date:"2026-06-12",twr:32.9},{date:"2026-06-13",twr:32.9},{date:"2026-06-14",twr:32.9},{date:"2026-06-15",twr:32.22},{date:"2026-06-16",twr:31.23},
+  {date:"2026-06-17",twr:30.6},{date:"2026-06-18",twr:29.7},{date:"2026-06-19",twr:29.74},{date:"2026-06-20",twr:29.74},{date:"2026-06-21",twr:29.74},{date:"2026-06-22",twr:29.64},
+  {date:"2026-06-23",twr:28.92},{date:"2026-06-24",twr:25.86},{date:"2026-06-25",twr:25.62},{date:"2026-06-26",twr:25.64},{date:"2026-06-27",twr:25.64},{date:"2026-06-28",twr:25.64}
 ];
 
 function calcPosition(p) {
@@ -6388,9 +6538,14 @@ function sortItas(col) {
 
 function getSortedAls() {
   return [...alsPositions].sort((a, b) => {
-    const { pct: pctA, ret: retA } = calcPosition(a);
-    const { pct: pctB, ret: retB } = calcPosition(b);
-    const map = { ticker: [a.ticker, b.ticker], pct: [parseFloat(pctA), parseFloat(pctB)], ret: [parseFloat(retA), parseFloat(retB)] };
+    if (a.ticker === 'CASH') return 1;
+    if (b.ticker === 'CASH') return -1;
+    const map = {
+      ticker:  [a.ticker, b.ticker],
+      pct:     [a.pct, b.pct],
+      ret:     [a.ret     !== null ? a.ret     : -9999, b.ret     !== null ? b.ret     : -9999],
+      retHist: [a.retHist !== null ? a.retHist : -9999, b.retHist !== null ? b.retHist : -9999]
+    };
     const [va, vb] = map[alsSort.col] || [a.ticker, b.ticker];
     if (va < vb) return -1 * alsSort.dir;
     if (va > vb) return 1 * alsSort.dir;
@@ -6400,10 +6555,13 @@ function getSortedAls() {
 
 function getSortedItas() {
   return [...itasPositions].sort((a, b) => {
+    if (a.ticker === 'CASH') return 1;
+    if (b.ticker === 'CASH') return -1;
     const map = {
-      ticker: [a.ticker, b.ticker],
-      pct: [a.pct, b.pct],
-      ret: [a.ret !== null ? a.ret : -9999, b.ret !== null ? b.ret : -9999]
+      ticker:   [a.ticker, b.ticker],
+      pct:      [a.pct, b.pct],
+      ret:      [a.ret     !== null ? a.ret     : -9999, b.ret     !== null ? b.ret     : -9999],
+      retHist:  [a.retHist !== null ? a.retHist : -9999, b.retHist !== null ? b.retHist : -9999]
     };
     const [va, vb] = map[itasSort.col] || [a.ticker, b.ticker];
     if (va < vb) return -1 * itasSort.dir;
@@ -6415,7 +6573,7 @@ function getSortedItas() {
 function updateAlsHeaders() {
   const homeH = document.getElementById('home-thead');
   const portH = document.getElementById('portfolio-thead');
-  if (homeH) homeH.innerHTML = `
+  const hRow = `
     <tr>
       <th onclick="sortAls('ticker')" style="cursor:pointer">Ticker / Empresa${sortIcon('als','ticker')}</th>
       <th>País</th><th>Sector</th>
@@ -6423,16 +6581,10 @@ function updateAlsHeaders() {
       <th>Precio Medio</th>
       <th>Precio Actual</th>
       <th onclick="sortAls('ret')" style="cursor:pointer">Return${sortIcon('als','ret')}</th>
+      <th onclick="sortAls('retHist')" style="cursor:pointer">Total${sortIcon('als','retHist')}</th>
     </tr>`;
-  if (portH) portH.innerHTML = `
-    <tr>
-      <th onclick="sortAls('ticker')" style="cursor:pointer">Ticker / Empresa${sortIcon('als','ticker')}</th>
-      <th>País</th><th>Sector</th>
-      <th onclick="sortAls('pct')" style="cursor:pointer">% Cartera${sortIcon('als','pct')}</th>
-      <th>Precio Medio</th><th>Precio Actual</th>
-      <th onclick="sortAls('ret')" style="cursor:pointer">Return${sortIcon('als','ret')}</th>
-      <th>Convicción</th>
-    </tr>`;
+  if (homeH) homeH.innerHTML = hRow;
+  if (portH) portH.innerHTML = hRow;
 }
 
 function updateItasHeaders() {
@@ -6446,6 +6598,7 @@ function updateItasHeaders() {
       <th>Precio Medio</th>
       <th>Precio Actual</th>
       <th onclick="sortItas('ret')" style="cursor:pointer">Return${sortIcon('itas','ret')}</th>
+      <th onclick="sortItas('retHist')" style="cursor:pointer">Total${sortIcon('itas','retHist')}</th>
     </tr>`;
 }
 
@@ -6478,121 +6631,98 @@ function renderHomeTbody() {
   const tbody = document.getElementById('home-tbody');
   if (!tbody) return;
   tbody.innerHTML = '';
-  const totalCostEUR = alsPositions.reduce((s,x) => s + x.costBasis * FX[x.currency], 0) + alsCashEUR;
-  const cashPct = (alsCashEUR / totalCostEUR * 100).toFixed(1);
   getSortedAls().forEach(p => {
-    const { pct, ret, avgEntry, currency } = calcPosition(p);
     const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><div class="ticker-bold">${p.ticker}</div><div class="company-name">${p.name}</div></td>
-      <td style="color:var(--text-mid)">${p.country}</td>
-      <td style="color:var(--text-mid)">${p.sector}</td>
-      <td>${pct}%</td>
-      <td>${avgEntry} ${currency}</td>
-      <td>${p.currentPrice} ${p.gbx ? 'GBX' : p.currency}</td>
-      <td class="${retClass(ret)}">${retFmt(ret)}</td>`;
-    tr.onclick = () => { showPage('portfolio'); openCompany(p.ticker); };
-    tbody.appendChild(tr);
-  });
-  // Cash row
-  const cashTr = document.createElement('tr');
-  cashTr.innerHTML = `
-    <td><div class="ticker-bold">CASH</div><div class="company-name">Liquidez</div></td>
-    <td style="color:var(--text-mid)">—</td>
-    <td style="color:var(--text-mid)">—</td>
-    <td>${cashPct}%</td>
-    <td style="color:var(--text-light)">—</td>
-    <td style="color:var(--text-light)">—</td>
-    <td style="color:var(--text-light)">—</td>`;
-  if (alsSort.col === 'pct') {
-    const cashPctNum = parseFloat(cashPct);
-    const rows = tbody.querySelectorAll('tr');
-    let inserted = false;
-    for (let i = 0; i < rows.length; i++) {
-      const rowPct = parseFloat(rows[i].cells[3].textContent);
-      if ((alsSort.dir === 1 && cashPctNum <= rowPct) || (alsSort.dir === -1 && cashPctNum >= rowPct)) {
-        tbody.insertBefore(cashTr, rows[i]);
-        inserted = true;
-        break;
+    if (p.ticker === 'CASH') {
+      tr.innerHTML = `
+        <td><div class="ticker-bold">CASH</div><div class="company-name">Liquidez</div></td>
+        <td style="color:var(--text-mid)">—</td>
+        <td style="color:var(--text-mid)">—</td>
+        <td>${p.pct.toFixed(1)}%</td>
+        <td style="color:var(--text-light)">—</td>
+        <td style="color:var(--text-light)">—</td>
+        <td style="color:var(--text-light)">—</td>
+        <td style="color:var(--text-light)">—</td>`;
+    } else {
+      const retStr = p.ret !== null
+        ? `<span class="${p.ret >= 0 ? 'ret-pos' : 'ret-neg'}">${(p.ret >= 0 ? '+' : '') + p.ret.toFixed(1) + '%'}</span>`
+        : '—';
+      const histVal = p.retHist;
+      const histStr = histVal !== null
+        ? `<span class="${histVal >= 0 ? 'ret-pos' : 'ret-neg'}">${(histVal >= 0 ? '+' : '') + histVal.toFixed(1) + '%'}</span>`
+        : '—';
+      tr.innerHTML = `
+        <td><div class="ticker-bold">${p.ticker}</div><div class="company-name">${p.name}</div></td>
+        <td style="color:var(--text-mid)">${p.country}</td>
+        <td style="color:var(--text-mid)">${p.sector}</td>
+        <td>${p.pct.toFixed(1)}%</td>
+        <td style="color:var(--text-mid)">${p.avgLocal} ${p.currency}</td>
+        <td>${p.currentPrice} ${p.currency}</td>
+        <td>${retStr}</td>
+        <td>${histStr}</td>`;
+      tr.onclick = () => { showPage('portfolio'); openCompany(p.ticker); };
+      if (p.firstTradeDate) {
+        tr.addEventListener('mouseenter', e => alsTooltipShow(e, p));
+        tr.addEventListener('mousemove',  e => alsTooltipMove(e));
+        tr.addEventListener('mouseleave',    alsTooltipHide);
       }
     }
-    if (!inserted) tbody.appendChild(cashTr);
-  } else {
-    tbody.appendChild(cashTr);
-  }
-  updateAlsHeaders();
-  // Mobile cards
-  const homeMobile = getSortedAls().map(p => {
-    const { pct, ret } = calcPosition(p);
-    return { ...p, pct, ret };
+    tbody.appendChild(tr);
   });
-  homeMobile.push({ ticker:'CASH', name:'Liquidez', pct: (alsCashEUR / (alsPositions.reduce((s,x)=>s+x.costBasis*FX[x.currency],0)+alsCashEUR)*100).toFixed(1), ret: null, country:'—', sector:'—' });
+  updateAlsHeaders();
+  const homeMobile = getSortedAls().map(p => ({ ...p }));
   renderMobileCards('home-cards', homeMobile, (ticker) => { if(ticker!=='CASH'){showPage('portfolio');openCompany(ticker);} });
 }
 
 function renderPortfolioTbody() {
   const tbody = document.getElementById('portfolio-tbody');
   tbody.innerHTML = '';
-  const totalCostEUR = alsPositions.reduce((s,x) => s + x.costBasis * FX[x.currency], 0) + alsCashEUR;
-  const cashPct = (alsCashEUR / totalCostEUR * 100).toFixed(1);
   getSortedAls().forEach(p => {
-    const { pct, ret, avgEntry, currency } = calcPosition(p);
     const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><div class="ticker-bold">${p.ticker}</div><div class="company-name">${p.name}</div></td>
-      <td style="color:var(--text-mid)">${p.country}</td>
-      <td style="color:var(--text-mid)">${p.sector}</td>
-      <td>${pct}%</td>
-      <td>${avgEntry} ${currency}</td>
-      <td>${p.currentPrice} ${p.gbx ? 'GBX' : p.currency}</td>
-      <td class="${retClass(ret)}">${retFmt(ret)}</td>
-      <td>${convBadge(p.conviction)}</td>`;
-    tr.onclick = () => openCompany(p.ticker);
-    tbody.appendChild(tr);
-  });
-  // Cash row
-  const cashTr = document.createElement('tr');
-  cashTr.innerHTML = `
-    <td><div class="ticker-bold">CASH</div><div class="company-name">Liquidez</div></td>
-    <td style="color:var(--text-mid)">—</td>
-    <td style="color:var(--text-mid)">—</td>
-    <td>${cashPct}%</td>
-    <td style="color:var(--text-light)">—</td>
-    <td style="color:var(--text-light)">—</td>
-    <td style="color:var(--text-light)">—</td>
-    <td style="color:var(--text-light)">—</td>`;
-  // Insert cash in sorted position if sorting by pct
-  if (alsSort.col === 'pct') {
-    const cashPctNum = parseFloat(cashPct);
-    const rows = tbody.querySelectorAll('tr');
-    let inserted = false;
-    for (let i = 0; i < rows.length; i++) {
-      const rowPct = parseFloat(rows[i].cells[3].textContent);
-      if ((alsSort.dir === 1 && cashPctNum <= rowPct) || (alsSort.dir === -1 && cashPctNum >= rowPct)) {
-        tbody.insertBefore(cashTr, rows[i]);
-        inserted = true;
-        break;
+    if (p.ticker === 'CASH') {
+      tr.innerHTML = `
+        <td><div class="ticker-bold">CASH</div><div class="company-name">Liquidez</div></td>
+        <td style="color:var(--text-mid)">—</td>
+        <td style="color:var(--text-mid)">—</td>
+        <td>${p.pct.toFixed(1)}%</td>
+        <td style="color:var(--text-light)">—</td>
+        <td style="color:var(--text-light)">—</td>
+        <td style="color:var(--text-light)">—</td>
+        <td style="color:var(--text-light)">—</td>`;
+    } else {
+      const retStr = p.ret !== null
+        ? `<span class="${p.ret >= 0 ? 'ret-pos' : 'ret-neg'}">${(p.ret >= 0 ? '+' : '') + p.ret.toFixed(1) + '%'}</span>`
+        : '—';
+      const histVal = p.retHist;
+      const histStr = histVal !== null
+        ? `<span class="${histVal >= 0 ? 'ret-pos' : 'ret-neg'}">${(histVal >= 0 ? '+' : '') + histVal.toFixed(1) + '%'}</span>`
+        : '—';
+      tr.innerHTML = `
+        <td><div class="ticker-bold">${p.ticker}</div><div class="company-name">${p.name}</div></td>
+        <td style="color:var(--text-mid)">${p.country}</td>
+        <td style="color:var(--text-mid)">${p.sector}</td>
+        <td>${p.pct.toFixed(1)}%</td>
+        <td style="color:var(--text-mid)">${p.avgLocal} ${p.currency}</td>
+        <td>${p.currentPrice} ${p.currency}</td>
+        <td>${retStr}</td>
+        <td>${histStr}</td>`;
+      tr.onclick = () => openCompany(p.ticker);
+      if (p.firstTradeDate) {
+        tr.addEventListener('mouseenter', e => alsTooltipShow(e, p));
+        tr.addEventListener('mousemove',  e => alsTooltipMove(e));
+        tr.addEventListener('mouseleave',    alsTooltipHide);
       }
     }
-    if (!inserted) tbody.appendChild(cashTr);
-  } else {
-    tbody.appendChild(cashTr);
-  }
-  updateAlsHeaders();
-  // Mobile cards portfolio
-  const portMobile = getSortedAls().map(p => {
-    const { pct, ret, avgEntry, currency } = calcPosition(p);
-    return { ...p, pct, ret };
+    tbody.appendChild(tr);
   });
-  const cashPctNum2 = (alsCashEUR / (alsPositions.reduce((s,x)=>s+x.costBasis*FX[x.currency],0)+alsCashEUR)*100).toFixed(1);
-  portMobile.push({ ticker:'CASH', name:'Liquidez', pct: cashPctNum2, ret: null, country:'—', sector:'—' });
+  updateAlsHeaders();
+  const portMobile = getSortedAls().map(p => ({ ...p }));
   renderMobileCards('portfolio-cards', portMobile, (ticker) => { if(ticker!=='CASH') openCompany(ticker); });
 }
 
 function renderItasTbody() {
   const tbody = document.getElementById('itas-tbody');
   tbody.innerHTML = '';
-  const itasCash = itasCashEUR;
   getSortedItas().forEach(p => {
     const tr = document.createElement('tr');
     const retStr = p.ret !== null && p.ret !== undefined
@@ -6606,26 +6736,99 @@ function renderItasTbody() {
         <td>${p.pct.toFixed(1)}%</td>
         <td style="color:var(--text-light)">—</td>
         <td style="color:var(--text-light)">—</td>
+        <td style="color:var(--text-light)">—</td>
         <td style="color:var(--text-light)">—</td>`;
     } else {
-      const { avgEntry, displayCurrency } = calcItasPosition(p);
-      const currentStr = p.currentPrice != null
-        ? `${p.gbx ? p.currentPrice.toFixed(2) : p.currentPrice} ${p.gbx ? 'GBX' : p.currency}`
+      const avgStr = p.avgLocal != null ? `${p.avgLocal} ${p.currency}` : '—';
+      const currStr = p.currentPrice != null ? `${p.currentPrice} ${p.currency}` : '—';
+      const histVal = p.retHist;
+      const histStr = histVal != null
+        ? `<span class="${histVal >= 0 ? 'ret-pos' : 'ret-neg'}">${(histVal >= 0 ? '+' : '') + histVal.toFixed(1) + '%'}</span>`
         : '—';
       tr.innerHTML = `
         <td><div class="ticker-bold">${p.ticker}</div><div class="company-name">${p.name}</div></td>
         <td style="color:var(--text-mid)">${p.country || '—'}</td>
         <td style="color:var(--text-mid)">${p.sector}</td>
-        <td>${p.pct.toFixed(1)}%</td>
-        <td>${avgEntry} ${displayCurrency}</td>
-        <td>${currentStr}</td>
-        <td>${retStr}</td>`;
+        <td>${p.pct.toFixed(2)}%</td>
+        <td style="color:var(--text-mid)">${avgStr}</td>
+        <td>${currStr}</td>
+        <td>${retStr}</td>
+        <td>${histStr}</td>`;
+      if (p.firstTradeDate) {
+        tr.addEventListener('mouseenter', e => itasTooltipShow(e, p));
+        tr.addEventListener('mousemove',  e => itasTooltipMove(e));
+        tr.addEventListener('mouseleave',    itasTooltipHide);
+      }
     }
     tbody.appendChild(tr);
   });
   updateItasHeaders();
   const itasMobile = getSortedItas().map(p => ({ ...p, ret: p.ret !== undefined ? p.ret : null }));
   renderMobileCards('itas-cards', itasMobile, null);
+}
+
+function itasTooltipShow(e, p) {
+  const tt = document.getElementById('itas-tooltip');
+  if (!tt) return;
+  tt.querySelector('.itas-tt-ticker').textContent = p.ticker + ' — ' + p.name;
+  const d = new Date(p.firstTradeDate + 'T00:00:00');
+  tt.querySelector('#itas-tt-date').textContent = d.toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' });
+  const retEl = tt.querySelector('#itas-tt-ret');
+  retEl.textContent = (p.ret >= 0 ? '+' : '') + p.ret.toFixed(2) + '%';
+  retEl.className = 'itas-tt-val ' + (p.ret >= 0 ? 'ret-pos' : 'ret-neg');
+  const divEl = tt.querySelector('#itas-tt-div');
+  divEl.textContent = p.divRet > 0 ? '+' + p.divRet.toFixed(2) + '%' : '—';
+  divEl.className = 'itas-tt-val ' + (p.divRet > 0 ? 'ret-pos' : '');
+  const totEl = tt.querySelector('#itas-tt-total');
+  totEl.textContent = (p.retTotal >= 0 ? '+' : '') + p.retTotal.toFixed(2) + '%';
+  totEl.className = 'itas-tt-val ' + (p.retTotal >= 0 ? 'ret-pos' : 'ret-neg');
+  tt.style.display = 'block';
+  itasTooltipMove(e);
+}
+function itasTooltipMove(e) {
+  const tt = document.getElementById('itas-tooltip');
+  if (!tt || tt.style.display === 'none') return;
+  const x = e.clientX + 16, y = e.clientY - 10;
+  const w = window.innerWidth, h = window.innerHeight;
+  const tw = tt.offsetWidth, th = tt.offsetHeight;
+  tt.style.left = (x + tw > w - 8 ? x - tw - 32 : x) + 'px';
+  tt.style.top  = (y + th > h - 8 ? y - th      : y) + 'px';
+}
+function itasTooltipHide() {
+  const tt = document.getElementById('itas-tooltip');
+  if (tt) tt.style.display = 'none';
+}
+
+function alsTooltipShow(e, p) {
+  const tt = document.getElementById('als-tooltip');
+  if (!tt) return;
+  tt.querySelector('.als-tt-ticker').textContent = p.ticker + ' — ' + p.name;
+  const d = new Date(p.firstTradeDate + 'T00:00:00');
+  tt.querySelector('#als-tt-date').textContent = d.toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' });
+  const retEl = tt.querySelector('#als-tt-ret');
+  retEl.textContent = (p.ret >= 0 ? '+' : '') + p.ret.toFixed(2) + '%';
+  retEl.className = 'als-tt-val ' + (p.ret >= 0 ? 'ret-pos' : 'ret-neg');
+  const divEl = tt.querySelector('#als-tt-div');
+  divEl.textContent = p.divRet > 0 ? '+' + p.divRet.toFixed(2) + '%' : '—';
+  divEl.className = 'als-tt-val ' + (p.divRet > 0 ? 'ret-pos' : '');
+  const totEl = tt.querySelector('#als-tt-total');
+  totEl.textContent = (p.retTotal >= 0 ? '+' : '') + p.retTotal.toFixed(2) + '%';
+  totEl.className = 'als-tt-val ' + (p.retTotal >= 0 ? 'ret-pos' : 'ret-neg');
+  tt.style.display = 'block';
+  alsTooltipMove(e);
+}
+function alsTooltipMove(e) {
+  const tt = document.getElementById('als-tooltip');
+  if (!tt || tt.style.display === 'none') return;
+  const x = e.clientX + 16, y = e.clientY - 10;
+  const w = window.innerWidth, h = window.innerHeight;
+  const tw = tt.offsetWidth, th = tt.offsetHeight;
+  tt.style.left = (x + tw > w - 8 ? x - tw - 32 : x) + 'px';
+  tt.style.top  = (y + th > h - 8 ? y - th      : y) + 'px';
+}
+function alsTooltipHide() {
+  const tt = document.getElementById('als-tooltip');
+  if (tt) tt.style.display = 'none';
 }
 
 
@@ -7057,20 +7260,20 @@ const GICS_COLORS = {
 };
 
 const alsGICS = {
-  'ASTS':'Comm. Services','CERT':'Materials','CVE':'Energy',
-  'GLNG':'Energy','GMS':'Energy','GRF':'Health Care','IVN':'Materials',
-  'KOS':'Energy','LGCY':'Cons. Discret.','MAU':'Energy',
-  'SOIL':'Energy','SU':'Energy','U.UN':'Energy','WCP':'Energy','YAL':'Materials',
+  'ASTS':'Comm. Services','AXL.V':'Energy','CERT.V':'Materials',
+  'COSH.OL':'Energy','GLNG':'Energy','GMS.L':'Energy','GRF.MC':'Health Care',
+  'KOS':'Energy','LGCY':'Cons. Discret.',
+  'SOIL.TO':'Energy','SU.TO':'Energy','U-UN.TO':'Energy','WCP.TO':'Energy','YAL.AX':'Materials',
+  'CASH':'Cash',
 };
 
 const itasGICS = {
   'ASTS':'Comm. Services','CERT':'Materials','CGEO':'Financials',
   'CVE':'Energy','GLNG':'Energy','GMS':'Energy','GRF':'Health Care',
-  'IBKR':'Financials','IVN':'Materials','KOS':'Energy',
-  'LGCY':'Cons. Discret.','MEGP':'Cons. Discret.',
-  'PLX':'Technology','PYPL':'Financials','PUIG':'Cons. Discret.',
+  'IVN':'Materials','KOS':'Energy','COSH':'Energy','AXL':'Energy',
+  'LGCY':'Cons. Discret.','PYPL':'Financials',
   'REG':'Materials','SMR':'Materials','SOIL':'Energy','SU':'Energy',
-  'TGS':'Energy','U.UN':'Energy','WCP':'Energy','YAL':'Materials',
+  'TGS':'Energy','U-UN':'Energy','WCP':'Energy','YAL':'Materials',
   'CASH':'Cash',
 };
 
@@ -7100,18 +7303,14 @@ function makePie(canvasId, labels, data, colors) {
 }
 
 function renderAlsPies() {
-  const totalEUR = alsPositions.reduce((s,x) => s + x.costBasis * FX[x.currency], 0) + alsCashEUR;
-  const cashPct = parseFloat((alsCashEUR / totalEUR * 100).toFixed(1));
-
-  // By position
-  const posLabels = [...alsPositions.map(p => p.ticker), 'CASH'];
-  const posPcts = [...alsPositions.map(p => parseFloat(calcPosition(p).pct)), cashPct];
+  // By position (use pre-computed pct, include CASH)
+  const posLabels = alsPositions.map(p => p.ticker);
+  const posPcts = alsPositions.map(p => p.pct);
   makePie('als-pie-position', posLabels, posPcts, PIE_PALETTE);
 
   // By sector
   const sm = {};
-  alsPositions.forEach(p => { const s = alsGICS[p.ticker]||'Otros'; sm[s] = (sm[s]||0) + parseFloat(calcPosition(p).pct); });
-  sm['Cash'] = (sm['Cash']||0) + cashPct;
+  alsPositions.forEach(p => { const s = alsGICS[p.ticker]||'Otros'; sm[s] = (sm[s]||0) + p.pct; });
   const sL = Object.keys(sm), sD = sL.map(k => parseFloat(sm[k].toFixed(1))), sC = sL.map(k => GICS_COLORS[k]||'#999');
   makePie('als-pie-sector', sL, sD, sC);
 }
@@ -9711,6 +9910,26 @@ function closeLightbox() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
 // ====== NAVIGATION ======
+let activePortfolioTab = 'als';
+
+function switchPortfolioTab(tab) {
+  activePortfolioTab = tab;
+  if (tab === 'itas') closeCompany();
+  document.getElementById('portfolio-sub-als').style.display = tab === 'als' ? '' : 'none';
+  document.getElementById('portfolio-sub-itas').style.display = tab === 'itas' ? '' : 'none';
+  document.getElementById('ptab-als').classList.toggle('active', tab === 'als');
+  document.getElementById('ptab-itas').classList.toggle('active', tab === 'itas');
+  if (tab === 'als') {
+    setTimeout(renderAlsChart, 50);
+    setTimeout(renderAlsPies, 100);
+    renderPortfolioTbody();
+  } else {
+    renderItasTbody();
+    setTimeout(renderItasPies, 100);
+    setTimeout(renderItasChart, 150);
+  }
+}
+
 function showPage(id, skipHistory) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
@@ -9726,11 +9945,12 @@ function showPage(id, skipHistory) {
   }
   if (id === 'energy') initEnergyPage();
   if (id === 'earnings') initEarningsPage();
-  if (id === 'portfolio') setTimeout(renderAlsChart, 50);
+  if (id === 'portfolio') {
+    setTimeout(renderAlsChart, 50);
+    setTimeout(renderAlsPies, 100);
+  }
   if (id === 'home') { const p = document.getElementById('home-mkt-indices'); if (p && !p.dataset.rendered) { renderHomeMktPanel('indices'); p.dataset.rendered='1'; } }
   if (id === 'macro') { const p = document.getElementById('mkt-indices'); if (p && !p.dataset.rendered) { renderMktPanel('indices'); p.dataset.rendered='1'; } }
-  if (id === 'portfolio') setTimeout(renderAlsPies, 100);
-  if (id === 'itas') { setTimeout(renderItasPies, 100); setTimeout(renderItasChart, 150); }
   if (id === 'watchlist') { renderWlTbody(); closeWatchlist(); }
   if (id === 'articles') renderRecapArchive();
   if (!skipHistory && id !== 'energy') {
@@ -9783,7 +10003,7 @@ const chartCurEl = document.getElementById('chart-current'); if (chartCurEl) cha
   };
   setAlsStat('als-stat-twr-total', lastTWR);
   setAlsStat('als-stat-ytd', calcPeriodReturn('YTD'));
-  setAlsStat('als-stat-positions', alsPositions.length, true);
+  setAlsStat('als-stat-positions', alsPositions.filter(p => p.ticker !== 'CASH').length, true);
 })();
 
 renderHomeTbody();
@@ -13387,6 +13607,7 @@ function showFundSection(id) {
   document.querySelectorAll('.en-fund-link').forEach(function(a) {
     a.classList.toggle('active', a.dataset.section === id);
   });
+  window.scrollTo(0, 0);
   setTimeout(function() { if (fundSectionInits[id]) fundSectionInits[id](); }, 60);
 }
 
@@ -13407,6 +13628,7 @@ function showEnergyTab(slug, skipHistory) {
     (energyTabSections[slug] || []).forEach(function(id) {
       const el = document.getElementById(id); if (el) el.classList.add('en-tab-active');
     });
+    if (!skipHistory) window.scrollTo(0, 0);
   }
   document.querySelectorAll('.en-tab-btn').forEach(function(b) {
     b.classList.toggle('active', b.dataset.tab === slug);
@@ -13618,6 +13840,52 @@ window.addEventListener('popstate', function() {
     <button class="lb-close" onclick="lbClose(null)" title="Cerrar">&times;</button>
     <img id="lb-img" src="" alt="">
     <div class="lb-caption" id="lb-caption"></div>
+  </div>
+</div>
+
+<!-- ITAS position tooltip -->
+<div id="itas-tooltip">
+  <div class="itas-tt-ticker"></div>
+  <div class="itas-tt-row">
+    <span class="itas-tt-label">1ª compra</span>
+    <span class="itas-tt-val" id="itas-tt-date"></span>
+  </div>
+  <hr class="itas-tt-divider">
+  <div class="itas-tt-row">
+    <span class="itas-tt-label">Rentabilidad precio</span>
+    <span class="itas-tt-val" id="itas-tt-ret"></span>
+  </div>
+  <div class="itas-tt-row">
+    <span class="itas-tt-label">Dividendos netos</span>
+    <span class="itas-tt-val" id="itas-tt-div"></span>
+  </div>
+  <hr class="itas-tt-divider">
+  <div class="itas-tt-row total">
+    <span class="itas-tt-label">Total con dividendos</span>
+    <span class="itas-tt-val" id="itas-tt-total"></span>
+  </div>
+</div>
+
+<!-- ALS position tooltip -->
+<div id="als-tooltip">
+  <div class="als-tt-ticker"></div>
+  <div class="als-tt-row">
+    <span class="als-tt-label">1ª compra</span>
+    <span class="als-tt-val" id="als-tt-date"></span>
+  </div>
+  <hr class="als-tt-divider">
+  <div class="als-tt-row">
+    <span class="als-tt-label">Rentabilidad precio</span>
+    <span class="als-tt-val" id="als-tt-ret"></span>
+  </div>
+  <div class="als-tt-row">
+    <span class="als-tt-label">Dividendos netos</span>
+    <span class="als-tt-val" id="als-tt-div"></span>
+  </div>
+  <hr class="als-tt-divider">
+  <div class="als-tt-row total">
+    <span class="als-tt-label">Total con dividendos</span>
+    <span class="als-tt-val" id="als-tt-total"></span>
   </div>
 </div>
 </body>
