@@ -1175,6 +1175,37 @@
     .em-signals-grid { grid-template-columns:1fr; }
   }
 
+  /* ── Visión General Energy ── */
+  .vg-header { display:flex; align-items:baseline; gap:16px; margin-bottom:20px; flex-wrap:wrap; }
+  .vg-period-badge { font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--burgundy); background:var(--burgundy-pale); border:1px solid rgba(107,39,55,0.18); padding:3px 12px; border-radius:4px; }
+  .vg-grid {
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:14px;
+    margin-bottom:28px;
+  }
+  .vg-fig { background:var(--card-bg); border:1px solid var(--border); border-radius:8px; overflow:hidden; box-shadow:var(--shadow); }
+  .vg-fig img { width:100%; height:auto; display:block; }
+  .vg-fig-cap { font-size:0.62rem; color:var(--text-light); padding:6px 10px 7px; border-top:1px solid var(--border); letter-spacing:0.04em; line-height:1.4; }
+  .vg-col-4 { grid-column:span 4; }
+  .vg-col-3 { grid-column:span 3; }
+  .vg-col-2 { grid-column:span 2; }
+  .vg-commentary { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:28px 32px; box-shadow:var(--shadow); }
+  .vg-commentary-title { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:600; color:var(--text-dark); margin-bottom:16px; }
+  .vg-commentary p { font-size:0.88rem; color:var(--text-mid); line-height:1.85; margin-bottom:14px; }
+  .vg-commentary p:last-child { margin-bottom:0; }
+  @media (max-width:900px) { .vg-grid { grid-template-columns:1fr 1fr; } .vg-col-4,.vg-col-3,.vg-col-2 { grid-column:span 2; } }
+  @media (max-width:580px) { .vg-grid { grid-template-columns:1fr; } .vg-col-4,.vg-col-3,.vg-col-2 { grid-column:span 1; } }
+
+  /* ── Lightbox ── */
+  .lb-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.82); z-index:9000; align-items:center; justify-content:center; padding:24px; cursor:zoom-out; }
+  .lb-overlay.open { display:flex; }
+  .lb-img-wrap { position:relative; max-width:92vw; max-height:90vh; }
+  .lb-img-wrap img { display:block; max-width:92vw; max-height:88vh; width:auto; height:auto; border-radius:6px; box-shadow:0 8px 48px rgba(0,0,0,0.6); cursor:default; }
+  .lb-close { position:absolute; top:-14px; right:-14px; width:28px; height:28px; border-radius:50%; background:var(--burgundy); color:#fff; border:none; font-size:1rem; line-height:28px; text-align:center; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.4); }
+  .lb-caption { margin-top:10px; font-size:0.72rem; color:rgba(255,255,255,0.65); text-align:center; max-width:720px; line-height:1.5; }
+  .vg-fig img { cursor:zoom-in; }
+
   /* ── Global Oil Production Table ── */
   .gop-controls { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
   .gop-year-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-light); font-weight:600; }
@@ -2389,7 +2420,8 @@
   <!-- ENERGY TAB BAR -->
   <div class="energy-tab-bar" id="energy-tab-bar">
     <div class="energy-tab-bar-inner">
-      <button class="en-tab-btn active" data-tab="spot-futures"      onclick="showEnergyTab('spot-futures')">Spot &amp; Futures</button>
+      <button class="en-tab-btn active" data-tab="vision-general"    onclick="showEnergyTab('vision-general')">Visi&oacute;n General</button>
+      <button class="en-tab-btn"        data-tab="spot-futures"       onclick="showEnergyTab('spot-futures')">Spot &amp; Futures</button>
       <button class="en-tab-btn"        data-tab="equity-performance" onclick="showEnergyTab('equity-performance')">Equity Performance</button>
       <button class="en-tab-btn"        data-tab="fundamentals"       onclick="showEnergyTab('fundamentals')">Fundamentals</button>
       <button class="en-tab-btn"        data-tab="weekly-wrap"        onclick="showEnergyTab('weekly-wrap')">Weekly Wrap</button>
@@ -2405,6 +2437,73 @@
       <a class="en-fund-link" data-section="en-refinerias"             onclick="enFundScrollTo('en-refinerias')">Refiner&iacute;as</a>
       <a class="en-fund-link" data-section="en-demanda"     onclick="enFundScrollTo('en-demanda')">Demanda</a>
       <a class="en-fund-link" data-section="en-flights"     onclick="enFundScrollTo('en-flights')">Flight Tracker</a>
+    </div>
+  </div>
+
+  <!-- VISION GENERAL -->
+  <div class="energy-section" id="en-vision-general">
+    <div class="vg-header">
+      <div class="energy-section-title" style="margin-bottom:0;">Oil Market Overview</div>
+      <span class="vg-period-badge">Junio 2026</span>
+    </div>
+    <div class="energy-divider"></div>
+
+    <!-- Fila 1: Disrupciones Ormuz (ancha) + Importaciones marítimas -->
+    <div class="vg-grid">
+      <div class="vg-fig vg-col-4">
+        <img src="assets/img/energy/vision-general/06-2026/picture-1.png" alt="Hormuz disruptions in crude oil production" loading="lazy">
+        <div class="vg-fig-cap">EIA — Strait of Hormuz: estimated shut-ins by country (Mar–May 2026 actual, Jun–4Q26 forecast)</div>
+      </div>
+      <div class="vg-fig vg-col-2">
+        <img src="assets/img/energy/vision-general/06-2026/picture-2.png" alt="May seaborne crude oil imports" loading="lazy">
+        <div class="vg-fig-cap">Kpler — May seaborne crude oil imports by country (kbd vs prior month)</div>
+      </div>
+
+      <!-- Fila 2: Precio Brent + inventarios (ancho) + importaciones China -->
+      <div class="vg-fig vg-col-4">
+        <img src="assets/img/energy/vision-general/06-2026/picture-3.png" alt="Brent spot price and global inventory changes" loading="lazy">
+        <div class="vg-fig-cap">EIA STEO Jun 2026 — Brent spot price ($/bbl) y variación de inventarios globales implícita</div>
+      </div>
+      <div class="vg-fig vg-col-2">
+        <img src="assets/img/energy/vision-general/06-2026/picture-4.png" alt="China crude oil imports plunge" loading="lazy">
+        <div class="vg-fig-cap">Vortexa — Importaciones de crudo de China (mb/d): caída pronunciada en abril–mayo 2026</div>
+      </div>
+
+      <!-- Fila 3: Inventarios OCDE (bb) + Inventarios OCDE (días) + Exportaciones vs pre-guerra -->
+      <div class="vg-fig vg-col-2">
+        <img src="assets/img/energy/vision-general/06-2026/picture-5.png" alt="OECD commercial inventories billion barrels" loading="lazy">
+        <div class="vg-fig-cap">EIA STEO Jun 2026 — Inventarios comerciales OCDE (billones de barriles)</div>
+      </div>
+      <div class="vg-fig vg-col-2">
+        <img src="assets/img/energy/vision-general/06-2026/picture-6.png" alt="OECD inventories days of supply" loading="lazy">
+        <div class="vg-fig-cap">EIA STEO Jun 2026 — Inventarios OCDE en días de suministro: escenario pre-conflicto vs junio 2026</div>
+      </div>
+      <div class="vg-fig vg-col-2">
+        <img src="assets/img/energy/vision-general/06-2026/picture-7.png" alt="May oil exports vs pre-war levels" loading="lazy">
+        <div class="vg-fig-cap">May 2026 — Exportaciones de petróleo vs niveles pre-guerra (kbd): ganancias y pérdidas por país</div>
+      </div>
+
+      <!-- Fila 4: Rig count + Cambio consumo mundial -->
+      <div class="vg-fig vg-col-3">
+        <img src="assets/img/energy/vision-general/06-2026/picture-8.png" alt="Rig count overview" loading="lazy">
+        <div class="vg-fig-cap">Baker Hughes / Enverus — Rig Count (jun 2026): EE.UU. +26 YoY, Canadá +57 YoY, Internacional –25 YoY</div>
+      </div>
+      <div class="vg-fig vg-col-3">
+        <img src="assets/img/energy/vision-general/06-2026/picture-9.png" alt="Annual change in world liquid fuels consumption" loading="lazy">
+        <div class="vg-fig-cap">EIA STEO Jun 2026 — Variación anual del consumo mundial de combustibles líquidos (mb/d): –1,1 en 2026, +2,5 en 2027</div>
+      </div>
+    </div>
+
+    <!-- Comentario -->
+    <div class="vg-commentary">
+      <div class="vg-commentary-title">Oil Market Overview &mdash; Junio 2026</div>
+      <p>A finales de junio de 2026, el mercado del petróleo presenta una situación particular: los datos de oferta, inventarios y flujos comerciales muestran un entorno que, en condiciones normales, habría podido generar una tensión mucho mayor en precios, pero la respuesta del mercado ha sido más contenida de lo inicialmente esperado. El escenario de disrupción en el Estrecho de Ormuz afectó de forma relevante a la producción del Golfo, con recortes estimados en países como Irak, Arabia Saudí, Kuwait y Emiratos Árabes Unidos. Según las tablas de la EIA, las interrupciones agregadas llegaron a superar los 10 millones de barriles diarios en algunos meses, una magnitud muy significativa dentro del balance global de petróleo.</p>
+      <p>En un primer momento, un evento de estas características habría llevado a pensar en un fuerte repunte del Brent, especialmente por el peso del Golfo Pérsico en la oferta mundial. Sin embargo, el precio no llegó a escalar hasta los niveles más extremos que algunos analistas habían planteado en los escenarios de estrés. De hecho, tras el episodio inicial de tensión, el Brent se mantuvo muy por debajo de los escenarios de 150-200 dólares y acabó corrigiendo hacia niveles cercanos a los 70 dólares. La lectura principal es que el mercado encontró mecanismos de ajuste que redujeron el impacto directo del shock de oferta.</p>
+      <p>Uno de los factores más importantes fue China. Los datos de importaciones marítimas muestran una caída muy pronunciada de las compras chinas de crudo y condensados, especialmente en mayo, con una reducción muy superior a la observada en otros grandes importadores asiáticos. Esta caída no se tradujo en una reducción equivalente de inventarios locales, lo que sugiere que parte del ajuste vino por menor demanda efectiva, menor actividad de refino o liberación de existencias previamente acumuladas. En la práctica, China actuó como un estabilizador del mercado: al reducir sus compras, liberó cargamentos para otros compradores asiáticos y evitó que la competencia por barriles disponibles fuese mucho más intensa.</p>
+      <p>El segundo elemento relevante fue la respuesta de inventarios. La EIA proyecta una fuerte reducción de inventarios comerciales de la OCDE durante 2026, tanto en volumen total como en días de suministro. En los gráficos del Short-Term Energy Outlook se observa una caída importante frente al escenario previo al conflicto, con los inventarios situándose en una zona baja respecto a los últimos años. Aun así, el mercado no reaccionó únicamente con nueva producción, sino también utilizando existencias acumuladas y petróleo en tránsito. La reapertura progresiva de flujos y la salida de barriles que habían quedado retenidos contribuyeron a aliviar el balance físico.</p>
+      <p>También hay que tener en cuenta que la oferta fuera del Golfo mostró cierta capacidad de respuesta. Los datos de rig count apuntan a una mejora de actividad en Estados Unidos y Canadá frente al año anterior, mientras que el recuento internacional se mantiene algo más débil. Además, los flujos de exportación muestran que países como Estados Unidos, Rusia, Brasil, Nigeria o Kazajistán aportaron más barriles respecto a los niveles previos a la guerra, compensando parcialmente las caídas de Irak, Arabia Saudí, Kuwait y Emiratos. Esta compensación no elimina el shock, pero sí ayuda a explicar por qué el mercado no entró en una dinámica de escasez extrema.</p>
+      <p>Por el lado de la demanda, la EIA prevé una caída del consumo mundial de combustibles líquidos en 2026, seguida de una recuperación en 2027. Este punto es clave: el ajuste del mercado no depende solo de cuántos barriles se pierden por el lado de la oferta, sino también de cómo responde la demanda ante precios más elevados, incertidumbre geopolítica y menor actividad en algunos consumidores relevantes. En el escenario de la EIA, 2026 sería un año de contracción del consumo global, mientras que 2027 mostraría una recuperación más clara, liderada por China, India, Oriente Medio y otros países no OCDE.</p>
+      <p>En conjunto, el mercado del petróleo a junio de 2026 puede resumirse como un entorno de balance físico frágil, pero no descontrolado. La disrupción en Ormuz redujo la oferta disponible y presionó los inventarios, pero la caída de importaciones chinas, el uso de existencias, la redistribución de flujos comerciales y cierta respuesta de productores alternativos evitaron un escenario de precios mucho más extremo. De cara a los próximos trimestres, las variables clave serán la normalización de la producción en el Golfo, el ritmo de reconstrucción de inventarios de la OCDE, la evolución de la demanda china y la capacidad de Estados Unidos y otros productores no OPEP para sostener o aumentar la oferta.</p>
     </div>
   </div>
 
@@ -13250,6 +13349,7 @@ let energyPageInitialized = false;
 
 // ── Energy tabs ──────────────────────────────────────────────────────────────
 const energyTabSections = {
+  'vision-general':     ['en-vision-general'],
   'spot-futures':       ['en-snapshot', 'en-precio', 'en-futuros'],
   'equity-performance': ['en-rentabilidad', 'en-fuerza'],
   'fundamentals':       ['en-global-production', 'en-inventarios', 'en-produccion', 'en-refinerias', 'en-demanda', 'en-flights'],
@@ -13325,7 +13425,7 @@ function initEnergyPage() {
     energyPageInitialized = true;
   }
   const hash = window.location.hash;
-  const slug = hash.startsWith('#energy/') ? hash.slice(8) : 'spot-futures';
+  const slug = hash.startsWith('#energy/') ? hash.slice(8) : 'vision-general';
   showEnergyTab(slug, true);
 }
 
@@ -13482,5 +13582,4 @@ window.addEventListener('popstate', function() {
   else if (!hash.includes('/')) { showPage(hash, true); }
 })();
 </script>
-</body>
-</html>
+<!-- LIGHTBOX -->
