@@ -1021,7 +1021,7 @@
   .en-fund-link:hover { color:var(--burgundy); }
   .en-fund-link.active { color:var(--burgundy); font-weight:500; }
   .en-fund-link + .en-fund-link::before { content:'·'; color:rgba(0,0,0,0.2); margin:0 9px; font-weight:400; }
-  #en-inventarios,#en-produccion,#en-refinerias,#en-demanda,#en-flights { scroll-margin-top:130px; }
+  #en-inventarios,#en-produccion,#en-global-production,#en-refinerias,#en-demanda,#en-flights { scroll-margin-top:130px; }
   .energy-divider { height:1px; background:var(--border); margin-bottom:18px; }
 
   .ret-table { width:100%; border-collapse:collapse; font-size:0.77rem; }
@@ -1174,6 +1174,29 @@
   @media (max-width:650px) {
     .em-signals-grid { grid-template-columns:1fr; }
   }
+
+  /* ── Global Oil Production Table ── */
+  .gop-controls { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+  .gop-year-label { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-light); font-weight:600; }
+  .gop-year-select { background:var(--cream-dark); border:1px solid var(--border); border-radius:6px; padding:5px 12px; font-size:0.82rem; color:var(--text-dark); font-family:'DM Sans',sans-serif; cursor:pointer; outline:none; transition:border-color 0.15s; }
+  .gop-year-select:focus { border-color:var(--burgundy); }
+  .gop-ytd-note { font-size:0.7rem; color:var(--burgundy); font-style:italic; background:var(--burgundy-pale); border:1px solid rgba(107,39,55,0.18); padding:3px 10px; border-radius:4px; }
+  .gop-table-wrap { overflow-x:auto; background:var(--card-bg); border:1px solid var(--border); border-radius:10px; box-shadow:var(--shadow); }
+  .gop-table { width:100%; border-collapse:collapse; font-size:0.8rem; min-width:440px; }
+  .gop-table th { padding:9px 14px; background:var(--cream-dark); color:var(--text-light); font-weight:600; font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; text-align:right; white-space:nowrap; border-bottom:2px solid var(--border); }
+  .gop-table th:first-child { text-align:left; }
+  .gop-table td { padding:8px 14px; border-bottom:1px solid var(--border); text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .gop-table td:first-child { text-align:left; }
+  .gop-table tbody tr:last-child td { border-bottom:none; }
+  .gop-row-world td { background:var(--burgundy); color:#fff; font-weight:700; border-bottom:2px solid rgba(255,255,255,0.12); }
+  .gop-row-region td { background:var(--cream-dark); color:var(--text-dark); font-weight:700; }
+  .gop-row-region td:first-child { color:var(--burgundy); cursor:pointer; user-select:none; }
+  .gop-region-arrow { display:inline-block; width:12px; font-size:0.6rem; color:var(--burgundy); opacity:0.7; }
+  .gop-row-country td { color:var(--text-mid); }
+  .gop-row-country td:first-child { color:var(--text-dark); font-weight:500; }
+  .gop-row-other td { color:var(--text-light); font-style:italic; }
+  .gop-table tr:not(.gop-row-world):hover td { background:var(--cream); }
+  .gop-note { font-size:0.69rem; color:var(--text-light); margin-top:10px; line-height:1.6; }
 
   </style>
 </head>
@@ -2376,16 +2399,17 @@
   <!-- FUNDAMENTALS SUB-NAV -->
   <div id="en-fund-subnav">
     <div id="en-fund-subnav-inner">
-      <a class="en-fund-link active" data-section="en-inventarios" onclick="enFundScrollTo('en-inventarios')">Inventarios</a>
-      <a class="en-fund-link" data-section="en-produccion"  onclick="enFundScrollTo('en-produccion')">Producci&oacute;n USA</a>
-      <a class="en-fund-link" data-section="en-refinerias"  onclick="enFundScrollTo('en-refinerias')">Refiner&iacute;as</a>
+      <a class="en-fund-link active" data-section="en-global-production" onclick="enFundScrollTo('en-global-production')">Producci&oacute;n Global</a>
+      <a class="en-fund-link" data-section="en-produccion"             onclick="enFundScrollTo('en-produccion')">Producci&oacute;n USA</a>
+      <a class="en-fund-link" data-section="en-inventarios"            onclick="enFundScrollTo('en-inventarios')">Inventarios</a>
+      <a class="en-fund-link" data-section="en-refinerias"             onclick="enFundScrollTo('en-refinerias')">Refiner&iacute;as</a>
       <a class="en-fund-link" data-section="en-demanda"     onclick="enFundScrollTo('en-demanda')">Demanda</a>
       <a class="en-fund-link" data-section="en-flights"     onclick="enFundScrollTo('en-flights')">Flight Tracker</a>
     </div>
   </div>
 
   <!-- 2. MARKET SNAPSHOT -->
-  <div style="max-width:1100px;margin:0 auto;padding:22px 48px 0;">
+  <div class="energy-section" id="en-snapshot">
     <div style="font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Market Snapshot</div>
     <div class="energy-snapshot-row">
       <div class="energy-snap-card">
@@ -2575,6 +2599,34 @@
       </div>
     </div>
     <div class="fut-reading" id="fut-reading-text"></div>
+  </div>
+
+  <!-- PRODUCCION GLOBAL EIA -->
+  <div class="energy-section" id="en-global-production">
+    <div class="energy-section-title">Global Oil Production by Region</div>
+    <div class="energy-section-sub">Total petroleum and other liquids &middot; million barrels per day &middot; EIA International Energy Statistics</div>
+    <div class="energy-divider"></div>
+    <div class="gop-controls">
+      <span class="gop-year-label">Year</span>
+      <select id="gop-year-select" class="gop-year-select" onchange="gopRenderTable()"></select>
+      <span id="gop-ytd-note" class="gop-ytd-note" style="display:none;"></span>
+    </div>
+    <div class="gop-table-wrap">
+      <table class="gop-table">
+        <thead>
+          <tr>
+            <th style="min-width:200px;">Region / Country</th>
+            <th>Production, mb/d</th>
+            <th>% World</th>
+            <th>% YoY</th>
+          </tr>
+        </thead>
+        <tbody id="gop-tbody">
+          <tr><td colspan="4" style="text-align:center;color:var(--text-light);padding:32px;font-size:0.82rem;">Loading data&hellip;</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="gop-note">Source: EIA International Energy Statistics. Annual figures are averages of available monthly data. Countries below the visibility threshold are grouped as Other within each region.</div>
   </div>
 
   <!-- 7. EIA INVENTORIES -->
@@ -4821,6 +4873,7 @@
 </footer>
 
 <script src="assets/js/mktData.js"></script>
+<script src="assets/data/energy/eia_oil_production_data.js"></script>
 <script>
 
 // ===== MERCADOS DATA =====
@@ -13197,34 +13250,39 @@ let energyPageInitialized = false;
 
 // ── Energy tabs ──────────────────────────────────────────────────────────────
 const energyTabSections = {
-  'spot-futures':       ['en-precio', 'en-futuros'],
+  'spot-futures':       ['en-snapshot', 'en-precio', 'en-futuros'],
   'equity-performance': ['en-rentabilidad', 'en-fuerza'],
-  'fundamentals':       ['en-inventarios', 'en-produccion', 'en-refinerias', 'en-demanda', 'en-flights'],
+  'fundamentals':       ['en-global-production', 'en-inventarios', 'en-produccion', 'en-refinerias', 'en-demanda', 'en-flights'],
   'weekly-wrap':        ['en-semanal']
 };
 let currentEnergyTab = null;
 
-function enFundScrollTo(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+const fundSections = ['en-global-production','en-inventarios','en-produccion','en-refinerias','en-demanda','en-flights'];
+let currentFundSection = null;
+
+const fundSectionInits = {
+  'en-global-production': function() { gopInit(); },
+  'en-inventarios':       function() { initInvHistChart(); },
+  'en-produccion':        function() { initProdChart(); },
+  'en-refinerias':        function() { initRefChart(); },
+  'en-demanda':           function() { initDemChart(); },
+  'en-flights':           function() { initFlightChart(); }
+};
+
+function showFundSection(id) {
+  currentFundSection = id;
+  fundSections.forEach(function(sid) {
+    const el = document.getElementById(sid);
+    if (el) el.classList.toggle('en-tab-active', sid === id);
+  });
+  document.querySelectorAll('.en-fund-link').forEach(function(a) {
+    a.classList.toggle('active', a.dataset.section === id);
+  });
+  setTimeout(function() { if (fundSectionInits[id]) fundSectionInits[id](); }, 60);
 }
 
-let _fundObserver = null;
-function initFundNavObserver() {
-  if (_fundObserver) { _fundObserver.disconnect(); _fundObserver = null; }
-  const ids = ['en-inventarios','en-produccion','en-refinerias','en-demanda','en-flights'];
-  const sections = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
-  if (!sections.length) return;
-  _fundObserver = new IntersectionObserver(function(entries) {
-    var visible = null;
-    entries.forEach(function(e) { if (e.isIntersecting) visible = e.target.id; });
-    if (visible) {
-      document.querySelectorAll('.en-fund-link').forEach(function(a) {
-        a.classList.toggle('active', a.dataset.section === visible);
-      });
-    }
-  }, { rootMargin: '-130px 0px -55% 0px', threshold: 0 });
-  sections.forEach(function(s) { _fundObserver.observe(s); });
+function enFundScrollTo(id) {
+  showFundSection(id);
 }
 
 function showEnergyTab(slug, skipHistory) {
@@ -13234,16 +13292,18 @@ function showEnergyTab(slug, skipHistory) {
   const page = document.getElementById('page-energy');
   if (page) page.classList.add('tabs-ready');
   document.querySelectorAll('#page-energy .energy-section').forEach(function(s) { s.classList.remove('en-tab-active'); });
-  (energyTabSections[slug] || []).forEach(function(id) {
-    const el = document.getElementById(id); if (el) el.classList.add('en-tab-active');
-  });
+  if (slug === 'fundamentals') {
+    showFundSection(currentFundSection || fundSections[0]);
+  } else {
+    (energyTabSections[slug] || []).forEach(function(id) {
+      const el = document.getElementById(id); if (el) el.classList.add('en-tab-active');
+    });
+  }
   document.querySelectorAll('.en-tab-btn').forEach(function(b) {
     b.classList.toggle('active', b.dataset.tab === slug);
   });
   const page2 = document.getElementById('page-energy');
   if (page2) page2.classList.toggle('fund-nav-active', slug === 'fundamentals');
-  if (slug === 'fundamentals') setTimeout(initFundNavObserver, 80);
-  else if (_fundObserver) { _fundObserver.disconnect(); _fundObserver = null; }
   if (!skipHistory) {
     const nh = '#energy/' + slug;
     if (window.location.hash !== nh) history.pushState({ page:'energy', tab:slug }, '', nh);
@@ -13253,7 +13313,6 @@ function showEnergyTab(slug, skipHistory) {
 
 function initEnergyTabCharts(slug) {
   if (slug === 'spot-futures') { initOilPriceChart(); initFuturesCurveChart(); }
-  else if (slug === 'fundamentals') { initInvHistChart(); initProdChart(); initRefChart(); initDemChart(); initFlightChart(); }
 }
 
 function initEnergyPage() {
@@ -13268,6 +13327,139 @@ function initEnergyPage() {
   const hash = window.location.hash;
   const slug = hash.startsWith('#energy/') ? hash.slice(8) : 'spot-futures';
   showEnergyTab(slug, true);
+}
+
+// ── Global Oil Production Table ──────────────────────────────────────────────
+let gopData = null;
+
+function gopInit() {
+  if (gopData) { gopPopulateSelect(); gopRenderTable(); return; }
+  if (window.gopRawData) {
+    gopData = window.gopRawData;
+    gopPopulateSelect();
+    gopRenderTable();
+    return;
+  }
+  const tb = document.getElementById('gop-tbody');
+  if (tb) tb.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-light);padding:32px;font-size:0.82rem;">No se pudieron cargar los datos.</td></tr>';
+}
+
+function gopPopulateSelect() {
+  const sel = document.getElementById('gop-year-select');
+  if (!sel || !gopData) return;
+  const years = (gopData.years || []).slice().reverse();
+  sel.innerHTML = '';
+  years.forEach(function(y) {
+    const opt = document.createElement('option');
+    opt.value = y.year;
+    opt.textContent = y.year_label;
+    sel.appendChild(opt);
+  });
+}
+
+let gopCollapsed = null; // null = not yet initialized (defaults to all collapsed)
+
+function gopToggleRegion(regionKey) {
+  if (!gopCollapsed) gopCollapsed = new Set();
+  if (gopCollapsed.has(regionKey)) gopCollapsed.delete(regionKey);
+  else gopCollapsed.add(regionKey);
+  gopRenderTable();
+}
+
+function gopRenderTable() {
+  const sel = document.getElementById('gop-year-select');
+  if (!sel || !gopData) return;
+  const year = parseInt(sel.value, 10);
+  const yearInfo = (gopData.years || []).find(function(y) { return y.year === year; });
+
+  const noteEl = document.getElementById('gop-ytd-note');
+  if (noteEl) {
+    if (yearInfo && yearInfo.is_partial_year) {
+      noteEl.textContent = yearInfo.year_label;
+      noteEl.style.display = '';
+    } else {
+      noteEl.style.display = 'none';
+    }
+  }
+
+  const rows = (gopData.rows || [])
+    .filter(function(r) { return r.year === year; })
+    .sort(function(a, b) {
+      if (a.region_order !== b.region_order) return a.region_order - b.region_order;
+      return a.row_order - b.row_order;
+    });
+
+  const tbody = document.getElementById('gop-tbody');
+  if (!tbody) return;
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-light);padding:32px;">No hay datos para el año seleccionado.</td></tr>';
+    return;
+  }
+
+  // Initialize: all regions collapsed by default on first render
+  if (gopCollapsed === null) {
+    gopCollapsed = new Set();
+    rows.forEach(function(r) { if (r.row_type === 'region_total') gopCollapsed.add(r.region); });
+  }
+
+  // Build YoY lookup from previous year
+  const prevYear = year - 1;
+  const prevMap = {};
+  (gopData.rows || []).forEach(function(r) {
+    if (r.year === prevYear) {
+      prevMap[r.row_type + '|' + r.region + '|' + r.display_name] = r.production_mbd;
+    }
+  });
+
+  let html = '';
+  rows.forEach(function(r) {
+    const isDetail = r.row_type === 'country' || r.row_type === 'other';
+    if (isDetail && gopCollapsed.has(r.region)) return;
+
+    const indent = r.indent_level > 0 ? ' style="padding-left:' + (14 + r.indent_level * 20) + 'px"' : '';
+    const prod = r.production_mbd != null ? r.production_mbd.toFixed(2) : '—';
+    const wpct = r.share_world_pct != null ? r.share_world_pct.toFixed(1) + '%' : '—';
+
+    // YoY
+    const yoyKey = r.row_type + '|' + r.region + '|' + r.display_name;
+    const prevProd = prevMap[yoyKey];
+    let yoyCell;
+    if (prevProd != null && prevProd !== 0 && r.production_mbd != null) {
+      const yoy = (r.production_mbd - prevProd) / Math.abs(prevProd) * 100;
+      const sign = yoy >= 0 ? '+' : '';
+      const col = yoy >= 0 ? 'var(--green)' : 'var(--red)';
+      yoyCell = '<td style="color:' + col + ';font-weight:600;">' + sign + yoy.toFixed(1) + '%</td>';
+    } else {
+      yoyCell = '<td style="color:var(--text-light)">—</td>';
+    }
+
+    let cls, nameCell;
+    if (r.row_type === 'world_total') {
+      cls = 'gop-row-world';
+      nameCell = '<td>' + r.display_name + '</td>';
+    } else if (r.row_type === 'region_total') {
+      cls = 'gop-row-region';
+      const collapsed = gopCollapsed.has(r.region);
+      const arrow = collapsed ? '&#9654;' : '&#9660;';
+      const safe = r.region.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      nameCell = '<td onclick="gopToggleRegion(\'' + safe + '\')">'
+        + '<span class="gop-region-arrow">' + arrow + '</span>' + r.display_name + '</td>';
+    } else if (r.row_type === 'other') {
+      cls = 'gop-row-other';
+      nameCell = '<td' + indent + '>' + r.display_name + '</td>';
+    } else {
+      cls = 'gop-row-country';
+      nameCell = '<td' + indent + '>' + r.display_name + '</td>';
+    }
+
+    html += '<tr class="' + cls + '">'
+      + nameCell
+      + '<td>' + prod + '</td>'
+      + '<td>' + wpct + '</td>'
+      + yoyCell
+      + '</tr>';
+  });
+  tbody.innerHTML = html;
 }
 
 // ── Hash routing ──────────────────────────────────────────────────────────────
