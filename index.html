@@ -1505,13 +1505,13 @@
     </div>
     <div class="recap-nav">
       <button class="recap-btn" onclick="changeRecap(1)">&larr; Anterior</button>
-      <div class="recap-date" id="recap-date-label">28 Jun 2026</div>
+      <div class="recap-date" id="recap-date-label">5 Jul 2026</div>
       <button class="recap-btn" onclick="changeRecap(-1)">Siguiente &rarr;</button>
     </div>
     <div class="recap-card" id="recap-content">
-      <h3>Semana del 22 al 28 de Junio de 2026</h3>
-      <p>La semana deja un mercado más defensivo y menos dependiente del liderazgo de megacaps tecnológicas, con una rotación clara hacia salud, utilities y real estate y con small caps resistiendo mejor que los grandes índices. La caída del petróleo alivió temporalmente la narrativa de inflación, pero los incidentes en Hormuz mantuvieron abierta la prima geopolítica. La próxima semana será clave para comprobar si la corrección en tecnología queda como ajuste de valoración y posicionamiento o si empieza a afectar a crédito, expectativas de tipos y condiciones financieras.</p>
-      <div style="margin-top:18px"><button onclick="openArticle('recap-2026-06-28')" style="background:none;border:none;cursor:pointer;color:var(--burgundy);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;padding:0;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;">Leer informe completo →</button></div>
+      <h3>Semana del 29 de Junio al 5 de Julio de 2026</h3>
+      <p>La semana deja un mercado que recupera parte del terreno perdido, pero sin resolver sus contradicciones principales: sentimiento aún frágil, liderazgo concentrado, petróleo menos tensionado pero no normalizado, empleo más débil pero no recesivo y condiciones financieras todavía laxas. La próxima semana será importante para comprobar si el alivio en tipos se consolida con los nuevos datos y actas de bancos centrales, si el inicio de la temporada de resultados valida las expectativas elevadas de beneficios y si la normalización de Hormuz sigue reduciendo presión sobre energía o vuelve a introducir prima de riesgo.</p>
+      <div style="margin-top:18px"><button onclick="openArticle('recap-2026-07-05')" style="background:none;border:none;cursor:pointer;color:var(--burgundy);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;padding:0;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;">Leer informe completo →</button></div>
     </div>
   </div>
 
@@ -2807,6 +2807,20 @@
     <div class="energy-section-title">Global Oil Production by Region</div>
     <div class="energy-section-sub">Total petroleum and other liquids &middot; million barrels per day &middot; EIA International Energy Statistics</div>
     <div class="energy-divider"></div>
+
+    <!-- Trend chart -->
+    <div class="energy-chart-card" style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div class="energy-chart-title" style="margin-bottom:0">Producción mundial de petróleo — tendencia (mb/d)</div>
+        <div style="display:flex;gap:5px;" id="gop-period-btns">
+          <button class="energy-filter-btn" onclick="filterGopPeriod('10Y',this)">10A</button>
+          <button class="energy-filter-btn" onclick="filterGopPeriod('20Y',this)">20A</button>
+          <button class="energy-filter-btn active" onclick="filterGopPeriod('ALL',this)">Todo</button>
+        </div>
+      </div>
+      <canvas id="gop-chart" height="120"></canvas>
+    </div>
+
     <div class="gop-controls">
       <span class="gop-year-label">Year</span>
       <select id="gop-year-select" class="gop-year-select" onchange="gopRenderTable()"></select>
@@ -5249,6 +5263,7 @@ const twrData = [
 ];
 
 const recaps = [
+  { date:"5 Jul 2026", title:"Semana del 29 de Junio al 5 de Julio de 2026", link:"recap-2026-07-05", content:"<p>La semana deja un mercado que recupera parte del terreno perdido, pero sin resolver sus contradicciones principales: sentimiento aún frágil, liderazgo concentrado, petróleo menos tensionado pero no normalizado, empleo más débil pero no recesivo y condiciones financieras todavía laxas. La próxima semana será importante para comprobar si el alivio en tipos se consolida con los nuevos datos y actas de bancos centrales, si el inicio de la temporada de resultados valida las expectativas elevadas de beneficios y si la normalización de Hormuz sigue reduciendo presión sobre energía o vuelve a introducir prima de riesgo.</p>" },
   { date:"28 Jun 2026", title:"Semana del 22 al 28 de Junio de 2026", link:"recap-2026-06-28", content:"<p>La semana deja un mercado m&#225;s defensivo y menos dependiente del liderazgo de megacaps tecnol&#243;gicas, con una rotaci&#243;n clara hacia salud, utilities y real estate y con small caps resistiendo mejor que los grandes &#237;ndices. La ca&#237;da del petr&#243;leo alivi&#243; temporalmente la narrativa de inflaci&#243;n, pero los incidentes en Hormuz mantuvieron abierta la prima geopol&#237;tica. La pr&#243;xima semana ser&#225; clave para comprobar si la correcci&#243;n en tecnolog&#237;a queda como ajuste de valoraci&#243;n y posicionamiento o si empieza a afectar a cr&#233;dito, expectativas de tipos y condiciones financieras.</p>" },
   { date:"21 Jun 2026", title:"Semana del 15 al 21 de Junio de 2026", link:"recap-2026-06-21", content:"<p>La semana deja un mercado más constructivo, pero apoyado en un equilibrio frágil: alivio geopolítico, fortaleza tecnológica y flujos favorables convivieron con una Fed más hawkish y con inflación todavía incómoda. La clave de la próxima semana será comprobar si los datos de PCE, PMIs y precios confirman que la presión inflacionista sigue contenida o si refuerzan la idea de tipos altos durante más tiempo. Mientras tanto, la composición interna del mercado siguió transmitiendo una señal de recuperación selectiva, no de euforia generalizada.</p>" },
   { date:"14 Jun 2026", title:"Semana del 08 al 14 de Junio de 2026", link:"recap-2026-06-14", content:"<p>Los mercados cerraron con un tono algo más constructivo que el observado en los episodios recientes de tensión, pero la semana no fue lineal. La rotación desde tecnología y semiconductores hacia una participación más amplia convivió con inflación energética elevada, debate sobre el rumbo de la Fed y una geopolítica todavía dominante por el Estrecho de Hormuz. La salida a bolsa de SpaceX funcionó como el gran evento de mercado de la semana y como prueba de profundidad para el apetito por riesgo.</p>" },
@@ -10056,6 +10071,76 @@ setTimeout(() => {
 
 
 const articles = {
+  'recap-2026-07-05': {
+    title: 'Semana del 29 de Junio al 5 de Julio de 2026',
+    category: 'Recap Semanal · Macro',
+    date: '5 Julio 2026',
+    readTime: '~10 min lectura',
+    content: `<h1>Semana del 29 de Junio al 5 de Julio de 2026</h1>
+<p><em>5 Julio 2026 · Recap Semanal · Macro</em></p>
+<hr>
+<h2>Primer vistazo visual</h2>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-05/picture-6.webp" loading="lazy" alt="Rendimiento renta variable global semana 29 junio-5 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">La semana dejó un rebote moderado en renta variable global, con Europa, MSCI World, IBEX 35 y S&amp;P 500 en positivo, mientras Nasdaq 100 y Russell 2000 quedaron rezagados. A tres meses, el liderazgo sigue muy concentrado en Nasdaq, small caps y S&amp;P 500, con China todavía claramente por detrás.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-05/picture-1.webp" loading="lazy" alt="Mapa de mercado S&amp;P 500 semana 29 junio-5 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El mapa de mercado mostró un tono más constructivo que la semana anterior, con grandes nombres de tecnología e internet recuperando terreno, aunque semiconductores siguió mostrando dispersión y varios componentes continuaron bajo presión.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-05/picture-2.webp" loading="lazy" alt="Rotación sectorial semana 29 junio-5 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">La rotación sectorial benefició a salud, comunicación, consumo cíclico y financieras; energía quedó rezagada, coherente con la normalización del petróleo y menor tensión inmediata en oferta.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-05/picture-3.webp" loading="lazy" alt="Fear &amp; Greed Index semana 29 junio-5 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El Fear &amp; Greed salió de miedo extremo, pero siguió en zona de miedo, señal de mejora táctica sin euforia.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-05/picture-4.webp" loading="lazy" alt="AAII Sentiment Survey semana 29 junio-5 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">La encuesta AAII mostró un deterioro claro del sentimiento minorista, con caída de alcistas y aumento de bajistas pese al rebote de varios índices.</figcaption>
+</figure>
+<hr>
+<h2>Resumen ejecutivo</h2>
+<p>La primera semana de julio dejó una recuperación táctica de los activos de riesgo, pero no una normalización completa del tono de mercado. El rebote fue visible en Europa, MSCI World, IBEX 35 y S&amp;P 500, mientras Nasdaq 100 y Russell 2000 quedaron algo rezagados en el cómputo semanal. La lectura no fue la de un rally homogéneo: hubo mejora en el índice agregado, pero también persistió una composición interna muy selectiva, con dispersión dentro de tecnología y semiconductores.</p>
+<p>El cambio más relevante frente a la semana anterior fue que el mercado pasó de una venta concentrada en grandes compañías de crecimiento a una recuperación más amplia, aunque todavía cautelosa. El primer vistazo visual sugiere que el apetito por riesgo mejoró, pero no se trasladó de forma limpia al sentimiento. El Fear &amp; Greed rebotó desde miedo extremo hacia miedo, mientras la encuesta AAII mostró una caída fuerte de los alcistas y un repunte de los bajistas. Esa divergencia es importante: el precio mejoró, pero la confianza del inversor individual no acompañó con la misma intensidad.</p>
+<p>La narrativa macro giró alrededor de un mercado laboral estadounidense que se enfría, pero sin romperse. La creación de empleo de junio fue más débil de lo esperado y las revisiones de meses anteriores enfriaron la lectura de crecimiento, pero la tasa de paro siguió baja y varias lecturas alternativas apuntaron a un mercado laboral aún resistente. Para los mercados, el punto clave fue que el dato redujo la probabilidad de una respuesta más agresiva de la Fed a corto plazo. El resultado fue una semana más favorable para activos de duración, oro y renta variable global, aunque no eliminó la tensión de fondo por inflación, energía y tipos.</p>
+<p>El petróleo pasó a un segundo plano como shock inmediato, pero siguió siendo una pieza importante de la lectura macro. Los precios volvieron a niveles cercanos a los previos a la guerra entre Estados Unidos, Israel e Irán, apoyados por el avance de las conversaciones y la reapertura parcial del estrecho de Hormuz. Sin embargo, la normalización del precio no equivale a desaparición del riesgo: el conflicto ha sido un shock energético amplio, con impacto en crudo, gas, refinados y fertilizantes. La transición de backwardation a contango en Brent reforzó la idea de menor tensión inmediata de oferta, pero también dejó abierta la duda de si el mercado está descontando demasiado rápido una vuelta a la normalidad.</p>
+<p>La semana también dejó señales menos visibles, pero relevantes, en crédito y divisas. La presión de reembolsos en private credit apunta a una posible fragilidad de liquidez en segmentos menos líquidos del sistema financiero. En paralelo, la debilidad del yen y la vigilancia de las autoridades japonesas recordaron que el ciclo de tipos global sigue generando tensiones fuera de Estados Unidos. La lectura agregada es la de un mercado que rebota cuando se modera el riesgo de subida inmediata de tipos, pero que sigue conviviendo con focos de vulnerabilidad: concentración en tecnología, sensibilidad a datos de empleo e inflación, energía, divisas y liquidez privada.</p>
+<hr>
+<h2>1. Mercados</h2>
+<p>La renta variable global recuperó tono tras la fuerte presión de la semana anterior. El avance fue más visible en Europa y en índices globales amplios que en los segmentos más asociados al liderazgo reciente de crecimiento. Europa subió con fuerza relativa, el S&amp;P 500 también avanzó, y el IBEX 35 mantuvo buen comportamiento. En cambio, Nasdaq 100 terminó ligeramente en negativo y Russell 2000 cedió, lo que matiza la idea de un rebote plenamente generalizado.</p>
+<p>La composición interna fue más relevante que el nivel agregado de los índices. El mapa de mercado mostró recuperación en grandes compañías como Apple, Microsoft, Alphabet, Meta, Amazon o Visa, pero también mantuvo señales de presión en semiconductores, hardware y determinados industriales. El mensaje no fue que el mercado abandonara el crecimiento, sino que empezó a discriminar más dentro del propio bloque tecnológico. Después de una semana previa marcada por caída intensa en megacaps y AI, el rebote de algunos líderes no bastó para borrar la sensación de que el mercado sigue muy sensible a valoración, márgenes y narrativas de capex.</p>
+<p>La rotación sectorial fue más constructiva que defensiva, pero no lineal. Salud lideró la semana, seguida por comunicación, consumo cíclico y financieras. Tecnología quedó prácticamente plana a nivel sectorial, arrastrada por la debilidad de semiconductores, mientras energía fue el principal rezagado. Esta combinación encaja con una semana de menor tensión inmediata en petróleo y de cierto alivio en tipos, pero también con un mercado que no recompuso de forma automática todo el liderazgo de AI. El rebote no fue una vuelta pura al mismo trade anterior, sino una recuperación con más dispersión interna.</p>
+<p>El mercado también empezó a mirar hacia la temporada de resultados del segundo trimestre. Las expectativas llegan exigentes: las estimaciones de beneficios del S&amp;P 500 para el trimestre han subido durante el propio trimestre, algo poco habitual, y el consenso espera otro periodo de crecimiento de beneficios superior al 20%. Esto explica parte de la resistencia de la renta variable pese a la incertidumbre macro. La otra cara es que el listón queda alto. Cuando las valoraciones descansan sobre crecimiento de beneficios elevado, cualquier decepción en márgenes, guidance o demanda puede tener una reacción más fuerte, especialmente en sectores donde la narrativa de AI y tecnología ya descuenta mucha ejecución.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-05/picture-7.webp" loading="lazy" alt="Estimaciones de beneficios S&amp;P 500 segundo trimestre 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+</figure>
+<p>El sentimiento siguió siendo el principal punto de contradicción. El Fear &amp; Greed mejoró desde miedo extremo, pero se mantuvo en miedo. La encuesta AAII, en cambio, mostró un deterioro más claro: los alcistas cayeron desde el 44,9% al 31,4%, mientras los bajistas subieron hasta el 42,3%. Es una señal útil porque no encaja con una lectura complaciente del mercado. El precio rebotó, pero el inversor minorista volvió a mostrarse más prudente. Esa distancia entre recuperación de índices y deterioro de sentimiento hace que la semana deje una lectura menos limpia que la que sugeriría solo mirar el S&amp;P 500.</p>
+<p>En crédito, la señal más relevante no vino tanto de los spreads públicos como de la tensión en private credit. El aumento de solicitudes de reembolso y la caída de nuevas entradas apuntan a una posible brecha de liquidez en vehículos menos líquidos. No es todavía un shock sistémico evidente, pero sí una advertencia de segundo orden: cuando el coste de financiación se mantiene elevado durante más tiempo, los segmentos donde la liquidez prometida al inversor es mayor que la liquidez real de los activos pueden empezar a mostrar fricciones. El riesgo no es solo que algunos fondos limiten reembolsos, sino que una menor captación reduzca la capacidad de seguir financiando a prestatarios de menor calidad.</p>
+<p>En materias primas, el petróleo se estabilizó cerca de niveles previos a la guerra. Brent y WTI apenas cambiaron en la semana, mientras el mercado empezó a descontar una reapertura parcial de Hormuz y una recuperación más rápida de la oferta de Oriente Medio. La señal de la curva fue importante: el paso hacia contango en Brent apunta a menor percepción de escasez inmediata. Para equities, esto ayudó a aliviar la presión inflacionista y a explicar el peor comportamiento relativo de energía. Para macro, sin embargo, el mensaje es más matizado: el precio spot se relajó, pero el shock de oferta ha sido amplio y sus efectos sobre transporte, refinados, gas y costes logísticos pueden tardar más en desaparecer.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-05/picture-8.webp" loading="lazy" alt="Petróleo Brent y WTI semana 29 junio-5 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+</figure>
+<p>El oro encontró apoyo en la combinación de menor expectativa de subida inmediata de tipos, dólar más contenido y persistencia de riesgos geopolíticos. No fue un movimiento aislado: encaja con una semana en la que el mercado redujo parte del riesgo de tightening a corto plazo, pero no eliminó los riesgos de cola. La lectura es coherente con un entorno donde los activos de riesgo rebotan, pero la demanda de cobertura no desaparece.</p>
+<hr>
+<h2>2. Macro</h2>
+<p>El dato central de la semana fue el empleo estadounidense. La economía añadió 57.000 empleos en junio, por debajo de las expectativas, y las revisiones a meses anteriores suavizaron la trayectoria reciente del mercado laboral. Aun así, la tasa de paro se mantuvo en el 4,2%, un nivel todavía bajo en perspectiva histórica. La lectura macro no fue de ruptura, sino de moderación. El mercado interpretó el dato como una señal de que la Fed tenía menos urgencia para endurecer de forma inmediata, especialmente después de varias semanas dominadas por preocupación inflacionista, energía y presión sobre tipos.</p>
+<p>El matiz es importante. Un mercado laboral que se enfría puede ser positivo para activos de riesgo si reduce la probabilidad de subidas de tipos, pero puede volverse negativo si empieza a cuestionar beneficios, consumo o crecimiento. De momento, la reacción de mercado se inclinó hacia la primera lectura. Los futuros de Fed Funds aumentaron la probabilidad de que la Fed mantenga tipos en septiembre frente al día anterior, y el dólar perdió algo de fuerza. Esa combinación sostuvo oro y ayudó a la renta variable global, pero no eliminó la tensión de fondo: la inflación sigue por encima de niveles cómodos y el shock energético aún puede filtrarse a precios de transporte y bienes.</p>
+<p>La lectura de actividad fue mixta, pero no recesiva. El ISM manufacturero de Estados Unidos siguió en expansión, aunque por debajo de lo esperado, y el componente de precios se moderó desde niveles elevados. En Asia, los PMIs mantuvieron una lectura razonablemente saludable, con servicios japoneses de vuelta en expansión y demanda externa china más firme. La macro global, por tanto, no confirmó una desaceleración abrupta. Más bien reforzó una narrativa de crecimiento desigual: Estados Unidos pierde algo de velocidad, Asia muestra resiliencia selectiva y Europa mejora apoyada por menor exposición al trade de AI y valoraciones relativas más bajas.</p>
+<p>En Europa, el avance de los índices tuvo una explicación distinta a la de Estados Unidos. El STOXX 600 marcó nuevos máximos y cerró una de sus mejores semanas recientes. La región se benefició de una combinación de menor tensión energética inmediata, menor exposición directa al ajuste de semiconductores y valoraciones más contenidas. No significa que Europa haya resuelto sus problemas estructurales, pero sí que, en una semana de dudas sobre concentración tecnológica estadounidense, los índices europeos actuaron como alternativa más diversificada y menos dependiente de AI. La inflación de la eurozona también ofreció cierto alivio al situarse por debajo de lo esperado, reduciendo la urgencia de una respuesta más agresiva del BCE.</p>
+<p>Japón volvió a concentrar tensión en divisas y bonos. El yen llegó a mínimos de 40 años frente al dólar antes de recuperar algo de terreno tras el dato de empleo estadounidense. Las autoridades japonesas mantuvieron la amenaza de intervención y señalaron contacto estrecho con Estados Unidos. La debilidad del yen no es solo un movimiento de divisa: encarece importaciones, presiona a hogares y empresas, aumenta la sensibilidad política a la inflación y complica la gestión del Banco de Japón. Además, la subida de rentabilidades en los bonos japoneses refleja una tensión más amplia entre estímulo fiscal, inflación importada y credibilidad de la política económica.</p>
+<p>La lectura de emergentes y países vulnerables quedó marcada por la persistencia del tightening global. El punto relevante no es solo que los tipos globales estén altos, sino cómo se transmiten a sistemas financieros con menor credibilidad fiscal, mayor dependencia de financiación doméstica o vínculos estrechos entre deuda soberana y banca local. En países con bancos muy expuestos a deuda pública, el endurecimiento monetario puede convertirse rápidamente en un problema de liquidez, estabilidad bancaria y coste de financiación. Esta lectura no fue el motor de los índices esta semana, pero ayuda a explicar por qué un entorno de tipos altos durante más tiempo sigue siendo más peligroso para mercados con menor margen fiscal y peores buffers externos.</p>
+<p>El petróleo requiere una lectura separada porque la caída de la prima de riesgo no equivale a normalización total. El conflicto con Irán ha provocado, según estimaciones de Reuters basadas en datos de IEA, OPEP y Departamento de Energía de Estados Unidos, el mayor shock de oferta en términos de pérdida diaria de producción, aunque no el mayor en términos acumulados si se compara con la Revolución iraní de 1979. La diferencia importa: el mercado puede relajarse si ve reapertura de Hormuz y más barriles en circulación, pero la economía global ha cambiado. Hoy el shock no afecta solo al crudo; también alcanza LNG, productos refinados, fertilizantes, transporte marítimo y logística. Por eso, aunque el precio spot haya vuelto a niveles más cómodos, el efecto sobre inflación y cadenas de suministro puede seguir filtrándose con retraso.</p>
+<p>Las condiciones financieras siguieron siendo más laxas que la media histórica, pese a la volatilidad reciente. Esto crea una tensión relevante para la Fed: el mercado se relaja cuando los datos reducen la probabilidad de subida inmediata de tipos, pero esa misma relajación puede limitar el efecto restrictivo de la política monetaria. El NFCI no apunta a un endurecimiento amplio de financiación; más bien confirma que el sistema sigue absorbiendo shocks con relativa facilidad. La Fed, por tanto, se enfrenta a un equilibrio delicado: evitar endurecer demasiado si el empleo se enfría, pero sin permitir que unas condiciones financieras demasiado cómodas reaviven inflación, demanda o exceso de riesgo.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-05/picture-5.webp" loading="lazy" alt="National Financial Conditions Index (NFCI) semana 29 junio-5 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El NFCI siguió en terreno claramente laxo frente a su media histórica, con pocos cambios recientes; la relajación financiera contrasta con una Fed todavía condicionada por inflación y energía.</figcaption>
+</figure>
+<hr>
+<h2>Cierre</h2>
+<p>La semana deja un mercado que recupera parte del terreno perdido, pero sin resolver sus contradicciones principales: sentimiento aún frágil, liderazgo concentrado, petróleo menos tensionado pero no normalizado, empleo más débil pero no recesivo y condiciones financieras todavía laxas. La próxima semana será importante para comprobar si el alivio en tipos se consolida con los nuevos datos y actas de bancos centrales, si el inicio de la temporada de resultados valida las expectativas elevadas de beneficios y si la normalización de Hormuz sigue reduciendo presión sobre energía o vuelve a introducir prima de riesgo.</p>`
+  },
   'recap-2026-06-28': {
     title: 'Semana del 22 al 28 de Junio de 2026',
     category: 'Recap Semanal · Macro',
@@ -13662,13 +13747,84 @@ function initEnergyPage() {
 
 // ── Global Oil Production Table ──────────────────────────────────────────────
 let gopData = null;
+let gopChartPeriod = 'ALL';
+
+function filterGopPeriod(period, btn) {
+  gopChartPeriod = period;
+  if (btn) {
+    document.querySelectorAll('#gop-period-btns .energy-filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  gopInitChart();
+}
+
+function gopInitChart() {
+  destroyEnergyChart('gop');
+  const ctx = document.getElementById('gop-chart');
+  if (!ctx || !gopData) return;
+
+  const regions = ['North America','Middle East','CIS / Former Soviet Union','Latin America & Caribbean','Asia-Pacific','Africa','Europe'];
+  const regionColors = ['#2D6A4F','#D4870A','#5B7FD4','#9B59B6','#20B2AA','#E67E22','#7F8C8D'];
+
+  // Get all years sorted
+  const allYears = (gopData.years || []).map(function(y) { return y.year; }).sort(function(a,b){return a-b;});
+  let filteredYears = allYears;
+  if (gopChartPeriod !== 'ALL') {
+    const span = parseInt(gopChartPeriod);
+    const cutoff = new Date().getFullYear() - span;
+    filteredYears = allYears.filter(function(y) { return y >= cutoff; });
+  }
+
+  const rowsByYear = {};
+  (gopData.rows || []).forEach(function(r) { if (!rowsByYear[r.year]) rowsByYear[r.year] = []; rowsByYear[r.year].push(r); });
+
+  const labels = filteredYears.map(function(y) { return String(y); });
+
+  const worldData = filteredYears.map(function(y) {
+    const row = (rowsByYear[y] || []).find(function(r) { return r.row_type === 'world_total'; });
+    return row ? row.production_mbd : null;
+  });
+
+  const datasets = [
+    { label:'World', data: worldData, borderColor:'#6B2737', backgroundColor:'rgba(107,39,55,0.07)',
+      fill:true, tension:0.3, pointRadius:0, borderWidth:2.5 }
+  ];
+
+  regions.forEach(function(region, i) {
+    const rData = filteredYears.map(function(y) {
+      const row = (rowsByYear[y] || []).find(function(r) { return r.row_type === 'region_total' && r.region === region; });
+      return row ? row.production_mbd : null;
+    });
+    datasets.push({
+      label: region, data: rData, borderColor: regionColors[i], backgroundColor:'transparent',
+      fill:false, tension:0.3, pointRadius:0, borderWidth:1.5, borderDash:[4,3]
+    });
+  });
+
+  energyCharts['gop'] = new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive:true,
+      plugins:{
+        legend:{ position:'bottom', labels:{ boxWidth:14, font:{size:10}, padding:10 } },
+        tooltip:{ callbacks:{ label: function(c) { return c.dataset.label + ': ' + (c.raw !== null ? c.raw.toFixed(2) + ' mb/d' : '—'); } } }
+      },
+      scales:{
+        y:{ grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:10}, callback: function(v){return v.toFixed(0)+' mb/d';}} },
+        x:{ grid:{display:false}, ticks:{font:{size:9}, maxRotation:0, maxTicksLimit:12} }
+      }
+    }
+  });
+}
 
 function gopInit() {
-  if (gopData) { gopPopulateSelect(); gopRenderTable(); return; }
+  if (gopData) { gopPopulateSelect(); gopRenderTable(); gopInitChart(); return; }
   if (window.gopRawData) {
     gopData = window.gopRawData;
     gopPopulateSelect();
     gopRenderTable();
+    gopInitChart();
     return;
   }
   const tb = document.getElementById('gop-tbody');
