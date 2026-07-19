@@ -9919,6 +9919,14 @@ function openLightbox(idx, ticker) {
   document.body.style.overflow = 'hidden';
 }
 
+function openImgLightbox(src, caption) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-caption').textContent = caption || '';
+  const lb = document.getElementById('lightbox');
+  lb.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
 function closeLightbox() {
   document.getElementById('lightbox').style.display = 'none';
   document.body.style.overflow = '';
@@ -10083,19 +10091,19 @@ const articles = {
 <hr>
 <h2>Primer vistazo visual</h2>
 <figure style="margin:28px 0;text-align:center;">
-  <img src="assets/img/recaps/2026-07-19/picture-1.webp" loading="lazy" alt="Mapa de mercado S&amp;P 500 semana 13-19 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <img src="assets/img/recaps/2026-07-19/picture-1.webp" loading="lazy" alt="Mapa de mercado S&amp;P 500 semana 13-19 julio 2026" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-1.webp', 'Predominó un tono correctivo y muy disperso: semiconductores, hardware e infraestructuras de IA concentraron las caídas, mientras Apple, energía y parte del sector financiero ofrecieron el principal contrapeso.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
   <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">Predominó un tono correctivo y muy disperso: semiconductores, hardware e infraestructuras de IA concentraron las caídas, mientras Apple, energía y parte del sector financiero ofrecieron el principal contrapeso.</figcaption>
 </figure>
 <figure style="margin:28px 0;text-align:center;">
-  <img src="assets/img/recaps/2026-07-19/picture-2.webp" loading="lazy" alt="Rotación sectorial semana 13-19 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <img src="assets/img/recaps/2026-07-19/picture-2.webp" loading="lazy" alt="Rotación sectorial semana 13-19 julio 2026" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-2.webp', 'La rotación favoreció energía, real estate y áreas defensivas, mientras tecnología, industriales y comunicación quedaron rezagados; el movimiento fue más una revisión de liderazgo que una liquidación uniforme de riesgo.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
   <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">La rotación favoreció energía, real estate y áreas defensivas, mientras tecnología, industriales y comunicación quedaron rezagados; el movimiento fue más una revisión de liderazgo que una liquidación uniforme de riesgo.</figcaption>
 </figure>
 <figure style="margin:28px 0;text-align:center;">
-  <img src="assets/img/recaps/2026-07-19/picture-3.webp" loading="lazy" alt="Fear &amp; Greed Index semana 13-19 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <img src="assets/img/recaps/2026-07-19/picture-3.webp" loading="lazy" alt="Fear &amp; Greed Index semana 13-19 julio 2026" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-3.webp', 'El Fear &amp; Greed descendió a 37 puntos y volvió a zona de miedo, desde una lectura neutral una semana antes.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
   <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El Fear &amp; Greed descendió a 37 puntos y volvió a zona de miedo, desde una lectura neutral una semana antes.</figcaption>
 </figure>
 <figure style="margin:28px 0;text-align:center;">
-  <img src="assets/img/recaps/2026-07-19/picture-4.webp" loading="lazy" alt="AAII Sentiment Survey semana 13-19 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <img src="assets/img/recaps/2026-07-19/picture-4.webp" loading="lazy" alt="AAII Sentiment Survey semana 13-19 julio 2026" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-4.webp', 'La encuesta AAII mejoró con fuerza, con un 44,9% de alcistas y un 32,9% de bajistas, en contraste con unos indicadores de mercado más prudentes.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
   <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">La encuesta AAII mejoró con fuerza, con un 44,9% de alcistas y un 32,9% de bajistas, en contraste con unos indicadores de mercado más prudentes.</figcaption>
 </figure>
 <hr>
@@ -10116,49 +10124,43 @@ const articles = {
 <p><strong>Resultados empresariales: soporte con listón exigente</strong></p>
 <p>Frente al deterioro de precios, la temporada de resultados aportó por ahora un soporte fundamental. FactSet registra un 88% de sorpresas positivas de beneficio y una sorpresa agregada del 16,4%. El crecimiento combinado del beneficio del segundo trimestre se ha elevado hasta el 24,7%, con financieras como principal contribuyente a la revisión semanal y energía, tecnología y materiales entre los sectores con mayor crecimiento previsto. Los ingresos también comenzaron con fuerza: el 85% de las compañías publicadas superó estimaciones y el crecimiento agregado se situó en el 12,8%.</p>
 <p>La tensión entre ambos elementos explica la reacción asimétrica del mercado. Unos resultados sólidos pueden no ser suficientes cuando las expectativas ya descuentan una aceleración extraordinaria. Edward Jones sitúa el crecimiento esperado del beneficio tecnológico cerca del 63% y estima que el sector aporta más de la mitad del crecimiento total del S&amp;P 500. Con un PER adelantado de 20,3 veces, la asimetría de expectativas es elevada: el mercado necesita confirmación de ingresos, márgenes y retorno del capex, mientras cualquier guía menos expansiva puede provocar ajustes desproporcionados.</p>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0;align-items:start;">
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-7.webp" loading="lazy" alt="Sorpresas de beneficios del S&amp;P 500, segundo trimestre 2026" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-7-1.webp" loading="lazy" alt="Crecimiento de beneficios por sector, segundo trimestre 2026" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-7-2.webp" loading="lazy" alt="PER adelantado y crecimiento de beneficios del sector tecnológico" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-</div>
-<p style="font-size:0.72rem;color:var(--text-light);margin-top:-20px;margin-bottom:28px;text-align:center;">La temporada de resultados arrancó con un 88% de sorpresas positivas de beneficio y un crecimiento combinado revisado al 24,7%, pero el PER adelantado de 20,3 veces en tecnología deja poco margen para decepciones.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-7.webp" loading="lazy" alt="Sorpresas de beneficios del S&amp;P 500, segundo trimestre 2026" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-7.webp', 'La temporada de resultados arrancó con un 88% de sorpresas positivas de beneficio y un crecimiento combinado revisado al 24,7%, pero el PER adelantado de 20,3 veces en tecnología deja poco margen para decepciones.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-7-1.webp" loading="lazy" alt="Crecimiento de beneficios por sector, segundo trimestre 2026" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-7-1.webp', 'La temporada de resultados arrancó con un 88% de sorpresas positivas de beneficio y un crecimiento combinado revisado al 24,7%, pero el PER adelantado de 20,3 veces en tecnología deja poco margen para decepciones.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-7-2.webp" loading="lazy" alt="PER adelantado y crecimiento de beneficios del sector tecnológico" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-7-2.webp', 'La temporada de resultados arrancó con un 88% de sorpresas positivas de beneficio y un crecimiento combinado revisado al 24,7%, pero el PER adelantado de 20,3 veces en tecnología deja poco margen para decepciones.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p style="font-size:0.72rem;color:var(--text-light);margin-top:-14px;margin-bottom:28px;text-align:center;">La temporada de resultados arrancó con un 88% de sorpresas positivas de beneficio y un crecimiento combinado revisado al 24,7%, pero el PER adelantado de 20,3 veces en tecnología deja poco margen para decepciones.</p>
 <p><strong>Capex de IA, competencia china y el nuevo criterio del mercado</strong></p>
 <p>El debate sobre inteligencia artificial se desplazó desde la escasez de capacidad hacia la rentabilidad del capex. UBS estima que la inversión de los hyperscalers crecerá un 76% en 2026, hasta 673.000 millones de dólares, antes de moderarse al 25% en 2027 y al 6% en 2028. El nivel seguiría siendo extraordinariamente elevado, pero la desaceleración del crecimiento incremental alteraría la distribución de beneficios dentro del ecosistema: aliviaría la presión financiera sobre Microsoft, Amazon, Alphabet y Meta, mientras reduciría parte del impulso que hasta ahora ha favorecido a fabricantes de chips y proveedores de equipamiento.</p>
 <p>Esa transición ayuda a entender la rotación dentro de tecnología observada durante la semana. Algunos gestores han reducido exposición a semiconductores y se han desplazado hacia hyperscalers, software y sectores capaces de capturar mejoras de productividad sin asumir directamente todo el coste de la infraestructura. La encuesta de gestores de Bank of America citada por Reuters refuerza esa lectura: el 82% de los participantes consideraba los semiconductores la operación más concurrida, sin posiciones cortas declaradas. La moderación del capex no implica una caída absoluta del gasto, sino un posible desplazamiento del liderazgo desde quienes suministran capacidad hacia quienes logran convertirla en ingresos y beneficios.</p>
 <p>La revisión de expectativas recibió además un catalizador competitivo desde China. Kimi K3, presentado por Moonshot como el mayor modelo open-weight del mundo, mostró prestaciones próximas a los modelos frontera estadounidenses, mientras Arena lo situó en primera posición en seis de siete dominios de Frontend. Su importancia para mercado no reside únicamente en la clasificación: un modelo chino abierto y competitivo cuestiona que el avance de la IA dependa necesariamente de incrementos ilimitados de gasto propietario. Scotiabank sostiene que Estados Unidos conserva una ligera ventaja en capacidad agregada, pero también subraya que el capital chino puede tolerar plazos de monetización diferentes a los exigidos por los inversores estadounidenses.</p>
 <p>La evolución bursátil de Apple ofreció una expresión directa de este nuevo criterio. La compañía superó a Nvidia el viernes y recuperó el puesto de empresa de mayor capitalización mundial, con aproximadamente 4,88 billones de dólares frente a 4,86 billones. El movimiento premió un modelo menos intensivo en inversión y con vías de monetización vinculadas a servicios, ecosistema y renovación de dispositivos. La reordenación entre Apple y Nvidia no invalida la demanda estructural de chips, pero sí sugiere que el mercado empieza a diferenciar entre construir la infraestructura de IA y capturar sus beneficios económicos finales.</p>
 <p>A esta revisión sectorial se añadió un coste de oportunidad más exigente. El earnings yield ajustado cíclicamente quedó por debajo del rendimiento real de largo plazo implícito en los TIPS. En términos sencillos, la compensación corriente ofrecida por los beneficios normalizados de la bolsa pasó a ser inferior al rendimiento real de un activo soberano protegido frente a la inflación. Esta comparación no determina por sí sola la dirección del mercado, pero reduce el margen para justificar valoraciones elevadas cuando el crecimiento de beneficios o la monetización del capex empiezan a perder velocidad.</p>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0;align-items:start;">
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-10.webp" loading="lazy" alt="Earnings yield ajustado cíclicamente del S&amp;P 500" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-10-1.webp" loading="lazy" alt="Evolución histórica del earnings yield frente a los tipos reales" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-11.webp" loading="lazy" alt="Rendimiento real de los TIPS a largo plazo" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-</div>
-<p style="font-size:0.72rem;color:var(--text-light);margin-top:-20px;margin-bottom:28px;text-align:center;">El earnings yield ajustado cíclicamente quedó por debajo del rendimiento real de largo plazo implícito en los TIPS, un coste de oportunidad que reduce el margen para justificar valoraciones elevadas.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-10.webp" loading="lazy" alt="Earnings yield ajustado cíclicamente del S&amp;P 500" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-10.webp', 'El earnings yield ajustado cíclicamente quedó por debajo del rendimiento real de largo plazo implícito en los TIPS, un coste de oportunidad que reduce el margen para justificar valoraciones elevadas.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-10-1.webp" loading="lazy" alt="Evolución histórica del earnings yield frente a los tipos reales" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-10-1.webp', 'El earnings yield ajustado cíclicamente quedó por debajo del rendimiento real de largo plazo implícito en los TIPS, un coste de oportunidad que reduce el margen para justificar valoraciones elevadas.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-11.webp" loading="lazy" alt="Rendimiento real de los TIPS a largo plazo" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-11.webp', 'El earnings yield ajustado cíclicamente quedó por debajo del rendimiento real de largo plazo implícito en los TIPS, un coste de oportunidad que reduce el margen para justificar valoraciones elevadas.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p style="font-size:0.72rem;color:var(--text-light);margin-top:-14px;margin-bottom:28px;text-align:center;">El earnings yield ajustado cíclicamente quedó por debajo del rendimiento real de largo plazo implícito en los TIPS, un coste de oportunidad que reduce el margen para justificar valoraciones elevadas.</p>
 <p><strong>Deuda de margen: una señal de fragilidad, no de calendario</strong></p>
 <p>Más allá de la valoración, la deuda de margen añadió una capa distinta de vulnerabilidad. Allocate Smartly parte del ratio de margin debt sobre PIB y de su variación en doce meses para evitar que el crecimiento nominal distorsione la comparación. La aceleración actual supera el umbral de un punto porcentual utilizado en el análisis y se agrupa con los grandes episodios de 2000, 2007 y 2021. La señal de apalancamiento es relevante, aunque sus resultados posteriores fueron muy distintos entre episodios.</p>
 <p>Esa heterogeneidad limita cualquier lectura mecánica. La rentabilidad media de los tres episodios completos fue cercana al 2% a doce meses y negativa a dieciocho y veinticuatro meses, con una dispersión muy elevada. Cuando se exige que el pico sea seguido por una caída del ratio, los resultados históricos son más uniformemente negativos, especialmente a dieciocho meses. Aun así, la muestra es pequeña y los cambios estructurales del mercado reducen la capacidad de extraer una regla de timing.</p>
 <p>La lectura útil es, por tanto, de fragilidad y no de calendario. Mientras precios, volatilidad y garantías permanezcan estables, el crédito de margen puede prolongar el momentum. Si caen los activos, aumentan los haircuts o se deteriora la liquidez, el mismo mecanismo puede generar ventas forzadas y mayor correlación. La deuda de margen funciona como indicador de fragilidad, no como temporizador autónomo.</p>
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:28px 0;align-items:start;">
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-8.webp" loading="lazy" alt="Deuda de margen sobre PIB y variación interanual (Allocate Smartly)" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-8-1.webp" loading="lazy" alt="Rentabilidad histórica del S&amp;P 500 tras picos de aceleración de la deuda de margen" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-</div>
-<p style="font-size:0.72rem;color:var(--text-light);margin-top:-20px;margin-bottom:28px;text-align:center;">La aceleración de la deuda de margen sobre PIB superó el umbral utilizado por Allocate Smartly y se agrupó con los episodios de 2000, 2007 y 2021, aunque sus resultados posteriores fueron muy distintos entre sí.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-8.webp" loading="lazy" alt="Deuda de margen sobre PIB y variación interanual (Allocate Smartly)" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-8.webp', 'La aceleración de la deuda de margen sobre PIB superó el umbral utilizado por Allocate Smartly y se agrupó con los episodios de 2000, 2007 y 2021, aunque sus resultados posteriores fueron muy distintos entre sí.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-8-1.webp" loading="lazy" alt="Rentabilidad histórica del S&amp;P 500 tras picos de aceleración de la deuda de margen" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-8-1.webp', 'La aceleración de la deuda de margen sobre PIB superó el umbral utilizado por Allocate Smartly y se agrupó con los episodios de 2000, 2007 y 2021, aunque sus resultados posteriores fueron muy distintos entre sí.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p style="font-size:0.72rem;color:var(--text-light);margin-top:-14px;margin-bottom:28px;text-align:center;">La aceleración de la deuda de margen sobre PIB superó el umbral utilizado por Allocate Smartly y se agrupó con los episodios de 2000, 2007 y 2021, aunque sus resultados posteriores fueron muy distintos entre sí.</p>
 <p><strong>Nota de mercado: el precio del acceso a la información presidencial</strong></p>
 <p>Fuera del eje principal de la corrección, una noticia más específica mostró cómo la velocidad de acceso a información política puede convertirse en un activo de mercado. Trump Media discutió cobrar hasta 100.000 dólares mensuales por el acceso más rápido a publicaciones de diez cuentas influyentes de Truth Social, con una alternativa de 60.000 dólares mensuales mediante contrato de tres años. El producto Truth API pretende ofrecer a bancos y firmas de trading una ventaja de latencia frente a las notificaciones ordinarias.</p>
 <p>Su relevancia es secundaria para los índices, pero directa para la microestructura de mercado. Las publicaciones presidenciales pueden alterar tarifas, sanciones o política económica y mover precios en segundos; comercializar el acceso anticipado convierte la velocidad de una comunicación pública en una fuente de ingresos privada y en una posible ventaja informativa para operadores de alta frecuencia. La noticia añade además un conflicto potencial entre monetización corporativa, acceso a información con impacto regulatorio y participación económica de la familia presidencial en Trump Media.</p>
@@ -10167,15 +10169,13 @@ const articles = {
 <p>La escalada del fin de semana elevó el riesgo de que esa prima se transformase en un shock físico. Estados Unidos completó una octava noche consecutiva de ataques después de anunciar la muerte de dos militares y la desaparición de un tercero tras una acción iraní. Washington atacó instalaciones costeras, de vigilancia y defensa; Irán respondió contra activos estadounidenses y aliados en Kuwait, Bahréin y Jordania, mientras también aparecieron alertas en Arabia Saudí. El Estrecho de Ormuz, por donde transita aproximadamente una quinta parte del petróleo mundial, volvió al centro de la transmisión macro.</p>
 <p>La ruptura del alto el fuego redujo además la probabilidad de una desescalada rápida. El líder supremo iraní afirmó que los incumplimientos estadounidenses habían demostrado que la firma de Trump carecía de valor, elevando el coste político de un nuevo acuerdo. La credibilidad del marco negociador importa para mercado porque un conflicto sin canal fiable de salida exige una prima más persistente en crudo, seguros marítimos, fletes y activos de la región.</p>
 <p>A esa incertidumbre se añadió un colchón de inventarios limitado. Las publicaciones de Josh Young y Jack Prandelli destacaron que la combinación de reservas comerciales y Reserva Estratégica estadounidense se encuentra en mínimos de varias décadas. La comparación requiere cautela porque la estructura de consumo y producción ha cambiado, pero la capacidad de absorción de un shock es menor sin reasignaciones de cargamentos, liberaciones adicionales o destrucción de demanda.</p>
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:28px 0;align-items:start;">
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-9.webp" loading="lazy" alt="Reservas comerciales de crudo y Reserva Estratégica de Petróleo de Estados Unidos" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-9-1.webp" loading="lazy" alt="Precio del petróleo WTI durante la escalada en el Estrecho de Ormuz" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-</div>
-<p style="font-size:0.72rem;color:var(--text-light);margin-top:-20px;margin-bottom:28px;text-align:center;">La combinación de reservas comerciales y Reserva Estratégica estadounidense se encuentra en mínimos de varias décadas, mientras el crudo acumuló una subida superior al 20% en unas quince sesiones.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-9.webp" loading="lazy" alt="Reservas comerciales de crudo y Reserva Estratégica de Petróleo de Estados Unidos" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-9.webp', 'La combinación de reservas comerciales y Reserva Estratégica estadounidense se encuentra en mínimos de varias décadas, mientras el crudo acumuló una subida superior al 20% en unas quince sesiones.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-9-1.webp" loading="lazy" alt="Precio del petróleo WTI durante la escalada en el Estrecho de Ormuz" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-9-1.webp', 'La combinación de reservas comerciales y Reserva Estratégica estadounidense se encuentra en mínimos de varias décadas, mientras el crudo acumuló una subida superior al 20% en unas quince sesiones.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p style="font-size:0.72rem;color:var(--text-light);margin-top:-14px;margin-bottom:28px;text-align:center;">La combinación de reservas comerciales y Reserva Estratégica estadounidense se encuentra en mínimos de varias décadas, mientras el crudo acumuló una subida superior al 20% en unas quince sesiones.</p>
 <p>Ese shock energético encontró una transmisión corporativa visible en Yara. Los precios del nitrógeno elevaron los márgenes y el EBITDA ajustado aumentó un 39% interanual hasta 906 millones de dólares. Sin embargo, el resultado quedó alrededor de un 20% por debajo de las expectativas porque los agricultores retrasaron compras: las entregas cayeron un 17%, el efecto de volumen y mix restó 240 millones al EBITDA y el flujo de caja operativo descendió a 682 millones desde 878 millones. La combinación refleja márgenes más altos con menor demanda efectiva.</p>
 <p>El trimestre resume una dinámica de margen frente a volumen. La interrupción de oferta puede mejorar temporalmente el precio realizado de un productor, pero también genera inventarios, aplaza demanda y reduce visibilidad. Yara señaló que las compras empezaban a recuperarse en julio, aunque la cuestión abierta es si se trata de un desplazamiento entre trimestres o de destrucción más persistente. Además, la compañía espera costes de gas superiores en 75 millones y 115 millones de dólares en el tercer y cuarto trimestre, respectivamente, reforzando el vínculo entre guerra, fertilizantes y presión alimentaria.</p>
 <hr>
@@ -10185,20 +10185,18 @@ const articles = {
 <p>La resistencia de la demanda, sin embargo, evitó una lectura recesiva. Las ventas minoristas aumentaron un 0,2% y, excluyendo estaciones de servicio, un 0,7%, lo que sugiere que la caída de la gasolina liberó gasto para otras categorías. Las solicitudes iniciales de desempleo descendieron a 208.000 y las continuadas a 1,805 millones. Los grandes bancos describieron una calidad crediticia, gasto y crecimiento de préstamos todavía sólidos, mientras la confianza de Michigan mejoró y las expectativas de inflación a un año bajaron al 4,2%.</p>
 <p>La lectura del mercado laboral no fue completamente limpia. Las solicitudes apuntan a despidos contenidos, pero el empleo ha sido desigual entre sectores y una medida alternativa destacó que el número de personas fuera de la fuerza laboral aumentó en 832.000 durante junio hasta 105,8 millones. El máximo absoluto está influido por el tamaño de la población y no equivale por sí solo a deterioro cíclico, pero introduce una divergencia entre bajas reclamaciones y participación laboral que obliga a mirar más allá de la tasa de paro.</p>
 <p>La vivienda siguió mostrando el efecto de los tipos reales elevados. Las ventas pendientes cayeron un 5,4% mensual, la confianza de los constructores se debilitó y la hipoteca fija a treinta años subió al 6,55%, su nivel más alto desde agosto de 2025. La economía conserva apoyo de consumo, empleo y gasto empresarial, pero la transmisión restrictiva se concentra en los segmentos más dependientes de financiación.</p>
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:28px 0;align-items:start;">
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-6.webp" loading="lazy" alt="Probabilidad de subida de tipos de la Fed en julio 2026" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-  <figure style="margin:0;text-align:center;">
-    <img src="assets/img/recaps/2026-07-19/picture-6-2.webp" loading="lazy" alt="Distribución de probabilidades de tipos de la Fed en diciembre 2026" style="width:100%;border-radius:8px;border:1px solid var(--border);" />
-  </figure>
-</div>
-<p style="font-size:0.72rem;color:var(--text-light);margin-top:-20px;margin-bottom:28px;text-align:center;">El repricing semanal fue dovish: la probabilidad de subida en julio cayó del 35,4% al 13,3%, y la distribución de diciembre se desplazó hacia escenarios de cero o una subida, aunque uno o dos incrementos siguen concentrando la mayor parte de la probabilidad.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-6.webp" loading="lazy" alt="Probabilidad de subida de tipos de la Fed en julio 2026" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-6.webp', 'El repricing semanal fue dovish: la probabilidad de subida en julio cayó del 35,4% al 13,3%, y la distribución de diciembre se desplazó hacia escenarios de cero o una subida, aunque uno o dos incrementos siguen concentrando la mayor parte de la probabilidad.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-07-19/picture-6-2.webp" loading="lazy" alt="Distribución de probabilidades de tipos de la Fed en diciembre 2026" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-6-2.webp', 'El repricing semanal fue dovish: la probabilidad de subida en julio cayó del 35,4% al 13,3%, y la distribución de diciembre se desplazó hacia escenarios de cero o una subida, aunque uno o dos incrementos siguen concentrando la mayor parte de la probabilidad.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p style="font-size:0.72rem;color:var(--text-light);margin-top:-14px;margin-bottom:28px;text-align:center;">El repricing semanal fue dovish: la probabilidad de subida en julio cayó del 35,4% al 13,3%, y la distribución de diciembre se desplazó hacia escenarios de cero o una subida, aunque uno o dos incrementos siguen concentrando la mayor parte de la probabilidad.</p>
 <p><strong>Fed: repricing dovish y condiciones financieras laxas</strong></p>
 <p>El repricing semanal de la Fed fue claramente dovish. El mercado elevó hasta el 86,7% la probabilidad de mantener el rango de fondos federales en el 3,50%-3,75% en julio. Para diciembre, la mayor masa de probabilidad continúa situada entre el 3,75%-4,00% y el 4,00%-4,25%, pero los escenarios de mayor endurecimiento perdieron peso frente a la semana anterior. La subida del petróleo impidió, sin embargo, que el mercado descontase una relajación sostenida.</p>
 <p>La discrepancia se trasladó al horizonte de tipos, no a la reunión inmediata. Edward Jones considera probable que la Fed mantenga los tipos durante el resto del año, mientras el mercado todavía asigna una probabilidad apreciable a una o dos subidas antes de diciembre. La diferencia refleja dos lecturas de la misma combinación: inflación mensual más favorable y actividad resistente por un lado; energía, expectativas todavía elevadas y condiciones financieras laxas por otro.</p>
 <figure style="margin:28px 0;text-align:center;">
-  <img src="assets/img/recaps/2026-07-19/picture-5.webp" loading="lazy" alt="National Financial Conditions Index (NFCI) semana 13-19 julio 2026" style="max-width:100%;border-radius:8px;border:1px solid var(--border);" />
+  <img src="assets/img/recaps/2026-07-19/picture-5.webp" loading="lazy" alt="National Financial Conditions Index (NFCI) semana 13-19 julio 2026" onclick="openImgLightbox('assets/img/recaps/2026-07-19/picture-5.webp', 'El NFCI continuó en terreno claramente negativo y volvió a relajarse, señal de condiciones más laxas que la media histórica pese a la corrección tecnológica y al repunte del petróleo.')" style="max-width:100%;border-radius:8px;border:1px solid var(--border);cursor:zoom-in;" />
   <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El NFCI continuó en terreno claramente negativo y volvió a relajarse, señal de condiciones más laxas que la media histórica pese a la corrección tecnológica y al repunte del petróleo.</figcaption>
 </figure>
 <p>Las condiciones financieras explican por qué unos tipos oficiales elevados no se han transformado en estrés agregado. El NFCI continuó en terreno negativo, los spreads se mantuvieron contenidos, los mercados de capitales funcionaron y el crédito corporativo de alto rendimiento resistió pese a la volatilidad. Esta laxitud sostiene actividad, beneficios y refinanciación, pero también permite que valoraciones, concentración y apalancamiento permanezcan altos. La Fed se enfrenta así a una transmisión incompleta: el precio oficial del dinero es restrictivo, mientras la financiación de mercado sigue ofreciendo apoyo.</p>
