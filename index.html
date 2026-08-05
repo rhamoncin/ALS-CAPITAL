@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALS Investment Journal</title>
+<title>ALS Value Capital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -45,12 +45,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 54px;
+    height: 65px;
   }
 
   .nav-logo {
     font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: white;
     letter-spacing: 0.02em;
@@ -59,12 +59,12 @@
 
   .nav-links {
     display: flex;
-    gap: 36px;
+    gap: 43px;
     list-style: none;
   }
 
   .nav-links a {
-    font-size: 0.72rem;
+    font-size: 0.86rem;
     font-weight: 500;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -679,7 +679,7 @@
   .mobile-menu {
     display: none;
     position: fixed;
-    top: 60px;
+    top: 71px;
     left: 0;
     right: 0;
     background: var(--cream);
@@ -932,8 +932,8 @@
     transform: translateX(-50%);
     background: var(--burgundy);
     border-top: 2px solid rgba(255,255,255,0.15);
-    min-width: 152px;
-    padding: 5px 0;
+    min-width: 182px;
+    padding: 6px 0;
     z-index: 200;
     border-radius: 0 0 8px 8px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.22);
@@ -941,9 +941,9 @@
   .nav-dropdown:hover .nav-dropdown-menu { display: block; }
   .nav-dropdown-menu a {
     display: block;
-    padding: 10px 20px;
+    padding: 12px 24px;
     white-space: nowrap;
-    font-size: 0.7rem;
+    font-size: 0.84rem;
     font-weight: 500;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -1003,7 +1003,7 @@
   .energy-section-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:600; color:var(--text-dark); margin-bottom:3px; }
   .energy-section-sub { font-size:0.76rem; color:var(--text-light); margin-bottom:16px; }
   /* Energy tab bar */
-  .energy-tab-bar { position:sticky; top:54px; z-index:99; background:#4a1220; border-bottom:1px solid rgba(255,255,255,0.1); }
+  .energy-tab-bar { position:sticky; top:65px; z-index:99; background:#4a1220; border-bottom:1px solid rgba(255,255,255,0.1); }
   .energy-tab-bar-inner { max-width:1100px; margin:0 auto; padding:0 48px; display:flex; gap:0; overflow-x:auto; scrollbar-width:none; }
   .energy-tab-bar-inner::-webkit-scrollbar { display:none; }
   .en-tab-btn { display:inline-block; padding:12px 22px; font-size:0.7rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.5); cursor:pointer; border:none; background:none; border-bottom:2px solid transparent; white-space:nowrap; transition:color 0.15s,border-color 0.15s; }
@@ -1013,7 +1013,7 @@
   #page-energy.tabs-ready .energy-section { display:none; }
   #page-energy.tabs-ready .energy-section.en-tab-active { display:block; }
   /* Fundamentals sub-nav */
-  #en-fund-subnav { display:none; position:sticky; top:92px; z-index:98; background:var(--cream); padding:8px 0 7px; }
+  #en-fund-subnav { display:none; position:sticky; top:103px; z-index:98; background:var(--cream); padding:8px 0 7px; }
   #page-energy.fund-nav-active #en-fund-subnav { display:block; }
   #en-fund-subnav-inner { max-width:1100px; margin:0 auto; padding:0 48px; display:flex; align-items:center; overflow-x:auto; scrollbar-width:none; }
   #en-fund-subnav-inner::-webkit-scrollbar { display:none; }
@@ -1153,7 +1153,7 @@
   }
   @media (max-width:700px) { .em-selector { grid-template-columns:1fr; } }
   /* Earnings sector menu (estilo fundamentals sub-nav de energía) */
-  #em-sector-menu { position:sticky; top:54px; z-index:99; background:var(--cream); padding:8px 0 7px; border-bottom:1px solid var(--border); }
+  #em-sector-menu { position:sticky; top:65px; z-index:99; background:var(--cream); padding:8px 0 7px; border-bottom:1px solid var(--border); }
   #em-sector-menu-inner { max-width:1200px; margin:0 auto; padding:0 48px; display:flex; align-items:center; overflow-x:auto; scrollbar-width:none; }
   #em-sector-menu-inner::-webkit-scrollbar { display:none; }
   .em-sm-link { font-size:0.8rem; font-weight:400; color:var(--text-light); cursor:pointer; white-space:nowrap; text-decoration:none; transition:color 0.18s,background 0.18s,border-color 0.18s; padding:3px 9px; border-radius:5px; border:1px solid transparent; }
@@ -1285,7 +1285,7 @@
   #portfolio-tabs {
     display: flex;
     position: sticky;
-    top: 54px;
+    top: 65px;
     left: 0; right: 0;
     background: var(--card-bg);
     border-bottom: 1px solid var(--border);
@@ -1406,13 +1406,16 @@
   }
   #page-home .hp-snap-name {
     font-size: 0.7rem; font-weight: 600; color: var(--hp-ink);
-    margin-bottom: 6px; white-space: nowrap;
+    margin-bottom: 7px; white-space: nowrap;
   }
-  #page-home .hp-snap-val {
-    font-size: 1.35rem; font-weight: 500; color: var(--hp-ink);
+  #page-home .hp-snap-src { font-weight: 400; color: var(--hp-ink-soft); }
+  #page-home .hp-snap-chg {
+    font-size: 1.35rem; font-weight: 500;
     line-height: 1.15; margin-bottom: 3px;
   }
-  #page-home .hp-snap-chg { font-size: 0.76rem; font-weight: 600; margin-bottom: 8px; }
+  #page-home .hp-snap-chg.hp-na {
+    font-size: 0.78rem; font-weight: 400; color: #B0A99E; padding: 8px 0;
+  }
   #page-home .hp-snap-proxy {
     font-size: 0.58rem; color: var(--hp-ink-soft); letter-spacing: 0.04em;
     text-transform: uppercase; margin-bottom: 6px;
@@ -1589,7 +1592,7 @@
   }
 </script>
 <nav>
-  <div class="nav-logo" onclick="showPage('home');closeMobileMenu()">ALS Investment Journal</div>
+  <div class="nav-logo" onclick="showPage('home');closeMobileMenu()">ALS Value Capital</div>
   <ul class="nav-links">
     <li><a onclick="showPage('home')" id="nav-home" class="active">Inicio</a></li>
     <li><a onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');" id="nav-portfolio">Portfolio</a></li>
@@ -1629,8 +1632,8 @@
   <div class="hp-wrap">
     <div class="hp-hero">
       <div>
-        <h1>ALS Value Capital</h1>
-        <div class="hp-hero-sub">Un espacio personal para seguir mercados, macroeconom&iacute;a, empresas y carteras.</div>
+        <h1>Mercados, macro e ideas de inversi&oacute;n</h1>
+        <div class="hp-hero-sub">Un espacio personal para reunir datos, an&aacute;lisis y seguimiento de carteras en un solo lugar.</div>
         <div class="hp-hero-btns">
           <button class="hp-btn hp-btn-primary" id="hp-hero-cta" onclick="HP.openLatest()">Ver &uacute;ltimo recap</button>
           <button class="hp-btn hp-btn-ghost" onclick="HP.goDashboards()">Explorar dashboards</button>
@@ -1675,7 +1678,7 @@
     </div>
     <div class="hp-dash-grid">
 
-      <div class="hp-card hp-dash" onclick="showPage('macro')">
+      <div class="hp-card hp-dash" onclick="HP.nav(function(){ showPage('macro'); })">
         <div class="hp-dash-top">
           <div class="hp-dash-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg></div>
           <div>
@@ -1687,7 +1690,7 @@
         <div class="hp-dash-link">Abrir dashboard <span>&rarr;</span></div>
       </div>
 
-      <div class="hp-card hp-dash" onclick="openMacroDetail()">
+      <div class="hp-card hp-dash" onclick="HP.nav(function(){ openMacroDetail(); })">
         <div class="hp-dash-top">
           <div class="hp-dash-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
           <div>
@@ -1699,7 +1702,7 @@
         <div class="hp-dash-link">Abrir dashboard <span>&rarr;</span></div>
       </div>
 
-      <div class="hp-card hp-dash" onclick="showPage('energy')">
+      <div class="hp-card hp-dash" onclick="HP.nav(function(){ showPage('energy'); })">
         <div class="hp-dash-top">
           <div class="hp-dash-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3s6 6.2 6 10.2A6 6 0 0 1 6 13.2C6 9.2 12 3 12 3z"/></svg></div>
           <div>
@@ -1711,7 +1714,7 @@
         <div class="hp-dash-link">Abrir dashboard <span>&rarr;</span></div>
       </div>
 
-      <div class="hp-card hp-dash" onclick="showPage('earnings')">
+      <div class="hp-card hp-dash" onclick="HP.nav(function(){ showPage('earnings'); })">
         <div class="hp-dash-top">
           <div class="hp-dash-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
           <div>
@@ -1732,7 +1735,7 @@
       <div>
         <div class="hp-block-head">
           <div class="hp-h2">Ideas de inversi&oacute;n</div>
-          <a class="hp-more" onclick="showPage('watchlist')">Ver todas las ideas <span>&rarr;</span></a>
+          <a class="hp-more" onclick="HP.nav(function(){ showPage('watchlist'); })">Ver todas las ideas <span>&rarr;</span></a>
         </div>
         <div class="hp-card hp-idea" id="hp-idea"></div>
       </div>
@@ -1741,7 +1744,7 @@
         <div class="hp-card" style="overflow:hidden;">
           <div id="hp-pf-rows"></div>
           <div class="hp-pf-foot">
-            <a class="hp-more" onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');">Ver portfolios <span>&rarr;</span></a>
+            <a class="hp-more" onclick="HP.nav(function(){ showPage('portfolio'); closeCompany(); switchPortfolioTab('als'); })">Ver portfolios <span>&rarr;</span></a>
           </div>
         </div>
       </div>
@@ -1756,9 +1759,9 @@
         Solo fines informativos. No constituye asesoramiento financiero.
       </div>
       <div class="hp-close-links">
-        <a onclick="showPage('articles')">Art&iacute;culos</a>
-        <a onclick="showPage('watchlist')">Watchlist</a>
-        <a onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');">Portfolios</a>
+        <a onclick="HP.nav(function(){ showPage('articles'); })">Art&iacute;culos</a>
+        <a onclick="HP.nav(function(){ showPage('watchlist'); })">Watchlist</a>
+        <a onclick="HP.nav(function(){ showPage('portfolio'); closeCompany(); switchPortfolioTab('als'); })">Portfolios</a>
         <span class="hp-meta" id="hp-close-date"></span>
       </div>
     </div>
@@ -2244,7 +2247,7 @@
       </table>
     </div>
 
-    <div style="position:sticky;top:54px;z-index:20;background:var(--cream);padding:8px 0;margin:0 -48px;padding-left:48px;padding-right:48px;border-bottom:1px solid var(--border);">
+    <div style="position:sticky;top:65px;z-index:20;background:var(--cream);padding:8px 0;margin:0 -48px;padding-left:48px;padding-right:48px;border-bottom:1px solid var(--border);">
       <div id="macro-nav-btns" style="display:flex;gap:8px;overflow-x:auto;white-space:nowrap;">
         <button class="mag7-btn active" onclick="scrollToMacroSection('macro-summary', this)">Resumen</button>
         <button class="mag7-btn" onclick="scrollToMacroSection('macro-growth', this)">Growth</button>
@@ -5332,7 +5335,7 @@
 </div><!-- /page-earnings -->
 
 <footer>
-  <span class="footer-logo">ALS Investment Journal</span>
+  <span class="footer-logo">ALS Value Capital</span>
   <span>Actualizado: 29 Mayo 2026 · Solo fines informativos</span>
 </footer>
 
@@ -14980,12 +14983,15 @@ const HP = (function () {
     let fechaMax = null;
     const celdas = SNAPSHOT.map(cfg => {
 
+      // Nombre del activo + fuente de la serie entre parentesis
+      const titulo = esc(cfg.nombre) +
+        (cfg.proxy ? ' <span class="hp-snap-src">(' + esc(cfg.proxy) + ')</span>' : '');
+
       // Dato provisional declarado (no hay serie en el proyecto)
       if (cfg.sinSerie) {
         const pos = cfg.varProvisional >= 0;
         return '<div class="hp-snap-cell" data-placeholder="true">' +
-          '<div class="hp-snap-name">' + esc(cfg.nombre) + '</div>' +
-          '<div class="hp-snap-val">' + num(cfg.valorProvisional, cfg.dec) + '</div>' +
+          '<div class="hp-snap-name">' + titulo + '</div>' +
           '<div class="hp-snap-chg ' + (pos ? 'hp-pos' : 'hp-neg') + '">' + signed(cfg.varProvisional, 2, '%') + '</div>' +
           '<div class="hp-snap-proxy">provisional</div>' +
           '<div class="hp-snap-nodata">Serie no disponible</div>' +
@@ -14997,9 +15003,8 @@ const HP = (function () {
 
       if (!p) {
         return '<div class="hp-snap-cell">' +
-          '<div class="hp-snap-name">' + esc(cfg.nombre) + '</div>' +
-          '<div class="hp-snap-val" style="color:#B0A99E;">&mdash;</div>' +
-          '<div class="hp-snap-chg" style="color:#B0A99E;">Dato no disponible</div>' +
+          '<div class="hp-snap-name">' + titulo + '</div>' +
+          '<div class="hp-snap-chg hp-na">Dato no disponible</div>' +
           '<div class="hp-snap-proxy">&nbsp;</div>' +
           '<div class="hp-snap-nodata">Serie no disponible</div>' +
         '</div>';
@@ -15010,13 +15015,11 @@ const HP = (function () {
       const variacion = cfg.enPuntos ? p.diff : p.pct;
       const pos = variacion >= 0;
       const textoVar = cfg.enPuntos ? signed(variacion, 2, ' pp') : signed(variacion, 2, '%');
-      const valor = num(p.last, cfg.dec) + (cfg.unidad || '');
 
       return '<div class="hp-snap-cell">' +
-        '<div class="hp-snap-name">' + esc(cfg.nombre) + '</div>' +
-        '<div class="hp-snap-val">' + valor + '</div>' +
+        '<div class="hp-snap-name">' + titulo + '</div>' +
         '<div class="hp-snap-chg ' + (pos ? 'hp-pos' : 'hp-neg') + '">' + textoVar + '</div>' +
-        '<div class="hp-snap-proxy">' + esc(cfg.proxy) + ' &middot; ' + fmtISO(p.lastDate) + '</div>' +
+        '<div class="hp-snap-proxy">' + fmtISO(p.lastDate) + '</div>' +
         '<div class="hp-snap-spark">' + sparkline(p.values, pos ? POS : NEG, 100, 42) + '</div>' +
       '</div>';
     });
@@ -15121,7 +15124,7 @@ const HP = (function () {
           '</div>' +
         '</div>').join('');
       rec.innerHTML = (items || '<div style="font-size:0.8rem;color:#B0A99E;padding:8px 0;">Sin análisis anteriores.</div>') +
-        '<a class="hp-more" style="margin-top:14px;" onclick="showPage(\'articles\')">Ver todos los análisis <span>&rarr;</span></a>';
+        '<a class="hp-more" style="margin-top:14px;" onclick="HP.nav(function(){ showPage(\'articles\'); })">Ver todos los análisis <span>&rarr;</span></a>';
     }
   }
 
@@ -15178,7 +15181,7 @@ const HP = (function () {
         '<div class="hp-idea-name">' + esc(w.name) + '</div>' +
         '<div class="hp-idea-sub">' + esc(w.ticker) + ' &middot; ' + esc(w.sector || '') + '</div>' +
         '<div class="hp-idea-desc">' + esc(txt) + '</div>' +
-        '<a class="hp-more" onclick="showPage(\'watchlist\');openWatchlistCompany(\'' + esc(w.ticker) + '\')">Abrir análisis completo <span>&rarr;</span></a>' +
+        '<a class="hp-more" onclick="HP.nav(function(){ showPage(\'watchlist\'); openWatchlistCompany(\'' + esc(w.ticker) + '\'); })">Abrir análisis completo <span>&rarr;</span></a>' +
       '</div>';
   }
 
@@ -15222,7 +15225,7 @@ const HP = (function () {
         etiqueta = '';
         fecha = '';
       }
-      return '<div class="hp-pf-row" onclick="showPage(\'portfolio\');closeCompany();switchPortfolioTab(\'' + f.tab + '\');">' +
+      return '<div class="hp-pf-row" onclick="HP.nav(function(){ showPage(\'portfolio\'); closeCompany(); switchPortfolioTab(\'' + f.tab + '\'); })">' +
         '<div><div class="hp-pf-name">' + f.nombre + '</div>' +
         '<div class="hp-pf-date">' + fecha + '</div></div>' +
         '<div><div class="hp-pf-val ' + clase + '" ' + (clase ? '' : 'style="font-size:0.78rem;color:#B0A99E;font-weight:400;"') + '>' + valor + '</div>' +
@@ -15241,6 +15244,16 @@ const HP = (function () {
   function goDashboards() {
     const el = document.getElementById('hp-dashboards');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /* Navegacion desde Inicio: ejecuta el destino existente y coloca la
+     pagina de destino arriba del todo. showPage() es compartida y no se
+     modifica; el reposicionamiento se hace aqui, solo para Inicio.     */
+  function nav(accion) {
+    try { accion(); } catch (e) { console.error('[HP] Error de navegación:', e); }
+    window.scrollTo(0, 0);
+    if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
+    requestAnimationFrame(function () { window.scrollTo(0, 0); });
   }
 
   // ---------- init ----------
@@ -15262,7 +15275,7 @@ const HP = (function () {
     }
   }
 
-  return { init: init, openLatest: openLatest, goDashboards: goDashboards };
+  return { init: init, openLatest: openLatest, goDashboards: goDashboards, nav: nav };
 })();
 
 HP.init();
