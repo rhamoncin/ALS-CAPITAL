@@ -1365,7 +1365,7 @@
   #page-home .hp-hero {
     display: grid; grid-template-columns: 1fr 1.12fr;
     gap: 48px; align-items: center;
-    padding: 46px 0 40px;
+    padding: 30px 0 26px;
   }
   #page-home .hp-hero h1 {
     font-family: 'Playfair Display', serif;
@@ -1389,41 +1389,45 @@
   }
   #page-home .hp-btn-ghost:hover { border-color: var(--hp-burgundy); color: var(--hp-burgundy); }
   #page-home .hp-hero-img {
-    width: 100%; height: 290px; object-fit: cover; object-position: center 62%;
+    width: 100%; height: 240px; object-fit: cover; object-position: center 62%;
     border-radius: 12px; display: block;
     box-shadow: 0 2px 18px rgba(107,39,55,0.10);
   }
 
   /* ---- B. SNAPSHOT ---- */
+  /* Snapshot compactado ~20% en vertical para que el bloque de
+     analisis suba y no quede cortado al entrar en la pagina.     */
+  #page-home .hp-snap-card { padding: 12px 0 0; }
+  #page-home .hp-snap-card .hp-block-head { margin-bottom: 9px; padding: 0 18px; }
   #page-home .hp-snap-grid {
     display: grid; grid-template-columns: repeat(6, 1fr);
-    gap: 10px; padding: 0 18px 14px;
+    gap: 9px; padding: 0 18px 11px;
   }
   #page-home .hp-snap-cell {
-    padding: 12px 13px 10px;
+    padding: 9px 12px 7px;
     border: 1px solid var(--hp-line);
     border-radius: 9px;
   }
   #page-home .hp-snap-name {
-    font-size: 0.7rem; font-weight: 600; color: var(--hp-ink);
-    margin-bottom: 7px; white-space: nowrap;
+    font-size: 0.68rem; font-weight: 600; color: var(--hp-ink);
+    margin-bottom: 4px; white-space: nowrap;
   }
   #page-home .hp-snap-src { font-weight: 400; color: var(--hp-ink-soft); }
   #page-home .hp-snap-chg {
-    font-size: 1.35rem; font-weight: 500;
-    line-height: 1.15; margin-bottom: 3px;
+    font-size: 1.12rem; font-weight: 500;
+    line-height: 1.15; margin-bottom: 2px;
   }
   #page-home .hp-snap-chg.hp-na {
-    font-size: 0.78rem; font-weight: 400; color: #B0A99E; padding: 8px 0;
+    font-size: 0.75rem; font-weight: 400; color: #B0A99E; padding: 6px 0;
   }
   #page-home .hp-snap-proxy {
-    font-size: 0.58rem; color: var(--hp-ink-soft); letter-spacing: 0.04em;
-    text-transform: uppercase; margin-bottom: 6px;
+    font-size: 0.56rem; color: var(--hp-ink-soft); letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 4px;
   }
-  #page-home .hp-snap-spark { height: 42px; }
+  #page-home .hp-snap-spark { height: 34px; }
   #page-home .hp-snap-nodata {
-    height: 42px; display: flex; align-items: center;
-    font-size: 0.65rem; font-style: italic; color: #B0A99E;
+    height: 34px; display: flex; align-items: center;
+    font-size: 0.63rem; font-style: italic; color: #B0A99E;
   }
   #page-home .hp-pos { color: var(--hp-pos); }
   #page-home .hp-neg { color: var(--hp-neg); }
@@ -1647,8 +1651,8 @@
 
   <!-- B. SNAPSHOT DE MERCADO -->
   <div class="hp-wrap hp-block">
-    <div class="hp-card" style="padding:16px 0 0;">
-      <div class="hp-block-head" style="padding:0 18px;">
+    <div class="hp-card hp-snap-card">
+      <div class="hp-block-head">
         <div class="hp-h2">Snapshot de mercado</div>
         <div class="hp-meta" id="hp-snap-date">&nbsp;</div>
       </div>
