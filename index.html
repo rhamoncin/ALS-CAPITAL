@@ -1317,6 +1317,259 @@
     border-color: var(--burgundy);
     color: var(--burgundy);
   }
+  /* =========================================================
+     HOME REDESIGN — estilos EXCLUSIVOS de la pagina de Inicio
+     Todo bajo #page-home y con prefijo .hp-  · Solo escritorio
+     ========================================================= */
+  #page-home {
+    --hp-burgundy: #6B2737;
+    --hp-burgundy-dark: #5A1F2D;
+    --hp-burgundy-soft: #F3E9EB;
+    --hp-pos: #2A7A3B;
+    --hp-neg: #C0392B;
+    --hp-line: #E4DCD2;
+    --hp-line-soft: #EFE9E1;
+    --hp-ink: #1C1C1C;
+    --hp-ink-mid: #4A4A4A;
+    --hp-ink-soft: #8A8378;
+    background: var(--cream);
+    padding-bottom: 8px;
+  }
+  #page-home .hp-wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+  #page-home .hp-card {
+    background: #fff;
+    border: 1px solid var(--hp-line);
+    border-radius: 12px;
+  }
+  #page-home .hp-block { margin-bottom: 18px; }
+  #page-home .hp-block-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; margin-bottom: 14px;
+  }
+  #page-home .hp-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.18rem; font-weight: 600; color: var(--hp-ink);
+    letter-spacing: 0.005em;
+  }
+  #page-home .hp-meta { font-size: 0.73rem; color: var(--hp-ink-soft); }
+  #page-home .hp-more {
+    font-size: 0.75rem; font-weight: 500; color: var(--hp-burgundy);
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  #page-home .hp-more:hover { opacity: 0.65; }
+  #page-home .hp-more span { transition: transform 0.15s; display: inline-block; }
+  #page-home .hp-more:hover span { transform: translateX(3px); }
+
+  /* ---- A. HERO ---- */
+  #page-home .hp-hero {
+    display: grid; grid-template-columns: 1fr 1.12fr;
+    gap: 48px; align-items: center;
+    padding: 46px 0 40px;
+  }
+  #page-home .hp-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.9rem; line-height: 1.1; font-weight: 700;
+    color: var(--hp-ink); letter-spacing: -0.015em; margin-bottom: 16px;
+  }
+  #page-home .hp-hero-sub {
+    font-size: 0.95rem; line-height: 1.65; color: var(--hp-ink-mid);
+    max-width: 30em; margin-bottom: 28px;
+  }
+  #page-home .hp-hero-btns { display: flex; gap: 12px; }
+  #page-home .hp-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500;
+    padding: 13px 26px; border-radius: 7px; cursor: pointer;
+    border: 1px solid transparent; transition: all 0.18s; white-space: nowrap;
+  }
+  #page-home .hp-btn-primary { background: var(--hp-burgundy); color: #fff; }
+  #page-home .hp-btn-primary:hover { background: var(--hp-burgundy-dark); }
+  #page-home .hp-btn-ghost {
+    background: #fff; color: var(--hp-ink); border-color: var(--hp-line);
+  }
+  #page-home .hp-btn-ghost:hover { border-color: var(--hp-burgundy); color: var(--hp-burgundy); }
+  #page-home .hp-hero-img {
+    width: 100%; height: 290px; object-fit: cover; object-position: center 62%;
+    border-radius: 12px; display: block;
+    box-shadow: 0 2px 18px rgba(107,39,55,0.10);
+  }
+
+  /* ---- B. SNAPSHOT ---- */
+  #page-home .hp-snap-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: 10px; padding: 0 18px 14px;
+  }
+  #page-home .hp-snap-cell {
+    padding: 12px 13px 10px;
+    border: 1px solid var(--hp-line);
+    border-radius: 9px;
+  }
+  #page-home .hp-snap-name {
+    font-size: 0.7rem; font-weight: 600; color: var(--hp-ink);
+    margin-bottom: 6px; white-space: nowrap;
+  }
+  #page-home .hp-snap-val {
+    font-size: 1.35rem; font-weight: 500; color: var(--hp-ink);
+    line-height: 1.15; margin-bottom: 3px;
+  }
+  #page-home .hp-snap-chg { font-size: 0.76rem; font-weight: 600; margin-bottom: 8px; }
+  #page-home .hp-snap-proxy {
+    font-size: 0.58rem; color: var(--hp-ink-soft); letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  #page-home .hp-snap-spark { height: 42px; }
+  #page-home .hp-snap-nodata {
+    height: 42px; display: flex; align-items: center;
+    font-size: 0.65rem; font-style: italic; color: #B0A99E;
+  }
+  #page-home .hp-pos { color: var(--hp-pos); }
+  #page-home .hp-neg { color: var(--hp-neg); }
+
+  /* ---- C. ULTIMO ANALISIS ---- */
+  #page-home .hp-analysis { display: grid; grid-template-columns: 1.95fr 1fr; gap: 16px; }
+  #page-home .hp-feature { display: grid; grid-template-columns: 400px 1fr; overflow: hidden; }
+  #page-home .hp-feature-media { position: relative; background: #2A2622; }
+  #page-home .hp-feature-media img {
+    width: 100%; height: 100%; min-height: 215px; object-fit: cover; display: block;
+  }
+  #page-home .hp-feature-scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(20,14,16,0.05) 0%, rgba(20,14,16,0.30) 42%, rgba(45,12,20,0.82) 100%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 18px 20px;
+  }
+  #page-home .hp-feature-badge {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.28);
+    color: #fff; font-size: 0.58rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 9px; border-radius: 4px; margin-bottom: 10px;
+    backdrop-filter: blur(2px);
+  }
+  #page-home .hp-feature-otitle {
+    font-family: 'Playfair Display', serif; color: #fff;
+    font-size: 1.02rem; font-weight: 600; line-height: 1.3;
+    text-shadow: 0 1px 10px rgba(0,0,0,0.45);
+  }
+  #page-home .hp-feature-odate {
+    color: rgba(255,255,255,0.72); font-size: 0.7rem; margin-top: 5px;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.45);
+  }
+  #page-home .hp-feature-body {
+    padding: 22px 26px; display: flex; flex-direction: column; justify-content: center;
+  }
+  #page-home .hp-tag {
+    align-self: flex-start; background: var(--hp-burgundy-soft);
+    color: var(--hp-burgundy); font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 9px; border-radius: 4px; margin-bottom: 12px;
+  }
+  #page-home .hp-feature-title {
+    font-family: 'Playfair Display', serif; font-size: 1.3rem;
+    font-weight: 700; color: var(--hp-ink); line-height: 1.25; margin-bottom: 10px;
+  }
+  #page-home .hp-feature-excerpt {
+    font-size: 0.83rem; line-height: 1.65; color: var(--hp-ink-mid); margin-bottom: 16px;
+  }
+  #page-home .hp-recent { padding: 18px 20px; display: flex; flex-direction: column; }
+  #page-home .hp-recent-item {
+    display: flex; gap: 11px; padding: 11px 0;
+    border-bottom: 1px solid var(--hp-line-soft); cursor: pointer;
+  }
+  #page-home .hp-recent-item:last-of-type { border-bottom: none; }
+  #page-home .hp-recent-item:hover .hp-recent-title { color: var(--hp-burgundy); }
+  #page-home .hp-recent-icon { flex-shrink: 0; color: var(--hp-burgundy); margin-top: 2px; }
+  #page-home .hp-recent-kind {
+    font-size: 0.63rem; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--hp-burgundy); margin-bottom: 3px;
+  }
+  #page-home .hp-recent-title {
+    font-size: 0.78rem; font-weight: 500; color: var(--hp-ink);
+    line-height: 1.35; transition: color 0.15s;
+  }
+  #page-home .hp-recent-date { font-size: 0.68rem; color: var(--hp-ink-soft); margin-top: 3px; }
+
+  /* ---- D. DASHBOARDS ---- */
+  #page-home .hp-dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  #page-home .hp-dash {
+    padding: 18px 20px 16px; cursor: pointer;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    display: flex; flex-direction: column;
+  }
+  #page-home .hp-dash:hover {
+    border-color: rgba(107,39,55,0.32);
+    box-shadow: 0 3px 16px rgba(107,39,55,0.09);
+  }
+  #page-home .hp-dash-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  #page-home .hp-dash-icon {
+    flex-shrink: 0; width: 38px; height: 38px; border-radius: 9px;
+    background: var(--hp-burgundy); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #page-home .hp-dash-title {
+    font-size: 0.92rem; font-weight: 600; color: var(--hp-ink); margin-bottom: 5px;
+  }
+  #page-home .hp-dash-desc { font-size: 0.72rem; line-height: 1.5; color: var(--hp-ink-mid); }
+  #page-home .hp-dash-viz { height: 46px; margin-bottom: 14px; }
+  #page-home .hp-dash-link {
+    margin-top: auto; font-size: 0.73rem; font-weight: 500; color: var(--hp-burgundy);
+  }
+  #page-home .hp-dash:hover .hp-dash-link span { transform: translateX(3px); }
+  #page-home .hp-dash-link span { display: inline-block; transition: transform 0.15s; }
+
+  /* ---- E + F. IDEAS / PORTFOLIOS ---- */
+  #page-home .hp-bottom { display: grid; grid-template-columns: 1fr 1.05fr; gap: 16px; }
+  #page-home .hp-idea { display: grid; grid-template-columns: 168px 1fr; gap: 18px; padding: 18px 20px; }
+  #page-home .hp-idea-tile {
+    border-radius: 9px; background: linear-gradient(150deg, #7A2E40 0%, #55202E 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #fff; min-height: 108px; padding: 12px;
+  }
+  #page-home .hp-idea-mono {
+    font-family: 'Playfair Display', serif; font-size: 1.75rem;
+    font-weight: 700; letter-spacing: 0.04em; line-height: 1;
+  }
+  #page-home .hp-idea-monosub {
+    font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); margin-top: 8px;
+  }
+  #page-home .hp-idea-name {
+    font-size: 0.92rem; font-weight: 600; color: var(--hp-ink); margin-bottom: 2px;
+  }
+  #page-home .hp-idea-sub {
+    font-size: 0.68rem; color: var(--hp-ink-soft); margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+  #page-home .hp-idea-desc {
+    font-size: 0.76rem; line-height: 1.6; color: var(--hp-ink-mid); margin-bottom: 12px;
+  }
+  #page-home .hp-pf-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; padding: 15px 20px;
+    border-bottom: 1px solid var(--hp-line-soft); cursor: pointer;
+    transition: background 0.15s;
+  }
+  #page-home .hp-pf-row:hover { background: #FBF8F5; }
+  #page-home .hp-pf-name { font-size: 0.88rem; font-weight: 600; color: var(--hp-ink); }
+  #page-home .hp-pf-date { font-size: 0.68rem; color: var(--hp-ink-soft); margin-top: 3px; }
+  #page-home .hp-pf-val { font-size: 1.05rem; font-weight: 600; text-align: right; }
+  #page-home .hp-pf-lbl {
+    font-size: 0.6rem; color: var(--hp-ink-soft); text-align: right;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px;
+  }
+  #page-home .hp-pf-foot { padding: 13px 20px; }
+
+  /* ---- H. CIERRE ---- */
+  #page-home .hp-close {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; padding: 18px 20px; margin: 4px 0 10px;
+  }
+  #page-home .hp-close-txt { font-size: 0.72rem; line-height: 1.7; color: var(--hp-ink-soft); }
+  #page-home .hp-close-links { display: flex; gap: 22px; }
+  #page-home .hp-close-links a {
+    font-size: 0.73rem; color: var(--hp-ink-mid); text-decoration: none; cursor: pointer;
+  }
+  #page-home .hp-close-links a:hover { color: var(--hp-burgundy); }
   </style>
 </head>
 <body>
@@ -1372,146 +1625,142 @@
 <!-- ===================== HOME ===================== -->
 <div id="page-home" class="page active">
 
-  <!-- HERO -->
-  <div style="background:#6B1C2E;padding:30px 48px 27px;">
-    <div style="max-width:1100px;margin:0 auto;">
-      <div style="font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.32);margin-bottom:12px;">VALUE INVESTING &middot; SMALL &amp; MID CAPS GLOBALES</div>
-      <div style="font-size:1.75rem;font-weight:500;color:#fff;margin-bottom:6px;letter-spacing:-0.01em;">ALS Investment Journal</div>
-      <div style="font-size:0.94rem;color:rgba(255,255,255,0.7);margin-bottom:6px;">Inversi&oacute;n en valor. Small &amp; mid caps globales.</div>
-      <div style="font-size:0.69rem;color:rgba(255,255,255,0.5);line-height:1.7;">Carteras, mercados, macro y an&aacute;lisis de empresas. Actualizado semanalmente.</div>
-    </div>
-  </div>
-
-  <!-- MACRO STRIP -->
-  <div style="max-width:1100px;margin:0 auto;padding:24px 48px 0;">
-    <div style="display:grid;grid-template-columns:repeat(7,1fr);background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:8px;overflow:hidden;">
-      <div style="padding:14px 16px;border-right:0.5px solid rgba(0,0,0,0.08);cursor:pointer;" onclick="openMacroIndicator({label:'GDP Growth',zone:'USA',unit:'B$',fredKey:'GDP Growth',desc:'PIB real USA',isGDP:true})">
-        <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:#9A9A9A;margin-bottom:5px;">GDP Growth</div>
-        <div style="font-size:1.1rem;font-weight:500;color:#1C1C1C;">0.49%</div>
-      </div>
-      <div style="padding:14px 16px;border-right:0.5px solid rgba(0,0,0,0.08);cursor:pointer;" onclick="openMacroIndicator({label:'PMI Manufacturing USA',zone:'USA',unit:'',desc:'ISM Manufacturing PMI'})">
-        <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:#9A9A9A;margin-bottom:5px;">PMI Manuf.</div>
-        <div style="font-size:1.1rem;font-weight:500;color:#1C1C1C;">52.6</div>
-      </div>
-      <div style="padding:14px 16px;border-right:0.5px solid rgba(0,0,0,0.08);cursor:pointer;" onclick="openMacroIndicator({label:'PMI Services USA',zone:'USA',unit:'',desc:'ISM Services PMI'})">
-        <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:#9A9A9A;margin-bottom:5px;">PMI Services</div>
-        <div style="font-size:1.1rem;font-weight:500;color:#1C1C1C;">53.6</div>
-      </div>
-      <div style="padding:14px 16px;border-right:0.5px solid rgba(0,0,0,0.08);cursor:pointer;" onclick="openMacroIndicator({label:'Core CPI YoY',zone:'USA',unit:'%',fredKey:'Core CPI YoY',desc:'Inflaci&oacute;n subyacente USA'})">
-        <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:#9A9A9A;margin-bottom:5px;">Core CPI YoY</div>
-        <div style="font-size:1.1rem;font-weight:500;color:#1C1C1C;">3.20%</div>
-      </div>
-      <div style="padding:14px 16px;border-right:0.5px solid rgba(0,0,0,0.08);cursor:pointer;" onclick="openMacroIndicator({label:'US 10Y Yield',zone:'USA',unit:'%',fredKey:'US 10Y Yield',desc:'Bono tesoro 10 a&ntilde;os'})">
-        <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:#9A9A9A;margin-bottom:5px;">US 10Y</div>
-        <div style="font-size:1.1rem;font-weight:500;color:#1C1C1C;">4.38%</div>
-      </div>
-      <div style="padding:14px 16px;border-right:0.5px solid rgba(0,0,0,0.08);cursor:pointer;" onclick="openMacroIndicator({label:'HY Spread',zone:'USA',unit:'%',fredKey:'HY Spread',desc:'High Yield OAS spread'})">
-        <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:#9A9A9A;margin-bottom:5px;">HY Spread</div>
-        <div style="font-size:1.1rem;font-weight:500;color:#1C1C1C;">2.76%</div>
-      </div>
-      <div style="padding:14px 16px;cursor:pointer;" onclick="openMacroIndicator({label:'VIX',zone:'Global',unit:'',desc:'CBOE Volatility Index'})">
-        <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:#9A9A9A;margin-bottom:5px;">VIX</div>
-        <div style="font-size:1.1rem;font-weight:500;color:#1C1C1C;">18.4</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INDICES GLOBALES -->
-  <div class="section" style="padding-top:18px;padding-bottom:8px;">
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
-      <span style="font-size:1.125rem;font-weight:500;color:var(--text-dark);white-space:nowrap;">&#205;ndices globales</span>
-      <div style="flex:1;height:1px;background:var(--border);"></div>
-      <span style="font-size:0.81rem;letter-spacing:0.06em;text-transform:uppercase;color:#9A9A9A;white-space:nowrap;">YTD 2026</span>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;" id="indices-grid">
-      <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:0.35rem 0.9rem;"><div style="font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:#9A9A9A;margin-bottom:3px;">S&amp;P 500</div><div style="font-size:1.25rem;font-weight:500;color:#9A9A9A;margin-bottom:2px;">&#8230;</div><div style="font-size:0.56rem;color:#9A9A9A;">desde 01/01/2026</div></div>
-      <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:0.35rem 0.9rem;"><div style="font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:#9A9A9A;margin-bottom:3px;">Russell 2000</div><div style="font-size:1.25rem;font-weight:500;color:#9A9A9A;margin-bottom:2px;">&#8230;</div><div style="font-size:0.56rem;color:#9A9A9A;">desde 01/01/2026</div></div>
-      <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:0.35rem 0.9rem;"><div style="font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:#9A9A9A;margin-bottom:3px;">MSCI World</div><div style="font-size:1.25rem;font-weight:500;color:#9A9A9A;margin-bottom:2px;">&#8230;</div><div style="font-size:0.56rem;color:#9A9A9A;">desde 01/01/2026</div></div>
-      <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:10px;padding:0.35rem 0.9rem;"><div style="font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:#9A9A9A;margin-bottom:3px;">Euro Stoxx 50</div><div style="font-size:1.25rem;font-weight:500;color:#9A9A9A;margin-bottom:2px;">&#8230;</div><div style="font-size:0.56rem;color:#9A9A9A;">desde 01/01/2026</div></div>
-    </div>
-  </div>
-
-  <!-- MERCADOS CHART -->
-  <div class="section" style="padding-top:14px;">
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
-      <span style="font-size:1.125rem;font-weight:500;color:var(--text-dark);white-space:nowrap;">Mercados</span>
-      <div style="flex:1;height:1px;background:var(--border);"></div>
-    </div>
-    <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:20px 24px;">
-      <div style="display:flex;gap:4px;margin-bottom:20px;border-bottom:1.5px solid var(--border);">
-        <button class="home-mktab active" onclick="showHomeMkTab('indices',this)">&#205;ndices</button>
-        <button class="home-mktab" onclick="showHomeMkTab('factores',this)">Factores</button>
-        <button class="home-mktab" onclick="showHomeMkTab('sectores',this)">Sectores USA</button>
-        <button class="home-mktab" onclick="showHomeMkTab('commodities',this)">Commodities</button>
-        <button class="home-mktab mktab-comparador" onclick="showHomeMkTab('comparador',this)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:5px;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>Comparador</button>
-      </div>
-      <div id="home-mkt-indices" class="home-mkt-panel"></div>
-      <div id="home-mkt-factores" class="home-mkt-panel" style="display:none"></div>
-      <div id="home-mkt-sectores" class="home-mkt-panel" style="display:none"></div>
-      <div id="home-mkt-commodities" class="home-mkt-panel" style="display:none"></div>
-      <div id="home-mkt-comparador" class="home-mkt-panel" style="display:none"></div>
-    </div>
-  </div>
-
-  <!-- MAGNIFICENT 7 -->
-  <div class="section" style="padding-top:28px;">
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-      <span style="font-size:1.125rem;font-weight:500;color:var(--text-dark);white-space:nowrap;">Magnificent 7</span>
-      <div style="flex:1;height:1px;background:var(--border);"></div>
-      <span id="mag7-period-label" style="font-size:0.81rem;letter-spacing:0.06em;text-transform:uppercase;color:#9A9A9A;white-space:nowrap;">YTD 2026</span>
-    </div>
-    <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:20px 24px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
-        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
-          <span style="font-size:0.81rem;font-weight:500;color:var(--text-dark);">Magnificent 7</span>
-          <span style="font-size:0.69rem;color:#9A9A9A;">media del grupo:</span>
-          <span id="mag7-avg-value" style="font-size:0.94rem;font-weight:500;color:#9A9A9A;">&#8230;</span>
-        </div>
-        <div style="display:flex;gap:4px;" id="mag7-period-btns">
-          <button class="mag7-btn" onclick="setMag7Period('5Y',this)">5Y</button>
-          <button class="mag7-btn" onclick="setMag7Period('3Y',this)">3Y</button>
-          <button class="mag7-btn" onclick="setMag7Period('1Y',this)">1Y</button>
-          <button class="mag7-btn active" onclick="setMag7Period('YTD',this)">YTD</button>
-          <button class="mag7-btn" onclick="setMag7Period('LM',this)">LM</button>
-          <button class="mag7-btn" onclick="setMag7Period('LW',this)">LW</button>
+  <!-- A. HERO -->
+  <div class="hp-wrap">
+    <div class="hp-hero">
+      <div>
+        <h1>ALS Value Capital</h1>
+        <div class="hp-hero-sub">Un espacio personal para seguir mercados, macroeconom&iacute;a, empresas y carteras.</div>
+        <div class="hp-hero-btns">
+          <button class="hp-btn hp-btn-primary" id="hp-hero-cta" onclick="HP.openLatest()">Ver &uacute;ltimo recap</button>
+          <button class="hp-btn hp-btn-ghost" onclick="HP.goDashboards()">Explorar dashboards</button>
         </div>
       </div>
-      <div id="mag7-ranking" style="display:flex;flex-direction:column;gap:9px;margin-bottom:18px;"></div>
-      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;" id="mag7-chips"></div>
-      <div id="mag7-chip-result" style="font-size:0.81rem;color:var(--text-mid);min-height:1.3em;padding:2px 0;"></div>
+      <div>
+        <img class="hp-hero-img" src="assets/img/home/hero-montanas.jpg" alt="Amanecer sobre una cordillera">
+      </div>
     </div>
   </div>
 
-  <!-- COMMODITIES & ALTERNATIVOS -->
-  <div class="section" style="padding-top:28px;">
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-      <span style="font-size:1.125rem;font-weight:500;color:var(--text-dark);white-space:nowrap;">Commodities &amp; alternativos</span>
-      <div style="flex:1;height:1px;background:var(--border);"></div>
-      <span style="font-size:0.81rem;letter-spacing:0.06em;text-transform:uppercase;color:#9A9A9A;white-space:nowrap;">YTD 2026</span>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="commodities-grid">
-      <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:16px;"><div style="font-size:1.125rem;margin-bottom:8px;">&#128738;</div><div style="font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:#9A9A9A;margin-bottom:6px;">Brent Crude</div><div id="comm-brent-ret" style="font-size:1.125rem;font-weight:500;color:#9A9A9A;margin-bottom:6px;">&#8230;</div><div id="comm-brent-px" style="font-size:0.56rem;color:#9A9A9A;"></div></div>
-      <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:16px;"><div style="font-size:1.125rem;margin-bottom:8px;">&#128738;</div><div style="font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:#9A9A9A;margin-bottom:6px;">WTI Crude</div><div id="comm-wti-ret" style="font-size:1.125rem;font-weight:500;color:#9A9A9A;margin-bottom:6px;">&#8230;</div><div id="comm-wti-px" style="font-size:0.56rem;color:#9A9A9A;"></div></div>
-      <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:16px;"><div style="font-size:1.125rem;margin-bottom:8px;">&#129351;</div><div style="font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:#9A9A9A;margin-bottom:6px;">Gold SPDR</div><div id="comm-gold-ret" style="font-size:1.125rem;font-weight:500;color:#9A9A9A;margin-bottom:6px;">&#8230;</div><div id="comm-gold-px" style="font-size:0.56rem;color:#9A9A9A;"></div></div>
-      <div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:16px;"><div style="font-size:1.125rem;margin-bottom:8px;">&#8383;</div><div style="font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:#9A9A9A;margin-bottom:6px;">Bitcoin</div><div id="comm-btc-ret" style="font-size:1.125rem;font-weight:500;color:#9A9A9A;margin-bottom:6px;">&#8230;</div><div id="comm-btc-px" style="font-size:0.56rem;color:#9A9A9A;"></div></div>
+  <!-- B. SNAPSHOT DE MERCADO -->
+  <div class="hp-wrap hp-block">
+    <div class="hp-card" style="padding:16px 0 0;">
+      <div class="hp-block-head" style="padding:0 18px;">
+        <div class="hp-h2">Snapshot de mercado</div>
+        <div class="hp-meta" id="hp-snap-date">&nbsp;</div>
+      </div>
+      <div class="hp-snap-grid" id="hp-snap-grid"></div>
     </div>
   </div>
 
-  <!-- RECAP SEMANAL -->
-  <div class="section" style="padding-top:28px;padding-bottom:48px;">
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
-      <span style="font-size:1.125rem;font-weight:500;color:var(--text-dark);white-space:nowrap;">&#218;ltima actualizaci&oacute;n</span>
-      <div style="flex:1;height:1px;background:var(--border);"></div>
+  <!-- C. ULTIMO ANALISIS -->
+  <div class="hp-wrap hp-block">
+    <div class="hp-analysis">
+      <div>
+        <div class="hp-block-head"><div class="hp-h2">&Uacute;ltimo an&aacute;lisis</div></div>
+        <div class="hp-card hp-feature" id="hp-feature"></div>
+      </div>
+      <div>
+        <div class="hp-block-head"><div class="hp-h2">An&aacute;lisis recientes</div></div>
+        <div class="hp-card hp-recent" id="hp-recent"></div>
+      </div>
     </div>
-    <div class="recap-nav">
-      <button class="recap-btn" onclick="changeRecap(1)">&larr; Anterior</button>
-      <div class="recap-date" id="recap-date-label">2 Ago 2026</div>
-      <button class="recap-btn" onclick="changeRecap(-1)">Siguiente &rarr;</button>
+  </div>
+
+  <!-- D. EXPLORAR DASHBOARDS -->
+  <div class="hp-wrap hp-block" id="hp-dashboards">
+    <div class="hp-block-head">
+      <div class="hp-h2">Explorar dashboards</div>
+      <div class="hp-meta">Datos de mercado, macro, energ&iacute;a y resultados</div>
     </div>
-    <div class="recap-card" id="recap-content">
-      <h3>Semana del 27 de Julio al 2 de Agosto de 2026</h3>
-      <p>La semana confirmó que el mercado no abandonó el ciclo de IA, sino que elevó el umbral de prueba: la monetización sostuvo a nube y software, mientras el apalancamiento y la duración absorbieron el ajuste. Queda abierto si esa selección puede continuar con una curva más empinada, inflación elevada y petróleo y yen volátiles, o si la rotación termina convirtiéndose en una corrección más amplia.</p>
-      <div style="margin-top:18px"><button onclick="openArticle('recap-2026-08-02')" style="background:none;border:none;cursor:pointer;color:var(--burgundy);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;padding:0;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;">Leer informe completo →</button></div>
+    <div class="hp-dash-grid">
+
+      <div class="hp-card hp-dash" onclick="showPage('macro')">
+        <div class="hp-dash-top">
+          <div class="hp-dash-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg></div>
+          <div>
+            <div class="hp-dash-title">Mercados</div>
+            <div class="hp-dash-desc">Rendimiento de activos, &iacute;ndices, sectores, factores y commodities.</div>
+          </div>
+        </div>
+        <div class="hp-dash-viz" id="hp-viz-mercados"></div>
+        <div class="hp-dash-link">Abrir dashboard <span>&rarr;</span></div>
+      </div>
+
+      <div class="hp-card hp-dash" onclick="openMacroDetail()">
+        <div class="hp-dash-top">
+          <div class="hp-dash-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+          <div>
+            <div class="hp-dash-title">Macro</div>
+            <div class="hp-dash-desc">Crecimiento, inflaci&oacute;n, tipos de inter&eacute;s, empleo y condiciones financieras.</div>
+          </div>
+        </div>
+        <div class="hp-dash-viz" id="hp-viz-macro"></div>
+        <div class="hp-dash-link">Abrir dashboard <span>&rarr;</span></div>
+      </div>
+
+      <div class="hp-card hp-dash" onclick="showPage('energy')">
+        <div class="hp-dash-top">
+          <div class="hp-dash-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3s6 6.2 6 10.2A6 6 0 0 1 6 13.2C6 9.2 12 3 12 3z"/></svg></div>
+          <div>
+            <div class="hp-dash-title">Energ&iacute;a</div>
+            <div class="hp-dash-desc">Petr&oacute;leo, curvas, inventarios, fundamentales y acciones energ&eacute;ticas.</div>
+          </div>
+        </div>
+        <div class="hp-dash-viz" id="hp-viz-energia"></div>
+        <div class="hp-dash-link">Abrir dashboard <span>&rarr;</span></div>
+      </div>
+
+      <div class="hp-card hp-dash" onclick="showPage('earnings')">
+        <div class="hp-dash-top">
+          <div class="hp-dash-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+          <div>
+            <div class="hp-dash-title">Earnings Monitor</div>
+            <div class="hp-dash-desc">Seguimiento de resultados trimestrales por sectores y compa&ntilde;&iacute;as.</div>
+          </div>
+        </div>
+        <div class="hp-dash-viz" id="hp-viz-earnings"></div>
+        <div class="hp-dash-link">Abrir dashboard <span>&rarr;</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- E + F. IDEAS DE INVERSION / PORTFOLIOS -->
+  <div class="hp-wrap hp-block">
+    <div class="hp-bottom">
+      <div>
+        <div class="hp-block-head">
+          <div class="hp-h2">Ideas de inversi&oacute;n</div>
+          <a class="hp-more" onclick="showPage('watchlist')">Ver todas las ideas <span>&rarr;</span></a>
+        </div>
+        <div class="hp-card hp-idea" id="hp-idea"></div>
+      </div>
+      <div>
+        <div class="hp-block-head"><div class="hp-h2">Portfolios</div></div>
+        <div class="hp-card" style="overflow:hidden;">
+          <div id="hp-pf-rows"></div>
+          <div class="hp-pf-foot">
+            <a class="hp-more" onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');">Ver portfolios <span>&rarr;</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- H. CIERRE DE LA PAGINA -->
+  <div class="hp-wrap">
+    <div class="hp-card hp-close">
+      <div class="hp-close-txt">
+        Seguimiento personal de mercados, macroeconom&iacute;a, empresas y carteras.<br>
+        Solo fines informativos. No constituye asesoramiento financiero.
+      </div>
+      <div class="hp-close-links">
+        <a onclick="showPage('articles')">Art&iacute;culos</a>
+        <a onclick="showPage('watchlist')">Watchlist</a>
+        <a onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');">Portfolios</a>
+        <span class="hp-meta" id="hp-close-date"></span>
+      </div>
     </div>
   </div>
 
@@ -9897,7 +10146,10 @@ function showRecapDetail(idx) {
 }
 function renderRecap() {
   const r = recaps[currentRecapIdx];
-  document.getElementById('recap-date-label').textContent = r.date;
+  const dateEl = document.getElementById('recap-date-label');
+  const contentEl = document.getElementById('recap-content');
+  if (!dateEl || !contentEl) return;   // Inicio ya no muestra el bloque de recap navegable
+  dateEl.textContent = r.date;
   const linkBtn = r.link
     ? `<div style="margin-top:18px"><button onclick="openArticle('${r.link}')" style="background:none;border:none;cursor:pointer;color:var(--burgundy);font-size:0.8rem;font-weight:600;letter-spacing:0.04em;padding:0;font-family:'DM Sans',sans-serif;text-decoration:underline;text-underline-offset:3px;">Leer informe completo →</button></div>`
     : '';
@@ -14602,6 +14854,418 @@ window.addEventListener('popstate', function() {
   else if (hash.startsWith('earnings/')) { showPage('earnings', true); }
   else if (!hash.includes('/')) { showPage(hash, true); }
 })();
+
+/* =============================================================
+   HP — Home Page (Inicio). Namespace EXCLUSIVO de la pagina de
+   Inicio. Solo LEE datos ya existentes (mktData, fredHistorical,
+   articles, recaps, watchlist, twrData, itasTwrData). No modifica
+   ninguna estructura ni funcion compartida.
+   ============================================================= */
+const HP = (function () {
+
+  const POS = '#2A7A3B';
+  const NEG = '#C0392B';
+  const BUR = '#6B2737';
+
+  const MES_CORTO = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const MES_LARGO = { enero:0, febrero:1, marzo:2, abril:3, mayo:4, junio:5, julio:6,
+                      agosto:7, septiembre:8, setiembre:8, octubre:9, noviembre:10, diciembre:11 };
+
+  let gradSeq = 0;
+
+  // ---------- utilidades ----------
+  function fmtISO(iso) {
+    if (!iso) return '';
+    const d = new Date(iso + 'T00:00:00');
+    if (isNaN(d)) return iso;
+    return d.getDate() + ' ' + MES_CORTO[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function num(v, dec) {
+    return Number(v).toLocaleString('es-ES', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  }
+  function signed(v, dec, suffix) {
+    return (v >= 0 ? '+' : '−') + num(Math.abs(v), dec) + (suffix || '');
+  }
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // ---------- acceso a series reales ----------
+  function assetPrices(group, ticker) {
+    try {
+      const a = mktData[group].activos.find(x => x.ticker === ticker);
+      return (a && a.prices && a.prices.length) ? a.prices : null;
+    } catch (e) { return null; }
+  }
+  function fredSerie(key) {
+    try {
+      const s = fredHistorical[key];
+      return (s && s.length) ? s : null;
+    } catch (e) { return null; }
+  }
+
+  /* Recorta la serie al periodo YTD del ultimo anyo con datos.
+     Incluye como primer punto el ultimo cierre del anyo anterior,
+     de modo que la direccion acumulada de la linea coincide por
+     construccion con la variacion mostrada. */
+  function ytd(serie) {
+    if (!serie || serie.length < 2) return null;
+    const year = String(serie[serie.length - 1][0]).slice(0, 4);
+    const start = year + '-01-01';
+    const previos = serie.filter(p => p[0] < start);
+    const dentro  = serie.filter(p => p[0] >= start);
+    if (!previos.length || dentro.length < 2) return null;
+    const base = previos[previos.length - 1];
+    const pts  = [base].concat(dentro);
+    const last = pts[pts.length - 1];
+    return {
+      points: pts,
+      values: pts.map(p => p[1]),
+      base: base[1],
+      baseDate: base[0],
+      last: last[1],
+      lastDate: last[0],
+      pct: (last[1] / base[1] - 1) * 100,
+      diff: last[1] - base[1],
+      year: year
+    };
+  }
+
+  // ---------- sparkline SVG a partir de valores reales ----------
+  function sparkline(values, color, w, h, stroke) {
+    if (!values || values.length < 2) return '';
+    w = w || 100; h = h || 32;
+    const min = Math.min.apply(null, values);
+    const max = Math.max.apply(null, values);
+    const rng = (max - min) || 1;
+    const pad = 2.5;
+    const step = w / (values.length - 1);
+    const y = v => (h - pad) - ((v - min) / rng) * (h - pad * 2);
+
+    let d = '';
+    for (let i = 0; i < values.length; i++) {
+      d += (i ? 'L' : 'M') + (i * step).toFixed(2) + ',' + y(values[i]).toFixed(2);
+    }
+    const area = d + 'L' + w + ',' + h + 'L0,' + h + 'Z';
+    const gid = 'hp-grad-' + (gradSeq++);
+
+    return '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" width="100%" height="100%" aria-hidden="true">' +
+      '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0%" stop-color="' + color + '" stop-opacity="0.22"/>' +
+        '<stop offset="100%" stop-color="' + color + '" stop-opacity="0"/>' +
+      '</linearGradient></defs>' +
+      '<path d="' + area + '" fill="url(#' + gid + ')"/>' +
+      '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="' + (stroke || 1.4) +
+        '" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>' +
+    '</svg>';
+  }
+
+  // ---------- B. SNAPSHOT DE MERCADO ----------
+  /* Variacion y sparkline comparten SIEMPRE la misma serie y el
+     mismo periodo (YTD del ultimo anyo con datos).                 */
+  const SNAPSHOT = [
+    { nombre: 'S&P 500',      fuente: () => assetPrices('indices', 'SPY'),        proxy: 'SPY', dec: 2 },
+    { nombre: 'Nasdaq 100',   fuente: () => assetPrices('indices', 'QQQ'),        proxy: 'QQQ', dec: 2 },
+    { nombre: 'US 10Y Yield', fuente: () => fredSerie('US 10Y Yield'),            proxy: 'FRED', dec: 2, unidad: '%', enPuntos: true },
+    { nombre: 'Dólar (DXY)', sinSerie: true, valorProvisional: 100.8, varProvisional: -1.2, dec: 1 },
+    { nombre: 'Brent',        fuente: () => assetPrices('commodities', 'BNO'),    proxy: 'BNO', dec: 2 },
+    { nombre: 'Oro',          fuente: () => assetPrices('commodities', 'GLD'),    proxy: 'GLD', dec: 2 }
+  ];
+
+  function renderSnapshot() {
+    const grid = document.getElementById('hp-snap-grid');
+    if (!grid) return null;
+
+    let fechaMax = null;
+    const celdas = SNAPSHOT.map(cfg => {
+
+      // Dato provisional declarado (no hay serie en el proyecto)
+      if (cfg.sinSerie) {
+        const pos = cfg.varProvisional >= 0;
+        return '<div class="hp-snap-cell" data-placeholder="true">' +
+          '<div class="hp-snap-name">' + esc(cfg.nombre) + '</div>' +
+          '<div class="hp-snap-val">' + num(cfg.valorProvisional, cfg.dec) + '</div>' +
+          '<div class="hp-snap-chg ' + (pos ? 'hp-pos' : 'hp-neg') + '">' + signed(cfg.varProvisional, 2, '%') + '</div>' +
+          '<div class="hp-snap-proxy">provisional</div>' +
+          '<div class="hp-snap-nodata">Serie no disponible</div>' +
+        '</div>';
+      }
+
+      const serie = cfg.fuente();
+      const p = ytd(serie);
+
+      if (!p) {
+        return '<div class="hp-snap-cell">' +
+          '<div class="hp-snap-name">' + esc(cfg.nombre) + '</div>' +
+          '<div class="hp-snap-val" style="color:#B0A99E;">&mdash;</div>' +
+          '<div class="hp-snap-chg" style="color:#B0A99E;">Dato no disponible</div>' +
+          '<div class="hp-snap-proxy">&nbsp;</div>' +
+          '<div class="hp-snap-nodata">Serie no disponible</div>' +
+        '</div>';
+      }
+
+      if (!fechaMax || p.lastDate > fechaMax) fechaMax = p.lastDate;
+
+      const variacion = cfg.enPuntos ? p.diff : p.pct;
+      const pos = variacion >= 0;
+      const textoVar = cfg.enPuntos ? signed(variacion, 2, ' pp') : signed(variacion, 2, '%');
+      const valor = num(p.last, cfg.dec) + (cfg.unidad || '');
+
+      return '<div class="hp-snap-cell">' +
+        '<div class="hp-snap-name">' + esc(cfg.nombre) + '</div>' +
+        '<div class="hp-snap-val">' + valor + '</div>' +
+        '<div class="hp-snap-chg ' + (pos ? 'hp-pos' : 'hp-neg') + '">' + textoVar + '</div>' +
+        '<div class="hp-snap-proxy">' + esc(cfg.proxy) + ' &middot; ' + fmtISO(p.lastDate) + '</div>' +
+        '<div class="hp-snap-spark">' + sparkline(p.values, pos ? POS : NEG, 100, 42) + '</div>' +
+      '</div>';
+    });
+
+    grid.innerHTML = celdas.join('');
+
+    const cab = document.getElementById('hp-snap-date');
+    if (cab) cab.innerHTML = fechaMax
+      ? 'YTD ' + fechaMax.slice(0, 4) + ' &middot; actualizado: ' + fmtISO(fechaMax)
+      : 'Datos no disponibles';
+    return fechaMax;
+  }
+
+  // ---------- C. ULTIMO ANALISIS ----------
+  function parseFechaEs(txt) {
+    const t = String(txt || '').toLowerCase().trim();
+    const m = t.match(/^(?:(\d{1,2})\s+(?:de\s+)?)?([a-záéíóú]+)\s+(?:de\s+)?(\d{4})$/);
+    if (!m) return null;
+    const mes = MES_LARGO[m[2]];
+    if (mes === undefined) return null;
+    return new Date(Date.UTC(+m[3], mes, m[1] ? +m[1] : 1));
+  }
+
+  /* Ordena TODAS las publicaciones existentes por fecha, sin
+     presuponer que la mas reciente sea un Weekly Recap.           */
+  function publicaciones() {
+    if (typeof articles === 'undefined') return [];
+    return Object.keys(articles).map((id, i) => {
+      const a = articles[id];
+      const cat = a.category || '';
+      return {
+        id: id,
+        orden: i,
+        titulo: a.title || id,
+        categoria: cat,
+        tipo: (cat.split('·')[0] || 'Análisis').trim(),
+        fecha: a.date || '',
+        cuando: parseFechaEs(a.date)
+      };
+    }).sort((x, y) => {
+      const tx = x.cuando ? x.cuando.getTime() : -Infinity;
+      const ty = y.cuando ? y.cuando.getTime() : -Infinity;
+      return (ty - tx) || (x.orden - y.orden);
+    });
+  }
+
+  function extracto(pub) {
+    let html = '';
+    if (typeof recaps !== 'undefined') {
+      const r = recaps.find(x => x.link === pub.id);
+      if (r) html = r.content || '';
+    }
+    if (!html) html = (articles[pub.id] && articles[pub.id].content) || '';
+    const box = document.createElement('div');
+    box.innerHTML = html;
+    const parrafos = Array.prototype.slice.call(box.querySelectorAll('p'))
+      .map(p => p.textContent.trim()).filter(t => t.length > 90);
+    let txt = parrafos[0] || box.textContent.trim();
+    if (txt.length > 215) txt = txt.slice(0, 212).replace(/\s+\S*$/, '') + '…';
+    return txt;
+  }
+
+  function renderUltimoAnalisis() {
+    const feat = document.getElementById('hp-feature');
+    const rec  = document.getElementById('hp-recent');
+    const pubs = publicaciones();
+
+    if (feat) {
+      if (!pubs.length) {
+        feat.innerHTML = '<div class="hp-feature-body" style="grid-column:1/-1;color:#B0A99E;font-size:0.85rem;">No hay análisis disponibles.</div>';
+      } else {
+        const p = pubs[0];
+        feat.innerHTML =
+          '<div class="hp-feature-media" onclick="openArticle(\'' + p.id + '\')" style="cursor:pointer;">' +
+            '<img src="assets/img/home/ultimo-analisis.jpg" alt="' + esc(p.titulo) + '">' +
+            '<div class="hp-feature-scrim">' +
+              '<div class="hp-feature-badge">' + esc(p.tipo) + '</div>' +
+              '<div class="hp-feature-otitle">' + esc(p.titulo) + '</div>' +
+              '<div class="hp-feature-odate">' + esc(p.fecha) + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="hp-feature-body">' +
+            '<div class="hp-tag">' + esc(p.categoria || p.tipo) + '</div>' +
+            '<div class="hp-feature-title">' + esc(p.titulo) + '</div>' +
+            '<div class="hp-feature-excerpt">' + esc(extracto(p)) + '</div>' +
+            '<a class="hp-more" onclick="openArticle(\'' + p.id + '\')">Leer análisis completo <span>&rarr;</span></a>' +
+          '</div>';
+
+        const cta = document.getElementById('hp-hero-cta');
+        if (cta) cta.textContent = /recap/i.test(p.tipo) ? 'Ver último recap' : 'Ver último análisis';
+      }
+    }
+
+    if (rec) {
+      const icono = '<svg class="hp-recent-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>';
+      const items = pubs.slice(1, 4).map(p =>
+        '<div class="hp-recent-item" onclick="openArticle(\'' + p.id + '\')">' + icono +
+          '<div>' +
+            '<div class="hp-recent-kind">' + esc(p.tipo) + '</div>' +
+            '<div class="hp-recent-title">' + esc(p.titulo) + '</div>' +
+            '<div class="hp-recent-date">' + esc(p.fecha) + '</div>' +
+          '</div>' +
+        '</div>').join('');
+      rec.innerHTML = (items || '<div style="font-size:0.8rem;color:#B0A99E;padding:8px 0;">Sin análisis anteriores.</div>') +
+        '<a class="hp-more" style="margin-top:14px;" onclick="showPage(\'articles\')">Ver todos los análisis <span>&rarr;</span></a>';
+    }
+  }
+
+  // ---------- D. MINI-GRAFICOS DE DASHBOARDS ----------
+  /* Series reales, sin cifras ni porcentajes: son elementos de
+     identidad de cada tarjeta, no lecturas de rentabilidad.       */
+  function renderDashViz() {
+    const conf = [
+      { id: 'hp-viz-mercados', serie: () => assetPrices('indices', 'SPY') },
+      { id: 'hp-viz-macro',    serie: () => fredSerie('US 10Y Yield') },
+      { id: 'hp-viz-energia',  serie: () => assetPrices('commodities', 'BNO') }
+    ];
+    conf.forEach(c => {
+      const el = document.getElementById(c.id);
+      if (!el) return;
+      const p = ytd(c.serie());
+      el.innerHTML = p ? sparkline(p.values, BUR, 100, 46, 1.5) : '';
+    });
+
+    // Earnings Monitor: elemento decorativo, sin datos ni cifras
+    const eEl = document.getElementById('hp-viz-earnings');
+    if (eEl) {
+      const alturas = [38,62,45,78,52,88,41,70,58,95,49,66,80,44,72,55,86,60,74,50];
+      let barras = '';
+      alturas.forEach((h, i) => {
+        const x = i * 5;
+        barras += '<rect x="' + x + '" y="' + (100 - h) + '" width="3.4" height="' + h +
+                  '" rx="1" fill="' + BUR + '" fill-opacity="' + (0.25 + (h / 100) * 0.45).toFixed(2) + '"/>';
+      });
+      eEl.innerHTML = '<svg viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%" aria-hidden="true">' + barras + '</svg>';
+    }
+  }
+
+  // ---------- E. IDEAS DE INVERSION ----------
+  function renderIdea() {
+    const el = document.getElementById('hp-idea');
+    if (!el) return;
+    if (typeof watchlist === 'undefined' || !watchlist.length) {
+      el.innerHTML = '<div style="grid-column:1/-1;font-size:0.8rem;color:#B0A99E;">No hay ideas en la Watchlist.</div>';
+      return;
+    }
+    const w = watchlist[0];
+    const box = document.createElement('div');
+    box.innerHTML = w.descripcion || '';
+    let txt = (box.querySelector('p') ? box.querySelector('p').textContent : box.textContent).trim();
+    if (txt.length > 190) txt = txt.slice(0, 187).replace(/\s+\S*$/, '') + '…';
+
+    el.innerHTML =
+      '<div class="hp-idea-tile">' +
+        '<div class="hp-idea-mono">' + esc(w.ticker) + '</div>' +
+        '<div class="hp-idea-monosub">Tesis de inversión</div>' +
+      '</div>' +
+      '<div>' +
+        '<div class="hp-idea-name">' + esc(w.name) + '</div>' +
+        '<div class="hp-idea-sub">' + esc(w.ticker) + ' &middot; ' + esc(w.sector || '') + '</div>' +
+        '<div class="hp-idea-desc">' + esc(txt) + '</div>' +
+        '<a class="hp-more" onclick="showPage(\'watchlist\');openWatchlistCompany(\'' + esc(w.ticker) + '\')">Abrir análisis completo <span>&rarr;</span></a>' +
+      '</div>';
+  }
+
+  // ---------- F. PORTFOLIOS ----------
+  /* Reutiliza el mismo criterio YTD que ya usa la pagina de
+     Portfolios (rebase sobre el primer punto del anyo en curso). */
+  function ytdTwr(serie) {
+    if (!serie || !serie.length) return null;
+    const anyo = String(serie[serie.length - 1].date).slice(0, 4);
+    const dentro = serie.filter(d => d.date >= anyo + '-01-01');
+    if (dentro.length < 2) return null;
+    return {
+      valor: dentro[dentro.length - 1].twr - dentro[0].twr,
+      fecha: serie[serie.length - 1].date
+    };
+  }
+
+  function renderPortfolios() {
+    const el = document.getElementById('hp-pf-rows');
+    if (!el) return;
+    let ultima = null;
+
+    const filas = [
+      { nombre: 'Portfolio ALS',  tab: 'als',
+        dato: (typeof twrData     !== 'undefined') ? ytdTwr(twrData)     : null },
+      { nombre: 'Portfolio ITAS', tab: 'itas',
+        dato: (typeof itasTwrData !== 'undefined') ? ytdTwr(itasTwrData) : null }
+    ];
+
+    el.innerHTML = filas.map(f => {
+      let valor, clase, etiqueta, fecha;
+      if (f.dato) {
+        if (!ultima || f.dato.fecha > ultima) ultima = f.dato.fecha;
+        valor = signed(f.dato.valor, 2, '%');
+        clase = f.dato.valor >= 0 ? 'hp-pos' : 'hp-neg';
+        etiqueta = 'YTD';
+        fecha = 'Actualizado: ' + fmtISO(f.dato.fecha);
+      } else {
+        valor = 'Dato no disponible';
+        clase = '';
+        etiqueta = '';
+        fecha = '';
+      }
+      return '<div class="hp-pf-row" onclick="showPage(\'portfolio\');closeCompany();switchPortfolioTab(\'' + f.tab + '\');">' +
+        '<div><div class="hp-pf-name">' + f.nombre + '</div>' +
+        '<div class="hp-pf-date">' + fecha + '</div></div>' +
+        '<div><div class="hp-pf-val ' + clase + '" ' + (clase ? '' : 'style="font-size:0.78rem;color:#B0A99E;font-weight:400;"') + '>' + valor + '</div>' +
+        '<div class="hp-pf-lbl">' + etiqueta + '</div></div>' +
+      '</div>';
+    }).join('');
+
+    return ultima;
+  }
+
+  // ---------- acciones del hero ----------
+  function openLatest() {
+    const pubs = publicaciones();
+    if (pubs.length && typeof openArticle === 'function') openArticle(pubs[0].id);
+  }
+  function goDashboards() {
+    const el = document.getElementById('hp-dashboards');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ---------- init ----------
+  function init() {
+    try {
+      const fMkt = renderSnapshot();
+      renderUltimoAnalisis();
+      renderDashViz();
+      renderIdea();
+      const fPf = renderPortfolios();
+
+      const cierre = document.getElementById('hp-close-date');
+      if (cierre) {
+        const f = [fMkt, fPf].filter(Boolean).sort().pop();
+        cierre.textContent = f ? 'Última actualización de datos: ' + fmtISO(f) : '';
+      }
+    } catch (e) {
+      console.error('[HP] Error al renderizar Inicio:', e);
+    }
+  }
+
+  return { init: init, openLatest: openLatest, goDashboards: goDashboards };
+})();
+
+HP.init();
 </script>
 <!-- LIGHTBOX -->
 <div class="lb-overlay" id="lb-overlay" onclick="lbClose(event)">
