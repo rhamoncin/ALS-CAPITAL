@@ -1661,6 +1661,39 @@
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
     margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--mc-line-soft);
   }
+  /* Tira de lectura al pie de Cycle Position: fase oficial, secundaria y el
+     indicador adelantado. Comparte tarjeta con el arco; no es un bloque nuevo. */
+  #page-macro-detail .mc-tira {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--mc-line-soft);
+  }
+  #page-macro-detail .mc-tira-item { min-width: 0; }
+  #page-macro-detail .mc-txt {
+    font-family: 'DM Sans', sans-serif; font-size: 0.78rem; line-height: 1.62;
+    color: var(--mc-ink-mid); margin: 0 0 10px;
+  }
+  #page-macro-detail .mc-txt:last-child { margin-bottom: 0; }
+  #page-macro-detail .mc-txt strong { color: var(--mc-ink); font-weight: 600; }
+  #page-macro-detail .mc-txt-nota {
+    font-size: 0.68rem; color: var(--mc-ink-soft);
+    padding-top: 9px; border-top: 1px solid var(--mc-line-soft);
+  }
+  #page-macro-detail .mc-tira-val {
+    font-family: 'Playfair Display', serif; font-size: 1.02rem; font-weight: 600;
+    color: var(--mc-ink); margin-top: 5px; line-height: 1.2;
+  }
+  #page-macro-detail .mc-tira-flecha { color: var(--mc-burgundy); font-family: 'DM Sans', sans-serif; }
+  #page-macro-detail .mc-tira-sub {
+    font-size: 0.66rem; color: var(--mc-ink-soft); margin-top: 4px; line-height: 1.4;
+  }
+  #page-macro-detail .mc-info {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 12px; height: 12px; border: 1px solid var(--mc-line);
+    border-radius: 50%; font-size: 0.52rem; font-weight: 700;
+    color: var(--mc-ink-soft); cursor: help; vertical-align: middle;
+    letter-spacing: 0; text-transform: none;
+  }
+  #page-macro-detail .mc-info:focus-visible { outline: 2px solid var(--mc-burgundy); outline-offset: 2px; }
   #page-macro-detail .mc-score-top {
     display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px;
   }
@@ -2027,6 +2060,216 @@
     background: var(--mc-heat-0); color: var(--mc-burgundy);
   }
   #page-macro-detail .ag-cell-tag.ag-tag-mute { background: #EDEAE7; color: var(--mc-ink-mid); }
+
+  /* ---- Inflation: expectativas de mercado, medio y largo plazo ---- */
+  #page-macro-detail .if-exp {
+    display: grid; grid-template-columns: 1fr 1fr auto; gap: 26px;
+    align-items: start; margin: 4px 0 14px;
+  }
+  #page-macro-detail .if-exp-item, #page-macro-detail .if-exp-gap { min-width: 0; }
+  #page-macro-detail .if-exp-gap {
+    padding-left: 26px; border-left: 1px solid var(--mc-line-soft); max-width: 210px;
+  }
+  #page-macro-detail .if-exp-val {
+    font-family: 'Playfair Display', serif; font-size: 1.62rem; font-weight: 700;
+    color: var(--mc-ink); line-height: 1.05; margin-top: 6px;
+  }
+  #page-macro-detail .if-exp-gap-val {
+    font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700;
+    color: var(--mc-burgundy); margin-top: 6px;
+  }
+  #page-macro-detail .if-exp-chg {
+    font-family: 'DM Sans', sans-serif; font-size: 0.76rem; font-weight: 600;
+    color: var(--mc-ink); margin-top: 6px; font-variant-numeric: tabular-nums;
+  }
+  #page-macro-detail .if-exp-u { font-weight: 400; color: var(--mc-ink-soft); }
+  #page-macro-detail .if-exp-sub {
+    font-size: 0.64rem; color: var(--mc-ink-soft); line-height: 1.5; margin-top: 7px;
+  }
+
+  /* ---- Monetary Policy: contexto de tipos nominales ---- */
+  #page-macro-detail .mp-mercado {
+    display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px;
+    align-items: center; margin-top: 6px;
+  }
+  #page-macro-detail .mp-curva-wrap, #page-macro-detail .mp-difs { min-width: 0; }
+  #page-macro-detail .mp-curva { display: block; max-width: 460px; margin: 0 auto; }
+  #page-macro-detail .mp-dif {
+    padding: 9px 0; border-bottom: 1px solid var(--mc-line-soft);
+  }
+  #page-macro-detail .mp-dif:first-child { padding-top: 0; }
+  #page-macro-detail .mp-dif-top {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.74rem; color: var(--mc-ink-mid);
+  }
+  #page-macro-detail .mp-dif-top .mc-num {
+    font-size: 0.92rem; font-weight: 700; color: var(--mc-ink); white-space: nowrap;
+  }
+  #page-macro-detail .mp-dif-sub {
+    font-size: 0.64rem; color: var(--mc-ink-soft); line-height: 1.45; margin-top: 4px;
+  }
+  #page-macro-detail .mp-nota {
+    font-size: 0.64rem; color: var(--mc-ink-soft); line-height: 1.5; margin-top: 11px;
+  }
+
+  /* ---- Credit: sintesis del pilar y aviso de dato desfasado ---- */
+  #page-macro-detail .cr-comp {
+    color: var(--mc-ink-soft); font-weight: 500;
+  }
+  #page-macro-detail .cr-stale {
+    font-family: 'DM Sans', sans-serif; font-size: 0.7rem; line-height: 1.55;
+    color: var(--mc-ink-mid); background: var(--mc-heat-0);
+    border: 1px solid var(--mc-line); border-radius: 4px;
+    padding: 9px 12px; margin: -6px 0 16px;
+  }
+  #page-macro-detail .cr-stale-lbl {
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--mc-burgundy); margin-right: 9px;
+  }
+
+  /* ---- Inventories: dinamica de inventarios frente a ventas ---- */
+  #page-macro-detail .iv-din {
+    display: grid; grid-template-columns: 1.35fr 1fr; gap: 30px; margin-top: 6px;
+  }
+  #page-macro-detail .iv-din-comp, #page-macro-detail .iv-din-gap { min-width: 0; }
+  #page-macro-detail .iv-barras { margin-top: 12px; }
+  #page-macro-detail .iv-barra-fila {
+    display: grid; grid-template-columns: 86px 1fr 62px; align-items: center;
+    gap: 11px; margin-bottom: 11px;
+  }
+  #page-macro-detail .iv-barra-lbl { font-size: 0.72rem; color: var(--mc-ink-mid); }
+  #page-macro-detail .iv-barra-track { height: 13px; background: var(--mc-heat-0); border-radius: 1px; }
+  #page-macro-detail .iv-barra-fill { display: block; height: 13px; background: var(--mc-burgundy); border-radius: 1px; }
+  #page-macro-detail .iv-barra-fill.iv-barra-dim { background: var(--mc-ink-mid); opacity: 0.5; }
+  #page-macro-detail .iv-barra-val {
+    font-size: 0.82rem; font-weight: 600; color: var(--mc-ink); text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  #page-macro-detail .iv-din-sec {
+    margin-top: 14px; padding-top: 11px; border-top: 1px solid var(--mc-line-soft);
+  }
+  #page-macro-detail .iv-sec-linea {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'DM Sans', sans-serif; font-size: 0.7rem;
+    color: var(--mc-ink-soft); margin-top: 5px;
+  }
+  #page-macro-detail .iv-sec-linea .mc-num { color: var(--mc-ink-mid); font-weight: 600; }
+  #page-macro-detail .iv-sec-linea.iv-sec-fuerte { color: var(--mc-ink-mid); }
+  #page-macro-detail .iv-sec-linea.iv-sec-fuerte .mc-num { color: var(--mc-burgundy); font-weight: 700; }
+
+  /* ---- Corporate Profits: calidad de beneficios y valoracion ---- */
+  #page-macro-detail .cp-senal { text-align: right; white-space: nowrap; }
+  #page-macro-detail .cp-senal-val {
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    background: var(--mc-heat-0); color: var(--mc-burgundy);
+    padding: 3px 9px; border-radius: 2px; display: inline-block; margin-top: 5px;
+  }
+  #page-macro-detail .cp-quality {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 6px;
+  }
+  #page-macro-detail .cp-q-item { min-width: 0; }
+  #page-macro-detail .cp-q-val {
+    font-family: 'Playfair Display', serif; font-size: 1.85rem; font-weight: 700;
+    color: var(--mc-ink); line-height: 1.05; margin-top: 7px;
+  }
+  #page-macro-detail .cp-q-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px; }
+  #page-macro-detail .cp-chip {
+    font-family: 'DM Sans', sans-serif; font-size: 0.66rem; font-weight: 600;
+    color: var(--mc-ink-mid); border: 1px solid var(--mc-line);
+    border-radius: 2px; padding: 2px 7px; font-variant-numeric: tabular-nums;
+  }
+  #page-macro-detail .cp-q-sub {
+    font-size: 0.66rem; color: var(--mc-ink-soft); line-height: 1.5; margin-top: 9px;
+  }
+  /* Amplitud: un segmento por sector */
+  #page-macro-detail .cp-breadth { margin-top: 11px; }
+  #page-macro-detail .cp-breadth-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--mc-ink-mid);
+    margin-bottom: 5px;
+  }
+  #page-macro-detail .cp-breadth-top .mc-num { color: var(--mc-ink); font-weight: 600; }
+  #page-macro-detail .cp-breadth-barra { display: flex; gap: 3px; }
+  #page-macro-detail .cp-seg {
+    flex: 1 1 0; height: 9px; border-radius: 1px; background: var(--mc-heat-0);
+    border: 1px solid var(--mc-line-soft);
+  }
+  #page-macro-detail .cp-seg.cp-seg-on { background: var(--mc-burgundy); border-color: var(--mc-burgundy); }
+  /* Forward earnings y valoracion */
+  #page-macro-detail .cp-forward {
+    display: grid; grid-template-columns: 0.8fr 1.5fr 1.1fr; gap: 26px; margin-top: 6px;
+  }
+  #page-macro-detail .cp-f-item { min-width: 0; }
+  #page-macro-detail .cp-escala { position: relative; height: 74px; margin-top: 22px; }
+  #page-macro-detail .cp-escala-eje {
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: var(--mc-heat-0); border-radius: 1px;
+  }
+  #page-macro-detail .cp-escala-prima {
+    position: absolute; top: 0; height: 6px; background: rgba(107, 39, 55, 0.22);
+  }
+  #page-macro-detail .cp-marca { position: absolute; top: -6px; transform: translateX(-50%); }
+  #page-macro-detail .cp-marca-linea {
+    width: 1px; height: 18px; margin: 0 auto; background: var(--mc-ink-soft);
+  }
+  #page-macro-detail .cp-marca-act .cp-marca-linea { width: 2px; height: 22px; background: var(--mc-burgundy); }
+  #page-macro-detail .cp-marca-txt { text-align: center; margin-top: 3px; white-space: nowrap; }
+  #page-macro-detail .cp-marca-val {
+    display: block; font-family: 'DM Sans', sans-serif; font-size: 0.76rem;
+    font-weight: 600; color: var(--mc-ink-mid); font-variant-numeric: tabular-nums;
+  }
+  #page-macro-detail .cp-marca-act .cp-marca-val { color: var(--mc-burgundy); font-size: 0.88rem; font-weight: 700; }
+  #page-macro-detail .cp-marca-lbl {
+    display: block; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--mc-ink-soft); margin-top: 1px;
+  }
+  /* Precio frente a beneficio esperado */
+  #page-macro-detail .cp-pe { margin-top: 10px; }
+  #page-macro-detail .cp-pe-fila {
+    display: grid; grid-template-columns: 92px 1fr 54px; align-items: center;
+    gap: 9px; margin-bottom: 7px;
+  }
+  #page-macro-detail .cp-pe-lbl { font-size: 0.68rem; color: var(--mc-ink-mid); }
+  #page-macro-detail .cp-pe-track { height: 9px; background: var(--mc-heat-0); border-radius: 1px; }
+  #page-macro-detail .cp-pe-fill { display: block; height: 9px; background: var(--mc-burgundy); border-radius: 1px; }
+  #page-macro-detail .cp-pe-fill.cp-pe-dim { background: var(--mc-ink-mid); opacity: 0.55; }
+  #page-macro-detail .cp-pe-val {
+    font-size: 0.72rem; font-weight: 600; color: var(--mc-ink); text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  #page-macro-detail .cp-lectura {
+    font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 600;
+    color: var(--mc-burgundy); margin-top: 10px; line-height: 1.3;
+  }
+
+  /* Tira de confirmacion de Activity: una linea, no un modulo nuevo. */
+  #page-macro-detail .ag-conf {
+    margin: -6px 0 16px; padding: 11px 14px;
+    border: 1px solid var(--mc-line); border-radius: 4px; background: var(--mc-paper);
+  }
+  #page-macro-detail .ag-conf-fila {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  #page-macro-detail .ag-conf-lista {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1 1 auto; min-width: 0;
+  }
+  #page-macro-detail .ag-conf-item {
+    font-family: 'DM Sans', sans-serif; font-size: 0.74rem; color: var(--mc-ink);
+  }
+  #page-macro-detail .ag-conf-item.ag-conf-mute { color: var(--mc-ink-soft); }
+  #page-macro-detail .ag-conf-flecha { color: var(--mc-burgundy); font-weight: 700; }
+  #page-macro-detail .ag-conf-item.ag-conf-mute .ag-conf-flecha { color: var(--mc-ink-soft); }
+  #page-macro-detail .ag-conf-sep { color: var(--mc-line); }
+  #page-macro-detail .ag-conf-senal {
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+    background: var(--mc-heat-0); color: var(--mc-burgundy);
+    padding: 3px 9px; border-radius: 2px; white-space: nowrap;
+  }
+  #page-macro-detail .ag-conf-txt {
+    font-family: 'DM Sans', sans-serif; font-size: 0.7rem; line-height: 1.55;
+    color: var(--mc-ink-soft); margin-top: 8px;
+  }
+  #page-macro-detail .ag-conf-txt strong { color: var(--mc-ink); font-weight: 600; }
 
   /* Paneles de grafico */
   #page-macro-detail .ag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -2812,6 +3055,10 @@
     <!-- 2. RESUMEN ACTUAL -->
     <div class="ag-summary" id="ag-summary"></div>
 
+    <!-- 2b. CONFIRMACION: explica por que el momentum efectivo puede
+         diferir del core. No es un modulo nuevo, solo una linea. -->
+    <div class="ag-conf" id="ag-confirmacion"></div>
+
     <!-- 3 + 4. GRAFICOS SUPERIORES -->
     <div class="ag-grid">
       <section class="mc-card ag-panel" aria-labelledby="ag-t-activity">
@@ -2898,9 +3145,19 @@
     <section class="mc-card ag-panel" style="margin-top:14px;" aria-labelledby="if-t-be">
       <div class="ag-panel-head">
         <div>
-          <div class="ag-panel-title" id="if-t-be">5-Year Inflation Expectations</div>
-          <div class="ag-panel-q">Market-based five-year breakeven inflation rate</div>
+          <div class="ag-panel-title" id="if-t-be">Market Inflation Expectations</div>
+          <div class="ag-panel-q">Breakeven inflation priced by the Treasury market</div>
           <div class="ag-panel-q">Are market-based inflation expectations remaining anchored?</div>
+        </div>
+        <div class="cp-senal" id="if-ctx-precios"></div>
+      </div>
+
+      <!-- Comparacion compacta: medio plazo frente a largo plazo -->
+      <div class="if-exp" id="if-expectativas"></div>
+
+      <div class="ag-panel-head" style="border-top:1px solid var(--mc-line-soft);padding-top:12px;margin-top:2px;">
+        <div>
+          <div class="ag-panel-q" style="margin:0;">History of the 5-year breakeven rate</div>
         </div>
         <div class="ag-ctrls" role="group" aria-label="Horizonte de expectativas" data-if-horiz="be"></div>
       </div>
@@ -2927,6 +3184,18 @@
 
     <!-- 2. RESUMEN ACTUAL -->
     <div class="ag-summary ag-summary-2" id="mp-summary"></div>
+
+    <!-- 2b. CONTEXTO DE TIPOS NOMINALES. Acompanya al pilar; no puntua. -->
+    <section class="mc-card ag-panel" style="margin-bottom:14px;" aria-labelledby="mp-t-mercado">
+      <div class="ag-panel-head">
+        <div>
+          <div class="ag-panel-title" id="mp-t-mercado">Market Rates Snapshot</div>
+          <div class="ag-panel-q">Where nominal rates sit today, from policy out to ten years</div>
+        </div>
+        <div class="cp-senal" id="mp-mercado-ctx"></div>
+      </div>
+      <div class="mp-mercado" id="mp-mercado"></div>
+    </section>
 
     <!-- 3 + 4. GRAFICOS -->
     <div class="ag-grid">
@@ -3223,8 +3492,14 @@
         <div class="ag-pillar" id="cr-pillar"></div>
       </div>
 
-      <!-- 2. RESUMEN ACTUAL -->
+      <!-- 2. SINTESIS: un unico pilar explicado por dos componentes -->
+      <div class="ag-conf" id="cr-sintesis"></div>
+
+      <!-- 2b. RESUMEN ACTUAL -->
       <div class="ag-summary ag-summary-2" id="cr-summary"></div>
+
+      <!-- 2c. AVISO DE DATO DESFASADO, solo si el Excel lo esta -->
+      <div id="cr-aviso"></div>
 
       <!-- 3 + 4. GRAFICOS -->
       <div class="ag-grid">
@@ -3288,7 +3563,30 @@
         <div class="ag-canvas-wrap ag-canvas-lg"><canvas id="cp-chart" role="img" aria-label="Crecimiento interanual del beneficio por accion del S&amp;P 500, por trimestres"></canvas></div>
       </section>
 
-      <!-- 4. FUENTE Y COBERTURA -->
+      <!-- 4. EARNINGS QUALITY: margenes, ingresos y amplitud -->
+      <section class="mc-card ag-panel" style="margin-top:14px;" aria-labelledby="cp-t-quality">
+        <div class="ag-panel-head">
+          <div>
+            <div class="ag-panel-title" id="cp-t-quality">Earnings Quality</div>
+            <div class="ag-panel-q">Margins, revenue and how broadly the improvement is shared across sectors</div>
+          </div>
+          <div class="cp-senal" id="cp-senal"></div>
+        </div>
+        <div class="cp-quality" id="cp-quality"></div>
+      </section>
+
+      <!-- 5. FORWARD EARNINGS & VALUATION -->
+      <section class="mc-card ag-panel" style="margin-top:14px;" aria-labelledby="cp-t-forward">
+        <div class="ag-panel-head">
+          <div>
+            <div class="ag-panel-title" id="cp-t-forward">Forward Earnings &amp; Valuation</div>
+            <div class="ag-panel-q">Expected earnings growth and what the market is paying for it</div>
+          </div>
+        </div>
+        <div class="cp-forward" id="cp-forward"></div>
+      </section>
+
+      <!-- 6. FUENTE Y COBERTURA -->
       <div class="mc-src" id="cp-src"></div>
 
     </div><!-- /mc-block corporate-profits -->
@@ -3301,13 +3599,27 @@
         <div class="ag-head-txt">
           <div class="mc-caps">Cycle Driver</div>
           <div class="ag-title">Inventories</div>
-          <div class="ag-sub">Tracks whether business inventories are lean or elevated and whether firms are building or drawing down stock.</div>
+          <div class="ag-sub">Tracks whether business inventories are lean or elevated, and whether inventories are keeping pace with sales.</div>
         </div>
         <div class="ag-pillar" id="iv-pillar"></div>
       </div>
 
       <!-- 2. RESUMEN ACTUAL -->
       <div class="ag-summary ag-summary-3" id="iv-summary"></div>
+
+      <!-- 2b. DINAMICA ACTUAL: inventarios frente a ventas y su diferencia.
+           Es lo que permite distinguir un ratio que cae por demanda de uno
+           que cae por liquidacion de existencias. -->
+      <section class="mc-card ag-panel" style="margin-bottom:14px;" aria-labelledby="iv-t-din">
+        <div class="ag-panel-head">
+          <div>
+            <div class="ag-panel-title" id="iv-t-din">Current Inventory Dynamics</div>
+            <div class="ag-panel-q">Are inventories growing faster or slower than the sales they support?</div>
+          </div>
+          <div class="cp-senal" id="iv-senal"></div>
+        </div>
+        <div class="iv-din" id="iv-dinamica"></div>
+      </section>
 
       <!-- 3. POSICION RELATIVA A DIEZ ANOS -->
       <section class="mc-card ag-panel" style="margin-bottom:14px;" aria-labelledby="iv-t-pos">
@@ -3327,7 +3639,7 @@
           <div>
             <div class="ag-panel-title" id="iv-t-hist">Inventories-to-Sales Ratio</div>
             <div class="ag-panel-q">Total business inventories relative to monthly sales</div>
-            <div class="ag-panel-q">Are firms accumulating inventories or continuing to draw them down?</div>
+            <div class="ag-panel-q">Where does the inventory position sit relative to its own history?</div>
           </div>
           <div class="ag-ctrls" role="group" aria-label="Horizonte del ratio inventarios sobre ventas" data-iv-horiz="isratio"></div>
         </div>
@@ -6119,7 +6431,7 @@
 <script src="assets/js/mktData.js"></script>
 <!-- El parametro ?v= fuerza a los navegadores a recargar los datos cuando se
      regenera el fichero. Subir el numero al actualizar el Excel. -->
-<script src="assets/js/macroCycle.js?v=a1356cbac1"></script>
+<script src="assets/js/macroCycle.js?v=f835b4175d"></script>
 <script src="assets/data/energy/eia_oil_production_data.js"></script>
 <script>
 
@@ -14356,6 +14668,12 @@ const MC = (function () {
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
   function hay() { return typeof macroCycle !== 'undefined' && macroCycle && macroCycle.snapshot; }
+  /* Articulo correcto delante del regimen, que el Excel puede devolver como
+     Expansion, Downturn, Slowdown o Recovery. */
+  function articulo(palabra) {
+    const p = String(palabra).toLowerCase();
+    return ('aeiou'.indexOf(p.charAt(0)) >= 0 ? 'an ' : 'a ') + esc(p);
+  }
 
   // --------------------------------------------------- Cycle Position ----
   /* El arco no interpola una posicion inventada: dibuja los cuatro tramos
@@ -14439,7 +14757,50 @@ const MC = (function () {
       svg +
       '<div class="mc-reading">' + esc(s.lectura) + '</div>' +
       '<div class="mc-caps" style="margin-top:9px;">Phase compatibility score (max ' + MAX_SCORE + ')</div>' +
-      '<div class="mc-score-grid">' + barras + '</div>';
+      '<div class="mc-score-grid">' + barras + '</div>' +
+      renderTiraLectura();
+  }
+
+  /* Tira compacta al pie de Cycle Position: fase oficial, fase secundaria y
+     el indicador adelantado. Es una lectura de un vistazo, no un bloque
+     nuevo: comparte tarjeta, tipografia y espaciado con el resto. */
+  function renderTiraLectura() {
+    if (!hay()) return '';
+    const s = macroCycle.snapshot;
+    const ld = (typeof macroCycle !== 'undefined' && macroCycle.leading) || null;
+
+    let celdaOecd = '';
+    if (ld && ld.cli) {
+      // La flecha sale del signo de la direccion que da el Excel; la
+      // clasificacion (Expansion, Downturn...) la decide el Excel, no el codigo.
+      const d = (ld.direccion || {}).valor;
+      const flecha = typeof d === 'number' ? (d >= 0 ? '↑' : '↓') : '';
+      celdaOecd =
+        '<div class="mc-tira-item">' +
+          '<div class="mc-caps">OECD US Leading Indicator' +
+            (ld.nota ? ' <span class="mc-info" tabindex="0" role="note" aria-label="' +
+              esc(ld.nota) + '" title="' + esc(ld.nota) + '">i</span>' : '') +
+          '</div>' +
+          '<div class="mc-tira-val mc-num">' + esc(ld.cli.texto) +
+            (flecha ? ' <span class="mc-tira-flecha">' + flecha + '</span>' : '') + '</div>' +
+          '<div class="mc-tira-sub">' + esc(ld.regimen || '—') +
+            ((ld.direccion || {}).texto ? ' · ' + esc(ld.direccion.texto) : '') + '</div>' +
+        '</div>';
+    }
+
+    return '<div class="mc-tira">' +
+      '<div class="mc-tira-item">' +
+        '<div class="mc-caps">Current cycle</div>' +
+        '<div class="mc-tira-val">' + esc(s.dominante) + '</div>' +
+        '<div class="mc-tira-sub">Official dominant phase</div>' +
+      '</div>' +
+      '<div class="mc-tira-item">' +
+        '<div class="mc-caps">Secondary</div>' +
+        '<div class="mc-tira-val">' + esc(s.secundaria) + '</div>' +
+        '<div class="mc-tira-sub">' + esc(s.confianza) + ' confidence · gap ' + esc(s.gap) + '</div>' +
+      '</div>' +
+      celdaOecd +
+    '</div>';
   }
 
   // ------------------------------------------------------- Heatmap ------
@@ -14518,10 +14879,34 @@ const MC = (function () {
   }
 
   // -------------------------------------------- Bloques aun sin texto ---
+  /* Texto editorial: lo redacta el proyecto de analisis, NO sale del Excel y
+     el extractor no lo sobrescribe. Se mantiene deliberadamente medido: con
+     Phase Confidence = Low el modelo distingue mal Mid de Early, asi que no
+     se afirma una transicion temporal (no hay historico comparable todavia).
+     Los nombres de fase se leen del snapshot para que el texto no pueda
+     contradecir al modelo si el Excel cambia. */
   function renderTextos() {
     const ex = document.getElementById('mc-executive');
     if (ex) {
-      ex.innerHTML = '<div class="mc-empty">Pendiente de redaccion. Este texto lo elabora el proyecto de analisis cada trimestre; no procede del Excel.</div>';
+      if (!hay()) {
+        ex.innerHTML = '<div class="mc-empty">Sin datos del Cycle Model.</div>';
+      } else {
+        const s = macroCycle.snapshot;
+        ex.innerHTML =
+          '<p class="mc-txt">The U.S. economy currently fits <strong>' + esc(s.dominante) +
+          '</strong> better than any other phase, but the margin over <strong>' + esc(s.secundaria) +
+          '</strong> is a single point (' + esc(s.mid) + ' vs ' + esc(s.early) +
+          ') and several pillars still show characteristics of an earlier phase.</p>' +
+          '<p class="mc-txt">Phase confidence is <strong>' + esc(s.confianza).toLowerCase() +
+          '</strong>. That refers to the difficulty of separating ' + esc(s.dominante) +
+          ' from ' + esc(s.secundaria) + ', not to the direction of the cycle: with a ' +
+          esc(s.recession) + '-point recession score and ' +
+          articulo(s.regimen || 'positive') + ' cycle regime, the direction of the cycle is not in question.</p>' +
+          '<p class="mc-txt mc-txt-nota">Editorial reading, written by the analysis project. ' +
+          'It does not come from the workbook and is not recalculated by the model. ' +
+          'No phase transition is claimed: the snapshot is a single provisional ' +
+          'photograph taken while the methodology is still being calibrated.</p>';
+      }
     }
     const ins = document.getElementById('mc-institutional');
     if (ins) {
@@ -14749,16 +15134,52 @@ const MC = (function () {
     });
   }
 
+  /* Tira de confirmacion: por que el momentum efectivo puede diferir del
+     core. Todas las senales salen del TABLE SUMMARY de Activity; la flecha
+     es solo la representacion del estado que da el Excel. */
+  function agConfirmacion() {
+    const el = document.getElementById('ag-confirmacion');
+    if (!el) return;
+    const d = ag();
+    const cf = (d && d.confirmacion) || null;
+    if (!cf || !cf.senal) { el.innerHTML = ''; el.style.display = 'none'; return; }
+    el.style.display = '';
+
+    const FLECHA = { positive: '↑', negative: '↓', neutral: '→' };
+    const piezas = (cf.componentes || []).map(function (c) {
+      const k = String(c.estado || '').toLowerCase();
+      return '<span class="ag-conf-item' + (k === 'positive' ? '' : ' ag-conf-mute') + '">' +
+        esc(c.nombre) + ' <span class="ag-conf-flecha">' + (FLECHA[k] || '·') + '</span></span>';
+    }).join('<span class="ag-conf-sep">·</span>');
+
+    // Solo se explica el ajuste cuando de verdad ha movido el momentum
+    const movido = cf.momentumCore && cf.momentumEfectivo && cf.momentumCore !== cf.momentumEfectivo;
+    const explica = movido
+      ? 'Core momentum is <strong>' + esc(cf.momentumCore) + '</strong>; confirmation is broad enough to lift effective momentum to <strong>' + esc(cf.momentumEfectivo) + '</strong>.'
+      : 'Core momentum is <strong>' + esc(cf.momentumCore || '—') + '</strong> and confirmation does not change it.';
+
+    el.innerHTML =
+      '<div class="ag-conf-fila">' +
+        '<div class="mc-caps">Activity confirmation</div>' +
+        '<div class="ag-conf-lista">' + piezas + '</div>' +
+        '<div class="ag-conf-senal">' + esc(cf.senal) + '</div>' +
+      '</div>' +
+      '<div class="ag-conf-txt">' + explica + '</div>';
+  }
+
   function agResumen() {
     const d = ag(); if (!d) return;
     const el = document.getElementById('ag-summary'); if (!el) return;
     const pil = agPilarActivity();
 
-    function etiquetaPMI(v) {
-      if (typeof v !== 'number') return null;
-      if (v > 50) return { txt: 'Above 50', mute: false };
-      if (v < 50) return { txt: 'Below 50', mute: true };
-      return { txt: 'At 50', mute: true };
+    /* El estado (Positive / Neutral / Negative) lo decide el Excel en el
+       TABLE SUMMARY de Activity. Antes se deducia aqui comparando con 50,
+       lo que duplicaba un umbral que ya vive en el libro. */
+    function etiquetaEstado(nombre) {
+      const c = ((d.confirmacion || {}).componentes || [])
+        .filter(function (x) { return x.nombre === nombre; })[0];
+      if (!c || !c.estado) return null;
+      return { txt: c.estado, mute: String(c.estado).toLowerCase() !== 'positive' };
     }
     function celda(nombre, valor, fecha, cambio, extra) {
       return '<div class="ag-cell">' +
@@ -14775,22 +15196,33 @@ const MC = (function () {
     }
 
     const a = d.activity, m = d.pmiManufacturas, s = d.pmiServicios, p = d.produccionManufacturera;
-    const tm = etiquetaPMI(m && m.lectura ? m.lectura.valor : null);
-    const ts = etiquetaPMI(s && s.lectura ? s.lectura.valor : null);
+    const cf = d.confirmacion || {};
+    const tm = etiquetaEstado('Manufacturing PMI');
+    const ts = etiquetaEstado('Services PMI');
+    const tp = etiquetaEstado('Manufacturing Production');
+
+    function tag(t) {
+      return t ? '<div class="ag-cell-tag' + (t.mute ? ' ag-tag-mute' : '') + '">' + esc(t.txt) + '</div>' : '';
+    }
 
     el.innerHTML =
+      // El core es Below Trend / Stable; la lectura del pilar puede diferir
+      // porque la confirmacion amplia mueve el momentum efectivo.
       celda('Activity', a.lectura ? a.lectura.texto : '—', a.nombrePublico + ' · ' + (a.fecha ? a.fecha.texto : '—'),
             chg(a.momentum, '3M'),
-            pil ? '<div class="ag-cell-tag">' + esc(pil.senalNivel) + '</div>' : '') +
+            (pil ? '<div class="ag-cell-tag">' + esc(pil.senalNivel) +
+                   (cf.momentumCore ? ' / ' + esc(cf.momentumCore) : '') + '</div>' : '') +
+            '<div class="ag-cell-sub">Core reading</div>') +
       celda('Manufacturing PMI', m.lectura ? m.lectura.texto : '—', m.fecha ? m.fecha.texto : '—',
-            chg(m.cambio3M, '3M'),
-            tm ? '<div class="ag-cell-tag' + (tm.mute ? ' ag-tag-mute' : '') + '">' + tm.txt + '</div>' : '') +
+            chg(m.cambio3M, '3M'), tag(tm)) +
       celda('Services PMI', s.lectura ? s.lectura.texto : '—', s.fecha ? s.fecha.texto : '—',
-            chg(s.cambio3M, '3M'),
-            ts ? '<div class="ag-cell-tag' + (ts.mute ? ' ag-tag-mute' : '') + '">' + ts.txt + '</div>' : '') +
+            chg(s.cambio3M, '3M'), tag(ts)) +
       celda('Manufacturing Production', p.yoy ? p.yoy.texto : '—', 'IPMAN YoY · ' + (p.fecha ? p.fecha.texto : '—'),
             '', '<div class="ag-cell-sub">3M annualized ' +
-                 '<span style="color:var(--mc-ink);font-weight:600;">' + esc(p.anualizado3M ? p.anualizado3M.texto : '—') + '</span></div>');
+                 '<span style="color:var(--mc-ink);font-weight:600;">' + esc(p.anualizado3M ? p.anualizado3M.texto : '—') + '</span></div>' +
+                tag(tp));
+
+    agConfirmacion();
 
     const cab = document.getElementById('ag-pillar');
     if (cab) {
@@ -14961,6 +15393,56 @@ const MC = (function () {
     ]);
   }
 
+  /* Sintesis del pilar: Credit es UNA sola lectura explicada por dos
+     componentes. Standards y Volume no votan por separado; sus scores viven
+     solo en la fila consolidada de la MAIN TABLE. */
+  function crSintesis() {
+    const el = document.getElementById('cr-sintesis'); if (!el) return;
+    const pil = crPilar();
+    const est = crDetalle('Credit Standards');
+    const vol = crDetalle('Credit Volume');
+    if (!pil) { el.innerHTML = ''; el.style.display = 'none'; return; }
+    el.style.display = '';
+
+    function pieza(nombre, x) {
+      if (!x) return '';
+      return '<span class="ag-conf-item">' + esc(nombre) +
+        ' <span class="cr-comp">' + esc(x.senalNivel) + ' / ' + esc(x.senalMomentum) + '</span></span>';
+    }
+    el.innerHTML =
+      '<div class="ag-conf-fila">' +
+        '<div class="mc-caps">Credit pillar</div>' +
+        '<div class="ag-conf-lista">' +
+          pieza('Standards', est) + '<span class="ag-conf-sep">·</span>' + pieza('Loan growth', vol) +
+        '</div>' +
+        '<div class="ag-conf-senal">' + esc(pil.senalNivel) + ' / ' + esc(pil.senalMomentum) + '</div>' +
+      '</div>' +
+      '<div class="ag-conf-txt">Credit standards are supportive while loan growth is already ' +
+        'expanding and improving. Both are components of a single Credit pillar: they explain ' +
+        'the reading, they do not score separately.</div>';
+  }
+
+  /* Aviso cuando el Excel entrega un dato claramente desfasado. No se
+     inventa nada ni se recalcula: solo se advierte de a que fecha
+     corresponde de verdad la cifra que se esta mostrando. */
+  function crAviso() {
+    const el = document.getElementById('cr-aviso'); if (!el) return;
+    const d = cr();
+    const des = d && d._desfase;
+    if (!des) { el.innerHTML = ''; el.style.display = 'none'; return; }
+    el.style.display = '';
+    const f = function (iso) {
+      const x = new Date(iso + 'T00:00:00');
+      return isNaN(x) ? iso : AG_MES[x.getMonth()] + ' ' + x.getFullYear();
+    };
+    el.innerHTML = '<div class="cr-stale">' +
+      '<span class="cr-stale-lbl">Data notice</span>' +
+      'The year-over-year loan growth series in the source workbook ends in ' +
+      esc(f(des.derivada)) + ', while the underlying loan level runs to ' +
+      esc(f(des.nivel)) + '. The figure shown is the last one the workbook computes.' +
+    '</div>';
+  }
+
   function crResumen() {
     const d = cr(); if (!d) return;
     const el = document.getElementById('cr-summary'); if (!el) return;
@@ -15029,7 +15511,7 @@ const MC = (function () {
 
   function crInit() {
     if (!cr()) return;
-    crResumen(); crBotones();
+    crSintesis(); crResumen(); crAviso(); crBotones();
     const blk = document.getElementById('mc-blk-credit');
     if (!blk) return;
     blk.addEventListener('click', function (ev) {
@@ -15141,6 +15623,153 @@ const MC = (function () {
     ]);
   }
 
+  /* Barra segmentada de amplitud: un segmento por sector, los que cumplen
+     en burdeos. Es la forma mas compacta de leer "7 de 11" sin una tabla. */
+  function cpBarraBreadth(b) {
+    if (!b || !b.total) return '';
+    let segs = '';
+    for (let i = 0; i < b.total; i++) {
+      segs += '<span class="cp-seg' + (i < b.cuantos ? ' cp-seg-on' : '') + '"></span>';
+    }
+    return '<div class="cp-breadth-barra">' + segs + '</div>';
+  }
+
+  /* Escala de valoracion: sitúa P/E actual y las dos medias sobre un mismo
+     eje para que se vea de un vistazo si cotiza por encima o por debajo. */
+  function cpEscalaPE(f) {
+    const pe = (f.pe || {}).valor, p5 = (f.pe5Y || {}).valor, p10 = (f.pe10Y || {}).valor;
+    if (![pe, p5, p10].every(function (x) { return typeof x === 'number'; })) return '';
+    const lo = Math.min(pe, p5, p10), hi = Math.max(pe, p5, p10);
+    const margen = Math.max((hi - lo) * 0.45, 0.6);   // aire a los lados
+    const a = lo - margen, b = hi + margen;
+    const pos = function (v) { return ((v - a) / (b - a) * 100).toFixed(1); };
+
+    function marca(v, etiqueta, clase) {
+      return '<div class="cp-marca ' + clase + '" style="left:' + pos(v) + '%">' +
+        '<div class="cp-marca-linea"></div>' +
+        '<div class="cp-marca-txt"><span class="cp-marca-val">' + esc(v.toFixed(1)) + 'x</span>' +
+        '<span class="cp-marca-lbl">' + esc(etiqueta) + '</span></div></div>';
+    }
+    // El tramo entre la media de 5Y y el P/E actual se sombrea: es la prima
+    const desde = Math.min(pe, p5), hasta = Math.max(pe, p5);
+    return '<div class="cp-escala">' +
+      '<div class="cp-escala-eje">' +
+        '<div class="cp-escala-prima" style="left:' + pos(desde) + '%;width:' +
+          (pos(hasta) - pos(desde)).toFixed(1) + '%"></div>' +
+      '</div>' +
+      marca(p10, '10Y avg', 'cp-marca-ref') +
+      marca(p5, '5Y avg', 'cp-marca-ref') +
+      marca(pe, 'Current', 'cp-marca-act') +
+    '</div>';
+  }
+
+  function cpCalidad() {
+    const d = cp(); if (!d) return;
+    const el = document.getElementById('cp-quality');
+    const sen = document.getElementById('cp-senal');
+    const c = d.calidad;
+    if (!el) return;
+    if (!c || !c.margen || !(c.margen.actual)) {
+      el.innerHTML = '<div class="mc-empty">Sin datos de calidad de beneficios en el Excel.</div>';
+      if (sen) sen.innerHTML = '';
+      return;
+    }
+    const t = function (o) { return o && o.texto ? o.texto : '—'; };
+
+    // La senal de confirmacion es informativa: NO altera el score del pilar
+    if (sen) {
+      sen.innerHTML = c.senal
+        ? '<div class="mc-caps">Confirmation</div><div class="cp-senal-val">' + esc(c.senal) + '</div>'
+        : '';
+    }
+
+    el.innerHTML =
+      '<div class="cp-q-item">' +
+        '<div class="mc-caps">Net margin</div>' +
+        '<div class="cp-q-val mc-num">' + esc(t(c.margen.actual)) + '</div>' +
+        '<div class="cp-q-chips">' +
+          '<span class="cp-chip">QoQ ' + esc(t(c.margenCambio.qoq)) + '</span>' +
+          '<span class="cp-chip">YoY ' + esc(t(c.margenCambio.yoy)) + '</span>' +
+        '</div>' +
+        '<div class="cp-q-sub">5Y average ' + esc(t(c.margen.media5Y)) +
+          ' · ' + esc(t(c.margenCambio.vs5Y)) + ' above it</div>' +
+      '</div>' +
+      '<div class="cp-q-item">' +
+        '<div class="mc-caps">Revenue growth</div>' +
+        '<div class="cp-q-val mc-num">' + esc(t(c.ingresos.crecimiento)) + '</div>' +
+        '<div class="cp-q-chips">' +
+          '<span class="cp-chip">Revised ' + esc(t(c.ingresos.revision)) + '</span>' +
+        '</div>' +
+        '<div class="cp-q-sub">Year-over-year, versus the estimate at quarter-end</div>' +
+      '</div>' +
+      '<div class="cp-q-item">' +
+        '<div class="mc-caps">Breadth</div>' +
+        (c.breadthMargen ? '<div class="cp-breadth">' +
+          '<div class="cp-breadth-top"><span>Margins improving</span>' +
+            '<span class="mc-num">' + esc(c.breadthMargen.cuantos) + ' / ' + esc(c.breadthMargen.total) + '</span></div>' +
+          cpBarraBreadth(c.breadthMargen) + '</div>' : '') +
+        (c.breadthIngresos ? '<div class="cp-breadth">' +
+          '<div class="cp-breadth-top"><span>Revenue positive</span>' +
+            '<span class="mc-num">' + esc(c.breadthIngresos.cuantos) + ' / ' + esc(c.breadthIngresos.total) + '</span></div>' +
+          cpBarraBreadth(c.breadthIngresos) + '</div>' : '') +
+        '<div class="cp-q-sub">Sectors of the S&amp;P 500</div>' +
+      '</div>';
+  }
+
+  function cpForward() {
+    const d = cp(); if (!d) return;
+    const el = document.getElementById('cp-forward'); if (!el) return;
+    const f = d.forward;
+    if (!f || !f.pe) {
+      el.innerHTML = '<div class="mc-empty">Sin datos de beneficios futuros en el Excel.</div>';
+      return;
+    }
+    const t = function (o) { return o && o.texto ? o.texto : '—'; };
+
+    // Precio frente a beneficio esperado: dos barras a la misma escala
+    const pr = (f.precioDesdeCierre || {}).valor, ep = (f.epsDesdeCierre || {}).valor;
+    let barras = '';
+    if (typeof pr === 'number' && typeof ep === 'number') {
+      const tope = Math.max(Math.abs(pr), Math.abs(ep)) || 1;
+      const fila = function (nombre, v, o, fuerte) {
+        return '<div class="cp-pe-fila">' +
+          '<span class="cp-pe-lbl">' + esc(nombre) + '</span>' +
+          '<span class="cp-pe-track"><span class="cp-pe-fill' + (fuerte ? '' : ' cp-pe-dim') +
+            '" style="width:' + (Math.abs(v) / tope * 100).toFixed(1) + '%"></span></span>' +
+          '<span class="cp-pe-val mc-num">' + esc(t(o)) + '</span>' +
+        '</div>';
+      };
+      // Si el precio sube mas que el beneficio esperado, el multiplo se expande
+      const lectura = (pr > ep)
+        ? 'Earnings growth + multiple expansion'
+        : (pr < ep ? 'Earnings growth + multiple compression' : 'Price tracking earnings');
+      barras =
+        '<div class="cp-f-item">' +
+          '<div class="mc-caps">Price vs forward earnings</div>' +
+          '<div class="cp-pe">' +
+            fila('S&P 500 price', pr, f.precioDesdeCierre, true) +
+            fila('Forward EPS', ep, f.epsDesdeCierre, false) +
+          '</div>' +
+          '<div class="cp-q-sub">Since quarter-end · gap ' + esc(t(f.diferencia)) + '</div>' +
+          '<div class="cp-lectura">' + esc(lectura) + '</div>' +
+        '</div>';
+    }
+
+    el.innerHTML =
+      '<div class="cp-f-item">' +
+        '<div class="mc-caps">Forward EPS growth</div>' +
+        '<div class="cp-q-val mc-num">' + esc(t(f.epsCY)) + '</div>' +
+        '<div class="cp-q-sub">Current calendar year, bottom-up estimate</div>' +
+      '</div>' +
+      '<div class="cp-f-item cp-f-ancho">' +
+        '<div class="mc-caps">Forward 12M P/E versus its own history</div>' +
+        cpEscalaPE(f) +
+        '<div class="cp-q-sub">' + esc(t(f.peVs5Y)) + ' versus the 5-year average · ' +
+          esc(t(f.peVs10Y)) + ' versus the 10-year average</div>' +
+      '</div>' +
+      barras;
+  }
+
   function cpResumen() {
     const d = cp(); if (!d) return;
     const el = document.getElementById('cp-summary'); if (!el) return;
@@ -15202,7 +15831,7 @@ const MC = (function () {
 
   function cpInit() {
     if (!cp()) return;
-    cpResumen(); cpBotones();
+    cpResumen(); cpCalidad(); cpForward(); cpBotones();
     const blk = document.getElementById('mc-blk-corporate-profits');
     if (!blk) return;
     blk.addEventListener('click', function (ev) {
@@ -15304,6 +15933,90 @@ const MC = (function () {
     ]);
   }
 
+  /* Mini estructura temporal de tipos: politica, 2 anyos y 10 anyos sobre un
+     mismo eje. El objetivo es que se vea de un golpe si la curva sube o baja,
+     no sustituir a los graficos del pilar. Nada de esto puntua en el ciclo. */
+  function mpMercado() {
+    const el = document.getElementById('mp-mercado');
+    const ctx = document.getElementById('mp-mercado-ctx');
+    if (!el) return;
+    const d = mp();
+    const t = (d && d.tiposMercado) || null;
+    if (!t || !t.treasury2Y) {
+      el.innerHTML = '<div class="mc-empty">Sin datos de tipos de mercado en el Excel.</div>';
+      if (ctx) ctx.innerHTML = '';
+      return;
+    }
+    const val = function (x) { return x && x.lectura ? x.lectura.valor : null; };
+    const txt = function (x) { return x && x.lectura && x.lectura.texto ? x.lectura.texto + '%' : '—'; };
+
+    const puntos = [
+      { lbl: 'Fed policy', sub: 'Target midpoint', v: val(t.fedMidpoint), tx: txt(t.fedMidpoint) },
+      { lbl: '2Y', sub: 'Treasury', v: val(t.treasury2Y), tx: txt(t.treasury2Y) },
+      { lbl: '10Y', sub: 'Treasury', v: val(t.treasury10Y), tx: txt(t.treasury10Y) }
+    ].filter(function (p) { return typeof p.v === 'number'; });
+
+    let svg = '';
+    if (puntos.length >= 2) {
+      const W = 420, H = 132, x0 = 46, x1 = W - 46, base = 92, alto = 56;
+      const vs = puntos.map(function (p) { return p.v; });
+      const lo = Math.min.apply(null, vs), hi = Math.max.apply(null, vs);
+      const margen = Math.max((hi - lo) * 0.35, 0.15);
+      const a = lo - margen, b = hi + margen;
+      const px = function (i) { return x0 + (x1 - x0) * (i / (puntos.length - 1)); };
+      const py = function (v) { return base - ((v - a) / (b - a)) * alto; };
+
+      const linea = puntos.map(function (p, i) { return px(i).toFixed(1) + ',' + py(p.v).toFixed(1); }).join(' ');
+      let marcas = '';
+      puntos.forEach(function (p, i) {
+        const x = px(i), y = py(p.v);
+        marcas +=
+          '<line x1="' + x.toFixed(1) + '" y1="' + y.toFixed(1) + '" x2="' + x.toFixed(1) +
+            '" y2="' + base + '" stroke="rgba(28,28,28,0.12)" stroke-width="1"/>' +
+          '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="4.2" fill="#6B2737"/>' +
+          '<text x="' + x.toFixed(1) + '" y="' + (y - 12).toFixed(1) + '" text-anchor="middle" ' +
+            'font-family="DM Sans" font-size="14" font-weight="700" fill="#1C1C1C">' + esc(p.tx) + '</text>' +
+          '<text x="' + x.toFixed(1) + '" y="' + (base + 18) + '" text-anchor="middle" ' +
+            'font-family="DM Sans" font-size="11" font-weight="600" fill="#534345">' + esc(p.lbl) + '</text>' +
+          '<text x="' + x.toFixed(1) + '" y="' + (base + 31) + '" text-anchor="middle" ' +
+            'font-family="DM Sans" font-size="9.5" fill="#867275">' + esc(p.sub) + '</text>';
+      });
+      svg = '<svg class="mp-curva" viewBox="0 0 ' + W + ' ' + H + '" width="100%" role="img" ' +
+        'aria-label="Niveles actuales de tipos: politica, dos anyos y diez anyos">' +
+        '<line x1="' + x0 + '" y1="' + base + '" x2="' + x1 + '" y2="' + base +
+          '" stroke="rgba(28,28,28,0.14)" stroke-width="1"/>' +
+        '<polyline points="' + linea + '" fill="none" stroke="#6B2737" stroke-width="1.9" ' +
+          'stroke-linejoin="round"/>' + marcas + '</svg>';
+    }
+
+    // Los dos diferenciales, como detalle secundario
+    function fila(nombre, x, nota) {
+      if (!x || !x.lectura) return '';
+      return '<div class="mp-dif">' +
+        '<div class="mp-dif-top"><span>' + esc(nombre) + '</span>' +
+          '<span class="mc-num">' + esc(x.lectura.texto) + ' pp</span></div>' +
+        (nota ? '<div class="mp-dif-sub">' + esc(nota) + '</div>' : '') +
+      '</div>';
+    }
+    // Descripcion literal del Excel: compara niveles, no anticipa decisiones
+    if (ctx) {
+      ctx.innerHTML = t.contexto && t.contexto.texto
+        ? '<div class="mc-caps">Rates context</div><div class="cp-senal-val">' +
+          esc(t.contexto.texto) + '</div>'
+        : '';
+    }
+
+    el.innerHTML =
+      '<div class="mp-curva-wrap">' + svg + '</div>' +
+      '<div class="mp-difs">' +
+        fila('2Y vs current policy', t.gap2YvsPolitica,
+             'Difference in level between the 2-year Treasury and the policy midpoint') +
+        fila('2s10s', t.pendiente2s10s, '10-year minus 2-year Treasury') +
+        '<div class="mp-nota">Market context. These nominal rates accompany the pillar; ' +
+          'they are not scored by the Cycle Model.</div>' +
+      '</div>';
+  }
+
   function mpResumen() {
     const d = mp(); if (!d) return;
     const el = document.getElementById('mp-summary'); if (!el) return;
@@ -15364,7 +16077,7 @@ const MC = (function () {
 
   function mpInit() {
     if (!mp()) return;
-    mpResumen(); mpBotones();
+    mpResumen(); mpMercado(); mpBotones();
     const blk = document.getElementById('mc-blk-real-rates');
     if (!blk) return;
     blk.addEventListener('click', function (ev) {
@@ -15500,6 +16213,70 @@ const MC = (function () {
       '</div>';
   }
 
+  /* Dinamica de inventarios: dos barras comparables (inventarios frente a
+     ventas) y la diferencia entre ambas. Es lo que explica que el ratio baje
+     mientras los inventarios siguen creciendo. Todo sale del Excel. */
+  function ivDinamica() {
+    const d = iv(); if (!d) return;
+    const el = document.getElementById('iv-dinamica');
+    const sen = document.getElementById('iv-senal');
+    if (!el) return;
+    const n = d.dinamica;
+    if (!n || !n.inventarios || !n.inventarios.yoy) {
+      el.innerHTML = '<div class="mc-empty">Sin datos de dinamica de inventarios en el Excel.</div>';
+      if (sen) sen.innerHTML = '';
+      return;
+    }
+    const t = function (o) { return o && o.texto ? o.texto : '—'; };
+    const inv = n.inventarios, ven = n.ventas, gap = n.gap;
+
+    if (sen) {
+      sen.innerHTML = n.senalMomentum
+        ? '<div class="mc-caps">Momentum</div><div class="cp-senal-val">' + esc(n.senalMomentum) + '</div>'
+        : '';
+    }
+
+    // Las dos barras comparten escala: la comparacion tiene que ser directa
+    const vi = (inv.yoy || {}).valor, vv = (ven.yoy || {}).valor;
+    const tope = Math.max(Math.abs(vi || 0), Math.abs(vv || 0)) || 1;
+    function barra(nombre, valor, obj, fuerte) {
+      return '<div class="iv-barra-fila">' +
+        '<span class="iv-barra-lbl">' + esc(nombre) + '</span>' +
+        '<span class="iv-barra-track"><span class="iv-barra-fill' + (fuerte ? '' : ' iv-barra-dim') +
+          '" style="width:' + (Math.abs(valor || 0) / tope * 100).toFixed(1) + '%"></span></span>' +
+        '<span class="iv-barra-val mc-num">' + esc(t(obj)) + '</span>' +
+      '</div>';
+    }
+
+    // El signo del gap es el que da la lectura: negativo = ventas por delante
+    const g = (gap.yoy || {}).valor;
+    const lectura = typeof g !== 'number' ? ''
+      : (g < 0
+          ? 'Sales are growing faster than inventories, so the ratio falls while inventories keep expanding.'
+          : 'Inventories are growing faster than sales, which pushes the ratio up.');
+
+    el.innerHTML =
+      '<div class="iv-din-comp">' +
+        '<div class="mc-caps">Year-over-year growth</div>' +
+        '<div class="iv-barras">' +
+          barra('Inventories', vi, inv.yoy, false) +
+          barra('Sales', vv, ven.yoy, true) +
+        '</div>' +
+        '<div class="cp-q-sub">' + esc(lectura) + '</div>' +
+      '</div>' +
+      '<div class="iv-din-gap">' +
+        '<div class="mc-caps">Inventory–sales growth gap</div>' +
+        '<div class="cp-q-val mc-num">' + esc(t(gap.yoy)) + '</div>' +
+        '<div class="cp-q-sub">Inventory growth minus sales growth. A negative gap means sales are running ahead.</div>' +
+        '<div class="iv-din-sec">' +
+          '<div class="mc-caps">3M annualized</div>' +
+          '<div class="iv-sec-linea">Inventories <span class="mc-num">' + esc(t(inv.anualizado3M)) + '</span></div>' +
+          '<div class="iv-sec-linea">Sales <span class="mc-num">' + esc(t(ven.anualizado3M)) + '</span></div>' +
+          '<div class="iv-sec-linea iv-sec-fuerte">Gap <span class="mc-num">' + esc(t(gap.anualizado3M)) + '</span></div>' +
+        '</div>' +
+      '</div>';
+  }
+
   function ivResumen() {
     const d = iv(); if (!d) return;
     const el = document.getElementById('iv-summary'); if (!el) return;
@@ -15519,8 +16296,9 @@ const MC = (function () {
     el.innerHTML =
       celda('Inventories-to-sales', d.lectura ? d.lectura.texto : '—',
             d.fecha ? d.fecha.texto : '—') +
-      celda('3M change', chg ? chg.texto : '—', 'Absolute change',
-            pil ? '<div class="ag-cell-tag ag-tag-mute">' + esc(pil.senalMomentum) + '</div>' : '') +
+      // El momentum del pilar ya NO sale de este cambio del ratio: viene del
+      // gap entre inventarios y ventas, asi que su etiqueta no va aqui.
+      celda('Ratio 3M change', chg ? chg.texto : '—', 'Absolute change in the ratio') +
       celda('10Y position', pct === null ? '—' : ivOrdinal(pct) + ' pct',
             'Relative to the last decade',
             pil ? '<div class="ag-cell-tag">' + esc(pil.senalNivel) + '</div>' : '');
@@ -15552,7 +16330,7 @@ const MC = (function () {
 
   function ivInit() {
     if (!iv()) return;
-    ivResumen(); ivPercentil(); ivBotones();
+    ivResumen(); ivDinamica(); ivPercentil(); ivBotones();
     const blk = document.getElementById('mc-blk-inventories');
     if (!blk) return;
     blk.addEventListener('click', function (ev) {
@@ -15720,6 +16498,63 @@ const MC = (function () {
     ]);
   }
 
+  /* Expectativas de mercado: medio plazo (5Y breakeven) frente a largo plazo
+     (5Y5Y forward). Se muestran juntas para que se vea de un vistazo si
+     ambas estan en niveles parecidos. Ninguna es una prevision de inflacion:
+     son el precio que pone el mercado de bonos. */
+  function ifExpectativas() {
+    const el = document.getElementById('if-expectativas');
+    const ctx = document.getElementById('if-ctx-precios');
+    if (!el) return;
+    const d = inf();
+    const be = d && d.breakeven5Y;
+    const fw = d && d.forward5Y5Y;
+    if (!be) { el.innerHTML = ''; return; }
+
+    // Contexto literal del Excel, discreto y sin tarjeta propia
+    if (ctx) {
+      // El texto del Excel ya dice "Inflation pricing...", asi que el rotulo
+      // no lo repite.
+      ctx.innerHTML = (fw && fw.contexto)
+        ? '<div class="mc-caps">Market reading</div><div class="cp-senal-val">' +
+          esc(fw.contexto) + '</div>'
+        : '';
+    }
+
+    // Los cambios de los breakevens son diferencias en puntos porcentuales
+    function pieza(nombre, valorTexto, cambio, aux) {
+      return '<div class="if-exp-item">' +
+        '<div class="mc-caps">' + esc(nombre) + '</div>' +
+        '<div class="if-exp-val mc-num">' + esc(valorTexto) + '</div>' +
+        (cambio && cambio.texto
+          ? '<div class="if-exp-chg">' + esc(cambio.texto) +
+            ' <span class="if-exp-u">pp · 3M</span></div>' : '') +
+        '<div class="if-exp-sub">' + esc(aux) + '</div>' +
+      '</div>';
+    }
+
+    // El formato del Excel ya trae el % en el breakeven; el 5Y5Y no
+    const txtBe = be.lectura ? be.lectura.texto : '—';
+    const txtFw = fw && fw.lectura ? fw.lectura.texto + (fw.unidad || '') : '—';
+
+    let gap = '';
+    if (fw && fw.gapCortoLargo && fw.gapCortoLargo.texto) {
+      gap = '<div class="if-exp-gap">' +
+        '<div class="mc-caps">Near vs long</div>' +
+        '<div class="if-exp-gap-val mc-num">' + esc(fw.gapCortoLargo.texto) + ' pp</div>' +
+        '<div class="if-exp-sub">5-year breakeven minus the 5Y5Y forward rate</div>' +
+      '</div>';
+    }
+
+    el.innerHTML =
+      pieza(be.nombrePublico, txtBe, be.cambio3M,
+            'Average inflation priced for the next five years · ' +
+            (be.fecha ? be.fecha.texto : '—')) +
+      (fw ? pieza(fw.nombrePublico, txtFw, fw.cambio3M,
+                  esc(fw.etiquetaAuxiliar) + ' · ' + (fw.fecha ? fw.fecha.texto : '—')) : '') +
+      gap;
+  }
+
   function ifResumen() {
     const d = inf(); if (!d) return;
     const el = document.getElementById('if-summary'); if (!el) return;
@@ -15773,7 +16608,7 @@ const MC = (function () {
 
   function ifInit() {
     if (!inf()) return;
-    ifResumen(); ifBotones();
+    ifResumen(); ifExpectativas(); ifBotones();
     const blk = document.getElementById('mc-blk-inflation');
     if (!blk) return;
     blk.addEventListener('click', function (ev) {
