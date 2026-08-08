@@ -1638,7 +1638,12 @@
   }
 
   /* Fila 1: Cycle Position + columna lateral */
-  #page-macro-detail .mc-row1 { display: grid; grid-template-columns: 1.95fr 1fr; gap: 16px; }
+  /* Dos columnas y dos filas: la altura de cada fila la marca su tarjeta mas
+     alta, asi que las de la derecha empiezan y acaban donde las de la
+     izquierda aunque les sobre espacio. */
+  #page-macro-detail .mc-row1 {
+    display: grid; grid-template-columns: 1.95fr 1fr; gap: 16px; align-items: stretch;
+  }
   #page-macro-detail .mc-side { display: flex; flex-direction: column; gap: 16px; }
   #page-macro-detail .mc-pos-head {
     display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
@@ -1663,29 +1668,140 @@
   }
   /* Tira de lectura al pie de Cycle Position: fase oficial, secundaria y el
      indicador adelantado. Comparte tarjeta con el arco; no es un bloque nuevo. */
-  #page-macro-detail .mc-tira {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
-    margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--mc-line-soft);
+  /* Franja inferior de Cycle Position: senyales complementarias. Deliberadamente
+     mas pequenya y sobria que el arco, para que no compita con el. */
+  /* La caja de senyales cae en la misma columna de la rejilla que Cycle
+     Position, de modo que hereda su ancho exacto. */
+  /* Tarjeta que no debe estirar su fila: si el texto no cabe, se desplaza
+     dentro en lugar de empujar la maqueta. */
+  #page-macro-detail .mc-card-scroll { min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+  #page-macro-detail .mc-card-scroll > div:last-child {
+    overflow-y: auto; min-height: 0; display: flex; flex-direction: column; flex: 1 1 auto;
   }
+  #page-macro-detail .mc-senales { display: flex; align-items: center; }
+  #page-macro-detail .mc-senales > * { width: 100%; }
+  #page-macro-detail .mc-tira {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+  }
+  #page-macro-detail .mc-tira-uno { grid-template-columns: minmax(0, 340px); }
+  /* Rotulos de las cinco areas, alineados bajo sus cuadrados */
+  #page-macro-detail .mc-area-pies { display: flex; gap: 4px; margin-top: 5px; }
+  #page-macro-detail .mc-area-pie {
+    flex: 1 1 0; min-width: 0; font-family: 'DM Sans', sans-serif;
+    font-size: 0.54rem; letter-spacing: 0.02em; text-transform: uppercase;
+    color: var(--mc-ink-soft); text-align: center;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  #page-macro-detail .mc-area-pie-on { color: var(--mc-burgundy); font-weight: 700; }
   #page-macro-detail .mc-tira-item { min-width: 0; }
+  #page-macro-detail .mc-tira-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; margin-bottom: 9px;
+  }
+  #page-macro-detail .mc-tira-cifra {
+    font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 700;
+    color: var(--mc-ink); white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  #page-macro-detail .mc-tira-delta { font-weight: 500; color: var(--mc-ink-soft); font-size: 0.76rem; }
+  /* Matriz 2x2 del indicador adelantado */
+  /* La matriz baja un poco y crece lo justo para que su borde inferior
+     quede a la altura de la ultima linea de Recession Risk. El titulo y la
+     cifra del CLI no se mueven: el desplazamiento vive solo aqui. */
+  #page-macro-detail .mc-matriz {
+    display: grid; grid-template-columns: auto 1fr 1fr; gap: 3px; align-items: stretch;
+    /* 18px y no 9: este margen colapsa con el margin-bottom de la cabecera,
+       asi que solo cuenta el mayor de los dos. */
+    margin-top: 18px;
+  }
+  #page-macro-detail .mc-q-eje {
+    font-family: 'DM Sans', sans-serif; font-size: 0.58rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--mc-ink-soft);
+    display: flex; align-items: center;
+  }
+  #page-macro-detail .mc-q-eje-c { justify-content: center; padding-bottom: 3px; }
+  #page-macro-detail .mc-q-eje-f { padding-right: 9px; white-space: nowrap; }
+  #page-macro-detail .mc-q {
+    font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--mc-ink-soft);
+    background: var(--mc-heat-0); border: 1px solid transparent; border-radius: 3px;
+    padding: 13px 6px; text-align: center;
+  }
+  #page-macro-detail .mc-q-on {
+    background: var(--mc-burgundy); border-color: var(--mc-burgundy);
+    color: #fff; font-weight: 700;
+  }
+  /* Riesgo de recesion */
+  #page-macro-detail .mc-rec-areas { margin-bottom: 3px; }
+  #page-macro-detail .mc-rec-linea {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+    color: var(--mc-ink-soft); padding: 5px 0;
+    border-bottom: 1px solid var(--mc-line-soft);
+  }
+  #page-macro-detail .mc-rec-linea:last-child { border-bottom: none; }
+  #page-macro-detail .mc-rec-linea .mc-num { color: var(--mc-ink); font-weight: 600; }
+  #page-macro-detail .mc-area-fila { display: flex; gap: 4px; margin: 7px 0 2px; }
+  #page-macro-detail .mc-area {
+    flex: 1 1 0; height: 10px; border-radius: 2px;
+    background: var(--mc-heat-0); border: 1px solid var(--mc-line-soft);
+  }
+  #page-macro-detail .mc-area-on { background: var(--mc-burgundy-deep); border-color: var(--mc-burgundy-deep); }
   #page-macro-detail .mc-txt {
     font-family: 'DM Sans', sans-serif; font-size: 0.78rem; line-height: 1.62;
     color: var(--mc-ink-mid); margin: 0 0 10px;
   }
   #page-macro-detail .mc-txt:last-child { margin-bottom: 0; }
   #page-macro-detail .mc-txt strong { color: var(--mc-ink); font-weight: 600; }
-  #page-macro-detail .mc-txt-nota {
-    font-size: 0.68rem; color: var(--mc-ink-soft);
-    padding-top: 9px; border-top: 1px solid var(--mc-line-soft);
+
+  /* ---- Institutional Perspectives: una casa cada vez ---- */
+  #page-macro-detail .mc-ip-nav {
+    display: grid; grid-template-columns: 22px 1fr 22px; align-items: center;
+    gap: 6px; margin-bottom: 8px;
   }
-  #page-macro-detail .mc-tira-val {
-    font-family: 'Playfair Display', serif; font-size: 1.02rem; font-weight: 600;
-    color: var(--mc-ink); margin-top: 5px; line-height: 1.2;
+  #page-macro-detail .mc-ip-flecha {
+    width: 22px; height: 22px; padding: 0; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    background: none; border: 1px solid var(--mc-line); border-radius: 3px;
+    color: var(--mc-ink-soft); font-size: 0.95rem; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
   }
-  #page-macro-detail .mc-tira-flecha { color: var(--mc-burgundy); font-family: 'DM Sans', sans-serif; }
-  #page-macro-detail .mc-tira-sub {
-    font-size: 0.66rem; color: var(--mc-ink-soft); margin-top: 4px; line-height: 1.4;
+  #page-macro-detail .mc-ip-flecha:hover { color: var(--mc-burgundy); border-color: var(--mc-burgundy); }
+  #page-macro-detail .mc-ip-flecha:focus-visible { outline: 2px solid var(--mc-burgundy); outline-offset: 2px; }
+  #page-macro-detail .mc-ip-casa {
+    font-family: 'Playfair Display', serif; font-size: 0.98rem; font-weight: 600;
+    color: var(--mc-ink); text-align: center; line-height: 1.25; min-width: 0;
   }
+  #page-macro-detail .mc-ip-sintesis {
+    font-size: 0.58rem; font-weight: 700; letter-spacing: 0.11em; text-transform: uppercase;
+    color: var(--mc-burgundy); text-align: center; margin-bottom: 11px;
+  }
+  #page-macro-detail .mc-ip-lista {
+    list-style: none; padding: 0; margin: 0;
+    /* Si una casa se extiende mas que otra, el texto se desplaza dentro y la
+       tarjeta no cambia de tamanyo. */
+    overflow-y: auto; min-height: 0;
+  }
+  #page-macro-detail .mc-ip-lista li {
+    position: relative; padding-left: 13px; margin-bottom: 9px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.72rem; line-height: 1.58;
+    color: var(--mc-ink-mid);
+  }
+  #page-macro-detail .mc-ip-lista li:last-child { margin-bottom: 0; }
+  #page-macro-detail .mc-ip-lista li::before {
+    content: ''; position: absolute; left: 0; top: 8px;
+    width: 4px; height: 4px; border-radius: 50%; background: var(--mc-burgundy);
+  }
+  #page-macro-detail .mc-ip-pie {
+    font-size: 0.62rem; color: var(--mc-ink-soft); line-height: 1.4;
+    margin-top: 11px; padding-top: 9px; border-top: 1px solid var(--mc-line-soft);
+  }
+  #page-macro-detail .mc-ip-pie a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--mc-line); }
+  #page-macro-detail .mc-ip-pie a:hover { color: var(--mc-burgundy); border-bottom-color: var(--mc-burgundy); }
+  #page-macro-detail .mc-ip-puntos { display: flex; gap: 5px; justify-content: center; margin-top: 9px; }
+  #page-macro-detail .mc-ip-punto {
+    width: 4px; height: 4px; border-radius: 50%; background: var(--mc-line);
+  }
+  #page-macro-detail .mc-ip-punto-on { background: var(--mc-burgundy); }
+  #page-macro-detail .mc-tira-flecha { color: var(--mc-burgundy); }
   #page-macro-detail .mc-info {
     display: inline-flex; align-items: center; justify-content: center;
     width: 12px; height: 12px; border: 1px solid var(--mc-line);
@@ -1729,12 +1845,16 @@
   #page-macro-detail .mc-heat { width: 100%; border-collapse: collapse; }
   #page-macro-detail .mc-heat th {
     font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--mc-ink-soft); padding: 0 8px 6px; border-bottom: 1px solid var(--mc-line);
-    text-align: center;
+    /* Relleno repartido arriba y abajo: con el relleno solo abajo, los
+       rotulos quedaban pegados al borde superior de la franja. */
+    color: var(--mc-ink-soft); padding: 4.5px 8px; border-bottom: 1px solid var(--mc-line);
+    text-align: center; vertical-align: middle;
   }
   #page-macro-detail .mc-heat th:first-child { text-align: left; }
+  /* Las filas llevan mas aire vertical que el minimo: con el relleno justo
+     el heatmap quedaba aplastado y los cuadrados se tocaban entre filas. */
   #page-macro-detail .mc-heat td {
-    padding: 4px 8px; border-bottom: 1px solid var(--mc-line-soft); text-align: center;
+    padding: 6.6px 8px; border-bottom: 1px solid var(--mc-line-soft); text-align: center;
     line-height: 1.3;
   }
   #page-macro-detail .mc-heat tr:last-child td { border-bottom: none; }
@@ -3007,17 +3127,23 @@
     <div class="mc-cover">
 
 
+      <!-- Rejilla 2x2: cada fila empareja una tarjeta de la izquierda con la
+           de su derecha, de modo que ambas empiezan y terminan a la misma
+           altura aunque una tenga menos contenido que la otra. -->
       <div class="mc-row1">
         <div class="mc-card" id="mc-position"></div>
-        <div class="mc-side">
-          <div class="mc-card">
-            <div class="mc-h-sm" style="margin-bottom:12px;">ALS Executive Assessment</div>
-            <div id="mc-executive"></div>
-          </div>
-          <div class="mc-card">
-            <div class="mc-h-sm" style="margin-bottom:12px;">Institutional Perspectives</div>
-            <div id="mc-institutional"></div>
-          </div>
+        <!-- El carrusel no debe cambiar el tamanyo de la tarjeta al pasar de
+             una casa a otra: si un texto es mas largo, se desplaza dentro. -->
+        <div class="mc-card mc-card-scroll">
+          <div class="mc-h-sm" style="margin-bottom:12px;">Institutional Perspectives</div>
+          <div id="mc-institutional"></div>
+        </div>
+        <div class="mc-card mc-senales" id="mc-senales"></div>
+        <!-- ALS Executive pasa a la caja pequenya: su texto puede pasarse de
+             alto, asi que se desplaza dentro sin estirar la fila. -->
+        <div class="mc-card mc-card-scroll">
+          <div class="mc-h-sm" style="margin-bottom:12px;">ALS Executive Assessment</div>
+          <div id="mc-executive"></div>
         </div>
       </div>
 
@@ -6431,7 +6557,7 @@
 <script src="assets/js/mktData.js"></script>
 <!-- El parametro ?v= fuerza a los navegadores a recargar los datos cuando se
      regenera el fichero. Subir el numero al actualizar el Excel. -->
-<script src="assets/js/macroCycle.js?v=f835b4175d"></script>
+<script src="assets/js/macroCycle.js?v=6b9936c244"></script>
 <script src="assets/data/energy/eia_oil_production_data.js"></script>
 <script>
 
@@ -14668,12 +14794,6 @@ const MC = (function () {
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
   function hay() { return typeof macroCycle !== 'undefined' && macroCycle && macroCycle.snapshot; }
-  /* Articulo correcto delante del regimen, que el Excel puede devolver como
-     Expansion, Downturn, Slowdown o Recovery. */
-  function articulo(palabra) {
-    const p = String(palabra).toLowerCase();
-    return ('aeiou'.indexOf(p.charAt(0)) >= 0 ? 'an ' : 'a ') + esc(p);
-  }
 
   // --------------------------------------------------- Cycle Position ----
   /* El arco no interpola una posicion inventada: dibuja los cuatro tramos
@@ -14757,49 +14877,161 @@ const MC = (function () {
       svg +
       '<div class="mc-reading">' + esc(s.lectura) + '</div>' +
       '<div class="mc-caps" style="margin-top:9px;">Phase compatibility score (max ' + MAX_SCORE + ')</div>' +
-      '<div class="mc-score-grid">' + barras + '</div>' +
-      renderTiraLectura();
+      '<div class="mc-score-grid">' + barras + '</div>';
+
+    renderSenales();
+  }
+
+  /* Las senyales complementarias viven en su propia caja, debajo de Cycle
+     Position y con su mismo ancho. Separarlas deja claro que no forman parte
+     del modelo de fases: lo acompanyan. */
+  function renderSenales() {
+    const el = document.getElementById('mc-senales');
+    if (!el) return;
+    const oecd = renderOecdMatriz();
+    const rec = renderRiesgoRecesion();
+    if (!oecd && !rec) { el.innerHTML = ''; el.style.display = 'none'; return; }
+    el.style.display = '';
+    // Sin titulo de tarjeta: cada senyal ya lleva el suyo y anyadir uno
+    // encima solo restaba espacio y sumaba ruido.
+    el.innerHTML =
+      '<div class="mc-tira' + (oecd && rec ? '' : ' mc-tira-uno') + '">' + oecd + rec + '</div>';
   }
 
   /* Tira compacta al pie de Cycle Position: fase oficial, fase secundaria y
      el indicador adelantado. Es una lectura de un vistazo, no un bloque
      nuevo: comparte tarjeta, tipografia y espaciado con el resto. */
-  function renderTiraLectura() {
-    if (!hay()) return '';
-    const s = macroCycle.snapshot;
-    const ld = (typeof macroCycle !== 'undefined' && macroCycle.leading) || null;
+  /* Franja inferior de Cycle Position: dos senyales COMPLEMENTARIAS, no un
+     segundo Cycle Position. Se retiraron de aqui "Current cycle" y
+     "Secondary": la fase ya se lee en el arco, en el texto principal y en la
+     puntuacion por fases, y repetirla tres veces solo restaba jerarquia. */
+  /* Matriz 2x2 del indicador adelantado. Las dos preguntas que la definen son
+     si el CLI esta por encima o por debajo de 100 y si sube o baja. El
+     cuadrante activo lo decide el REGIMEN que publica el Excel; la posicion
+     solo se usa si ese regimen no llegara. */
+  const OECD_CUADRANTES = [
+    { fila: 'Rising',  col: 'bajo', nombre: 'Recovery' },
+    { fila: 'Rising',  col: 'alto', nombre: 'Expansion' },
+    { fila: 'Falling', col: 'bajo', nombre: 'Slowdown' },
+    { fila: 'Falling', col: 'alto', nombre: 'Downturn' }
+  ];
 
-    let celdaOecd = '';
-    if (ld && ld.cli) {
-      // La flecha sale del signo de la direccion que da el Excel; la
-      // clasificacion (Expansion, Downturn...) la decide el Excel, no el codigo.
-      const d = (ld.direccion || {}).valor;
-      const flecha = typeof d === 'number' ? (d >= 0 ? '↑' : '↓') : '';
-      celdaOecd =
-        '<div class="mc-tira-item">' +
-          '<div class="mc-caps">OECD US Leading Indicator' +
-            (ld.nota ? ' <span class="mc-info" tabindex="0" role="note" aria-label="' +
-              esc(ld.nota) + '" title="' + esc(ld.nota) + '">i</span>' : '') +
-          '</div>' +
-          '<div class="mc-tira-val mc-num">' + esc(ld.cli.texto) +
-            (flecha ? ' <span class="mc-tira-flecha">' + flecha + '</span>' : '') + '</div>' +
-          '<div class="mc-tira-sub">' + esc(ld.regimen || '—') +
-            ((ld.direccion || {}).texto ? ' · ' + esc(ld.direccion.texto) : '') + '</div>' +
-        '</div>';
+  function renderOecdMatriz() {
+    const ld = (typeof macroCycle !== 'undefined' && macroCycle.leading) || null;
+    if (!ld || !ld.cli) return '';
+    const nivel = ld.cli.valor;
+    const dir = (ld.direccion || {}).valor;
+    if (typeof nivel !== 'number') return '';
+
+    const col = nivel > 100 ? 'alto' : 'bajo';
+    const fila = (typeof dir === 'number' && dir < 0) ? 'Falling' : 'Rising';
+    const flecha = typeof dir === 'number' ? (dir >= 0 ? '↑' : '↓') : '';
+
+    // "Contraction" y "Downturn" son el mismo cuadrante segun quien lo escriba
+    const reg = String(ld.regimen || '').trim().toLowerCase();
+    const alias = { contraction: 'downturn' };
+    const regNorm = alias[reg] || reg;
+
+    let activo = OECD_CUADRANTES.filter(function (q) {
+      return q.nombre.toLowerCase() === regNorm;
+    })[0];
+    if (!activo) {
+      activo = OECD_CUADRANTES.filter(function (q) { return q.fila === fila && q.col === col; })[0];
     }
 
-    return '<div class="mc-tira">' +
-      '<div class="mc-tira-item">' +
-        '<div class="mc-caps">Current cycle</div>' +
-        '<div class="mc-tira-val">' + esc(s.dominante) + '</div>' +
-        '<div class="mc-tira-sub">Official dominant phase</div>' +
+    function celda(f, c) {
+      const q = OECD_CUADRANTES.filter(function (x) { return x.fila === f && x.col === c; })[0];
+      const on = activo && q.nombre === activo.nombre;
+      return '<div class="mc-q' + (on ? ' mc-q-on' : '') + '">' + esc(q.nombre) + '</div>';
+    }
+
+    return '<div class="mc-tira-item">' +
+      '<div class="mc-tira-head">' +
+        '<div class="mc-caps">OECD US Leading Indicator' +
+          (ld.nota ? ' <span class="mc-info" tabindex="0" role="note" aria-label="' +
+            esc(ld.nota) + '" title="' + esc(ld.nota) + '">i</span>' : '') + '</div>' +
+        '<div class="mc-tira-cifra mc-num">' + esc(ld.cli.texto) +
+          (flecha ? ' <span class="mc-tira-flecha">' + flecha + '</span>' : '') +
+          ((ld.direccion || {}).texto
+            ? ' <span class="mc-tira-delta">' + esc(ld.direccion.texto) + '</span>' : '') +
+        '</div>' +
       '</div>' +
-      '<div class="mc-tira-item">' +
-        '<div class="mc-caps">Secondary</div>' +
-        '<div class="mc-tira-val">' + esc(s.secundaria) + '</div>' +
-        '<div class="mc-tira-sub">' + esc(s.confianza) + ' confidence · gap ' + esc(s.gap) + '</div>' +
+      '<div class="mc-matriz">' +
+        '<div class="mc-q-eje"></div>' +
+        '<div class="mc-q-eje mc-q-eje-c">&le; 100</div>' +
+        '<div class="mc-q-eje mc-q-eje-c">&gt; 100</div>' +
+        '<div class="mc-q-eje mc-q-eje-f">Rising</div>' + celda('Rising', 'bajo') + celda('Rising', 'alto') +
+        '<div class="mc-q-eje mc-q-eje-f">Falling</div>' + celda('Falling', 'bajo') + celda('Falling', 'alto') +
       '</div>' +
-      celdaOecd +
+    '</div>';
+  }
+
+  /* Riesgo de recesion. Todo sale del bloque WEB SUMMARY - RECESSION
+     EVIDENCE del Excel, ya resuelto: amplitud, persistencia, profundidad y la
+     bandera de cada area. Aqui no se recalcula ni se pondera nada.
+
+     La unica decision del front es la etiqueta de cabecera: el Excel entrega
+     "Not Confirmed", que describe el veredicto pero no informa del nivel de
+     riesgo. Se traduce a partir de los tres criterios que el propio libro
+     documenta (amplitud >= 3 de 5, persistencia >= 2 meses, profundidad en
+     alerta), sin inventar probabilidades. */
+  function renderRiesgoRecesion() {
+    const r = (typeof macroCycle !== 'undefined' && macroCycle.recesion) || null;
+    if (!r || !r.detalleDisponible) return '';
+
+    const esContraccion = function (v) {
+      return String(v || '').trim().toLowerCase() === 'contracting';
+    };
+    const areas = r.areas || [];
+    const enContraccion = areas.filter(function (a) { return esContraccion(a.estado); }).length;
+    const meses = parseInt(String(r.persistencia || '').replace(/[^0-9-]/g, ''), 10);
+    const profundidadAlerta = String(r.profundidad || '').trim().toLowerCase() !== 'normal';
+    const confirmado = String(r.confirmacion || '').trim().toLowerCase().indexOf('not') !== 0 &&
+                       String(r.confirmacion || '').trim() !== '';
+
+    // Escalera: confirmada > elevada > moderada > baja
+    let nivel = 'Low';
+    if (confirmado) nivel = 'Confirmed';
+    else if (enContraccion >= 3 && meses >= 2) nivel = 'Elevated';
+    else if (enContraccion >= 3 || profundidadAlerta) nivel = 'Moderate';
+
+    const cuadros = areas.map(function (a) {
+      const on = esContraccion(a.estado);
+      return '<span class="mc-area' + (on ? ' mc-area-on' : '') + '" title="' +
+        esc(a.nombre) + ': ' + esc(a.estado || '—') + '"></span>';
+    }).join('');
+
+    function linea(etiqueta, valor) {
+      if (valor === null || valor === undefined || valor === '') return '';
+      return '<div class="mc-rec-linea"><span>' + esc(etiqueta) + '</span>' +
+        '<span class="mc-num">' + esc(valor) + '</span></div>';
+    }
+
+    const ayuda = 'Breadth counts how many of the five monthly real-economy areas ' +
+      'are contracting. Persistence is the number of consecutive months with a ' +
+      'broad contraction. Depth is based on the CFNAIMA3 threshold. Source: ALS ' +
+      'recession-evidence framework, not the NBER dating formula.';
+
+    return '<div class="mc-tira-item">' +
+      '<div class="mc-tira-head">' +
+        '<div class="mc-caps">Recession risk' +
+          ' <span class="mc-info" tabindex="0" role="note" aria-label="' + esc(ayuda) +
+          '" title="' + esc(ayuda) + '">i</span></div>' +
+        '<div class="mc-tira-cifra">' + esc(nivel) + '</div>' +
+      '</div>' +
+      '<div class="mc-rec-areas">' +
+        '<div class="mc-rec-linea"><span>Key areas contracting</span>' +
+          '<span class="mc-num">' + esc(r.amplitud) + '</span></div>' +
+        '<div class="mc-area-fila">' + cuadros + '</div>' +
+        '<div class="mc-area-pies">' +
+          areas.map(function (a) {
+            return '<span class="mc-area-pie' + (esContraccion(a.estado) ? ' mc-area-pie-on' : '') +
+              '">' + esc(a.nombre) + '</span>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+      linea('Persistence', r.persistencia) +
+      linea('Depth', r.profundidad) +
     '</div>';
   }
 
@@ -14878,40 +15110,112 @@ const MC = (function () {
     }).join('');
   }
 
-  // -------------------------------------------- Bloques aun sin texto ---
-  /* Texto editorial: lo redacta el proyecto de analisis, NO sale del Excel y
-     el extractor no lo sobrescribe. Se mantiene deliberadamente medido: con
-     Phase Confidence = Low el modelo distingue mal Mid de Early, asi que no
-     se afirma una transicion temporal (no hay historico comparable todavia).
-     Los nombres de fase se leen del snapshot para que el texto no pueda
-     contradecir al modelo si el Excel cambia. */
+  // -------------------------------------------- Bloques editoriales -----
+  /* Textos redactados por el proyecto de analisis. NO salen del Excel y el
+     extractor no los sobrescribe. Se guardan aqui, literales, para que
+     cambiarlos sea editar una cadena y nada mas. */
+  const MC_EXECUTIVE =
+    'Mid-Cycle remains the best fit. Strong profits, expanding credit and neutral ' +
+    'policy lead the signal, while below-trend activity and lean inventories ' +
+    'preserve some Early-Cycle traits.';
+
+  /* Perspectivas institucionales. Contenido EDITORIAL y fijo: no sale del
+     Excel, no se genera ni se reinterpreta a partir del dashboard. ALS lo
+     revisa a mano. Cada casa dice lo suyo: no se fuerza a todas a una
+     clasificacion Early/Mid/Late comun. */
+  const MC_PERSPECTIVAS = [
+    {
+      casa: 'Fidelity Investments',
+      sintesis: 'Mid-Cycle',
+      puntos: [
+        'Fidelity places the U.S. in mid-cycle, citing solid economic activity and early signs of recovery in the labor market.',
+        'In its framework, mid-cycle represents a broader, more self-sustaining expansion, with economic momentum still positive but beyond the initial recovery phase.'
+      ],
+      pie: 'Q3 2026 · Fidelity Business Cycle Update',
+      url: 'https://institutional.fidelity.com/app/item/RD_13569_40890/business-cycle-update.html'
+    },
+    {
+      casa: 'J.P. Morgan Asset Management',
+      sintesis: 'Stronger mid-year momentum',
+      puntos: [
+        'The U.S. enters the second half of 2026 with stronger momentum, supported by surging AI investment and spending by upper-income households.',
+        'J.P. Morgan expects real GDP growth of roughly 3% in Q2–Q3 before moderating toward 1.5% late in the year.',
+        'The expansion remains uneven: AI-related investment is strong, while several other areas of demand remain softer. The Fed is expected to stay on hold through 2026.'
+      ],
+      pie: 'Mid-Year 2026 · J.P. Morgan Asset Management',
+      url: 'https://am.jpmorgan.com/us/en/asset-management/liq/insights/market-insights/investment-outlook/'
+    },
+    {
+      casa: 'Morgan Stanley',
+      sintesis: 'Late-cycle growth',
+      puntos: [
+        'U.S. momentum remains resilient, with AI-related capex and spending by wealthier consumers providing the main support to growth.',
+        'Morgan Stanley expects growth to soften in the second half of 2026, but its baseline avoids recession. AI investment and fiscal spending provide a floor that can prolong late-cycle growth.',
+        'Energy remains the key downside risk: a more prolonged supply disruption could lift inflation, weaken confidence and materially worsen the growth outlook.'
+      ],
+      pie: 'May 2026 · Morgan Stanley Midyear Economic Outlook',
+      url: 'https://www.morganstanley.com/insights/articles/economic-outlook-midyear-2026'
+    },
+    {
+      casa: 'ClearBridge Investments',
+      sintesis: 'Solid footing',
+      puntos: [
+        'ClearBridge sees the U.S. economy on firmer footing as the labor market improves: payroll growth averaged 111k per month in Q2 versus 73k in Q1.',
+        'Its Recession Dashboard remains strongly expansionary, with 11 of 12 indicators in expansion territory and no deterioration in the latest monthly update.',
+        'Lower oil prices and a stronger labor backdrop should support real incomes and consumption, while robust earnings remain the main fundamental support for equities.'
+      ],
+      pie: 'July 2026 · ClearBridge — The Long View',
+      url: 'https://www.franklintempleton.com/articles/2026/clearbridge-investments/the-long-view-not-a-straight-line'
+    }
+  ];
+  let mcPerspectiva = 0;
+
+  function renderPerspectivas() {
+    const el = document.getElementById('mc-institutional');
+    if (!el) return;
+    const n = MC_PERSPECTIVAS.length;
+    // El modulo mantiene el indice dentro del rango en ambos sentidos
+    mcPerspectiva = ((mcPerspectiva % n) + n) % n;
+    const p = MC_PERSPECTIVAS[mcPerspectiva];
+
+    el.innerHTML =
+      '<div class="mc-ip-nav">' +
+        '<button type="button" class="mc-ip-flecha" data-ip="-1" aria-label="Fuente anterior">&lsaquo;</button>' +
+        '<div class="mc-ip-casa">' + esc(p.casa) + '</div>' +
+        '<button type="button" class="mc-ip-flecha" data-ip="1" aria-label="Fuente siguiente">&rsaquo;</button>' +
+      '</div>' +
+      (p.sintesis ? '<div class="mc-ip-sintesis">' + esc(p.sintesis) + '</div>' : '') +
+      '<ul class="mc-ip-lista">' +
+        p.puntos.map(function (b) { return '<li>' + esc(b) + '</li>'; }).join('') +
+      '</ul>' +
+      '<div class="mc-ip-pie">' +
+        (p.url
+          ? '<a href="' + esc(p.url) + '" target="_blank" rel="noopener noreferrer">' + esc(p.pie) + '</a>'
+          : esc(p.pie)) +
+      '</div>' +
+      '<div class="mc-ip-puntos" aria-hidden="true">' +
+        MC_PERSPECTIVAS.map(function (_, i) {
+          return '<span class="mc-ip-punto' + (i === mcPerspectiva ? ' mc-ip-punto-on' : '') + '"></span>';
+        }).join('') +
+      '</div>';
+  }
+
   function renderTextos() {
     const ex = document.getElementById('mc-executive');
-    if (ex) {
-      if (!hay()) {
-        ex.innerHTML = '<div class="mc-empty">Sin datos del Cycle Model.</div>';
-      } else {
-        const s = macroCycle.snapshot;
-        ex.innerHTML =
-          '<p class="mc-txt">The U.S. economy currently fits <strong>' + esc(s.dominante) +
-          '</strong> better than any other phase, but the margin over <strong>' + esc(s.secundaria) +
-          '</strong> is a single point (' + esc(s.mid) + ' vs ' + esc(s.early) +
-          ') and several pillars still show characteristics of an earlier phase.</p>' +
-          '<p class="mc-txt">Phase confidence is <strong>' + esc(s.confianza).toLowerCase() +
-          '</strong>. That refers to the difficulty of separating ' + esc(s.dominante) +
-          ' from ' + esc(s.secundaria) + ', not to the direction of the cycle: with a ' +
-          esc(s.recession) + '-point recession score and ' +
-          articulo(s.regimen || 'positive') + ' cycle regime, the direction of the cycle is not in question.</p>' +
-          '<p class="mc-txt mc-txt-nota">Editorial reading, written by the analysis project. ' +
-          'It does not come from the workbook and is not recalculated by the model. ' +
-          'No phase transition is claimed: the snapshot is a single provisional ' +
-          'photograph taken while the methodology is still being calibrated.</p>';
-      }
-    }
+    if (ex) ex.innerHTML = '<p class="mc-txt">' + esc(MC_EXECUTIVE) + '</p>';
+
     const ins = document.getElementById('mc-institutional');
-    if (ins) {
-      ins.innerHTML = '<div class="mc-empty">Pendiente de contenido. Las perspectivas institucionales se anaden manualmente al no existir en el Excel.</div>';
+    if (ins && !ins.dataset.ipListo) {
+      // Un solo listener en la tarjeta: los botones se redibujan en cada paso
+      ins.dataset.ipListo = '1';
+      ins.addEventListener('click', function (ev) {
+        const b = ev.target.closest('[data-ip]');
+        if (!b) return;
+        mcPerspectiva += parseInt(b.getAttribute('data-ip'), 10);
+        renderPerspectivas();
+      });
     }
+    renderPerspectivas();
   }
 
   /* ===================================================================
