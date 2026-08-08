@@ -2604,6 +2604,29 @@
     flex-wrap: wrap; padding: 15px 22px;
     background: var(--imf-headbg); border-bottom: 1px solid var(--imf-line);
   }
+  /* --- Ficha de casa: el titulo NO vive dentro de una caja ---------------
+     La ficha deja de ser panel. El nombre de la institucion queda suelto
+     sobre el fondo de la pagina, subrayado por un filete burdeos que corre
+     de lado a lado con el mismo ancho que la tabla. La caja se reserva para
+     los datos: solo la tabla conserva borde y fondo blanco. */
+  .imf-inst {
+    background: none; border: 0; border-radius: 0; margin-bottom: 34px;
+  }
+  .imf-inst .imf-panel-head {
+    background: none; padding: 0 0 11px; margin-bottom: 14px;
+    border-bottom: 1px solid var(--burgundy);
+  }
+  .imf-inst .imf-tablewrap {
+    background: var(--card-bg); border: 1px solid var(--imf-line); border-radius: 3px;
+  }
+  /* Ancho fijo en la columna de variable: asi las casas con el mismo rango de
+     anyos alinean sus columnas entre fichas, aunque cada tabla sea una tabla
+     independiente. Las que tienen mas horizontes (ING, 3 anyos) reparten el
+     resto entre mas columnas y no pueden coincidir; es inevitable. */
+  .imf-inst .imf-table { table-layout: fixed; }
+  .imf-inst .imf-table th:first-child,
+  .imf-inst .imf-table td:first-child { width: 340px; }
+  .imf-inst .imf-analysis { border-top: 0; padding: 26px 0 0; }
   .imf-panel-title {
     font-family: 'Playfair Display', serif; font-size: 1.02rem;
     font-weight: 700; color: var(--text-dark);
@@ -2649,11 +2672,13 @@
     vertical-align: 1px; font-style: normal;
   }
   .imf-info:hover { color: var(--burgundy); border-color: var(--burgundy); }
-  .imf-sum-inst { font-weight: 700 !important; }
-  .imf-sum-pub {
-    display: block; font-size: 0.68rem; color: var(--text-light);
-    margin-top: 3px; font-weight: 400; letter-spacing: 0;
+  /* Marca de base distinta a la mayoritaria de la columna: discreta, no altera
+     el color del dato y se explica en el tooltip de la propia celda. */
+  .imf-basis-mark {
+    font-family: 'DM Sans', sans-serif; font-size: 0.6rem; color: var(--burgundy);
+    margin-left: 2px; cursor: help; font-weight: 700;
   }
+  .imf-sum-inst { font-weight: 700 !important; }
 
   /* --- Tabla transversal: cabecera de dos niveles --- */
   .imf-table-sum thead th.imf-grp {
@@ -2759,6 +2784,10 @@
     color: var(--burgundy); text-decoration: none; border-bottom: 1px solid rgba(107,39,55,0.3);
   }
   .imf-src-row a:hover { border-bottom-color: var(--burgundy); }
+  /* Nota de cobertura bajo la tabla: tratamiento secundario, sin caja. */
+  .imf-coverage {
+    margin-top: 10px; font-size: 0.73rem; color: var(--text-light); line-height: 1.6;
+  }
   .imf-src-solo { padding-left: 0; }
   .imf-src-meta { font-size: 0.73rem; color: var(--text-light); margin-top: 3px; }
   .imf-note {
@@ -14881,9 +14910,14 @@ function renderResources() {
    ARCHIVO HISTORICO. Cada edicion es un snapshot independiente y
    CONGELADO: anadir 'H2-2026' NO debe tocar 'H1-2026'.
 
-   Regla de pertenencia a una edicion: la fuente debe haberse
-   PUBLICADO dentro de ese semestre. No vale un informe de finales
-   de 2025 por el hecho de que hable de 2026.
+   Regla de pertenencia a una edicion: H1/H2 identifica el SNAPSHOT
+   de ALS, no un cut-off mecanico de fechas. Para cada institucion
+   se toma su actualizacion relevante mas reciente disponible al
+   construir el snapshot, y se guarda siempre su publicationDate
+   real. Una actualizacion material publicada pocos dias despues
+   del cierre formal del semestre no se descarta por ello (ver
+   Deloitte, 1 July 2026). Lo que si se descarta es un informe
+   viejo por el mero hecho de hablar del anyo en curso.
 
    Esquema de cada fila de forecast (ver reglas metodologicas):
      key        -> identificador de variable, usado para la tabla
@@ -14925,19 +14959,22 @@ const institutionalForecasts = {
 
   'H1-2026': {
     label: 'H1 2026',
-    window: '· fuentes publicadas entre enero y junio de 2026',
+    window: '· última actualización disponible de cada institución al cerrar el snapshot',
     // Horizontes de la tabla transversal. Solo entran los que TODAS las
     // instituciones presentes publican: 2028 existe en ING pero no en BBVA,
     // asi que se queda unicamente en la ficha individual de ING.
     summaryYears: [2026, 2027],
-    // Las cabeceras describen el horizonte y la base general, NUNCA afirman
-    // que dos casas midan lo mismo. La definición exacta de cada institución
-    // viaja en el tooltip de su propia celda.
+    // La cabecera toma el nombre de la base MAYORITARIA de la columna. Una casa
+    // que publique la misma variable en otra base sigue mostrando su cifra:
+    // 'fallback' indica que clave alternativa puede ocupar la celda cuando no
+    // existe la principal. Esa celda se marca y explica su base en el tooltip.
+    // Las claves NUNCA se fusionan: cada dato conserva la suya y su metadata.
     summaryMetrics: [
-      { key: 'gdp',   label: 'GDP Growth', basis: 'Crecimiento real anual. Cada institución conserva su propia definición: ver su ficha individual.' },
-      { key: 'cpi',   label: 'Inflation',  sub: 'avg', basis: 'Media anual. ING publica headline CPI; BBVA publica “Inflation (%, avg)”. No son necesariamente la misma medida.' },
-      { key: 'ffr',   label: 'Fed Funds',  sub: 'eop', basis: 'End of period (eop).' },
-      { key: 'ust10', label: 'US 10Y',     sub: 'eop', basis: 'End of period (eop).' }
+      { key: 'gdp',   label: 'GDP Growth',   basis: 'Crecimiento real anual. Cada institución conserva su propia definición: ver su ficha individual.' },
+      { key: 'cpi',   label: 'Inflation',    sub: 'avg', fallback: ['cpi_yoy'], basis: 'Base mayoritaria: media anual. Las cifras marcadas usan otra base; el tooltip de cada celda lo indica.' },
+      { key: 'unemp', label: 'Unemployment', sub: 'avg', basis: 'Tasa de paro, media anual.' },
+      { key: 'ffr',   label: 'Fed Funds',    sub: 'eop', fallback: ['ffr_avg'],   basis: 'Base mayoritaria: end of period. Las cifras marcadas son media anual; el tooltip de cada celda lo indica.' },
+      { key: 'ust10', label: 'US 10Y',       sub: 'eop', fallback: ['ust10_avg'], basis: 'Base mayoritaria: end of period. Las cifras marcadas son media anual; el tooltip de cada celda lo indica.' }
     ],
     institutions: [
       {
@@ -15198,7 +15235,7 @@ const institutionalForecasts = {
         // de la tabla transversal, donde no seria comparable.
         rows: [
           { key: 'gdp',     variable: 'Real GDP Growth',    basis: 'Forecast anual de crecimiento del PIB de Amundi. No es Q4/Q4.',                       values: { 2026: '2.1%', 2027: '2.1%' } },
-          { key: 'cpi_yoy', variable: 'CPI Inflation — YoY', basis: 'Amundi publica “US CPI, Year on Year %”. No es media anual: no comparable con la columna Inflation — avg del resumen.', values: { 2026: '3.4%', 2027: '2.2%' } },
+          { key: 'cpi_yoy', variable: 'CPI Inflation — YoY', basis: 'Amundi publica “US CPI, Year on Year %”. No es media anual.', summaryNote: 'Amundi — US CPI · YoY. Unlike the majority of forecasts in this column, this is not an annual-average measure.', values: { 2026: '3.4%', 2027: '2.2%' } },
           { key: 'ffr',     variable: 'Fed Funds Rate',     basis: 'Esta fuente no publica un forecast numérico de Fed Funds. Su visión de política monetaria es cualitativa.', values: { 2026: 'N/A', 2027: 'N/A' } },
           { key: 'ust10',   variable: 'US 10Y Yield',       basis: 'La fuente comenta la presión sobre el tramo largo, pero no publica un nivel numérico para el 10Y.',        values: { 2026: 'N/A', 2027: 'N/A' } },
           { key: 'unemp',   variable: 'Unemployment',       basis: 'No publicado en esta fuente.',                                                        values: { 2026: 'N/A', 2027: 'N/A' } }
@@ -15251,6 +15288,276 @@ const institutionalForecasts = {
             label: 'Mid-Year Investment Outlook 2026 — Power of endurance',
             meta: 'Published: 29 June 2026 · forecast data as of 25 June 2026',
             url: 'https://research-center.amundi.com/article/2026-mid-year-outlook'
+          }
+        ]
+      },
+
+      {
+        id: 'deloitte',
+        name: 'Deloitte',
+        publisher: 'Deloitte Global Economics Research Center',
+        publicationTitle: 'United States Economic Forecast: Q2 2026',
+        publicationDate: '1 July 2026',
+        forecastDate: '2026-07-01',
+        geography: 'United States',
+        years: [2026, 2027],
+        // Publicada el 1 de julio: entra igualmente porque es la actualizacion
+        // mas reciente disponible al construir este snapshot. Ver la regla de
+        // pertenencia arriba.
+        selectionNote: 'Latest Deloitte US Economic Forecast available when the ALS H1 2026 snapshot was built. Publication date: 1 July 2026.',
+        sourceType: 'live-page',
+        snapshotFrozen: true,
+        // Deloitte publica tres escenarios. ALS usa solo el Baseline.
+        scenario: 'baseline',
+        // OJO con las claves de Fed Funds y 10Y: Deloitte los publica como
+        // valores ANUALES del appendix, no end-of-period. Por eso usan
+        // 'ffr_avg' y 'ust10_avg' en vez de 'ffr' y 'ust10': se ven en su
+        // ficha pero NO caen en las columnas "— eop" del resumen, donde no
+        // serian comparables. Mismo mecanismo que el CPI YoY de Amundi.
+        rows: [
+          { key: 'gdp',       variable: 'Real GDP Growth',                 basis: 'Real GDP growth, Deloitte Baseline scenario.',                                    values: { 2026: '2.0%', 2027: '1.8%' } },
+          { key: 'cpi',       variable: 'CPI Inflation — Annual Average',  basis: 'Consumer Price Index. Annual forecast value from Deloitte’s Baseline appendix.',   values: { 2026: '3.4%', 2027: '2.6%' } },
+          { key: 'unemp',     variable: 'Unemployment Rate — Annual Average', basis: 'Unemployment rate. Annual forecast value from Deloitte’s Baseline appendix.',   values: { 2026: '4.3%', 2027: '4.3%' } },
+          { key: 'ffr_avg',   variable: 'Fed Funds Rate — Annual Average', basis: 'Federal funds rate. Annual forecast value; NOT end-of-period.',             summaryNote: 'Deloitte — Federal Funds Rate · Annual Average. The column is primarily End of Period; this forecast uses an annual-average basis.',       values: { 2026: '3.7%', 2027: '3.7%' } },
+          { key: 'ust10_avg', variable: 'US 10Y Yield — Annual Average',   basis: 'Yield on 10-year Treasury note. Annual forecast value; NOT end-of-period.', summaryNote: 'Deloitte — US 10Y Treasury Yield · Annual Average. The column is primarily End of Period; this forecast uses an annual-average basis.', values: { 2026: '4.4%', 2027: '4.2%' } }
+        ],
+        // Contexto del Baseline que apoya el Executive Summary. No se muestra
+        // en la tabla para no duplicar la variable de inflacion ni engordarla.
+        raw: {
+          pce_avg:                    { basis: 'Chained price index for PCE, annual', values: { 2026: '3.7%', 2027: '2.3%' } },
+          realConsumerSpending:       { basis: 'Real consumer spending, annual',      values: { 2026: '1.9%', 2027: '1.3%' } },
+          realFixedBusinessInvestment:{ basis: 'Real fixed business investment, annual', values: { 2026: '6.1%', 2027: '4.9%' } },
+          brentAssumption:            { basis: 'Brent baseline assumption',           values: { 2026: '$92/barrel', 2027: '$80/barrel' } }
+        },
+        keyView: 'AI investment supports growth · Higher oil keeps inflation elevated · Domestic demand softens · Fed hike expected before easing resumes in 2027',
+        analysis: [
+          {
+            tag: 'Growth dynamics',
+            headline: 'AI investment supports growth as domestic demand slows',
+            body: [
+              { p: 'Deloitte mantiene un crecimiento todavía sólido en su escenario Baseline, pero espera una moderación desde el 2,0% en 2026 hasta el 1,8% en 2027.' },
+              { p: 'El principal soporte procede de la inversión empresarial vinculada a inteligencia artificial. Deloitte ha elevado su previsión de crecimiento de la inversión fija empresarial hasta el 6,1% en 2026, frente al 4% de su forecast anterior.' },
+              { p: 'Fuera del segmento relacionado con IA, la demanda doméstica pierde impulso: los mayores precios energéticos erosionan el poder adquisitivo, el crecimiento salarial se modera y el impulso fiscal comienza a desaparecer. El consumo real se desacelera al 1,9% en 2026 y al 1,3% en 2027.' }
+            ]
+          },
+          {
+            tag: 'Inflation trajectory',
+            headline: 'Oil and tariffs keep inflation elevated in 2026',
+            body: [
+              { p: 'Deloitte proyecta una inflación CPI del 3,4% en 2026, moderándose al 2,6% en 2027. Su escenario también sitúa la inflación PCE en el 3,7% en 2026 y el 2,3% en 2027.' },
+              { p: 'La publicación identifica el encarecimiento de la energía como el principal impulso reciente de la inflación, junto con un mayor traslado de los aranceles a los precios de los bienes.' },
+              { p: 'En el escenario Baseline, Deloitte espera que el Brent promedie 92 dólares por barril en 2026 y baje a 80 en 2027. Esa normalización energética y una menor transmisión de los aranceles permiten que la inflación vuelva a moderarse durante 2027.' }
+            ]
+          },
+          {
+            tag: 'Labor market',
+            headline: 'Employment growth remains weak despite stable unemployment',
+            body: [
+              { p: 'Deloitte proyecta una tasa de desempleo del 4,3% tanto en 2026 como en 2027.' },
+              { p: 'Aunque la creación de empleo mejoró durante los primeros meses de 2026, el crecimiento del empleo privado sigue siendo muy débil fuera de healthcare y social assistance.' },
+              { p: 'Deloitte espera que una inmigración más baja limite el crecimiento de la población en edad de trabajar y mantenga contenido el crecimiento agregado del empleo. La combinación es un mercado laboral con bajo dinamismo de contratación, pero sin un aumento significativo del desempleo en el escenario central.' }
+            ]
+          },
+          {
+            tag: 'Monetary policy & rates',
+            headline: 'A temporary Fed hike precedes renewed easing',
+            body: [
+              { p: 'El repunte de la inflación, los mayores precios del petróleo y la reciente mejora del mercado laboral llevan a Deloitte a esperar una subida de tipos de la Fed antes de finales de 2026.' },
+              { p: 'Sin embargo, Deloitte no espera que ese endurecimiento sea duradero y prevé que la Fed vuelva a recortar tipos antes de finales de 2027. En su tabla anual Baseline, el Fed Funds rate figura en el 3,7% tanto para 2026 como para 2027.' },
+              { p: 'Los tipos largos permanecen elevados: el Treasury 10Y figura en el 4,4% en 2026 y el 4,2% en 2027. Deloitte atribuye parte de la presión sobre los yields largos a una inflación más elevada y a la creciente preocupación de los inversores sobre la sostenibilidad de la deuda pública estadounidense.' }
+            ]
+          }
+        ],
+        footnote: 'Scenario: Baseline.',
+        footnoteInfo: 'Deloitte also publishes downside and upside scenarios. ALS uses the Baseline, which Deloitte describes as its best assessment of the path of economic variables.',
+        sources: [
+          {
+            label: 'United States Economic Forecast: Q2 2026',
+            meta: 'Deloitte Global Economics Research Center · Baseline scenario · Published 1 July 2026',
+            url: 'https://www.deloitte.com/us/en/insights/topics/economy/us-economic-forecast/united-states-outlook-analysis.html'
+          }
+        ]
+      },
+
+      {
+        id: 'kpmg',
+        name: 'KPMG Economics',
+        publisher: 'KPMG US',
+        author: 'Diane C. Swonk',
+        publicationTitle: 'Economic Compass — Rolling a boulder uphill: Structural change watchlist',
+        publicationDate: '8 July 2026',
+        forecastDate: '2026-07-08',
+        geography: 'United States',
+        years: [2026, 2027],
+        sourceType: 'dated-report',
+        snapshotFrozen: true,
+        documentUrl: 'https://kpmg.com/kpmg-us/content/dam/kpmg/pdf/2026/july-structural-change-watchlist.pdf',
+        // Los numeros salen de la tabla incluida en ESTE PDF, no del Biannual
+        // Outlook del 10 June 2026, que queda superado por esta actualizacion.
+        forecastTable: 'Economic Forecast — July 2026',
+        // Igual que Deloitte: la tabla de KPMG publica valores ANUALES. La
+        // trayectoria trimestral lo confirma (Fed Funds 3,9% en Q4 2026 frente
+        // al 3,7% anual), asi que Fed Funds y 10Y usan 'ffr_avg' y 'ust10_avg'
+        // y no alimentan las columnas "— eop" del resumen.
+        rows: [
+          { key: 'gdp',       variable: 'Real GDP Growth',                    basis: 'KPMG Chain Weight GDP — annual forecast.',                          values: { 2026: '2.0%', 2027: '1.9%' } },
+          { key: 'cpi',       variable: 'CPI Inflation — Annual Average',     basis: 'Consumer Price Index — annual forecast.',                            values: { 2026: '3.2%', 2027: '2.6%' } },
+          { key: 'unemp',     variable: 'Unemployment Rate — Annual Average', basis: 'Civilian Unemployment Rate — annual forecast.',                      values: { 2026: '4.2%', 2027: '4.2%' } },
+          { key: 'ffr_avg',   variable: 'Fed Funds Rate — Annual Average',    basis: 'Federal Funds Rate — annual forecast value. NOT end-of-period.',         summaryNote: 'KPMG — Federal Funds Rate · Annual Average. The column is primarily End of Period; this forecast uses an annual-average basis.',       values: { 2026: '3.7%', 2027: '4.0%' } },
+          { key: 'ust10_avg', variable: 'US 10Y Yield — Annual Average',      basis: '10-Year Treasury Note yield — annual forecast value. NOT end-of-period.', summaryNote: 'KPMG — US 10Y Treasury Yield · Annual Average. The column is primarily End of Period; this forecast uses an annual-average basis.', values: { 2026: '4.6%', 2027: '5.0%' } }
+        ],
+        // Contexto de la misma tabla. Los valores de Q4 se guardan como dato
+        // trimestral y NO deben usarse como si fueran EOP en el resumen.
+        raw: {
+          coreCpi:               { basis: 'Core CPI, annual forecast',        values: { 2026: '2.8%', 2027: '3.0%' } },
+          businessFixedInvest:   { basis: 'Business fixed investment, annual', values: { 2026: '6.4%', 2027: '5.5%' } },
+          personalConsumption:   { basis: 'Personal consumption, annual',     values: { 2026: '1.8%', 2027: '1.9%' } },
+          ffrQ4:                 { basis: 'Fed Funds, Q4 quarterly forecast', values: { 2026: '3.9%', 2027: '3.8%' } },
+          ust10Q4:               { basis: 'US 10Y, Q4 quarterly forecast',    values: { 2026: '5.0%', 2027: '4.8%' } }
+        },
+        keyView: 'Growth remains positive but harder to sustain · Inflation has a higher structural floor · Fed may need to tighten further · AI brings investment today but productivity later',
+        analysis: [
+          {
+            tag: 'Growth & resilience',
+            headline: 'Positive growth, but with fewer shock absorbers',
+            body: [
+              { p: 'KPMG proyecta un crecimiento real del PIB del 2,0% en 2026 y del 1,9% en 2027.' },
+              { p: 'La publicación no presenta una economía al borde de la recesión, sino una economía que necesita cada vez más esfuerzo para mantener el crecimiento.' },
+              { p: 'KPMG considera que varios de los antiguos amortiguadores de los shocks —capital barato, comercio abierto, baja inflación y amplio margen fiscal— se han debilitado.' },
+              { p: 'El resultado es una economía todavía capaz de crecer, pero más vulnerable a episodios de incertidumbre, shocks de oferta y correcciones financieras.' }
+            ]
+          },
+          {
+            tag: 'Inflation trajectory',
+            headline: 'Inflation has developed a higher floor',
+            body: [
+              { p: 'KPMG proyecta CPI del 3,2% en 2026 y del 2,6% en 2027.' },
+              { p: 'La publicación considera que varias fuerzas desinflacionarias de las últimas décadas se están revirtiendo: menor acceso a bienes baratos, cadenas de suministro diseñadas para resiliencia en lugar de eficiencia, mayor inestabilidad energética y climática y nuevas presiones derivadas de la inversión en IA.' },
+              { p: 'KPMG advierte que un entorno de inflación del 3–4% ha dejado de ser un simple riesgo de cola si los shocks de oferta persisten y las expectativas de inflación se deterioran.' }
+            ]
+          },
+          {
+            tag: 'Monetary policy & rates',
+            headline: 'The Fed faces a higher and more uncertain rate floor',
+            body: [
+              { p: 'KPMG considera que la Fed se enfrenta a una economía en la que el tipo neutral es más difícil de estimar y probablemente más elevado que durante el periodo anterior a la pandemia.' },
+              { p: 'En la tabla anual de julio, el Fed Funds rate figura en el 3,7% en 2026 y el 4,0% en 2027, mientras que la trayectoria trimestral muestra tipos alcanzando el 3,9% en Q4 2026 y el 4,1% durante buena parte de 2027 antes de moderarse.' },
+              { p: 'Los Treasury yields permanecen todavía más elevados: el forecast anual del 10Y aumenta desde el 4,6% en 2026 hasta el 5,0% en 2027.' },
+              { p: 'KPMG vincula ese entorno a una combinación de inflación persistente, menor demanda estructural de Treasuries y unas necesidades fiscales crecientes.' }
+            ]
+          },
+          {
+            tag: 'AI & structural change',
+            headline: 'AI costs arrive before the productivity dividend',
+            body: [
+              { p: 'KPMG considera que la inteligencia artificial puede transformar la economía, pero identifica un problema de secuencia.' },
+              { p: 'La inversión en infraestructura está aumentando la demanda de chips, electricidad, agua, capital y trabajadores cualificados antes de que las ganancias de productividad puedan compensar esos costes.' },
+              { p: 'El forecast refleja todavía una fuerte inversión empresarial, con Business Fixed Investment creciendo un 6,4% en 2026 y un 5,5% en 2027.' },
+              { p: 'Para KPMG, el potencial de IA sigue siendo elevado, pero la economía soporta primero los costes de la inversión y solo más adelante podría recibir de forma generalizada el dividendo de productividad.' }
+            ]
+          }
+        ],
+        sources: [
+          {
+            label: 'Economic Compass — Rolling a boulder uphill: Structural change watchlist',
+            meta: 'Diane C. Swonk · Chief Economist, KPMG US · 8 July 2026',
+            url: 'https://kpmg.com/us/en/articles/2026/july-2026-economic-compass.html'
+          }
+        ]
+      },
+
+      {
+        id: 'ms',
+        name: 'Morgan Stanley Research',
+        leadEconomist: 'Seth Carpenter',
+        publicationTitle: 'Midyear Economic Outlook: AI Drives Resilient Growth',
+        primaryPublication: 'Midyear Economic Outlook: AI Drives Resilient Growth',
+        publicationDate: '15 May 2026',
+        forecastDate: '2026-05-15',
+        geography: 'United States',
+        years: [2026, 2027],
+        sourceType: 'dated-outlook',
+        scenario: 'baseline',
+        snapshotFrozen: true,
+        selectedMacroOutlook: 'Midyear Economic Outlook — May 2026',
+        // El transcript oficial del 14 May pertenece al MISMO Midyear Outlook y
+        // es donde Carpenter da las cifras de PIB. Se guarda solo para
+        // trazabilidad: no es una segunda fuente editorial.
+        companionTitle: 'Growth Faces an Energy Test',
+        companionDate: '2026-05-14',
+        companionUrl: 'https://www.morganstanley.com/insights/podcasts/thoughts-on-the-market/mid-year-global-economic-outlook-seth-carpenter',
+        companionPurpose: 'Official Morgan Stanley Midyear Outlook transcript used for the explicit U.S. GDP forecasts and supporting narrative.',
+        // Cobertura numerica minima: esta fuente solo publica PIB de forma
+        // comparable. El resto queda N/A con el motivo guardado en cada basis.
+        // Existe research posterior de Morgan Stanley con forecasts de
+        // Treasuries: se excluye deliberadamente.
+        rows: [
+          { key: 'gdp',   variable: 'Real GDP Growth', approximate: true, basis: 'Morgan Stanley Midyear Economic Outlook. U.S. real GDP growth forecast; figures described by Seth Carpenter as approximately 2.25% in 2026 and 2.5% in 2027.', values: { 2026: '2.25%', 2027: '2.50%' } },
+          { key: 'cpi',   variable: 'Inflation',       basis: 'The selected Midyear Economic Outlook provides a directional U.S. inflation view but not comparable numerical annual forecasts for both years.', values: { 2026: 'N/A', 2027: 'N/A' } },
+          { key: 'unemp', variable: 'Unemployment Rate', basis: 'No comparable numerical annual unemployment forecast published in the selected source.', values: { 2026: 'N/A', 2027: 'N/A' } },
+          { key: 'ffr',   variable: 'Fed Funds Rate',  basis: 'Morgan Stanley expects the Fed to remain on hold through 2026 and cut twice in H1 2027 to a 3.00%–3.25% target range. ALS does not convert a target range into a single EOP value.', values: { 2026: 'N/A', 2027: 'N/A' } },
+          { key: 'ust10', variable: 'US 10Y Yield',    basis: 'No numerical US 10Y forecast published in the selected Midyear Economic Outlook. Later Morgan Stanley fixed-income research is intentionally excluded.', values: { 2026: 'N/A', 2027: 'N/A' } }
+        ],
+        // La regla general oculta las filas sin dato, asi que la tabla se queda
+        // en una linea. Esta nota explica la ausencia sin devolver los N/A.
+        coverageNote: 'Coverage: The selected outlook does not publish comparable numerical forecasts for inflation, unemployment, Fed Funds levels or the US 10Y.',
+        // Trayectoria de politica monetaria expresada como RANGO. No se
+        // convierte a un unico nivel para poder rellenar la columna EOP.
+        fedPolicyView: 'Fed on hold through 2026; two 25bp cuts in March and June 2027 to a final target range of 3.00%–3.25%.',
+        raw: {
+          businessSpendingQ4YoY2026: { basis: 'Business spending, Q4 YoY', values: { 2026: '7%' } },
+          businessSpending2027:      { basis: 'Business spending, annual',  values: { 2027: '8%' } },
+          oilBaselineEoy2026:        { basis: 'Brent baseline, end-2026',   values: { 2026: '≈ $90/barrel' } },
+          fedCuts2027:               { basis: 'Number of cuts, 2027',       values: { 2027: '2 × 25bp (March, June)' } },
+          fedFinalRange2027:         { basis: 'Target range after cuts',    values: { 2027: '3.00%–3.25%' } },
+          extremeOilRisk:            { basis: 'Risk scenario threshold',    values: { 2026: 'above $150/barrel' } }
+        },
+        keyView: 'AI investment and high-income consumption sustain U.S. growth · Energy slows the second half · Disinflation resumes as the oil shock fades · Fed easing moves into 2027',
+        analysis: [
+          {
+            tag: 'Growth dynamics',
+            headline: 'U.S. growth remains resilient and strengthens into 2027',
+            body: [
+              { p: 'Morgan Stanley mantiene una visión constructiva sobre la economía estadounidense: prevé un crecimiento real de aproximadamente el 2,25% en 2026, acelerándose hasta alrededor del 2,5% en 2027.' },
+              { p: 'Los dos principales soportes del escenario son la inversión empresarial vinculada a inteligencia artificial y la fortaleza del consumo entre los hogares de mayor renta.' },
+              { p: 'El shock energético debería frenar parcialmente el crecimiento durante la segunda mitad de 2026, pero Morgan Stanley espera que la actividad vuelva a fortalecerse durante 2027 a medida que se normalice el mercado energético.' }
+            ]
+          },
+          {
+            tag: 'AI & business investment',
+            headline: 'AI capex remains the central investment engine',
+            body: [
+              { p: 'Morgan Stanley considera que la inversión relacionada con inteligencia artificial es la fuerza dominante del actual ciclo de inversión estadounidense.' },
+              { p: 'El gasto empresarial debería crecer alrededor de un 7% interanual en el cuarto trimestre de 2026 y aproximadamente un 8% durante 2027.' },
+              { p: 'La inversión abarca data centers, infraestructura eléctrica, equipos de procesamiento de información y software.' },
+              { p: 'Morgan Stanley espera que, con el tiempo, este impulso se extienda desde el propio ecosistema de IA hacia otras áreas de inversión empresarial.' }
+            ]
+          },
+          {
+            tag: 'Inflation & energy',
+            headline: 'The energy shock delays, rather than breaks, disinflation',
+            body: [
+              { p: 'Morgan Stanley considera que el shock energético ha interrumpido temporalmente la tendencia desinflacionaria.' },
+              { p: 'En Estados Unidos, los mayores precios del petróleo elevan la inflación headline y presionan el poder adquisitivo de los consumidores.' },
+              { p: 'Sin embargo, durante la segunda mitad de 2026 este efecto debería quedar parcialmente compensado por una menor contribución de la inflación asociada a los aranceles.' },
+              { p: 'El escenario central espera que la inflación estadounidense vuelva hacia una trayectoria descendente hacia finales de 2026 y que estas presiones se moderen adicionalmente durante 2027.' }
+            ]
+          },
+          {
+            tag: 'Monetary policy',
+            headline: 'Fed stays on hold in 2026 before cutting in 2027',
+            body: [
+              { p: 'El aumento temporal de los riesgos de inflación lleva a Morgan Stanley a esperar que la Fed mantenga los tipos sin cambios durante todo 2026.' },
+              { p: 'Si la inflación comienza a moderarse conforme espera el escenario central, Morgan Stanley prevé dos recortes de 25 puntos básicos durante la primera mitad de 2027, concretamente en marzo y junio. Tras esos movimientos, el target range se situaría en 3,00%–3,25%.' },
+              { riskLabel: 'Key risk: energy normalization', risk: 'El baseline asume que el crudo vuelve aproximadamente hacia 90 dólares por barril a finales de 2026 y sigue moderándose durante 2027. Una interrupción mucho más severa, con precios por encima de 150 dólares y escasez física de suministro, es el principal escenario de riesgo y podría provocar una recesión global.' }
+            ]
+          }
+        ],
+        sources: [
+          {
+            label: 'Midyear Economic Outlook: AI Drives Resilient Growth',
+            meta: 'Seth Carpenter · Chief Global Economist, Morgan Stanley · 15 May 2026',
+            url: 'https://www.morganstanley.com/insights/articles/economic-outlook-midyear-2026'
           }
         ]
       }
@@ -15322,19 +15629,32 @@ function renderForecasts() {
     ).join('');
     const body = ed.institutions.map(inst => {
       const cells = mets.map((m, i) => {
-        const row = inst.rows.find(r => r.key === m.key);
+        // Se prefiere la clave de la columna. Si esa institución no la publica,
+        // se admite una variante numérica en otra base (fallback), que se
+        // muestra MARCADA. Las claves no se fusionan: solo se visualizan.
+        let row = inst.rows.find(r => r.key === m.key);
+        let marcada = false;
+        if (!row || row.values[yrs[0]] === 'N/A') {
+          for (const fk of (m.fallback || [])) {
+            const alt = inst.rows.find(r => r.key === fk && r.values[yrs[0]] !== 'N/A');
+            if (alt) { row = alt; marcada = true; break; }
+          }
+        }
         // Cada celda lleva la definición de SU institución, para no dar por
         // homogéneas medidas que la fuente no declara equivalentes.
-        const t = row && row.basis ? ` title="${imfEsc(inst.name + ' — ' + row.variable + '. ' + row.basis)}"` : '';
+        const nota = row ? (marcada && row.summaryNote ? row.summaryNote
+                                                      : inst.name + ' — ' + row.variable + '. ' + row.basis) : '';
+        const t = nota ? ` title="${imfEsc(nota)}"` : '';
+        const marca = marcada ? `<sup class="imf-basis-mark">*</sup>` : '';
         return yrs.map((y, j) => {
           const v = row && row.values[y] != null ? row.values[y] : 'N/A';
-          return `<td class="${j === 0 && i > 0 ? 'imf-grp-start' : ''}"${t}>${imfCell(v)}</td>`;
+          const cont = v === 'N/A' ? imfCell(v) : imfCell(v) + marca;
+          return `<td class="${j === 0 && i > 0 ? 'imf-grp-start' : ''}"${t}>${cont}</td>`;
         }).join('');
       }).join('');
-      return `<tr>
-        <td class="imf-sum-inst">${imfEsc(inst.name)}
-          <span class="imf-sum-pub">${imfEsc(inst.publicationTitle)}</span>
-        </td>${cells}</tr>`;
+      // Solo el nombre de la casa: la publicación concreta ya aparece en su
+      // ficha individual y en Sources, y aqui solo estrechaba las columnas.
+      return `<tr><td class="imf-sum-inst">${imfEsc(inst.name)}</td>${cells}</tr>`;
     }).join('');
     sumEl.innerHTML = `<div class="imf-panel">
       <div class="imf-panel-head">
@@ -15358,7 +15678,13 @@ function renderForecasts() {
   if (instEl) {
     instEl.innerHTML = ed.institutions.map(inst => {
       const head = inst.years.map(y => `<th>${y}</th>`).join('');
-      const rows = inst.rows.map(r => {
+      // En la ficha propia, si la fuente no publica una variable, la fila
+      // simplemente no aparece: el N/A solo tiene sentido en la tabla
+      // transversal, donde marca el hueco frente a las demas casas. El dato
+      // se mantiene en el dataset para ese uso y para la trazabilidad.
+      const filas = inst.rows.filter(r =>
+        inst.years.some(y => r.values[y] != null && r.values[y] !== 'N/A'));
+      const rows = filas.map(r => {
         const cells = inst.years.map(y => `<td>${imfCell(r.values[y] != null ? r.values[y] : 'N/A')}</td>`).join('');
         return `<tr><td>${imfEsc(r.variable)}${imfInfo(r.basis)}</td>${cells}</tr>`;
       }).join('');
@@ -15369,7 +15695,8 @@ function renderForecasts() {
       const cells = (inst.analysis || []).map(blk => {
         const body = blk.body.map(it => {
           if (it.p) return `<p>${imfEsc(it.p)}</p>`;
-          if (it.risk) return `<div class="imf-risk"><b>Upside risk</b>${imfEsc(it.risk)}</div>`;
+          // El rotulo es configurable: no todos los riesgos son al alza.
+          if (it.risk) return `<div class="imf-risk"><b>${imfEsc(it.riskLabel || 'Upside risk')}</b>${imfEsc(it.risk)}</div>`;
           if (it.list) return (it.label ? `<div class="imf-lst-lab">${imfEsc(it.label)}</div>` : '') +
             `<ul class="imf-lst">${it.list.map(li => `<li>${imfEsc(li)}</li>`).join('')}</ul>`;
           return '';
@@ -15393,13 +15720,14 @@ function renderForecasts() {
         <div class="imf-tablewrap"><table class="imf-table">
           <thead><tr><th>US Forecast</th>${head}</tr></thead>
           <tbody>${rows}</tbody></table></div>
+        ${inst.coverageNote ? `<div class="imf-coverage">${imfEsc(inst.coverageNote)}</div>` : ''}
         ${cells ? `<div class="imf-analysis">
           <div class="imf-outlook-head">Outlook Analysis</div>
           <div class="imf-keyview">
             <span class="imf-keyview-lab">Key view</span>${imfEsc(inst.keyView)}
           </div>
           <div class="imf-notes">${cells}</div>
-          ${inst.footnote ? `<div class="imf-foot-note">${imfEsc(inst.footnote)}</div>` : ''}
+          ${inst.footnote ? `<div class="imf-foot-note">${imfEsc(inst.footnote)}${imfInfo(inst.footnoteInfo)}</div>` : ''}
         </div>` : ''}
       </div>`;
     }).join('');
