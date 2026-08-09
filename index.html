@@ -3707,12 +3707,14 @@
       <button class="mktab" onclick="showMkTab('factores',this)">Factores</button>
       <button class="mktab" onclick="showMkTab('sectores',this)">Sectores USA</button>
       <button class="mktab" onclick="showMkTab('commodities',this)">Commodities</button>
+      <button class="mktab" onclick="showMkTab('rentafija',this)">Renta Fija</button>
       <button class="mktab mktab-comparador" onclick="showMkTab('comparador',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:6px;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>Comparador</button>
     </div>
     <div id="mkt-indices" class="mkt-panel"></div>
     <div id="mkt-factores" class="mkt-panel" style="display:none"></div>
     <div id="mkt-sectores" class="mkt-panel" style="display:none"></div>
     <div id="mkt-commodities" class="mkt-panel" style="display:none"></div>
+    <div id="mkt-rentafija" class="mkt-panel" style="display:none"></div>
     <div id="mkt-comparador" class="mkt-panel" style="display:none"></div>
   </div>
 </div>
@@ -7400,7 +7402,7 @@
   <span id="footer-actualizado">Solo fines informativos</span>
 </footer>
 
-<script src="assets/js/mktData.js"></script>
+<script src="assets/js/mktData.js?v=20260810"></script>
 <!-- El parametro ?v= fuerza a los navegadores a recargar los datos cuando se
      regenera el fichero. Subir el numero al actualizar el Excel. -->
 <script src="assets/js/macroCycle.js?v=6b9936c244"></script>
@@ -12422,7 +12424,7 @@ function openArticle(id) {
 
 // ===== MERCADOS STATE =====
 const mktState = {};
-['indices','factores','sectores','commodities'].forEach(g => {
+['indices','factores','sectores','commodities','rentafija'].forEach(g => {
   mktState[g] = { activo: null, periodo: 'YTD', modo: 'ret', chart: null, homeChart: null, sortCol: null, sortDir: 1 };
 });
 // Render home markets chart (initial page)
@@ -12483,6 +12485,12 @@ function fmtRet(val) {
   return `<span class="${cls}">${val >= 0 ? '+' : ''}${pct}%</span>`;
 }
 
+/* Nota metodologica de Renta Fija. Las series son precio del ETF, no total
+   return: sin el matiz, un TLT o un LQD parecen rendir menos de lo que rinden
+   porque el cupon se reparte via distribuciones. Se muestra solo cuando hay
+   renta fija en pantalla, para no ensuciar el resto de categorias. */
+const MKT_NOTA_RF = `<div style="font-size:0.7rem;color:var(--text-light);font-style:italic;margin:-18px 0 28px">La rentabilidad de los ETF de renta fija refleja cambios de precio y excluye distribuciones.</div>`;
+
 // ===== RENDER PANEL =====
 function renderMktPanel(gid) {
   const grupo = mktData[gid];
@@ -12518,6 +12526,8 @@ function renderMktPanel(gid) {
     </tr>`;
   }
   tableHtml += `</tbody></table></div>`;
+  // Nota metodologica: solo en Renta Fija, donde el dato necesita el matiz.
+  if (gid === 'rentafija') tableHtml += MKT_NOTA_RF;
 
   // Build chart section
   const activoOpts = activos.map(a => {
@@ -12614,7 +12624,14 @@ function renderMktChart(gid) {
       },
       scales: {
         x: { type:'category', ticks:{ maxTicksLimit:8, color:'#999', font:{size:11} }, grid:{display:false} },
-        y: { ticks:{ color:'#999', font:{size:11}, callback: v => modo==='precio'?'$'+v:v+'%' }, grid:{color:'#f0ebe6'} }
+        /* Los ticks se redondean antes de pintarlos: con recorridos pequenos
+           (los ETF de renta fija se mueven decimas) el reparto de escalas de
+           Chart.js dejaba a la vista el error de coma flotante, del tipo
+           -0.199999999999999%. Solo afecta a la etiqueta, no al dato. */
+        y: { ticks:{ color:'#999', font:{size:11},
+               callback: v => modo === 'precio' ? '$' + (Math.round(v * 100) / 100)
+                                                : (Math.round(v * 100) / 100) + '%' },
+             grid:{color:'#f0ebe6'} }
       }
     }
   });
@@ -12678,7 +12695,8 @@ function renderComparador() {
     indices: 'Índices',
     factores: 'Factores',
     sectores: 'Sectores USA',
-    commodities: 'Commodities'
+    commodities: 'Commodities',
+    rentafija: 'Renta Fija'
   };
 
   const periods = ['1M','3M','6M','YTD','1Y','3Y','5Y'];
@@ -12731,6 +12749,7 @@ function renderComparador() {
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="comp-chips">${chipsHtml}</div>
       <canvas id="comp-chart" height="90"></canvas>
+      ${compState.selected.some(s => s.gid === 'rentafija') ? MKT_NOTA_RF.replace('margin:-18px 0 28px', 'margin:16px 0 0') : ''}
     </div>
     <div id="comp-table-wrap"></div>`;
 
@@ -12872,7 +12891,7 @@ function renderCompTable() {
       <th>Rentabilidad (${compState.periodo})</th>
     </tr></thead><tbody>`;
 
-  const grupos_labels = { indices:'Índices', factores:'Factores', sectores:'Sectores USA', commodities:'Commodities' };
+  const grupos_labels = { indices:'Índices', factores:'Factores', sectores:'Sectores USA', commodities:'Commodities', rentafija:'Renta Fija' };
 
   const rows = compState.selected.map((s, i) => {
     const prices = getCompPrices(s);
