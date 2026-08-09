@@ -790,12 +790,6 @@
   .home-mktab { background:none;border:none;padding:10px 20px;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-light);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:'DM Sans',sans-serif;transition:all 0.2s }
   .home-mktab.active { color:var(--burgundy);border-bottom-color:var(--burgundy);font-weight:600 }
   .home-mktab:hover { color:var(--text-dark) }
-  .mag7-btn { background:none;border:1px solid var(--border);border-radius:4px;padding:4px 12px;font-size:0.72rem;color:var(--text-light);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s }
-  .mag7-btn.active { background:var(--burgundy);color:#fff;border-color:var(--burgundy) }
-  .mag7-btn:hover:not(.active) { border-color:var(--burgundy);color:var(--burgundy) }
-  .mag7-chip { background:var(--cream-dark);border:1px solid var(--border);border-radius:3px;padding:4px 14px;font-size:0.75rem;color:var(--text-mid);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s }
-  .mag7-chip.active { background:var(--burgundy);color:#fff;border-color:var(--burgundy) }
-  .mag7-chip:hover:not(.active) { border-color:var(--burgundy);color:var(--burgundy) }
   .mkt-table { width:100%;border-collapse:collapse;font-size:0.78rem;margin-bottom:32px }
   .mkt-table th { padding:10px 12px;background:var(--cream-dark);color:var(--text-light);font-weight:600;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;text-align:right;white-space:nowrap;cursor:pointer;user-select:none }
   .mkt-table th:first-child { text-align:left }
@@ -2872,7 +2866,7 @@
     <li class="nav-dropdown">
       <a id="nav-market-view">Market View<svg class="nav-chevron" width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg></a>
       <div class="nav-dropdown-menu">
-        <a onclick="showPage('macro')" id="nav-macro">Mercados</a>
+        <a onclick="showPage('mercados')" id="nav-mercados">Mercados</a>
         <a onclick="openMacroDetail()" id="nav-macro-detail">Macro</a>
         <a onclick="showPage('energy')" id="nav-energy">Energ&iacute;a</a>
         <a onclick="showPage('earnings')" id="nav-earnings">Earnings Monitor</a>
@@ -2897,7 +2891,7 @@
   <a onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');closeMobileMenu()" id="mnav-portfolio">Portfolio</a>
   <a onclick="showPage('watchlist');closeMobileMenu()" id="mnav-watchlist">Watchlist</a>
   <div class="mobile-menu-group-label">Market View</div>
-  <a onclick="showPage('macro');closeMobileMenu()" id="mnav-macro" style="padding-left:10px">Mercados</a>
+  <a onclick="showPage('mercados');closeMobileMenu()" id="mnav-mercados" style="padding-left:10px">Mercados</a>
   <a onclick="openMacroDetail();closeMobileMenu()" id="mnav-macro-detail" style="padding-left:10px">Macro</a>
   <a onclick="showPage('energy');closeMobileMenu()" id="mnav-energy" style="padding-left:10px">Energ&iacute;a</a>
   <a onclick="showPage('earnings');closeMobileMenu()" id="mnav-earnings" style="padding-left:10px">Earnings Monitor</a>
@@ -2960,7 +2954,7 @@
     </div>
     <div class="hp-dash-grid">
 
-      <div class="hp-card hp-dash" onclick="HP.nav(function(){ showPage('macro'); })">
+      <div class="hp-card hp-dash" onclick="HP.nav(function(){ showPage('mercados'); })">
         <div class="hp-dash-top">
           <div class="hp-dash-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg></div>
           <div>
@@ -3432,55 +3426,11 @@
 </div>
 
 <!-- ===================== MACRO ===================== -->
-<div id="page-macro" class="page">
+<div id="page-mercados" class="page">
   <div style="padding:48px 48px 16px;max-width:1400px;margin:0 auto">
     <div class="section-label">Datos de mercado</div>
     <div class="section-title">Mercados</div>
     <div class="divider"></div>
-    <!-- MACRO PREVIEW -->
-    <div style="margin-bottom:28px;">
-      <div style="display:inline-flex;align-items:center;gap:16px;border-left:3px solid var(--burgundy);padding:10px 18px;background:var(--card-bg);border-radius:0 8px 8px 0;cursor:pointer;border:1px solid var(--border);border-left:3px solid var(--burgundy);margin-bottom:20px;" onclick="openMacroDetail()">
-        <div>
-          <div style="font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--burgundy);margin-bottom:3px;">Ver indicadores</div>
-          <div style="font-size:0.9rem;font-weight:700;color:var(--text-dark);">Macro</div>
-        </div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--burgundy)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:16px;">
-        <div>
-          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:5px;">GDP Growth</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;" id="mp-gdp">···</div>
-        </div>
-        <div>
-          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:5px;">PMI Manuf.</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;" id="mp-pmi-mfg">···</div>
-        </div>
-        <div>
-          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:5px;">PMI Services</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;" id="mp-pmi-svc">···</div>
-        </div>
-        <div>
-          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:5px;">Core CPI YoY</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;" id="mp-corecpi">···</div>
-        </div>
-        <div>
-          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:5px;">US 10Y Yield</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;" id="mp-10y">···</div>
-        </div>
-        <div>
-          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:5px;">HY Spread</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;" id="mp-hy">···</div>
-        </div>
-        <div>
-          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:5px;">VIX</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;" id="mp-vix">···</div>
-        </div>
-        <div>
-          <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:5px;">Consumer Conf.</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;" id="mp-confcons">···</div>
-        </div>
-      </div>
-    </div>
   </div>
   <div style="max-width:1400px;margin:0 auto;padding:0 48px 48px">
     <div style="display:flex;gap:4px;margin-bottom:32px;border-bottom:2px solid var(--border)">
@@ -3502,7 +3452,7 @@
 <div id="page-macro-detail" class="page">
   <!-- Cabecera reducida: el titulo de la seccion lo pone ya la propia portada -->
   <div style="padding:18px 48px 16px;max-width:1300px;margin:0 auto">
-    <button onclick="showPage('macro')" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text-light);font-size:0.8rem;padding:0;font-family:'DM Sans',sans-serif;">
+    <button onclick="showPage('mercados')" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text-light);font-size:0.8rem;padding:0;font-family:'DM Sans',sans-serif;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
       Volver a Mercados
     </button>
@@ -10176,7 +10126,7 @@ function showPage(id, skipHistory) {
   if (navEl) navEl.classList.add('active');
   const mNav = document.getElementById('mnav-' + id);
   if (mNav) mNav.classList.add('active');
-  if (id === 'macro' || id === 'macro-detail' || id === 'energy' || id === 'earnings' || id === 'forecasts') {
+  if (id === 'mercados' || id === 'macro-detail' || id === 'energy' || id === 'earnings' || id === 'forecasts') {
     const mv = document.getElementById('nav-market-view');
     if (mv) mv.classList.add('active');
   }
@@ -10191,7 +10141,7 @@ function showPage(id, skipHistory) {
     setTimeout(renderAlsPies, 100);
   }
   if (id === 'home') { const p = document.getElementById('home-mkt-indices'); if (p && !p.dataset.rendered) { renderHomeMktPanel('indices'); p.dataset.rendered='1'; } }
-  if (id === 'macro') { const p = document.getElementById('mkt-indices'); if (p && !p.dataset.rendered) { renderMktPanel('indices'); p.dataset.rendered='1'; } }
+  if (id === 'mercados') { const p = document.getElementById('mkt-indices'); if (p && !p.dataset.rendered) { renderMktPanel('indices'); p.dataset.rendered='1'; } }
   if (id === 'watchlist') { renderWlTbody(); closeWatchlist(); }
   if (id === 'articles') renderRecapArchive();
   if (id === 'resources') renderResources();
@@ -10324,18 +10274,18 @@ const articles = {
   <img src="assets/img/recaps/2026-08-09/picture-4.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-4.webp', 'Alcistas en 37,0% y bajistas en 38,0%; mejora semanal del sentimiento, aunque sin predominio alcista.')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
   <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">Alcistas en 37,0% y bajistas en 38,0%; mejora semanal del sentimiento, aunque sin predominio alcista.</figcaption>
 </figure>
-<p>El conjunto visual refleja un tono de mercado claramente mejor que el de finales de julio, aunque todavía lejos de una euforia indiscriminada. Finviz muestra un liderazgo muy concentrado en <strong>tecnología</strong>, materiales e industriales, con energía como principal rezagado; el Fear &amp; Greed entra en zona de Greed y sube a 64 desde 45 una semana antes. AAII, en cambio, mantiene una comunidad minorista dividida: los bajistas retroceden, pero aún superan ligeramente a los alcistas. El avance de los precios ha sido, por tanto, más rápido que la mejora de la convicción entre los inversores particulares.</p>
+<p>El conjunto visual refleja un tono de mercado claramente mejor que el de finales de julio, aunque todavía lejos de una euforia indiscriminada. El liderazgo fue muy concentrado en <strong>tecnología</strong>, materiales e industriales, con energía como principal rezagado; el Fear &amp; Greed entra en zona de Greed y sube a 64 desde 45 una semana antes. AAII, en cambio, mantiene una comunidad minorista dividida: los bajistas retroceden, pero aún superan ligeramente a los alcistas. El avance de los precios ha sido, por tanto, más rápido que la mejora de la convicción entre los inversores particulares.</p>
 <hr>
 <h2>Resumen ejecutivo</h2>
 <p>El deterioro del empleo estadounidense al cierre de la semana alteró el eje inmediato del mercado. <strong>Nonfarm payrolls</strong> cayó en 23.000 puestos en julio frente a un consenso de +80.000, y las revisiones de mayo y junio restaron otros 103.000 empleos. La caída de la <strong>Unemployment Rate</strong> al 4,1% no suavizó la lectura, porque vino acompañada de una salida de 264.000 personas de la fuerza laboral y de una <strong>Labor Force Participation Rate</strong> del 61,4%, la más baja desde febrero de 2021. El resultado fue suficiente para enfriar la hipótesis de una subida de la Fed en septiembre.</p>
 <p>El segundo alivio procedió de la energía. La posibilidad de un acuerdo sobre el estrecho de Ormuz redujo durante gran parte de la semana la prima geopolítica del crudo, aunque el rebote del viernes recordó que el desbloqueo sigue condicionado a exigencias adicionales de Teherán. Ese descenso del petróleo coincidió con un repliegue de las expectativas de endurecimiento monetario y generó un entorno más favorable para duración, oro y renta variable.</p>
-<p>La bolsa aprovechó ambos canales con un respaldo adicional de <strong>beneficios</strong>. FactSet sitúa el crecimiento agregado del beneficio del S&amp;P 500 del segundo trimestre en el 50,4% interanual, o en el 32,0% si se excluyen los extraordinarios de Alphabet y Amazon, con un 86% de compañías superando las estimaciones de BPA. La mejora de amplitud en Finviz y la fortaleza del Nasdaq sugieren que el mercado volvió a apoyarse en fundamentales corporativos después de la corrección previa en tecnología.</p>
+<p>La bolsa aprovechó ambos canales con un respaldo adicional de <strong>beneficios</strong>. FactSet sitúa el crecimiento agregado del beneficio del S&amp;P 500 del segundo trimestre en el 50,4% interanual, o en el 32,0% si se excluyen los extraordinarios de Alphabet y Amazon, con un 86% de compañías superando las estimaciones de BPA. La mejora de amplitud del S&amp;P 500 y la fortaleza del Nasdaq sugieren que el mercado volvió a apoyarse en fundamentales corporativos después de la corrección previa en tecnología.</p>
 <p>A la vez, la semana dejó dos matices estructurales. El primero es que el despliegue de <strong>IA</strong> ya no solo sostiene beneficios y capex, sino que también está reconfigurando la oferta de deuda y la competencia por capital a largo plazo. El segundo es que la aparente desinflación energética convive con señales de presión en otros tramos: el Treasury a 30 años se mantiene en máximos de diecinueve años y la compresión del múltiplo del mercado, según Michael Kantro, responde en parte al encarecimiento de la deuda y al tono de la política monetaria.</p>
 <p>El conjunto visual y las fuentes consultadas encajan en una lectura común: el mercado cerró la semana con más <strong>apetito por riesgo</strong>, pero no con menos complejidad. Fear &amp; Greed y las compras de acciones estadounidenses por minoristas surcoreanos reflejan demanda por riesgo; AAII, la debilidad del empleo y la persistencia de un Treasury largo muy exigente recuerdan que el equilibrio sigue siendo frágil. El dato clave inmediato pasa a ser el <strong>CPI</strong> de julio.</p>
 <hr>
 <h2>1. Mercados</h2>
-<p>La renta variable estadounidense recuperó tracción de forma amplia. T. Rowe Price recoge nuevos máximos en varios índices y un Nasdaq con su mejor semana desde abril; el S&amp;P 500 cerró en 7.757,64, el Nasdaq Composite en 26.690,62 y el Russell 2000 en 3.034,50. Finviz confirma esa amplitud con materiales básicos (+8,87%), tecnología (+6,92%) e industriales (+5,39%) a la cabeza, mientras energía cayó un 3,66%. El mapa por capitalización devuelve el protagonismo a <strong>semiconductores</strong> y software, con Nvidia, Broadcom, Microsoft u Oracle entre los focos más visibles.</p>
-<p>El rebote también encontró apoyo en el posicionamiento exterior. Una publicación de Kobeissi muestra que los minoristas surcoreanos compraron 4.600 millones de dólares en acciones estadounidenses en julio, su mayor registro mensual desde enero, después de ventas en abril y mayo y con la bolsa coreana corrigiendo con fuerza desde sus máximos de junio. No cambia por sí mismo la tesis de mercado, pero sí ayuda a explicar por qué la corrección anterior en tecnología dio paso tan rápido a nuevas entradas hacia activos estadounidenses.</p>
+<p>La renta variable estadounidense recuperó tracción de forma amplia. Varios índices marcaron nuevos máximos y el Nasdaq firmó su mejor semana desde abril; el S&amp;P 500 cerró en 7.757,64, el Nasdaq Composite en 26.690,62 y el Russell 2000 en 3.034,50. La amplitud lo confirmó: materiales básicos (+8,87%), tecnología (+6,92%) e industriales (+5,39%) a la cabeza, mientras energía cayó un 3,66%. El mapa por capitalización devuelve el protagonismo a <strong>semiconductores</strong> y software, con Nvidia, Broadcom, Microsoft u Oracle entre los focos más visibles.</p>
+<p>El rebote también encontró apoyo en el posicionamiento exterior. Los minoristas surcoreanos compraron 4.600 millones de dólares en acciones estadounidenses en julio, su mayor registro mensual desde enero, después de ventas en abril y mayo y con la bolsa coreana corrigiendo con fuerza desde sus máximos de junio. No cambia por sí mismo la tesis de mercado, pero sí ayuda a explicar por qué la corrección anterior en tecnología dio paso tan rápido a nuevas entradas hacia activos estadounidenses.</p>
 <p>Los resultados siguieron siendo el soporte más sólido. El 86% de las compañías del S&amp;P 500 que habían publicado hasta el 7 de agosto superó las estimaciones de BPA y el crecimiento agregado del beneficio alcanzó el 50,4%. La cifra está amplificada por ganancias extraordinarias en Alphabet y Amazon, pero incluso excluyéndolas el avance queda en el 32,0% y diez de los once sectores presentan crecimiento interanual del beneficio. El mercado ha seguido pagando por crecimiento real de beneficios, no solo por expansión de múltiplos.</p>
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-7.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-7.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
@@ -10344,16 +10294,16 @@ const articles = {
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-8.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-8.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
 </figure>
-<p>La historia de <strong>IA</strong> añadió un segundo canal de mercado, esta vez en crédito y duración. Russell Investments cifra en unos 220.000 millones de dólares la emisión investment grade de prestatarios ligados a IA durante el primer semestre, aproximadamente el 18% del total, y Wells Fargo subraya que esa financiación compite por capital con una oferta abundante de Treasuries. Peter Mallouk lo expresa desde otra óptica: el Treasury a 30 años se encuentra en máximos de diecinueve años. El mercado puede premiar beneficios vinculados a IA y, al mismo tiempo, exigir más rentabilidad para absorber la duración necesaria para financiar centros de datos, redes, energía y déficit público.</p>
+<p>La historia de <strong>IA</strong> añadió un segundo canal de mercado, esta vez en crédito y duración. Russell Investments cifra en unos 220.000 millones de dólares la emisión investment grade de prestatarios ligados a IA durante el primer semestre, aproximadamente el 18% del total, y Wells Fargo subraya que esa financiación compite por capital con una oferta abundante de Treasuries. El Treasury a 30 años se encuentra, además, en máximos de diecinueve años. El mercado puede premiar beneficios vinculados a IA y, al mismo tiempo, exigir más rentabilidad para absorber la duración necesaria para financiar centros de datos, redes, energía y déficit público.</p>
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-9.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-9.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
 </figure>
-<p>El petróleo fue el otro gran transmisor semanal. Reuters y DeItaone coinciden en que Irán y Omán están cerca de un acuerdo sobre Ormuz, pero también en que Teherán exige condiciones adicionales y que el acuerdo por sí solo no reabriría de inmediato la vía marítima. El crudo cayó con fuerza al incorporarse una probabilidad mayor de desbloqueo, aunque el rebote final del viernes recordó que la prima geopolítica no ha desaparecido. Brent terminó en 83,55 dólares y WTI en 78,18, ambos por debajo del inicio de la semana.</p>
-<p>La corrección del crudo convivió, además, con una base física mucho más ajustada de lo que sugiere el precio semanal. Kobeissi destaca que los inventarios totales de crudo de Estados Unidos han caído durante 17 semanas consecutivas, la racha más larga registrada, con un descenso de 166 millones de barriles desde comienzos de abril hasta 712 millones; la <strong>Strategic Petroleum Reserve</strong> habría caído 111 millones desde marzo. Esa divergencia ayuda a explicar por qué el mercado sigue reaccionando con rapidez a cualquier noticia sobre Ormuz. La oferta sigue tensa.</p>
+<p>El petróleo fue el otro gran transmisor semanal. Reuters informó de que Irán y Omán estaban cerca de un acuerdo sobre Ormuz, pero también de que Teherán exigía condiciones adicionales y de que el acuerdo por sí solo no reabriría de inmediato la vía marítima. El crudo cayó con fuerza al incorporarse una probabilidad mayor de desbloqueo, aunque el rebote final del viernes recordó que la prima geopolítica no ha desaparecido. Brent terminó en 83,55 dólares y WTI en 78,18, ambos por debajo del inicio de la semana.</p>
+<p>La corrección del crudo convivió, además, con una base física mucho más ajustada de lo que sugiere el precio semanal. Los inventarios totales de crudo de Estados Unidos han caído durante 17 semanas consecutivas, la racha más larga registrada, con un descenso de 166 millones de barriles desde comienzos de abril hasta 712 millones; la <strong>Strategic Petroleum Reserve</strong> habría caído 111 millones desde marzo. Esa divergencia ayuda a explicar por qué el mercado sigue reaccionando con rapidez a cualquier noticia sobre Ormuz. La oferta sigue tensa.</p>
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-10.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-10.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
 </figure>
-<p>El oro captó el giro de tipos y de dólar del viernes. Reuters sitúa el metal en 4.336,02 dólares por onza, con una ganancia diaria del 2,3% y un avance semanal superior al 7%. La publicación de Kobeissi añade que los ETF físicos respaldados por oro registraron entradas de 3.000 millones de dólares en julio, la mayor entrada mensual desde abril, elevando las tenencias globales hasta 4.068 toneladas y las entradas acumuladas del año hasta 11.000 millones. El movimiento no fue solo táctico. Hubo demanda de cobertura.</p>
+<p>El oro captó el giro de tipos y de dólar del viernes. El metal cerró en 4.336,02 dólares por onza, con una ganancia diaria del 2,3% y un avance semanal superior al 7%. Los ETF físicos respaldados por oro registraron entradas de 3.000 millones de dólares en julio, la mayor entrada mensual desde abril, elevando las tenencias globales hasta 4.068 toneladas y las entradas acumuladas del año hasta 11.000 millones. El movimiento no fue solo táctico. Hubo demanda de cobertura.</p>
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-11.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-11.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
 </figure>
@@ -10364,7 +10314,7 @@ const articles = {
 <p>Europa acompañó el mejor tono global, aunque con motores distintos. El STOXX Europe 600 avanzó un 1,70%; DAX, CAC 40 y FTSE MIB subieron más del 2%, y el FTSE 100 encadenó una cuarta semana de ganancias apoyado en mineras de metales preciosos. La caída del crudo penalizó a petroleras, mientras el oro respaldó a extractoras. La lectura europea fue más una extensión del alivio global en energía y tipos que una mejora uniforme del crecimiento regional.</p>
 <hr>
 <h2>2. Macro</h2>
-<p>El informe laboral de julio fue el cambio macro más importante de la semana. <strong>Nonfarm payrolls</strong> cayó en 23.000 puestos frente a un consenso de +80.000 y mayo-junio se revisaron a la baja en 103.000. La <strong>Unemployment Rate</strong> bajó al 4,1%, pero la caída no se debió a una contratación más fuerte, sino a la salida de 264.000 personas de la fuerza laboral, con una <strong>Labor Force Participation Rate</strong> del 61,4%, la menor desde febrero de 2021. Liz Thomas, Charlie Bilello y Nick Timiraos convergen en ese mismo diagnóstico: el titular de paro mejoró, pero el detalle fue claramente más débil.</p>
+<p>El informe laboral de julio fue el cambio macro más importante de la semana. <strong>Nonfarm payrolls</strong> cayó en 23.000 puestos frente a un consenso de +80.000 y mayo-junio se revisaron a la baja en 103.000. La <strong>Unemployment Rate</strong> bajó al 4,1%, pero la caída no se debió a una contratación más fuerte, sino a la salida de 264.000 personas de la fuerza laboral, con una <strong>Labor Force Participation Rate</strong> del 61,4%, la menor desde febrero de 2021. El titular de paro mejoró, pero el detalle fue claramente más débil.</p>
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-13.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-13.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
 </figure>
@@ -10375,17 +10325,17 @@ const articles = {
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-14.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-14.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
 </figure>
-<p>La reacción monetaria fue inmediata. El <strong>FedWatch</strong> del 8 de agosto asigna un 55,6% a mantener el rango en 3,50%-3,75% y un 44,4% a elevarlo a 3,75%-4,00%; una semana antes esas probabilidades eran 33,0% y 67,0%, respectivamente. La publicación de DeItaone subraya la misma idea: el informe laboral restó fuerza al caso de una subida en septiembre, aunque no eliminó por completo la preocupación por inflación. Hubo giro dovish. No hubo giro hacia recortes.</p>
+<p>La reacción monetaria fue inmediata. El <strong>FedWatch</strong> del 8 de agosto asigna un 55,6% a mantener el rango en 3,50%-3,75% y un 44,4% a elevarlo a 3,75%-4,00%; una semana antes esas probabilidades eran 33,0% y 67,0%, respectivamente. El informe laboral restó fuerza al caso de una subida en septiembre, aunque no eliminó por completo la preocupación por inflación. Hubo giro dovish. No hubo giro hacia recortes.</p>
 <figure style="margin:28px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-6.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-6.webp', 'Giro dovish frente a una semana antes; la probabilidad de subida baja del 67,0% al 44,4% y la de no cambio sube del 33,0% al 55,6%, con easing en 0%.')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
   <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">Giro dovish frente a una semana antes; la probabilidad de subida baja del 67,0% al 44,4% y la de no cambio sube del 33,0% al 55,6%, con easing en 0%.</figcaption>
 </figure>
 <p>Los indicadores de actividad, de hecho, impiden leer Estados Unidos exclusivamente en clave de debilidad. El ISM manufacturero subió a 55,6 desde 53,3, su nivel más alto desde mayo de 2022, y el ISM de servicios se situó en 54,1. En servicios, el componente de precios pagados aumentó a 70,3 desde 67,7 y su media de doce meses alcanzó 68,1, máximo de más de tres años. El crecimiento no ha desaparecido. El problema para la Fed es que crecimiento y precios siguen enviando mensajes distintos.</p>
-<p>La productividad complicó todavía más ese equilibrio. Kobeissi destaca que la <strong>labor productivity</strong> estadounidense subió un 1,4% anualizado en el 2Q26, más del doble de lo esperado, tras una revisión al alza del 0,8% del 1Q. En manufacturas, la productividad subió un 1,9% con un aumento del 4,6% de la producción, mientras la compensación real cayó y los <strong>unit labor costs</strong> avanzaron menos de lo previsto. Ese patrón puede aliviar parte de la presión de costes empresariales y ayuda a entender por qué la economía puede mostrar empleo más débil sin una caída proporcional de beneficios.</p>
+<p>La productividad complicó todavía más ese equilibrio. La <strong>labor productivity</strong> estadounidense subió un 1,4% anualizado en el 2Q26, más del doble de lo esperado, tras una revisión al alza del 0,8% del 1Q. En manufacturas, la productividad subió un 1,9% con un aumento del 4,6% de la producción, mientras la compensación real cayó y los <strong>unit labor costs</strong> avanzaron menos de lo previsto. Ese patrón puede aliviar parte de la presión de costes empresariales y ayuda a entender por qué la economía puede mostrar empleo más débil sin una caída proporcional de beneficios.</p>
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-15.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-15.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
 </figure>
-<p>Por eso el <strong>CPI</strong> de julio pasa a ser la siguiente prueba crítica. Scotiabank contempla riesgo de repunte de la inflación subyacente a corto plazo, aunque también identifica fuerzas desinflacionistas de mayor duración ligadas a vivienda, ahorro, salarios reales y demanda. Reuters sitúa el consenso en un 3,4% interanual para el CPI general y un 2,5% para el subyacente. Un dato alto devolvería protagonismo a la curva y a la credibilidad antiinflacionista; un dato contenido consolidaría la moderación de las expectativas de subida iniciada tras las nóminas.</p>
+<p>Por eso el <strong>CPI</strong> de julio pasa a ser la siguiente prueba crítica. Scotiabank contempla riesgo de repunte de la inflación subyacente a corto plazo, aunque también identifica fuerzas desinflacionistas de mayor duración ligadas a vivienda, ahorro, salarios reales y demanda. Reuters recoge un consenso del 3,4% interanual para el CPI general y del 2,5% para el subyacente. Un dato alto devolvería protagonismo a la curva y a la credibilidad antiinflacionista; un dato contenido consolidaría la moderación de las expectativas de subida iniciada tras las nóminas.</p>
 <figure style="margin:28px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-5.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-5.webp', 'Condiciones financieras holgadas; el NFCI permanece claramente por debajo de cero y vuelve a niveles más laxos que en marzo-abril.')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
   <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">Condiciones financieras holgadas; el NFCI permanece claramente por debajo de cero y vuelve a niveles más laxos que en marzo-abril.</figcaption>
@@ -10396,12 +10346,12 @@ const articles = {
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-16.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-16.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
 </figure>
-<p>El mercado laboral también dejó una señal sectorial con interés propio. Kobeissi sitúa la <strong>layoff rate</strong> del sector de información en el 2,3% en junio, tercera más alta desde la pandemia, con 63.000 trabajadores despedidos o desvinculados y una media móvil de seis meses del 2,0%, segunda más alta registrada. El dato no invalida la narrativa de inversión en IA, pero sí recuerda que la reasignación de capital y trabajo está siendo desigual y que parte de la eficiencia actual puede venir acompañada de fricción laboral en segmentos muy concretos.</p>
+<p>El mercado laboral también dejó una señal sectorial con interés propio. La <strong>layoff rate</strong> del sector de información se situó en el 2,3% en junio, tercera más alta desde la pandemia, con 63.000 trabajadores despedidos o desvinculados y una media móvil de seis meses del 2,0%, segunda más alta registrada. El dato no invalida la narrativa de inversión en IA, pero sí recuerda que la reasignación de capital y trabajo está siendo desigual y que parte de la eficiencia actual puede venir acompañada de fricción laboral en segmentos muy concretos.</p>
 <p>Reino Unido añade una restricción distinta: financiar crecimiento con una base fiscal exigente. ODI sitúa la deuda pública cerca del 95% del PIB, la inversión en el 19% del PIB y el comercio alrededor del 62% del PIB. Su argumento es que el nuevo Gobierno necesita utilizar comercio, inversión y finanzas internacionales como palancas de productividad y crecimiento regional sin deteriorar la credibilidad fiscal. Ese margen de maniobra es más estrecho con rendimientos largos todavía elevados.</p>
 <figure style="margin:20px 0;text-align:center;">
   <img src="assets/img/recaps/2026-08-09/picture-17.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-08-09/picture-17.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
 </figure>
-<p>Europa dejó además un riesgo secundario de oferta. Reuters destaca que los bajos niveles del Rin están reduciendo cargas y suspendiendo algunos servicios de mercancías; el corredor mueve unos 285 millones de toneladas al año y cerca del 80% de los bienes transportados por vías navegables interiores alemanas. Calor, sequía y menor capacidad fluvial pueden trasladarse a costes logísticos y alimentos justo cuando Europa sigue gestionando el impacto energético de Oriente Medio.</p>
+<p>Europa dejó además un riesgo secundario de oferta. Los bajos niveles del Rin están reduciendo cargas y suspendiendo algunos servicios de mercancías; el corredor mueve unos 285 millones de toneladas al año y cerca del 80% de los bienes transportados por vías navegables interiores alemanas. Calor, sequía y menor capacidad fluvial pueden trasladarse a costes logísticos y alimentos justo cuando Europa sigue gestionando el impacto energético de Oriente Medio.</p>
 <hr>
 <h2>Cierre</h2>
 <p>El mercado entra en la próxima referencia de <strong>CPI</strong> con un equilibrio más delicado que hace una semana. El empleo debilitó el caso de una subida de la Fed en septiembre y alivió la curva, pero la inflación de servicios, el Treasury a 30 años, la fragilidad de Ormuz y la competencia por capital asociada a IA siguen abiertas. La cuestión a seguir es si los próximos precios permiten sostener a la vez el alivio de tipos, la fortaleza bursátil y una Reserva Federal más cauta.</p>
@@ -12768,252 +12718,6 @@ function renderHomeCompChart() {
   });
 }
 
-// ===== EXCEL DATA SECTIONS =====
-const POS_COLOR = '#2a7a3b';
-const NEG_COLOR = '#c0392b';
-const MAG7_TICKERS = ['AAPL','MSFT','NVDA','AMZN','GOOGL','META','TSLA'];
-const MAG7_NAMES   = { 'AAPL':'Apple','MSFT':'Microsoft','NVDA':'NVIDIA','AMZN':'Amazon','GOOGL':'Alphabet','META':'Meta','TSLA':'Tesla' };
-
-// Hardcoded defaults (updated from Excel on load)
-// Última actualización: 26/06/2026 — Índices/Gold/Mag7; Brent/WTI spot 22/06/2026 (Energy tracker); BTC 25/06/2026
-let excelData = {
-  indices: { sp500: 6.7, russell: 20.5, msci: 5.8, eurostoxx: 2.7 },
-  mag7: {
-    'Magnificent 7 (avg)': { name:'Mag 7 (media)', '5Y':194.4, '3Y':148.3, '1Y':21.7, 'YTD':1.4,   'LM':-8.2,  'LW':3.7   },
-    'AAPL':  { name:'Apple',     '5Y':117.3, '3Y':59.1,  '1Y':45.3,  'YTD':13.5,  'LM':-2.1,  'LW':12.2  },
-    'MSFT':  { name:'Microsoft', '5Y':40.6,  '3Y':14.7,  '1Y':-20.5, 'YTD':-19.3, 'LM':-11.5, 'LW':10.7  },
-    'NVDA':  { name:'NVIDIA',    '5Y':841.3, '3Y':360.6, '1Y':23.9,  'YTD':4.5,   'LM':-12.6, 'LW':-0.5  },
-    'AMZN':  { name:'Amazon',    '5Y':32.0,  '3Y':86.2,  '1Y':10.3,  'YTD':5.1,   'LM':-5.4,  'LW':6.9   },
-    'GOOGL': { name:'Alphabet',  '5Y':185.2, '3Y':200.7, '1Y':101.5, 'YTD':15.0,  'LM':-0.5,  'LW':4.7   },
-    'META':  { name:'Meta',      '5Y':65.2,  '3Y':103.1, '1Y':-18.3, 'YTD':-11.7, 'LM':-2.5,  'LW':7.4   },
-    'TSLA':  { name:'Tesla',     '5Y':79.0,  '3Y':50.3,  '1Y':24.6,  'YTD':-12.5, 'LM':-7.1,  'LW':4.9   }
-  },
-  commodities: {
-    brent: { current:76.49,    init:61.98,  ytd:23.41 },
-    wti:   { current:78.94,    init:57.21,  ytd:37.98 },
-    gold:  { current:393.45,   init:438.07, ytd:-10.19 },
-    btc:   { current:59721.68, ytd:-31.75 }
-  }
-};
-
-let mag7ActivePeriod = 'YTD';
-let mag7ActiveChip = null;
-
-function renderIndices() {
-  const grid = document.getElementById('indices-grid');
-  if (!grid) return;
-  const d = excelData.indices;
-  const items = [
-    { name:'S&P 500',       val:d.sp500 },
-    { name:'Russell 2000',  val:d.russell },
-    { name:'MSCI World',    val:d.msci },
-    { name:'Euro Stoxx 50', val:d.eurostoxx }
-  ];
-  grid.innerHTML = items.map(c => {
-    const color = c.val >= 0 ? POS_COLOR : NEG_COLOR;
-    const sign = c.val >= 0 ? '+' : '';
-    return `<div style="background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:4px;padding:0.35rem 0.9rem;">
-      <div style="font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:#9A9A9A;margin-bottom:3px;">${c.name}</div>
-      <div style="font-size:1.25rem;font-weight:500;color:${color};margin-bottom:2px;">${sign}${c.val.toFixed(1)}%</div>
-      <div style="font-size:0.56rem;color:#9A9A9A;">desde 01/01/2026</div>
-    </div>`;
-  }).join('');
-}
-
-function renderCommodities() {
-  const d = excelData.commodities;
-  function setCard(retId, pxId, ytd, current, init) {
-    const retEl = document.getElementById(retId);
-    const pxEl  = document.getElementById(pxId);
-    if (!retEl) return;
-    const color = ytd >= 0 ? POS_COLOR : NEG_COLOR;
-    const sign  = ytd >= 0 ? '+' : '';
-    retEl.textContent = sign + ytd.toFixed(1) + '%';
-    retEl.style.color = color;
-    if (pxEl) pxEl.textContent = 'actual ' + current + ' · inicio ' + init;
-  }
-  setCard('comm-brent-ret','comm-brent-px', d.brent.ytd, d.brent.current.toFixed(2)+' $', d.brent.init.toFixed(2)+' $');
-  setCard('comm-wti-ret',  'comm-wti-px',   d.wti.ytd,   d.wti.current.toFixed(2)+' $',   d.wti.init.toFixed(2)+' $');
-  setCard('comm-gold-ret', 'comm-gold-px',  d.gold.ytd,  '$'+d.gold.current.toFixed(2),        '$'+d.gold.init.toFixed(2));
-  setCard('comm-btc-ret',  'comm-btc-px',   d.btc.ytd,   '$'+Math.round(d.btc.current).toLocaleString('es-ES'), '—');
-}
-
-function renderMag7(period) {
-  const mag7 = excelData.mag7;
-  // Average value header
-  const avg = mag7['Magnificent 7 (avg)'];
-  if (avg) {
-    const val = avg[period];
-    const el = document.getElementById('mag7-avg-value');
-    if (el) {
-      el.textContent = (val >= 0 ? '+' : '') + val.toFixed(1) + '%';
-      el.style.color = val >= 0 ? POS_COLOR : NEG_COLOR;
-    }
-  }
-  // Sort tickers by return
-  const sorted = MAG7_TICKERS.map(t => ({
-    ticker: t, name: mag7[t]?.name || t, val: mag7[t]?.[period] ?? 0
-  })).sort((a, b) => b.val - a.val);
-
-  const maxAbs = Math.max(...sorted.map(s => Math.abs(s.val)), 0.01);
-
-  const rankEl = document.getElementById('mag7-ranking');
-  if (rankEl) {
-    rankEl.innerHTML = sorted.map((s, i) => {
-      const barPct = (Math.abs(s.val) / maxAbs * 100).toFixed(1);
-      const color  = s.val >= 0 ? POS_COLOR : NEG_COLOR;
-      const sign   = s.val >= 0 ? '+' : '';
-      return `<div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:16px;font-size:0.68rem;color:var(--text-light);text-align:right;flex-shrink:0;">${i+1}</div>
-        <div style="width:90px;flex-shrink:0;">
-          <div style="font-size:0.78rem;font-weight:600;color:var(--text-dark);line-height:1.2;">${s.name}</div>
-          <div style="font-size:0.63rem;color:var(--text-light);">${s.ticker}</div>
-        </div>
-        <div style="flex:1;background:rgba(0,0,0,0.05);border-radius:3px;overflow:hidden;height:14px;">
-          <div style="width:${barPct}%;height:100%;background:${color};border-radius:3px;transition:width 0.35s;"></div>
-        </div>
-        <div style="width:58px;text-align:right;font-size:0.82rem;font-weight:600;color:${color};flex-shrink:0;">${sign}${s.val.toFixed(1)}%</div>
-      </div>`;
-    }).join('');
-  }
-  // Chips
-  const chipsEl = document.getElementById('mag7-chips');
-  if (chipsEl) {
-    chipsEl.innerHTML = MAG7_TICKERS.map(t => {
-      const active = t === mag7ActiveChip ? ' active' : '';
-      return `<button class="mag7-chip${active}" onclick="selectMag7Chip('${t}',this)">${t}</button>`;
-    }).join('');
-  }
-  if (mag7ActiveChip) updateMag7ChipResult(mag7ActiveChip, period);
-}
-
-function updateMag7ChipResult(ticker, period) {
-  const el = document.getElementById('mag7-chip-result');
-  if (!el) return;
-  const data = excelData.mag7[ticker];
-  if (!data) { el.innerHTML = ''; return; }
-  const val   = data[period];
-  const color = val >= 0 ? POS_COLOR : NEG_COLOR;
-  const sign  = val >= 0 ? '+' : '';
-  const pLabel = { '5Y':'5 años','3Y':'3 años','1Y':'1 año','YTD':'YTD 2026','LM':'último mes','LW':'última semana' }[period] || period;
-  el.innerHTML = `<span style="font-weight:600;color:var(--text-dark);">${data.name}:</span> <span style="color:${color};font-weight:600;">${sign}${val.toFixed(1)}%</span> <span style="color:var(--text-light);">${pLabel}</span>`;
-}
-
-function setMag7Period(period, btn) {
-  mag7ActivePeriod = period;
-  document.querySelectorAll('#mag7-period-btns .mag7-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  const labelMap = { '5Y':'5 años', '3Y':'3 años', '1Y':'1 año', 'YTD':'YTD 2026', 'LM':'último mes', 'LW':'última semana' };
-  const lbl = document.getElementById('mag7-period-label');
-  if (lbl) lbl.textContent = labelMap[period] || period;
-  renderMag7(period);
-}
-
-function selectMag7Chip(ticker, btn) {
-  if (mag7ActiveChip === ticker) {
-    mag7ActiveChip = null;
-    document.querySelectorAll('.mag7-chip').forEach(b => b.classList.remove('active'));
-    const el = document.getElementById('mag7-chip-result');
-    if (el) el.innerHTML = '';
-  } else {
-    mag7ActiveChip = ticker;
-    document.querySelectorAll('.mag7-chip').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    updateMag7ChipResult(ticker, mag7ActivePeriod);
-  }
-}
-
-// Render all sections with current excelData
-function renderExcelSections() {
-  renderIndices();
-  renderCommodities();
-  renderMag7(mag7ActivePeriod);
-}
-
-// Load Excel via SheetJS and override defaults
-async function loadExcelData() {
-  if (typeof XLSX === 'undefined') { renderExcelSections(); return; }
-  try {
-    const resp = await fetch('YTD_RENTABILIDADES.xlsx');
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const buf  = await resp.arrayBuffer();
-    const wb   = XLSX.read(buf, { type:'array' });
-    const ws   = wb.Sheets[wb.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:'' });
-
-    function parsePct(v) {
-      if (v === '' || v == null) return 0;
-      if (typeof v === 'number') return parseFloat((v * 100).toFixed(1));
-      return parseFloat(String(v).replace('%','').trim()) || 0;
-    }
-    function parsePx(v) {
-      if (typeof v === 'number') return v;
-      return parseFloat(String(v).replace(/[$,\s]/g,'')) || NaN;
-    }
-
-    // Mag7 rows: SheetJS rows[3..10] = Excel rows 4..11; cols 65-70 (0-indexed)
-    const mag7 = {};
-    for (let r = 3; r <= 10; r++) {
-      const row = rows[r]; if (!row || !row[65]) continue;
-      const t = String(row[65]).trim();
-      mag7[t] = { name: MAG7_NAMES[t] || (t === 'Magnificent 7 (avg)' ? 'Mag 7 (media)' : t),
-        '5Y':parsePct(row[66]),'3Y':parsePct(row[67]),'1Y':parsePct(row[68]),'YTD':parsePct(row[69]),'LM':parsePct(row[70]),'LW':parsePct(row[71]) };
-    }
-
-    // Indices YTD: find last row with col 42 data (rows start at index 4)
-    let lastIdx = 4;
-    for (let r = rows.length-1; r >= 4; r--) {
-      if (rows[r] && rows[r][42] !== '') { lastIdx = r; break; }
-    }
-    const indices = {
-      sp500:     parsePct(rows[lastIdx][43]),
-      russell:   parsePct(rows[lastIdx][44]),
-      msci:      parsePct(rows[lastIdx][45]),
-      eurostoxx: parsePct(rows[lastIdx][46])
-    };
-
-    // BRENT col 27=date 28=price; first data row = rows[2]
-    const brentInit = parsePx(rows[2][28]);
-    let lastBrent = 2;
-    for (let r = rows.length-1; r >= 2; r--) { if (rows[r]?.[27] !== '') { lastBrent=r; break; } }
-    const brentCur = parsePx(rows[lastBrent][28]);
-
-    // WTI col 30=date 31=price; first = rows[2]
-    const wtiInit = parsePx(rows[2][31]);
-    let lastWTI = 2;
-    for (let r = rows.length-1; r >= 2; r--) { if (rows[r]?.[30] !== '') { lastWTI=r; break; } }
-    const wtiCur = parsePx(rows[lastWTI][31]);
-
-    // GOLD col 33=date 34=price; first data = rows[3]
-    const goldInit = parsePx(rows[3][34]);
-    let lastGold = 3;
-    for (let r = rows.length-1; r >= 3; r--) { if (rows[r]?.[33] !== '') { lastGold=r; break; } }
-    const goldCur = parsePx(rows[lastGold][34]);
-
-    // Bitcoin col 36=date 37=price 38=ytd%; first data = rows[3]
-    let lastBTC = 3;
-    for (let r = rows.length-1; r >= 3; r--) { if (rows[r]?.[36] !== '') { lastBTC=r; break; } }
-    const btcPrice = parsePx(rows[lastBTC][37]);
-    const btcYTD   = parsePct(rows[lastBTC][38]);
-
-    excelData = {
-      mag7,
-      indices,
-      commodities: {
-        brent: { current:brentCur, init:brentInit, ytd:(brentCur/brentInit-1)*100 },
-        wti:   { current:wtiCur,   init:wtiInit,   ytd:(wtiCur/wtiInit-1)*100 },
-        gold:  { current:goldCur,  init:goldInit,  ytd:(goldCur/goldInit-1)*100 },
-        btc:   { current:btcPrice, ytd:btcYTD }
-      }
-    };
-  } catch(e) {
-    console.info('Excel load failed, using defaults:', e.message);
-  }
-  renderExcelSections();
-}
-
-// Init Excel sections
-document.addEventListener('DOMContentLoaded', loadExcelData);
 
 // ====== ENERGY PAGE ======
 
@@ -15918,6 +15622,11 @@ function renderForecasts() {
 }
 
 // ── Hash routing ──────────────────────────────────────────────────────────────
+// Alias de hashes antiguos: los enlaces ya compartidos siguen abriendo la pagina
+// correcta aunque la seccion se haya renombrado.
+const LEGACY_HASH = { 'macro': 'mercados' };
+function resolveHash(h) { return LEGACY_HASH[h] || h; }
+
 window.addEventListener('popstate', function() {
   const hash = window.location.hash.slice(1);
   if (hash.startsWith('energy/')) {
@@ -15925,7 +15634,7 @@ window.addEventListener('popstate', function() {
   } else if (hash.startsWith('earnings/')) {
     showPage('earnings', true); showEMSector(hash.slice(9), true);
   } else {
-    showPage(hash || 'home', true);
+    showPage(resolveHash(hash) || 'home', true);
   }
 });
 
@@ -15934,7 +15643,11 @@ window.addEventListener('popstate', function() {
   if (!hash || hash === 'home') return;
   if (hash.startsWith('energy/')) { showPage('energy', true); }
   else if (hash.startsWith('earnings/')) { showPage('earnings', true); }
-  else if (!hash.includes('/')) { showPage(hash, true); }
+  else if (!hash.includes('/')) {
+    const target = resolveHash(hash);
+    if (target !== hash) history.replaceState({ page: target }, '', '#' + target);
+    showPage(target, true);
+  }
 })();
 
 /* =============================================================
