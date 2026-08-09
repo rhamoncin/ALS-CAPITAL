@@ -2839,6 +2839,273 @@
   #page-macro-detail .badge,
   #page-macro-detail .mc-chip,
   #page-macro-detail .ag-cell-tag { border-radius: 2px; }
+
+  /* =========================================================
+     RENTA FIJA (Market View)
+     Todo el ambito cuelga de #page-rentafija para no afectar al
+     resto del sitio. Reutiliza las variables de :root y las
+     clases globales .section-label / .section-title / .divider /
+     .period-btn / .chart-card. La pagina evita las cajas: usa
+     filetes y aire, y reserva la unica caja para el grafico de
+     la curva, que es la pieza principal.
+     ========================================================= */
+  #page-rentafija .rf-sub {
+    font-size: 0.85rem; color: var(--text-light);
+    max-width: 620px; line-height: 1.6;
+  }
+  #page-rentafija .rf-fecha {
+    font-size: 0.7rem; color: var(--text-light); opacity: 0.8; margin-top: 10px;
+  }
+  #page-rentafija #rf-curve-chart { width: 100% !important; height: 360px !important; }
+  #page-rentafija .rf-section { margin-bottom: 64px; }
+  #page-rentafija .rf-section:last-child { margin-bottom: 0; }
+
+  /* Encabezado de seccion: filete fino a todo el ancho, sin caja */
+  #page-rentafija .rf-h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.12rem; font-weight: 600; color: var(--text-dark);
+  }
+  #page-rentafija .rf-section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+    padding-bottom: 12px; margin-bottom: 28px;
+    border-bottom: 1px solid var(--divider);
+  }
+
+  /* Snapshot compacto de metricas (Treasury Market) */
+  #page-rentafija .rf-snapshot {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  }
+  #page-rentafija .rf-metric { padding: 0 28px; border-left: 1px solid var(--divider); }
+  #page-rentafija .rf-metric:first-child { padding-left: 0; border-left: none; }
+  #page-rentafija .rf-metric-label {
+    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-light); margin-bottom: 8px; white-space: nowrap;
+  }
+  #page-rentafija .rf-metric-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 700; color: var(--text-dark);
+    line-height: 1.1; margin-bottom: 5px;
+  }
+  #page-rentafija .rf-metric-chg { font-size: 0.74rem; color: var(--text-light); }
+  #page-rentafija .rf-metric-chg.pos { color: var(--green); }
+  #page-rentafija .rf-metric-chg.neg { color: var(--red); }
+
+  /* Curva: selectores + caja del grafico */
+  #page-rentafija .rf-curve-bar {
+    display: flex; align-items: center; gap: 14px;
+    flex-wrap: wrap; margin-bottom: 18px;
+  }
+  #page-rentafija .rf-curve-bar-label {
+    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-light);
+  }
+  #page-rentafija .rf-curve-btns {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    background: var(--cream-dark); border-radius: 4px; padding: 3px;
+  }
+  #page-rentafija .rf-spread {
+    display: flex; align-items: baseline; gap: 10px; white-space: nowrap;
+  }
+  #page-rentafija .rf-spread-label {
+    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-light);
+  }
+  #page-rentafija .rf-spread-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700; color: var(--text-dark);
+  }
+  #page-rentafija .rf-chart-card { margin-bottom: 0; min-height: 380px; position: relative; }
+  #page-rentafija .rf-chart-empty {
+    position: absolute; inset: 28px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; text-align: center; pointer-events: none;
+  }
+  #page-rentafija .rf-chart-empty-title { font-size: 0.82rem; color: var(--text-light); }
+  #page-rentafija .rf-chart-empty-sub { font-size: 0.72rem; color: var(--text-light); opacity: 0.7; }
+
+  /* Drivers del 10Y: jerarquia nominal > (real + breakeven) > term premium */
+  /* Nominal ~ Real + Breakeven. Columnas al ancho del contenido y una ultima
+     columna elastica que recoge el sobrante: asi los operadores quedan junto a
+     sus cifras y no separados por huecos de rejilla. align-items:baseline hace
+     el resto, alineando los tres valores y los dos signos sobre la misma linea
+     pese a tener cuerpos distintos. */
+  #page-rentafija .rf-driver-grid {
+    display: grid;
+    /* Los tres bloques se dimensionan por su contenido y el sobrante va a las
+       dos columnas elasticas de los operadores, que reparten el ancho a partes
+       iguales. Con justify-self:center cada signo queda justo en el medio de
+       su hueco, asi que la fila se lee como una ecuacion repartida y no como
+       un bloque pegado a la izquierda. */
+    grid-template-columns: auto 1fr auto 1fr auto;
+    grid-template-areas:
+      "l1 l1 l2 l2 l3"
+      "v1 eq v2 pl v3"
+      "c1 c1 c2 c2 c3";
+    column-gap: 20px;
+    align-items: baseline;
+  }
+  #page-rentafija .rf-driver-op { justify-self: center; }
+  #page-rentafija .rf-d-l1 { grid-area: l1; }
+  #page-rentafija .rf-d-l2 { grid-area: l2; }
+  #page-rentafija .rf-d-l3 { grid-area: l3; }
+  #page-rentafija .rf-d-v1 { grid-area: v1; }
+  #page-rentafija .rf-d-v2 { grid-area: v2; }
+  #page-rentafija .rf-d-v3 { grid-area: v3; }
+  #page-rentafija .rf-d-c1 { grid-area: c1; }
+  #page-rentafija .rf-d-c2 { grid-area: c2; }
+  #page-rentafija .rf-d-c3 { grid-area: c3; }
+  #page-rentafija .rf-driver-op-eq { grid-area: eq; }
+  #page-rentafija .rf-driver-op-plus { grid-area: pl; }
+  #page-rentafija .rf-driver-op {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700; color: var(--text-dark);
+    line-height: 1; user-select: none;
+  }
+  #page-rentafija .rf-driver-lead-label {
+    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--burgundy); margin-bottom: 10px;
+  }
+  #page-rentafija .rf-driver-lead-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 700; color: var(--text-dark);
+    line-height: 1; margin-bottom: 10px;
+  }
+  #page-rentafija .rf-driver-part-label {
+    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-light); margin-bottom: 8px;
+  }
+  #page-rentafija .rf-driver-part-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.45rem; font-weight: 700; color: var(--text-dark);
+    line-height: 1.1; margin-bottom: 6px;
+  }
+  #page-rentafija .rf-chg-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  #page-rentafija .rf-chg { font-size: 0.72rem; color: var(--text-light); }
+  #page-rentafija .rf-chg span { color: var(--text-mid); }
+  #page-rentafija .rf-chg span.pos { color: var(--green); }
+  #page-rentafija .rf-chg span.neg { color: var(--red); }
+  /* 3M es el horizonte principal de la vista: mismo tamano, mas peso */
+  #page-rentafija .rf-chg-key { color: var(--text-mid); font-weight: 500; }
+  #page-rentafija .rf-chg-key span { font-weight: 600; }
+
+  /* Term premium: complementario, deliberadamente menos protagonista */
+  #page-rentafija .rf-driver-extra {
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    margin-top: 28px; padding-top: 18px;
+    border-top: 1px solid var(--divider);
+  }
+  #page-rentafija .rf-driver-extra-label {
+    font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-light);
+  }
+  #page-rentafija .rf-driver-extra-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700; color: var(--text-mid);
+  }
+
+  /* Ayuda contextual: icono discreto + tooltip en hover y en foco de teclado.
+     Sin JS: el texto vive en data-tip. */
+  #page-rentafija .rf-info {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 13px; height: 13px; margin-left: 6px;
+    border: 1px solid var(--text-light); border-radius: 50%;
+    font-family: 'DM Sans', sans-serif; font-size: 8.5px; font-weight: 600;
+    font-style: normal; line-height: 1; text-transform: none; letter-spacing: 0;
+    color: var(--text-light); opacity: 0.55; cursor: help;
+    position: relative; vertical-align: 1px; transition: opacity 0.15s;
+  }
+  #page-rentafija .rf-info:hover,
+  #page-rentafija .rf-info:focus-visible { opacity: 1; color: var(--burgundy); border-color: var(--burgundy); outline: none; }
+  #page-rentafija .rf-info::after {
+    content: attr(data-tip);
+    position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    width: max-content; max-width: 250px;
+    background: var(--card-bg); color: var(--text-mid);
+    border: 1px solid var(--border); border-radius: 3px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+    padding: 8px 10px; font-size: 0.68rem; font-weight: 400; line-height: 1.5;
+    text-align: left; letter-spacing: 0; white-space: normal;
+    z-index: 60; pointer-events: none;
+    /* display y no visibility: un tooltip oculto con visibility sigue contando
+       para el ancho de la pagina y provocaba scroll horizontal. */
+    display: none;
+  }
+  #page-rentafija .rf-info:hover::after,
+  #page-rentafija .rf-info:focus-visible::after { display: block; }
+  /* Al final de una fila el tooltip centrado se saldria: se ancla a la derecha. */
+  #page-rentafija .rf-info-fin::after { left: auto; right: 0; transform: none; }
+  /* En la tabla el icono queda al final de un nombre largo, asi que el tooltip
+     se ancla a la celda y no al icono: con el icono en static, el bloque de
+     referencia del pseudo-elemento pasa a ser el td. Asi arranca en el borde
+     de la fila y cabe siempre, tambien en movil. */
+  #page-rentafija .rf-credit td { position: relative; }
+  #page-rentafija .rf-credit td .rf-info { position: static; }
+  #page-rentafija .rf-credit td .rf-info::after {
+    left: 0; right: auto; transform: none; top: calc(100% - 12px);
+  }
+
+  /* Credit conditions: tabla compacta, sin caja */
+  #page-rentafija .rf-credit { width: 100%; border-collapse: collapse; }
+  #page-rentafija .rf-credit th {
+    font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-light); font-weight: 600; text-align: right;
+    /* Relleno simetrico: el texto queda centrado en la franja, no pegado
+       al borde superior. Sin relleno lateral, para no descuadrar columnas. */
+    padding: 9px 0; border-bottom: 1px solid var(--divider); white-space: nowrap;
+  }
+  #page-rentafija .rf-credit th:first-child { text-align: left; }
+  #page-rentafija .rf-credit td {
+    padding: 16px 0; border-bottom: 1px solid var(--divider);
+    text-align: right; font-size: 0.82rem; color: var(--text-mid); white-space: nowrap;
+  }
+  #page-rentafija .rf-credit td:first-child {
+    text-align: left; font-size: 0.85rem; color: var(--text-dark); font-weight: 500;
+  }
+  #page-rentafija .rf-credit td.rf-credit-level {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700; color: var(--text-dark);
+  }
+  #page-rentafija .rf-credit td.pos { color: var(--green); }
+  #page-rentafija .rf-credit td.neg { color: var(--red); }
+
+  @media (max-width: 768px) {
+    /* La regla global de margenes apunta a [style*="padding: 48px"] con
+       espacio y estos contenedores lo escriben sin el, asi que el margen
+       lateral se reduce aqui de forma explicita. */
+    #page-rentafija > div { padding-left: 20px !important; padding-right: 20px !important; }
+    #page-rentafija .rf-section { margin-bottom: 44px; }
+    #page-rentafija .rf-snapshot { grid-template-columns: repeat(2, 1fr); row-gap: 26px; }
+    #page-rentafija .rf-metric { padding: 0 16px; }
+    #page-rentafija .rf-metric:nth-child(odd) { padding-left: 0; border-left: none; }
+    /* Apilado en vertical la lectura de la identidad se pierde: el "~" sobra,
+       pero el "+" entre los dos componentes sigue teniendo sentido. */
+    #page-rentafija .rf-driver-grid {
+      grid-template-columns: auto auto 1fr;
+      grid-template-areas:
+        "l1 l1 l1"
+        "v1 v1 v1"
+        "c1 c1 c1"
+        "l2 .  l3"
+        "v2 pl v3"
+        "c2 .  c3";
+      column-gap: 16px;
+    }
+    #page-rentafija .rf-driver-op-eq { display: none; }
+    #page-rentafija .rf-driver-op { font-size: 1.05rem; }
+    #page-rentafija .rf-d-c1 { margin-bottom: 24px; }
+    #page-rentafija .rf-info::after { max-width: 68vw; }
+    #page-rentafija .rf-chart-card { min-height: 300px; padding: 18px; }
+    #page-rentafija #rf-curve-chart { height: 260px !important; }
+    #page-rentafija .rf-chart-empty { inset: 18px; }
+    /* No caben las 6 columnas: se deja lo principal, spread actual y 3M */
+    #page-rentafija .rf-credit th:nth-child(3),
+    #page-rentafija .rf-credit td:nth-child(3),
+    #page-rentafija .rf-credit th:nth-child(5),
+    #page-rentafija .rf-credit td:nth-child(5),
+    #page-rentafija .rf-credit th:nth-child(6),
+    #page-rentafija .rf-credit td:nth-child(6) { display: none; }
+  }
   </style>
 </head>
 <body>
@@ -2868,6 +3135,7 @@
       <div class="nav-dropdown-menu">
         <a onclick="showPage('mercados')" id="nav-mercados">Mercados</a>
         <a onclick="openMacroDetail()" id="nav-macro-detail">Macro</a>
+        <a onclick="showPage('rentafija')" id="nav-rentafija">Renta Fija</a>
         <a onclick="showPage('energy')" id="nav-energy">Energ&iacute;a</a>
         <a onclick="showPage('earnings')" id="nav-earnings">Earnings Monitor</a>
         <a onclick="showPage('forecasts')" id="nav-forecasts">Macro Forecasts</a>
@@ -2893,6 +3161,7 @@
   <div class="mobile-menu-group-label">Market View</div>
   <a onclick="showPage('mercados');closeMobileMenu()" id="mnav-mercados" style="padding-left:10px">Mercados</a>
   <a onclick="openMacroDetail();closeMobileMenu()" id="mnav-macro-detail" style="padding-left:10px">Macro</a>
+  <a onclick="showPage('rentafija');closeMobileMenu()" id="mnav-rentafija" style="padding-left:10px">Renta Fija</a>
   <a onclick="showPage('energy');closeMobileMenu()" id="mnav-energy" style="padding-left:10px">Energ&iacute;a</a>
   <a onclick="showPage('earnings');closeMobileMenu()" id="mnav-earnings" style="padding-left:10px">Earnings Monitor</a>
   <a onclick="showPage('forecasts');closeMobileMenu()" id="mnav-forecasts" style="padding-left:10px">Macro Forecasts</a>
@@ -4939,6 +5208,171 @@
 
 </div>
 
+<!-- ===================== RENTA FIJA (Market View) =====================
+     Estructura visual. Los valores se muestran como guion largo hasta
+     que se conecte la fuente de datos: no hay cifras de ejemplo.
+     ================================================================== -->
+<div id="page-rentafija" class="page">
+
+  <!-- A. HEADER -->
+  <div style="padding:48px 48px 16px;max-width:1300px;margin:0 auto">
+    <div class="section-label">Market View</div>
+    <div class="section-title" style="margin-bottom:20px">Renta Fija</div>
+    <div class="divider"></div>
+    <div class="rf-sub">Tipos de inter&eacute;s, curva del Treasury y condiciones de cr&eacute;dito en Estados Unidos.</div>
+    <div class="rf-fecha" id="rf-fecha-datos"></div>
+  </div>
+
+  <div style="max-width:1300px;margin:0 auto;padding:20px 48px 64px">
+
+    <!-- B. TREASURY MARKET -->
+    <section class="rf-section">
+      <div class="rf-section-head">
+        <div class="rf-h2">US Treasury Market</div>
+      </div>
+      <div class="rf-snapshot">
+        <div class="rf-metric">
+          <div class="rf-metric-label">US Treasury 2Y</div>
+          <div class="rf-metric-value" id="rf-ust-2y">&mdash;</div>
+          <div class="rf-metric-chg" id="rf-ust-2y-chg">&mdash;</div>
+        </div>
+        <div class="rf-metric">
+          <div class="rf-metric-label">US Treasury 5Y</div>
+          <div class="rf-metric-value" id="rf-ust-5y">&mdash;</div>
+          <div class="rf-metric-chg" id="rf-ust-5y-chg">&mdash;</div>
+        </div>
+        <div class="rf-metric">
+          <div class="rf-metric-label">US Treasury 10Y</div>
+          <div class="rf-metric-value" id="rf-ust-10y">&mdash;</div>
+          <div class="rf-metric-chg" id="rf-ust-10y-chg">&mdash;</div>
+        </div>
+        <div class="rf-metric">
+          <div class="rf-metric-label">US Treasury 30Y</div>
+          <div class="rf-metric-value" id="rf-ust-30y">&mdash;</div>
+          <div class="rf-metric-chg" id="rf-ust-30y-chg">&mdash;</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- C. US TREASURY YIELD CURVE -->
+    <section class="rf-section">
+      <div class="rf-section-head">
+        <div class="rf-h2">US Treasury Yield Curve</div>
+        <div class="rf-spread">
+          <span class="rf-spread-label">10Y&ndash;2Y Spread<span class="rf-info rf-info-fin" tabindex="0" aria-label="Difference between the 10-year and 2-year U.S. Treasury yields. A simple measure of the slope of the yield curve." data-tip="Difference between the 10-year and 2-year U.S. Treasury yields. A simple measure of the slope of the yield curve.">i</span></span>
+          <span class="rf-spread-value" id="rf-spread-10y2y">&mdash;</span>
+        </div>
+      </div>
+
+      <div class="rf-curve-bar">
+        <span class="rf-curve-bar-label">Comparar</span>
+        <div class="rf-curve-btns" id="rf-curve-btns">
+          <button class="period-btn active" data-serie="current" onclick="rfToggleCurveSerie(this)">Current</button>
+          <button class="period-btn" data-serie="1m" onclick="rfToggleCurveSerie(this)">1M Ago</button>
+          <button class="period-btn" data-serie="3m" onclick="rfToggleCurveSerie(this)">3M Ago</button>
+          <button class="period-btn" data-serie="6m" onclick="rfToggleCurveSerie(this)">6M Ago</button>
+          <button class="period-btn active" data-serie="1y" onclick="rfToggleCurveSerie(this)">1Y Ago</button>
+        </div>
+      </div>
+
+      <div class="chart-card rf-chart-card">
+        <canvas id="rf-curve-chart"></canvas>
+        <div class="rf-chart-empty" id="rf-curve-empty">
+          <div class="rf-chart-empty-title">Curva pendiente de conexi&oacute;n de datos</div>
+          <div class="rf-chart-empty-sub">3M &middot; 6M &middot; 1Y &middot; 2Y &middot; 3Y &middot; 5Y &middot; 7Y &middot; 10Y &middot; 20Y &middot; 30Y</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- D. WHAT IS DRIVING THE 10Y? -->
+    <section class="rf-section">
+      <div class="rf-section-head">
+        <div class="rf-h2">What is driving the 10Y?</div>
+      </div>
+
+      <!-- La fila lee de izquierda a derecha como Nominal ~ Real + Breakeven.
+           Los operadores son decorativos: se ocultan a lectores de pantalla. -->
+      <!-- Rejilla plana de una sola capa: etiquetas, valores y variaciones van
+           cada uno en su propia fila, colocados por grid-template-areas. Es lo
+           que permite que los tres valores y los dos operadores compartan linea
+           base y se lean como una unica ecuacion. -->
+      <div class="rf-driver-grid">
+        <div class="rf-driver-lead-label rf-d-l1">10Y Nominal Yield</div>
+        <div class="rf-driver-part-label rf-d-l2">10Y Real Yield<span class="rf-info" tabindex="0" aria-label="Inflation-adjusted market yield derived from 10-year U.S. inflation-protected Treasuries." data-tip="Inflation-adjusted market yield derived from 10-year U.S. inflation-protected Treasuries.">i</span></div>
+        <div class="rf-driver-part-label rf-d-l3">10Y Breakeven Inflation<span class="rf-info rf-info-fin" tabindex="0" aria-label="Market-implied average inflation compensation over the next 10 years, derived from nominal and inflation-protected Treasuries." data-tip="Market-implied average inflation compensation over the next 10 years, derived from nominal and inflation-protected Treasuries.">i</span></div>
+
+        <div class="rf-driver-lead-value rf-d-v1" id="rf-10y-nominal">&mdash;</div>
+        <div class="rf-driver-op rf-driver-op-eq" aria-hidden="true">&asymp;</div>
+        <div class="rf-driver-part-value rf-d-v2" id="rf-10y-real">&mdash;</div>
+        <div class="rf-driver-op rf-driver-op-plus" aria-hidden="true">+</div>
+        <div class="rf-driver-part-value rf-d-v3" id="rf-10y-breakeven">&mdash;</div>
+
+        <div class="rf-chg-row rf-d-c1">
+          <div class="rf-chg rf-chg-key">3M <span id="rf-10y-nominal-3m">&mdash;</span></div>
+          <div class="rf-chg">1M <span id="rf-10y-nominal-1m">&mdash;</span></div>
+        </div>
+        <div class="rf-chg-row rf-d-c2">
+          <div class="rf-chg rf-chg-key">3M <span id="rf-10y-real-3m">&mdash;</span></div>
+          <div class="rf-chg">1M <span id="rf-10y-real-1m">&mdash;</span></div>
+        </div>
+        <div class="rf-chg-row rf-d-c3">
+          <div class="rf-chg rf-chg-key">3M <span id="rf-10y-breakeven-3m">&mdash;</span></div>
+          <div class="rf-chg">1M <span id="rf-10y-breakeven-1m">&mdash;</span></div>
+        </div>
+      </div>
+
+      <!-- Term Premium queda fuera de la identidad anterior: no es un tercer
+           sumando, sino un indicador complementario. -->
+      <div class="rf-driver-extra">
+        <span class="rf-driver-extra-label">10Y Term Premium<span class="rf-info" tabindex="0" aria-label="Estimated additional compensation investors require for holding long-term interest-rate risk." data-tip="Estimated additional compensation investors require for holding long-term interest-rate risk.">i</span></span>
+        <span class="rf-driver-extra-value" id="rf-10y-termpremium">&mdash;</span>
+        <div class="rf-chg-row">
+          <div class="rf-chg rf-chg-key">3M <span id="rf-10y-termpremium-3m">&mdash;</span></div>
+          <div class="rf-chg">1M <span id="rf-10y-termpremium-1m">&mdash;</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- E. CREDIT CONDITIONS -->
+    <section class="rf-section">
+      <div class="rf-section-head">
+        <div class="rf-h2">Credit Conditions</div>
+      </div>
+      <table class="rf-credit">
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Spread (bp)</th>
+            <th>1M</th>
+            <th>3M</th>
+            <th>6M</th>
+            <th>1Y</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>US Investment Grade Spread<span class="rf-info" tabindex="0" aria-label="Additional yield demanded by the market for investment-grade corporate credit relative to government bonds." data-tip="Additional yield demanded by the market for investment-grade corporate credit relative to government bonds.">i</span></td>
+            <td class="rf-credit-level" id="rf-ig-oas">&mdash;</td>
+            <td id="rf-ig-oas-1m">&mdash;</td>
+            <td id="rf-ig-oas-3m">&mdash;</td>
+            <td id="rf-ig-oas-6m">&mdash;</td>
+            <td id="rf-ig-oas-1y">&mdash;</td>
+          </tr>
+          <tr>
+            <td>US High Yield Spread<span class="rf-info" tabindex="0" aria-label="Additional yield demanded for lower-rated corporate credit relative to government bonds." data-tip="Additional yield demanded for lower-rated corporate credit relative to government bonds.">i</span></td>
+            <td class="rf-credit-level" id="rf-hy-oas">&mdash;</td>
+            <td id="rf-hy-oas-1m">&mdash;</td>
+            <td id="rf-hy-oas-3m">&mdash;</td>
+            <td id="rf-hy-oas-6m">&mdash;</td>
+            <td id="rf-hy-oas-1y">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+</div>
+
 <!-- ===================== EARNINGS MONITOR ===================== -->
 <div id="page-earnings" class="page">
 
@@ -6970,6 +7404,7 @@
 <!-- El parametro ?v= fuerza a los navegadores a recargar los datos cuando se
      regenera el fichero. Subir el numero al actualizar el Excel. -->
 <script src="assets/js/macroCycle.js?v=6b9936c244"></script>
+<script src="assets/js/rentaFijaData.js"></script>
 <script src="assets/data/energy/eia_oil_production_data.js"></script>
 <script>
 
@@ -10126,7 +10561,7 @@ function showPage(id, skipHistory) {
   if (navEl) navEl.classList.add('active');
   const mNav = document.getElementById('mnav-' + id);
   if (mNav) mNav.classList.add('active');
-  if (id === 'mercados' || id === 'macro-detail' || id === 'energy' || id === 'earnings' || id === 'forecasts') {
+  if (id === 'mercados' || id === 'macro-detail' || id === 'rentafija' || id === 'energy' || id === 'earnings' || id === 'forecasts') {
     const mv = document.getElementById('nav-market-view');
     if (mv) mv.classList.add('active');
   }
@@ -10134,6 +10569,7 @@ function showPage(id, skipHistory) {
     const pb = document.getElementById('nav-publicaciones');
     if (pb) pb.classList.add('active');
   }
+  if (id === 'rentafija') initRentaFija();
   if (id === 'energy') initEnergyPage();
   if (id === 'earnings') initEarningsPage();
   if (id === 'portfolio') {
@@ -12718,6 +13154,221 @@ function renderHomeCompChart() {
   });
 }
 
+
+/* =============================================================
+   RENTA FIJA (Market View). Namespace propio: todo lo de esta
+   pagina lleva prefijo rf. Solo LEE assets/js/rentaFijaData.js,
+   generado por tools/extraer_rentafija.py desde las cinco tablas
+   resumen de "RENTA FIJA - FRED.xlsx". No comparte datos con
+   Macro, Mercados ni Energia, y no escribe ninguna cifra a mano:
+   si el asset no esta, la pagina se queda con sus guiones.
+   ============================================================= */
+
+/* Current manda visualmente: burdeos, solida y con punto en cada vencimiento.
+   Las historicas se mantienen secundarias (finas y en gris), pero cada una
+   lleva trama y tono propios: con tres o mas seleccionadas, un gris uniforme
+   las hacia indistinguibles. El orden de tono va de mas oscura a mas clara
+   segun cuanto se consultan: 1Y entra por defecto, asi que es la mas legible. */
+const RF_SERIES = {
+  current: { etiqueta: 'Current', color: '#6B2737', ancho: 2.6, dash: [],            radio: 3.2, orden: 5 },
+  '1y':    { etiqueta: '1Y Ago',  color: '#5A534D', ancho: 1.5, dash: [5, 3],        radio: 0,   orden: 4 },
+  '1m':    { etiqueta: '1M Ago',  color: '#7A736D', ancho: 1.4, dash: [9, 4],        radio: 0,   orden: 3 },
+  '3m':    { etiqueta: '3M Ago',  color: '#9A938D', ancho: 1.4, dash: [2, 3],        radio: 0,   orden: 2 },
+  '6m':    { etiqueta: '6M Ago',  color: '#B9B2AC', ancho: 1.4, dash: [14, 4, 2, 4], radio: 0,   orden: 1 }
+};
+
+let rfCurveChart = null;
+let rfIniciado = false;
+
+function rfHayDatos() {
+  return typeof rentaFijaData !== 'undefined' && rentaFijaData && rentaFijaData.curva;
+}
+
+// ---- Formato ----
+function rfPct(v, dec) {
+  if (v === null || v === undefined) return '—';
+  return v.toFixed(dec === undefined ? 2 : dec) + '%';
+}
+
+function rfBp(v) {
+  if (v === null || v === undefined) return '—';
+  const n = Math.round(v);
+  return (n > 0 ? '+' : '') + n + ' bp';
+}
+
+/* Los tipos no tienen direccion "buena" o "mala": una subida del yield no es
+   intrinsecamente positiva ni una bajada negativa, asi que sus variaciones van
+   en color neutro. El credito si tiene semantica: un spread que se amplia es
+   deterioro (rojo) y uno que se estrecha es mejora (verde). */
+function rfSignoCredito(v) {
+  if (v === null || v === undefined || v === 0) return '';
+  return v > 0 ? 'neg' : 'pos';   // widening = negativo, tightening = positivo
+}
+
+function rfTexto(id, valor, clase) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = valor;
+  el.classList.remove('pos', 'neg');
+  if (clase) el.classList.add(clase);
+}
+
+function rfFechaLarga(iso) {
+  if (!iso) return '';
+  const meses = ['enero','febrero','marzo','abril','mayo','junio',
+                 'julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  const p = iso.split('-');
+  return parseInt(p[2], 10) + ' ' + meses[parseInt(p[1], 10) - 1] + ' ' + p[0];
+}
+
+// ---- Bloques de metricas ----
+function rfPintarTreasuries() {
+  const mapa = { 'US Treasury 2Y': '2y', 'US Treasury 5Y': '5y',
+                 'US Treasury 10Y': '10y', 'US Treasury 30Y': '30y' };
+  rentaFijaData.treasuries.forEach(t => {
+    const suf = mapa[t.nombre];
+    if (!suf) return;
+    rfTexto('rf-ust-' + suf, rfPct(t.current));
+    rfTexto('rf-ust-' + suf + '-chg', '1M ' + rfBp(t.cambios['1m']));
+  });
+}
+
+function rfPintarPendiente() {
+  const p = rentaFijaData.pendiente;
+  rfTexto('rf-spread-10y2y', p.current === null ? '—' : Math.round(p.current) + ' bp');
+}
+
+function rfPintarDrivers() {
+  const s = rentaFijaData.drivers.series;
+  const bloques = [
+    ['rf-10y-nominal',     s.nominal,     2],
+    ['rf-10y-real',        s.real,        2],
+    ['rf-10y-breakeven',   s.breakeven,   2],
+    ['rf-10y-termpremium', s.termPremium, 2]
+  ];
+  bloques.forEach(([id, serie, dec]) => {
+    if (!serie) return;
+    rfTexto(id, rfPct(serie.current, dec));
+    ['3m', '1m'].forEach(h => rfTexto(id + '-' + h, rfBp(serie.cambios[h])));
+  });
+}
+
+function rfPintarCredito() {
+  const mapa = { 'US Investment Grade OAS': 'rf-ig-oas', 'US High Yield OAS': 'rf-hy-oas' };
+  rentaFijaData.credito.series.forEach(c => {
+    const base = mapa[c.nombre];
+    if (!base) return;
+    rfTexto(base, c.current === null ? '—' : Math.round(c.current));
+    ['1m', '3m', '6m', '1y'].forEach(h => {
+      const d = c.cambios[h];
+      rfTexto(base + '-' + h, rfBp(d), rfSignoCredito(d));
+    });
+  });
+}
+
+// ---- Curva ----
+function rfCurveSeries() {
+  return Array.from(document.querySelectorAll('#rf-curve-btns .period-btn.active'))
+    .map(b => b.dataset.serie);
+}
+
+function rfToggleCurveSerie(btn) {
+  const activos = document.querySelectorAll('#rf-curve-btns .period-btn.active');
+  // Siempre debe quedar al menos una serie seleccionada.
+  if (btn.classList.contains('active') && activos.length === 1) return;
+  btn.classList.toggle('active');
+  rfPintarCurva();
+}
+
+function rfPintarCurva() {
+  const canvas = document.getElementById('rf-curve-chart');
+  if (!canvas || typeof Chart === 'undefined' || !rfHayDatos()) return;
+
+  const puntos = rentaFijaData.curva.puntos;
+  const fechas = rentaFijaData.curva.fechas;
+  const activas = rfCurveSeries();
+
+  const datasets = activas
+    .map(clave => {
+      const meta = RF_SERIES[clave];
+      if (!meta) return null;
+      return {
+        label: meta.etiqueta,
+        data: puntos.map(p => p.yields[clave]),
+        borderColor: meta.color,
+        backgroundColor: meta.color,
+        borderWidth: meta.ancho,
+        borderDash: meta.dash,
+        pointRadius: meta.radio,
+        pointHoverRadius: 4,
+        // Monotona: pasa exactamente por los diez puntos reales y no inventa
+        // maximos ni minimos entre vencimientos, como si haria un spline libre.
+        cubicInterpolationMode: 'monotone',
+        order: 10 - meta.orden,      // Current se dibuja por encima
+        rfFecha: fechas[clave]
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.order - a.order);
+
+  const vacio = document.getElementById('rf-curve-empty');
+  if (vacio) vacio.style.display = 'none';
+
+  if (rfCurveChart) rfCurveChart.destroy();
+  rfCurveChart = new Chart(canvas.getContext('2d'), {
+    type: 'line',
+    data: { labels: puntos.map(p => p.maturity), datasets: datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          align: 'start',
+          labels: {
+            boxWidth: 18, boxHeight: 2, padding: 16, usePointStyle: false,
+            font: { size: 11, family: "'DM Sans', sans-serif" }, color: '#7D7975'
+          }
+        },
+        tooltip: {
+          backgroundColor: '#fff', borderColor: 'rgba(0,0,0,0.08)', borderWidth: 1,
+          titleColor: '#7A7A7A', bodyColor: '#1C1C1C', padding: 10,
+          callbacks: {
+            title: items => 'Maturity ' + items[0].label,
+            label: c => ' ' + c.dataset.label + ': ' + c.parsed.y.toFixed(2) + '%'
+                        + '  ·  ' + (c.dataset.rfFecha || '')
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false },
+             ticks: { font: { size: 10 }, color: '#7A7A7A' } },
+        y: { title: { display: true, text: 'Yield (%)',
+                      font: { size: 10 }, color: '#7A7A7A' },
+             grid: { color: 'rgba(0,0,0,0.04)' },
+             ticks: { font: { size: 10 }, color: '#7A7A7A',
+                      callback: v => v.toFixed(2) + '%' } }
+      }
+    }
+  });
+}
+
+function initRentaFija() {
+  if (!rfHayDatos()) return;          // sin asset, la pagina se queda con guiones
+  if (!rfIniciado) {
+    rfPintarTreasuries();
+    rfPintarPendiente();
+    rfPintarDrivers();
+    rfPintarCredito();
+    const nota = document.getElementById('rf-fecha-datos');
+    if (nota) nota.textContent = 'Datos a ' + rfFechaLarga(rentaFijaData.fechaOficial);
+    rfIniciado = true;
+  }
+  // El canvas necesita que la pagina ya sea visible para medir su ancho.
+  setTimeout(rfPintarCurva, 50);
+}
 
 // ====== ENERGY PAGE ======
 
