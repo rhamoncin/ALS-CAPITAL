@@ -824,6 +824,18 @@
   .comp-chip { display:inline-flex;align-items:center;gap:6px;background:#F8F8F7;border:1px solid #F5F4F2;border-radius:3px;padding:4px 12px;font-size:0.75rem;color:#333 }
   .comp-chip .chip-dot { width:10px;height:10px;border-radius:50%;flex-shrink:0 }
   .comp-chip button { background:none;border:none;cursor:pointer;color:#999;font-size:1rem;line-height:1;padding:0;margin-left:2px }
+  /* Buscador del desplegable: con 41 activos repartidos en cinco grupos,
+     encontrar uno concreto a base de desplegar acordeones es lento. */
+  .comp-search { position:sticky;top:0;z-index:1;background:#fff;padding:10px 12px;border-bottom:1px solid #F5F4F2 }
+  .comp-search input { width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:3px;padding:7px 10px;font-size:0.78rem;font-family:'DM Sans',sans-serif;color:var(--text-dark);background:#FCFCFB;outline:none }
+  .comp-search input:focus { border-color:var(--burgundy) }
+  .comp-search input::placeholder { color:#B0A99E }
+  .comp-tk { margin-left:auto;font-size:0.68rem;color:var(--text-light);letter-spacing:0.04em }
+  .comp-option.sel { background:var(--burgundy-pale) }
+  .comp-vacio { padding:16px 20px;font-size:0.78rem;color:var(--text-light);font-style:italic }
+  .comp-pie { display:flex;justify-content:space-between;align-items:center;position:sticky;bottom:0;background:#fff;border-top:1px solid #F5F4F2;padding:8px 12px;font-size:0.72rem;color:var(--text-light) }
+  .comp-pie button { background:none;border:none;cursor:pointer;color:var(--burgundy);font-size:0.72rem;font-family:'DM Sans',sans-serif;padding:0 }
+  .comp-pie button:hover { text-decoration:underline }
  font-family: 'Playfair Display', serif; font-size: 1.9rem; color: var(--text-dark); margin: 0 0 8px; line-height: 1.25; }
   .article-body h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--text-dark); margin: 40px 0 14px; border-left: 3px solid var(--burgundy); padding-left: 14px; }
   .article-body p { font-size: 0.95rem; line-height: 1.85; color: var(--text-mid); margin: 0 0 18px; }
@@ -2514,6 +2526,11 @@
   .res-card-ext { flex: 0 0 auto; color: var(--text-light); opacity: 0; transition: opacity 0.18s; }
   .res-card:hover .res-card-ext { opacity: 1; }
   .res-card-desc { font-size: 0.77rem; color: var(--text-mid); line-height: 1.55; margin-bottom: 10px; }
+  /* Ficha sin enlace: misma caja, pero sin el gesto de "pinchable" (ni elevacion
+     ni borde burdeos al pasar), porque aqui no hay adonde ir. */
+  .res-card-plain:hover { box-shadow: none; border-color: var(--border); transform: none; }
+  .res-card-plain .res-card-top { margin-bottom: 5px; }
+  .res-card-pub { font-size: 0.77rem; color: var(--text-mid); line-height: 1.5; }
   .res-card-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .res-card-host { font-size: 0.68rem; color: var(--text-light); letter-spacing: 0.02em; }
   .res-tag {
@@ -7402,7 +7419,7 @@
   <span id="footer-actualizado">Solo fines informativos</span>
 </footer>
 
-<script src="assets/js/mktData.js?v=20260810"></script>
+<script src="assets/js/mktData.js?v=20260810b"></script>
 <!-- El parametro ?v= fuerza a los navegadores a recargar los datos cuando se
      regenera el fichero. Subir el numero al actualizar el Excel. -->
 <script src="assets/js/macroCycle.js?v=6b9936c244"></script>
@@ -12705,15 +12722,6 @@ function renderComparador() {
     return `<button class="pbtn ${active}" onclick="setCompPeriod('${p}',this)">${p}</button>`;
   }).join('');
 
-  const chipsHtml = compState.selected.length === 0
-    ? `<span style="font-size:0.8rem;color:var(--text-light);font-style:italic">Selecciona al menos 2 activos para comparar</span>`
-    : compState.selected.map((s, i) => `
-        <div class="comp-chip">
-          <span class="chip-dot" style="background:${COMP_COLORS[i % COMP_COLORS.length]}"></span>
-          ${s.nombre}
-          <button onclick="removeCompActivo('${s.key}')">×</button>
-        </div>`).join('');
-
   // Build grouped dropdown - groups as accordion
   let groupsHtml = '';
   for (const [gid, glabel] of Object.entries(grupos_labels)) {
@@ -12722,9 +12730,11 @@ function renderComparador() {
       const key = gid + '|' + a.ticker + '|' + a.nombre;
       const isSelected = compState.selected.find(s => s.key === key);
       const checked = isSelected ? 'checked' : '';
-      return `<label class="comp-option">
+      // data-buscar permite filtrar por nombre o por ticker sin recorrer el DOM
+      return `<label class="comp-option${isSelected ? ' sel' : ''}" data-buscar="${(a.nombre + ' ' + a.ticker).toLowerCase()}">
         <input type="checkbox" value="${key}" ${checked} onchange="toggleCompActivo(this)">
         <span>${a.nombre}</span>
+        <span class="comp-tk">${a.ticker}</span>
       </label>`;
     }).join('');
 
@@ -12743,17 +12753,103 @@ function renderComparador() {
       <div class="mkt-controls" style="flex-wrap:wrap;gap:12px;margin-bottom:16px">
         <div class="comp-dropdown" id="comp-dd-wrapper">
           <button class="mkt-select" onclick="toggleCompDropdown()" id="comp-dd-btn">+ Añadir activo</button>
-          <div class="comp-dropdown-menu" id="comp-dropdown-menu" style="display:none">${groupsHtml}</div>
+          <div class="comp-dropdown-menu" id="comp-dropdown-menu" style="display:none">
+            <div class="comp-search">
+              <input type="text" id="comp-buscar" placeholder="Buscar por nombre o ticker"
+                     oninput="filtrarCompOpciones(this.value)" autocomplete="off">
+            </div>
+            <div id="comp-groups">${groupsHtml}</div>
+            <div class="comp-vacio" id="comp-sin-resultados" style="display:none">Ningún activo coincide.</div>
+            <div class="comp-pie">
+              <span id="comp-contador"></span>
+              <button onclick="limpiarComp()">Quitar todos</button>
+            </div>
+          </div>
         </div>
         <div class="period-btns">${periodBtns}</div>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="comp-chips">${chipsHtml}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="comp-chips"></div>
       <canvas id="comp-chart" height="90"></canvas>
-      ${compState.selected.some(s => s.gid === 'rentafija') ? MKT_NOTA_RF.replace('margin:-18px 0 28px', 'margin:16px 0 0') : ''}
+      <div id="comp-nota"></div>
     </div>
     <div id="comp-table-wrap"></div>`;
 
+  refreshComparador();
+}
+
+/* Refresco ligero del comparador.
+   Antes cada clic en un activo llamaba a renderComparador(), que rehacia el
+   panel entero: el desplegable se reconstruia desde cero y por eso se cerraba
+   en cada seleccion. Aqui solo se tocan las partes que cambian (fichas, nota,
+   grafico, tabla y contador), de modo que el desplegable y el grupo abierto se
+   quedan como estaban y se pueden marcar varios activos seguidos. */
+function refreshComparador() {
+  const chips = document.getElementById('comp-chips');
+  if (!chips) return;
+
+  chips.innerHTML = compState.selected.length === 0
+    ? `<span style="font-size:0.8rem;color:var(--text-light);font-style:italic">Selecciona al menos 2 activos para comparar</span>`
+    : compState.selected.map((s, i) => `
+        <div class="comp-chip">
+          <span class="chip-dot" style="background:${COMP_COLORS[i % COMP_COLORS.length]}"></span>
+          ${s.nombre}
+          <button onclick="removeCompActivo('${s.key}')">×</button>
+        </div>`).join('');
+
+  const nota = document.getElementById('comp-nota');
+  if (nota) {
+    nota.innerHTML = compState.selected.some(s => s.gid === 'rentafija')
+      ? MKT_NOTA_RF.replace('margin:-18px 0 28px', 'margin:16px 0 0') : '';
+  }
+
+  // Marca visual de los ya elegidos y contador, sin rehacer el desplegable
+  const n = compState.selected.length;
+  document.querySelectorAll('#comp-dropdown-menu .comp-option').forEach(op => {
+    op.classList.toggle('sel', op.querySelector('input').checked);
+  });
+  const cont = document.getElementById('comp-contador');
+  if (cont) cont.textContent = n === 0 ? 'Ninguno seleccionado'
+                                       : n + (n === 1 ? ' activo seleccionado' : ' activos seleccionados');
+  const btn = document.getElementById('comp-dd-btn');
+  if (btn) btn.textContent = n === 0 ? '+ Añadir activo' : '+ Añadir activo (' + n + ')';
+
+  if (n === 0) {
+    if (compState.chart) { compState.chart.destroy(); compState.chart = null; }
+    const wrap = document.getElementById('comp-table-wrap');
+    if (wrap) wrap.innerHTML = '';
+    return;
+  }
   renderCompChart();
+}
+
+// Filtra las opciones por nombre o ticker y abre los grupos con coincidencias.
+function filtrarCompOpciones(texto) {
+  const q = (texto || '').trim().toLowerCase();
+  let visibles = 0;
+  document.querySelectorAll('#comp-groups .comp-group').forEach(grupo => {
+    const items = grupo.querySelectorAll('.comp-option');
+    let coinciden = 0;
+    items.forEach(op => {
+      const ok = !q || op.dataset.buscar.includes(q);
+      op.style.display = ok ? '' : 'none';
+      if (ok) coinciden++;
+    });
+    grupo.style.display = coinciden ? '' : 'none';
+    visibles += coinciden;
+    // Con busqueda activa se despliegan los grupos que tienen resultados
+    if (q) {
+      grupo.querySelector('.comp-group-items').style.display = coinciden ? 'block' : 'none';
+      grupo.querySelector('.comp-arrow').textContent = '▴';
+    }
+  });
+  const vacio = document.getElementById('comp-sin-resultados');
+  if (vacio) vacio.style.display = visibles ? 'none' : 'block';
+}
+
+function limpiarComp() {
+  compState.selected = [];
+  document.querySelectorAll('#comp-dropdown-menu input[type=checkbox]').forEach(i => { i.checked = false; });
+  refreshComparador();
 }
 
 function toggleCompGroup(header) {
@@ -12768,7 +12864,13 @@ function toggleCompGroup(header) {
 function toggleCompDropdown() {
   const menu = document.getElementById('comp-dropdown-menu');
   if (!menu) return;
-  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  const abrir = menu.style.display === 'none';
+  menu.style.display = abrir ? 'block' : 'none';
+  if (abrir) {
+    // El foco va al buscador: se puede escribir el ticker sin tocar el raton
+    const buscador = document.getElementById('comp-buscar');
+    if (buscador) setTimeout(() => buscador.focus(), 20);
+  }
   // Close on outside click
   setTimeout(() => {
     document.addEventListener('click', function closeDD(e) {
@@ -12780,6 +12882,13 @@ function toggleCompDropdown() {
   }, 10);
 }
 
+// Escape cierra el desplegable sin tener que buscar un hueco donde pinchar.
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const menu = document.getElementById('comp-dropdown-menu');
+  if (menu && menu.style.display === 'block') menu.style.display = 'none';
+});
+
 function toggleCompActivo(cb) {
   const key = cb.value;
   const [gid, ticker, nombre] = key.split('|');
@@ -12790,12 +12899,15 @@ function toggleCompActivo(cb) {
   } else {
     compState.selected = compState.selected.filter(s => s.key !== key);
   }
-  renderComparador();
+  refreshComparador();   // no rehacer el panel: el desplegable sigue abierto
 }
 
 function removeCompActivo(key) {
   compState.selected = compState.selected.filter(s => s.key !== key);
-  renderComparador();
+  // El desplegable ya no se reconstruye, asi que hay que desmarcar la casilla
+  const cb = document.querySelector('#comp-dropdown-menu input[value="' + key + '"]');
+  if (cb) cb.checked = false;
+  refreshComparador();
 }
 
 function setCompPeriod(p, btn) {
@@ -15342,16 +15454,47 @@ function lbKeyClose(e) {
    ============================================================= */
 const resourceTopics = [
   {
+    /* Directorio permanente de outlooks institucionales. Estas fichas no
+       llevan enlace a proposito: la edicion cambia cada año y cualquier URL
+       quedaria rota. El nombre de la serie es la pista para reencontrarla. */
+    id: 'market-outlook',
+    title: 'Market Outlook',
+    sites: [
+      { name: 'BlackRock Investment Institute', pub: 'Global Outlook' },
+      { name: 'J.P. Morgan Asset Management',   pub: 'Market Outlook / Guide to the Markets' },
+      { name: 'T. Rowe Price',                  pub: 'Global Market Outlook' },
+      { name: 'Deutsche Bank',                  pub: 'Annual Outlook' },
+      { name: 'Julius Baer',                    pub: 'Market Outlook' },
+      { name: 'Franklin Templeton',             pub: 'Global Investment Outlook' },
+      { name: 'Mackenzie Investments',          pub: 'Market Outlook' },
+      { name: 'OECD',                           pub: 'Economic Outlook' },
+      { name: 'Mercer',                         pub: 'Economic and Market Outlook' }
+    ]
+  },
+  {
     id: 'commodities',
     title: 'Materias Primas & Energía',
     desc: 'Oferta, demanda, inventarios y precios de energía y commodities.',
     sites: []
   },
   {
+    /* Mismas instituciones que el dashboard Institutional Macro Forecasts. El
+       subtitulo es la parte estable de su 'publicationTitle', sin el mes,
+       trimestre, semestre, año ni el lema propio de cada edicion, para que
+       siga sirviendo de pista cuando salga la siguiente. Sin enlace: la URL
+       de una edicion concreta caduca. */
     id: 'forecasts',
     title: 'Institutional Macro Forecasts',
     desc: 'Previsiones y outlooks de organismos oficiales, bancos centrales y casas de análisis.',
-    sites: []
+    sites: [
+      { name: 'ING Think',                    pub: 'Monthly Economic Update' },
+      { name: 'BBVA Research',                pub: 'Economic Forecasts — United States' },
+      { name: 'TD Economics',                 pub: 'U.S. Quarterly Economic Forecast' },
+      { name: 'Amundi Investment Institute',  pub: 'Investment Outlook' },
+      { name: 'Deloitte',                     pub: 'United States Economic Forecast' },
+      { name: 'KPMG Economics',               pub: 'Economic Compass' },
+      { name: 'Morgan Stanley Research',      pub: 'Economic Outlook' }
+    ]
   }
 ];
 
@@ -15369,6 +15512,13 @@ function resHost(url) {
 
 function resEsc(s) {
   return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+/* En los apartados sin enlace lo que se lista son publicaciones, no webs. */
+function resNombreItem(sites, n) {
+  const sinEnlace = sites.length && sites.every(s => !s.url);
+  if (sinEnlace) return n === 1 ? 'publicación' : 'publicaciones';
+  return n === 1 ? 'web' : 'webs';
 }
 
 function renderResources() {
@@ -15392,7 +15542,8 @@ function renderResources() {
     .filter(t => resActiveTopic === 'all' || t.id === resActiveTopic)
     .map(t => {
       const sites = !q ? t.sites : t.sites.filter(s =>
-        (s.name + ' ' + (s.desc || '') + ' ' + s.url + ' ' + t.title).toLowerCase().includes(q));
+        (s.name + ' ' + (s.desc || '') + ' ' + (s.pub || '') + ' ' + (s.url || '') + ' ' + t.title)
+          .toLowerCase().includes(q));
       return { topic: t, sites };
     })
     .filter(b => !q || b.sites.length);
@@ -15414,6 +15565,14 @@ function renderResources() {
       </div>`;
     }
     const cards = b.sites.map(s => {
+      // Ficha sin enlace: institucion + serie, y nada mas. Se usa cuando la
+      // entrada no tiene URL, como en el directorio de outlooks.
+      if (!s.url) {
+        return `<div class="res-card res-card-plain">
+          <div class="res-card-top"><div class="res-card-name">${resEsc(s.name)}</div></div>
+          ${s.pub ? `<div class="res-card-pub">${resEsc(s.pub)}</div>` : ''}
+        </div>`;
+      }
       const tagCls = (s.tag === 'free' || s.tag === 'pago') ? ' ' + s.tag : '';
       const tag = s.tag ? `<span class="res-tag${tagCls}">${resEsc(s.tag === 'free' ? 'Gratis' : s.tag === 'pago' ? 'Suscripcion' : s.tag)}</span>` : '';
       return `<a class="res-card" href="${resEsc(s.url)}" target="_blank" rel="noopener noreferrer">
@@ -15428,7 +15587,7 @@ function renderResources() {
     return `<div class="res-topic">
       <div class="res-topic-head">
         <div class="res-topic-title">${resEsc(b.topic.title)}</div>
-        <div class="res-topic-count">${b.sites.length} ${b.sites.length === 1 ? 'web' : 'webs'}</div>
+        <div class="res-topic-count">${b.sites.length} ${resNombreItem(b.sites, b.sites.length)}</div>
       </div>
       ${b.topic.desc ? `<div class="res-topic-desc">${resEsc(b.topic.desc)}</div>` : ''}
       <div class="res-grid">${cards}</div>
