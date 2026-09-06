@@ -1,11 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
+<!--
+  ===========================================================================
+  AVISO TEMPORAL - FUENTE DE DATOS DE LA PESTANA MERCADOS   (05/09/2026)
+  ===========================================================================
+  La pestana "Mercados" lee ahora de assets/js/mktDataV2.js, que se genera
+  con yfinance (DASHBOARDS\MERCADO\INDICES\actualizar_mercados_yf.py).
+
+  La fuente antigua (el Excel via STOCKHISTORY -> mktData.js) sigue viva pero
+  YA NO SE VE: queda como red de seguridad en una pagina oculta, sin enlace en
+  el menu, accesible solo por  ?tab=mercados-legacy  (o #mercados-legacy).
+
+  ESTO ES PROVISIONAL. Cuando se confirme que la fuente nueva va bien, hay que
+  borrar la pagina legacy y todo el flujo de Excel. Que hay que quitar:
+
+    EN ESTE FICHERO (buscar los marcadores LEGACY INICIO / LEGACY FIN):
+      1. El <script src="assets/js/mktData.js"> y su comentario.
+      2. El bloque <div id="page-mercados-legacy"> entero.
+      3. La linea de showPage() que atiende a 'mercados-legacy'.
+      4. El bloque initTabLegacy() del enrutado por ?tab=.
+      5. En los ayudantes: simplificar mktBase/mktUid/mktSrc/mktNs/compSt/
+         compSfx quitando la rama 'legacy:', y dejar mktSrc devolviendo
+         siempre mktDataV2. Quitar tambien compStateLegacy y las claves
+         'legacy:' de mktState.
+      6. En renderComparador/refreshComparador/etc., quitar el parametro ns.
+
+    FUERA DE ESTE FICHERO:
+      7. assets/js/mktData.js
+      8. DASHBOARDS\MERCADO\INDICES\actualizar_mercados.py  (y su carpeta
+         backups\, y github_token.txt si no lo usa nada mas)
+      9. El Excel "Mercados - Indices.xlsx" solo si no se quiere conservar
+         como archivo historico. OJO: la pestana Activos de ese Excel es la
+         que sigue alimentando la LISTA de activos del script nuevo, asi que
+         el Excel NO se puede borrar sin sustituir antes esa lista.
+
+  La PORTADA ya esta migrada (05/09/2026): sus mini-graficos, la miniatura de
+  la tarjeta de Mercados y la fecha de "ultimo cierre" leen tambien de
+  mktDataV2.js. TODO el sitio usa ya la misma fuente, y el unico sitio que
+  queda leyendo mktData.js es la pagina oculta ?tab=mercados-legacy.
+
+  Detalle completo en:  AA_INSTRUCCIONES\MERCADOS\PENDIENTE_borrar_flujo_excel.md
+  ===========================================================================
+-->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALS Value Capital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Tipografias del apartado Heatmaps (su disenyo es propio, ver #page-heatmaps) -->
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
@@ -3123,6 +3167,104 @@
     #page-rentafija .rf-credit th:nth-child(6),
     #page-rentafija .rf-credit td:nth-child(6) { display: none; }
   }
+
+  /* ===== HEATMAPS =========================================================
+     Apartado con disenyo propio, tomado del export "Heatmap SP500.html":
+     fondo crema, IBM Plex Sans/Mono e Instrument Serif. Todo va acotado a
+     #page-heatmaps para no tocar el resto del sitio, que usa Playfair/DM Sans.
+     ===================================================================== */
+  #page-heatmaps { background:#F1EDE4; }
+  #page-heatmaps .hm-wrap {
+    box-sizing:border-box; width:100%; max-width:1360px; margin:0 auto;
+    padding:36px 32px 30px; font-family:'IBM Plex Sans', system-ui, sans-serif;
+    display:flex; flex-direction:column; gap:34px;
+  }
+  #page-heatmaps .hm-head {
+    display:flex; flex-wrap:wrap; align-items:flex-end;
+    justify-content:space-between; gap:20px 32px;
+  }
+  #page-heatmaps .hm-eyebrow {
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.24em;
+    text-transform:uppercase; color:#8a7f70;
+  }
+  #page-heatmaps .hm-title {
+    font-family:'Instrument Serif',serif; font-size:36px; line-height:1.02; color:#22201C;
+  }
+  #page-heatmaps .hm-sub { font-size:12.5px; color:#6d6559; }
+  #page-heatmaps .hm-stats {
+    display:flex; align-items:baseline; gap:18px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; color:#7d7264;
+  }
+  #page-heatmaps .hm-cap {
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8a7f70;
+  }
+  #page-heatmaps .hm-back {
+    border:0; background:#E3DCCD; color:#3A332B; font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+    padding:5px 10px; cursor:pointer;
+  }
+  #page-heatmaps .hm-back:hover { background:#D7CEBB; }
+  #page-heatmaps .hm-foot {
+    display:flex; flex-wrap:wrap; gap:8px 24px; justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#9a9084; letter-spacing:.06em;
+  }
+  /* Selector de periodo */
+  #page-heatmaps .hm-periods { display:flex; gap:6px; flex-wrap:wrap; }
+  #page-heatmaps .hm-pbtn {
+    border:1px solid #DDD5C6; background:transparent; color:#6d6559;
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; padding:7px 13px; cursor:pointer; transition:all .12s ease;
+  }
+  #page-heatmaps .hm-pbtn:hover { background:#E7E1D5; color:#3A332B; }
+  #page-heatmaps .hm-pbtn.active { background:#22201C; border-color:#22201C; color:#F1EDE4; }
+  #page-heatmaps .hm-sep { height:1px; background:#DFD8C9; }
+  /* Selector de mapa: se monta desde heatmapData.meta.mapas, asi que crece
+     solo cuando se anyadan mapas nuevos. */
+  #page-heatmaps .hm-maps { display:flex; gap:2px; flex-wrap:wrap; }
+  #page-heatmaps .hm-mbtn {
+    border:0; border-bottom:2px solid transparent; background:transparent; color:#8a7f70;
+    font-family:'IBM Plex Sans',sans-serif; font-size:13.5px; font-weight:500;
+    padding:6px 14px 7px; cursor:pointer; transition:color .12s ease, border-color .12s ease;
+  }
+  #page-heatmaps .hm-mbtn:hover { color:#3A332B; }
+  #page-heatmaps .hm-mbtn.active { color:#22201C; border-bottom-color:#22201C; }
+  /* Miga de pan del sector aislado */
+  #page-heatmaps .hm-crumb {
+    display:inline-flex; align-items:center; gap:10px; border:0;
+    background:#E3DCCD; color:#3A332B; font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+    padding:7px 10px 7px 13px; cursor:pointer; transition:background .12s ease;
+  }
+  #page-heatmaps .hm-crumb:hover { background:#D7CEBB; }
+  #page-heatmaps .hm-crumb .x { font-size:14px; line-height:1; opacity:.55; }
+  #page-heatmaps .hm-crumb:hover .x { opacity:1; }
+  /* Icono de informacion del pie: guarda lo que antes ocupaba sitio ahi
+     (escala de color, criterio de tamanyo, ETF, husos y fuentes). */
+  #page-heatmaps .hm-info-btn {
+    flex-shrink:0; width:15px; height:15px; padding:0; border:1px solid #c5bcab;
+    border-radius:50%; background:transparent; color:#9a9084; cursor:pointer;
+    font-family:'IBM Plex Mono',monospace; font-size:9.5px; line-height:13px;
+    text-align:center; transition:all .12s ease;
+  }
+  #page-heatmaps .hm-info-btn:hover,
+  #page-heatmaps .hm-info-btn[aria-expanded="true"] {
+    border-color:#22201C; background:#22201C; color:#F1EDE4;
+  }
+  #page-heatmaps .hm-info-panel {
+    position:absolute; left:0; bottom:calc(100% + 10px); z-index:20;
+    width:min(430px, 92vw); box-sizing:border-box; padding:16px 18px 17px;
+    background:#1F1C18; color:#C9C2B4; text-align:left;
+    font-family:'IBM Plex Sans',sans-serif; font-size:12.5px; line-height:1.5;
+    letter-spacing:0; text-transform:none;
+    box-shadow:0 10px 34px rgba(0,0,0,.28);
+  }
+  #page-heatmaps .hm-info-panel h4 {
+    margin:0 0 3px; font-family:'IBM Plex Mono',monospace; font-size:10px;
+    letter-spacing:.16em; text-transform:uppercase; color:#8a8072; font-weight:400;
+  }
+  #page-heatmaps .hm-info-panel p { margin:0 0 13px; }
+  #page-heatmaps .hm-info-panel p:last-child { margin-bottom:0; }
+  #page-heatmaps .hm-info-panel b { color:#E7E1D5; font-weight:500; }
   </style>
 </head>
 <body>
@@ -3147,6 +3289,7 @@
     <li><a onclick="showPage('home')" id="nav-home" class="active">Inicio</a></li>
     <li><a onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');" id="nav-portfolio">Portfolio</a></li>
     <li><a onclick="showPage('watchlist')" id="nav-watchlist">Watchlist</a></li>
+    <li><a onclick="showPage('heatmaps')" id="nav-heatmaps">Heatmaps</a></li>
     <li class="nav-dropdown">
       <a id="nav-market-view">Market View<svg class="nav-chevron" width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg></a>
       <div class="nav-dropdown-menu">
@@ -3175,6 +3318,7 @@
   <a onclick="showPage('home');closeMobileMenu()" id="mnav-home" class="active">Inicio</a>
   <a onclick="showPage('portfolio');closeCompany();switchPortfolioTab('als');closeMobileMenu()" id="mnav-portfolio">Portfolio</a>
   <a onclick="showPage('watchlist');closeMobileMenu()" id="mnav-watchlist">Watchlist</a>
+  <a onclick="showPage('heatmaps');closeMobileMenu()" id="mnav-heatmaps">Heatmaps</a>
   <div class="mobile-menu-group-label">Market View</div>
   <a onclick="showPage('mercados');closeMobileMenu()" id="mnav-mercados" style="padding-left:10px">Mercados</a>
   <a onclick="openMacroDetail();closeMobileMenu()" id="mnav-macro-detail" style="padding-left:10px">Macro</a>
@@ -3733,6 +3877,113 @@
     <div id="mkt-commodities" class="mkt-panel" style="display:none"></div>
     <div id="mkt-rentafija" class="mkt-panel" style="display:none"></div>
     <div id="mkt-comparador" class="mkt-panel" style="display:none"></div>
+  </div>
+</div>
+
+
+<!-- ===== LEGACY INICIO =======================================================
+     Mercados (Excel) - la fuente ANTIGUA, conservada como red de seguridad.
+     Lee de mktData.js, que genera actualizar_mercados.py desde el Excel via
+     STOCKHISTORY. NO tiene enlace en el menu a proposito: se llega solo por
+     ?tab=mercados-legacy (o #mercados-legacy).
+     PROVISIONAL: borrar este bloque entero cuando se retire el flujo de Excel.
+     ========================================================================== -->
+<div id="page-mercados-legacy" class="page">
+  <div style="padding:48px 48px 16px;max-width:1400px;margin:0 auto">
+    <div class="section-label">Datos de mercado &middot; fuente Excel (STOCKHISTORY)</div>
+    <div class="section-title">Mercados <span style="font-size:0.5em;color:var(--text-light);font-weight:400">legacy</span></div>
+    <div class="divider"></div>
+  </div>
+  <div style="max-width:1400px;margin:0 auto;padding:0 48px 48px">
+    <div style="background:#f4f0ea;border:1px solid #d9cfc2;border-radius:4px;padding:12px 16px;margin-bottom:28px;font-size:0.78rem;color:var(--text-mid);line-height:1.6">
+      <strong>Fuente antigua, fuera de servicio.</strong> Esta copia lee del Excel
+      y se conserva solo como respaldo mientras se comprueba la fuente nueva.
+      La pesta&ntilde;a <em>Mercados</em> del men&uacute; es la buena y toma los precios de
+      Yahoo Finance. Estos datos solo se actualizan si se ejecuta a mano el
+      script antiguo, as&iacute; que lo normal es que vayan por detr&aacute;s.
+    </div>
+    <div style="display:flex;gap:4px;margin-bottom:32px;border-bottom:2px solid var(--border)">
+      <button class="mktab active" onclick="showMkTab('legacy:indices',this)">&Iacute;ndices</button>
+      <button class="mktab" onclick="showMkTab('legacy:factores',this)">Factores</button>
+      <button class="mktab" onclick="showMkTab('legacy:sectores',this)">Sectores USA</button>
+      <button class="mktab" onclick="showMkTab('legacy:commodities',this)">Commodities</button>
+      <button class="mktab" onclick="showMkTab('legacy:rentafija',this)">Renta Fija</button>
+      <button class="mktab mktab-comparador" onclick="showMkTab('legacy:comparador',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:6px;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>Comparador</button>
+    </div>
+    <div id="mkt-legacy-indices" class="mkt-panel"></div>
+    <div id="mkt-legacy-factores" class="mkt-panel" style="display:none"></div>
+    <div id="mkt-legacy-sectores" class="mkt-panel" style="display:none"></div>
+    <div id="mkt-legacy-commodities" class="mkt-panel" style="display:none"></div>
+    <div id="mkt-legacy-rentafija" class="mkt-panel" style="display:none"></div>
+    <div id="mkt-legacy-comparador" class="mkt-panel" style="display:none"></div>
+  </div>
+</div>
+<!-- ===== LEGACY FIN ===== -->
+
+
+<!-- ===================== HEATMAPS ===================== -->
+<!-- La pagina tiene UN solo contenedor de mapa. El selector de arriba se monta
+     recorriendo heatmapData.meta.mapas, asi que para anyadir un mapa nuevo
+     (IBEX u otro grupo tematico) basta con generarlo en el script: aqui no hay
+     que tocar nada. -->
+<div id="page-heatmaps" class="page">
+  <div class="hm-wrap">
+
+    <!-- Cabecera del apartado y los dos selectores -->
+    <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:18px 32px;">
+      <div style="display:flex; flex-direction:column; gap:5px; min-width:0;">
+        <span class="hm-eyebrow">Mapas de calor</span>
+        <span class="hm-title">Heatmaps</span>
+        <span class="hm-sub" id="hm-fecha"></span>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:12px;">
+        <div class="hm-maps" id="hm-mapas"></div>
+        <div class="hm-periods" id="hm-periods"></div>
+      </div>
+    </div>
+
+    <div class="hm-sep"></div>
+
+    <!-- Mapa activo -->
+    <div>
+      <div class="hm-head" style="margin-bottom:20px;">
+        <div style="display:flex; flex-direction:column; gap:5px; min-width:0;">
+          <span class="hm-eyebrow" id="hm-eyebrow"></span>
+          <span class="hm-title" id="hm-title"></span>
+          <span class="hm-sub" id="hm-sub"></span>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
+          <div class="hm-stats">
+            <span><span id="hm-idxlabel"></span> <span id="hm-idx"></span></span>
+            <span id="hm-breadth"></span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="hm-cap" id="hm-caplo"></span>
+            <div style="display:flex;" id="hm-legend"></div>
+            <span class="hm-cap" id="hm-caphi"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Miga de pan: solo aparece con un sector aislado -->
+      <div id="hm-crumb-wrap" style="display:none; margin-bottom:14px;">
+        <button type="button" class="hm-crumb" id="hm-crumb">
+          <span id="hm-crumb-txt"></span><span class="x">&times;</span>
+        </button>
+      </div>
+
+      <div id="hm-box" style="position:relative; width:100%; cursor:default;"></div>
+      <div class="hm-foot" style="margin-top:14px; position:relative;">
+        <span style="display:inline-flex; align-items:center; gap:9px; min-width:0;">
+          <span id="hm-note"></span>
+          <button type="button" class="hm-info-btn" id="hm-info-btn"
+                  aria-expanded="false" aria-label="Cómo se lee este mapa">i</button>
+        </span>
+        <span>ALS VALUE CAPITAL</span>
+        <div class="hm-info-panel" id="hm-info-panel" hidden></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -7419,7 +7670,13 @@
   <span id="footer-actualizado">Solo fines informativos</span>
 </footer>
 
+<!-- Fuente en produccion: yfinance -->
+<script src="assets/js/mktDataV2.js?v=20260905"></script>
+<script src="assets/js/heatmapData.js?v=20260905"></script>
+<!-- LEGACY INICIO: fuente antigua (Excel). Solo la usa la pagina oculta
+     ?tab=mercados-legacy y, de momento, la portada. Borrar al retirar el flujo. -->
 <script src="assets/js/mktData.js?v=20260810b"></script>
+<!-- LEGACY FIN -->
 <!-- El parametro ?v= fuerza a los navegadores a recargar los datos cuando se
      regenera el fichero. Subir el numero al actualizar el Excel. -->
 <script src="assets/js/macroCycle.js?v=6b9936c244"></script>
@@ -7599,6 +7856,7 @@ const twrData = [
 ];
 
 const recaps = [
+  { date:"6 Sep 2026", title:"Semana del 31 de Agosto al 6 de Septiembre de 2026", link:"recap-2026-09-06", content:"<p>El mercado llega al CPI con el Treasury a diez años cerca del 4,8%, el Brent por encima de 96 dólares y una probabilidad del 59,4% de subida de la Fed en septiembre. La cuestión central ya no es si la actividad estadounidense puede evitar un frenazo inmediato, sino cuánto endurecimiento adicional pueden absorber beneficios, consumo y financiación si la energía permanece cara y la oferta de duración continúa aumentando. Ormuz, inflación y curvas soberanas marcarán si la resistencia de los índices fue una muestra de fortaleza fundamental o simplemente un aplazamiento del ajuste.</p>" },
   { date:"30 Ago 2026", title:"Semana del 24 al 30 de Agosto de 2026", link:"recap-2026-08-30", content:"<p>Los datos de empleo, actividad e inflación decidirán si el repricing de tipos iniciado en Jackson Hole se consolida. El soporte de la inteligencia artificial y unas condiciones financieras acomodaticias sostienen los índices, pero la amplitud estrecha, el consumo desigual y las tensiones energéticas mantienen abierto un ajuste más brusco si los beneficios o la desinflación pierden tracción.</p>" },
   { date:"23 Ago 2026", title:"Semana del 17 al 23 de Agosto de 2026", link:"recap-2026-08-23", content:"<p>Las recompras del Tesoro demostraron que una intervención de liquidez puede mover con fuerza el tramo largo durante una sesión y, al mismo tiempo, dejar intactas las fuerzas que determinan su precio a medio plazo. El punto a vigilar ya no es solo si la Fed subirá en septiembre, sino si déficit, oferta de deuda, petróleo y prima a plazo permiten estabilizar las yields sin deteriorar una economía que todavía conserva crecimiento y empleo. Jackson Hole, PCE, payrolls y Nvidia pondrán a prueba precisamente esa convivencia.</p>" },
   { date:"16 Ago 2026", title:"Semana del 10 al 16 de Agosto de 2026", link:"recap-2026-08-16", content:"<p>El 30 años estadounidense terminó cerca del 5,27% justo cuando el mercado reducía al 33,1% la probabilidad de una subida de la Fed en septiembre. Esa divergencia resume el punto que queda abierto: la inflación de corto plazo está dando algo más de margen a la política monetaria, pero la economía de financiación sigue enfrentándose a déficits, oferta de deuda y un ciclo de capex excepcionalmente intenso. Los beneficios y las condiciones financieras laxas continúan sosteniendo el riesgo; el consumidor, la escalada económica contra Irán y la capacidad del mercado para absorber más duración determinarán si ese equilibrio se conserva. Las actas del FOMC, los PMI y cualquier concreción de las nuevas sanciones serán las referencias inmediatas para comprobarlo.</p>" },
@@ -10600,6 +10858,14 @@ function showPage(id, skipHistory) {
   }
   if (id === 'home') { const p = document.getElementById('home-mkt-indices'); if (p && !p.dataset.rendered) { renderHomeMktPanel('indices'); p.dataset.rendered='1'; } }
   if (id === 'mercados') { const p = document.getElementById('mkt-indices'); if (p && !p.dataset.rendered) { renderMktPanel('indices'); p.dataset.rendered='1'; } }
+  /* LEGACY */ if (id === 'mercados-legacy') { const p = document.getElementById('mkt-legacy-indices'); if (p && !p.dataset.rendered) { renderMktPanel('legacy:indices'); p.dataset.rendered='1'; } }
+  /* HM se define mas abajo en este mismo script. Si se entra directamente
+     por ?tab=heatmaps o #heatmaps, showPage() corre ANTES de que exista, asi
+     que aqui solo se llama si ya esta; del pintado inicial en ese caso se
+     encarga el propio modulo al final de su definicion.
+     Al SALIR del apartado se avisa tambien, para soltar el sector aislado y
+     limpiar los parametros de la URL. */
+  if (typeof HM !== 'undefined') { if (id === 'heatmaps') HM.mostrar(); else HM.salir(); }
   if (id === 'watchlist') { renderWlTbody(); closeWatchlist(); }
   if (id === 'articles') renderRecapArchive();
   if (id === 'resources') renderResources();
@@ -10707,6 +10973,164 @@ setTimeout(() => {
 
 
 const articles = {
+  'recap-2026-09-06': {
+    title: 'Semana del 31 de Agosto al 6 de Septiembre de 2026',
+    category: 'Recap Semanal · Macro',
+    date: '6 Septiembre 2026',
+    readTime: '~15 min lectura',
+    content: `<h1>Semana del 31 de Agosto al 6 de Septiembre de 2026</h1>
+<p><em>6 Septiembre 2026 · Recap Semanal · Macro</em></p>
+<hr>
+<h2>Primer vistazo visual</h2>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-1.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-1.webp', 'El S&amp;P 500 avanzó un 0,20%, pero la amplitud fue negativa: 209 valores subieron y 294 bajaron, con liderazgo concentrado en semiconductores y algunos grandes nombres tecnológicos.')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El S&amp;P 500 avanzó un 0,20%, pero la amplitud fue negativa: 209 valores subieron y 294 bajaron, con liderazgo concentrado en semiconductores y algunos grandes nombres tecnológicos.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-2.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-2.webp', 'Energía lideró la semana (+2,2%), seguida de tecnología (+0,9%) y utilities (+0,8%); consumo discrecional, materiales e inmobiliario quedaron rezagados.')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">Energía lideró la semana (+2,2%), seguida de tecnología (+0,9%) y utilities (+0,8%); consumo discrecional, materiales e inmobiliario quedaron rezagados.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-3.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-3.webp', 'El indicador cerró en 42, zona de Fear, frente a 52 una semana antes, reflejando un deterioro del tono pese a la estabilidad de los grandes índices.')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El indicador cerró en 42, zona de Fear, frente a 52 una semana antes, reflejando un deterioro del tono pese a la estabilidad de los grandes índices.</figcaption>
+</figure>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-4.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-4.webp', 'El sentimiento minorista mejoró: 39,7% alcistas y 37,6% bajistas, frente a 32,9% y 44,4% una semana antes.')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El sentimiento minorista mejoró: 39,7% alcistas y 37,6% bajistas, frente a 32,9% y 44,4% una semana antes.</figcaption>
+</figure>
+<hr>
+<h2>Resumen ejecutivo</h2>
+<p>El informe de empleo de agosto cambió el equilibrio de riesgos para la Reserva Federal: las nóminas no agrícolas aumentaron en 162.000, frente a un consenso próximo a 55.000, la tasa de paro permaneció en el 4,1% y la participación laboral repuntó al 61,6%. El FedWatch cerró el 6 de septiembre con un 59,4% de probabilidad de una subida de 25 puntos básicos en la reunión del día 16, frente al 57,0% una semana antes. El mercado dejó así de tratar septiembre como una reunión dominada por el mantenimiento y volvió a exigir una prima más alta por un posible endurecimiento adicional.</p>
+<p>El <strong>petróleo</strong> añadió una segunda fuente de presión. Estados Unidos e Irán reanudaron los ataques sobre buques y activos petroleros próximos al estrecho de Ormuz, el Brent ganó un 7,6% hasta 96,28 dólares y el WTI cerca de un 10% hasta 91,48. El diésel estadounidense alcanzó 5,85 dólares por galón, de modo que la geopolítica volvió a transmitirse a inflación, costes logísticos y rendimientos soberanos en un momento en que la Fed ya tenía menos margen para interpretar los datos de actividad de forma dovish.</p>
+<p>La renta variable absorbió el endurecimiento con pérdidas limitadas en los índices, aunque su estructura interna fue menos sólida. El S&amp;P 500 quedó prácticamente plano y avanzó un 0,20% en el mapa semanal, pero 294 compañías retrocedieron frente a 209 al alza. Energía lideró, tecnología resistió gracias a semiconductores y algunos grandes valores, y varios sectores sensibles a tipos o consumo quedaron rezagados. La volatilidad tampoco acompañó el aumento de los riesgos: el VIX acumuló 25 cierres entre 14 y 17 puntos.</p>
+<p>Los <strong>beneficios empresariales</strong> siguieron amortiguando la presión de los tipos. FactSet calcula que la estimación bottom-up de BPA del S&amp;P 500 para el tercer trimestre aumentó un 1,2% entre el 30 de junio y el 31 de agosto, un comportamiento inusual frente a las revisiones negativas que suelen producirse durante los dos primeros meses de un trimestre. Esa resistencia ayuda a entender por qué el deterioro de amplitud y sentimiento no se convirtió en una corrección generalizada.</p>
+<p>El riesgo abierto se desplazó hacia la interacción entre energía, inflación y duración. Los rendimientos a largo plazo subieron en Estados Unidos y en varios mercados desarrollados, a la presión fiscal se añadió una oferta privada creciente para financiar la infraestructura de IA y el yen empezó a recuperar terreno ante unas expectativas más agresivas para el Banco de Japón. El NFCI permaneció, no obstante, claramente por debajo de cero. El CPI estadounidense de la próxima semana será la prueba más inmediata para saber si el endurecimiento en bonos y FedWatch se consolida o pierde fuerza.</p>
+<hr>
+<h2>1. Mercados</h2>
+<p>Los grandes índices estadounidenses cerraron con variaciones muy pequeñas pese a una semana de oscilaciones relevantes. El Dow Jones perdió un 0,27%, el Nasdaq Composite avanzó un 0,40% y el S&amp;P 500, el Russell 2000 y el S&amp;P MidCap 400 terminaron prácticamente sin cambios. El viernes concentró buena parte del ajuste: tras el empleo, el S&amp;P 500 cayó un 0,38%, el Dow un 0,51% y el Nasdaq un 0,29% al aumentar las probabilidades de una subida de la Fed. El dato macro fue positivo para crecimiento, pero elevó simultáneamente el tipo de descuento aplicado a los activos de riesgo.</p>
+<p>La <strong>amplitud</strong> fue más débil que los índices. A comienzos de septiembre, menos del 50% de los componentes del S&amp;P 500 cotizaba por encima de su media de 50 sesiones, después de haber superado el 70% a mediados de agosto, y el RSI del índice retrocedió desde más de 65 hasta poco más de 50. Schwab señala además que siete de los once sectores habían caído desde principios de agosto pese a que tecnología acumulaba un avance del 5,4% en ese mismo tramo. La estabilidad del índice dependió, por tanto, de un grupo reducido de compañías con suficiente peso para compensar la pérdida de participación interna.</p>
+<p>El mapa semanal hizo visible esa concentración. Nvidia ganó un 5,89%, Micron un 8,98% y Meta un 6,70%; Intel, Sandisk y Oracle también registraron avances relevantes. En sentido contrario, Microsoft cedió un 2,69%, Broadcom un 2,95%, Alphabet alrededor del 2,3% y Amazon un 2,97%. T. Rowe Price observó el mayor diferencial semanal a favor de growth frente a value en un mes. No hubo un único bloque tecnológico ganador: semiconductores y algunos nombres ligados a infraestructura destacaron frente a software, plataformas y consumo digital más dispersos.</p>
+<p>La rotación sectorial confirmó el peso del shock energético. Energía avanzó un 2,2% en la semana y acumulaba un 9,5% a un mes; tecnología ganó un 0,9% y utilities un 0,8%. En el extremo opuesto, consumo discrecional perdió un 1,6%, materiales un 1,4%, inmobiliario un 1,2% e industriales un 1,1%. A tres meses, salud (+12,7%), financieras (+11,3%) y energía (+9,0%) mantenían una dinámica más firme que tecnología (-3,0%), utilities (-2,0%) o consumo discrecional (-1,0%), una dispersión que amplía el liderazgo más allá de las grandes tecnológicas sin convertirlo en una subida homogénea.</p>
+<p>Los <strong>fundamentales corporativos</strong> aportaron el principal contrapeso al deterioro técnico. FactSet elevó de 88,64 a 89,69 dólares su estimación bottom-up de BPA para el S&amp;P 500 en el tercer trimestre entre finales de junio y finales de agosto, un aumento del 1,2%. En los últimos cinco años, esa estimación ha caído de media un 1,7% durante los dos primeros meses de cada trimestre. Schwab añadió que 493 compañías del S&amp;P 500 ya habían publicado el segundo trimestre, con un 69% superando estimaciones de ingresos y un 88% las de beneficio; el crecimiento agregado del BPA estaba muy distorsionado por ganancias de inversión puntuales en mega-cap tecnológicas, pero incluso excluyéndolas seguía en el rango del 26%-29% según su cálculo.</p>
+<p>La fortaleza de beneficios convivió con una mayor sensibilidad a los tipos. Schwab encuadra industriales y materiales dentro del gasto de capital vinculado a electricidad, construcción de infraestructura de IA, defensa y energía, y atribuye a financieras revisiones de beneficios apoyadas en una curva más inclinada y mejores ingresos por intereses. En servicios de comunicación, en cambio, las valoraciones elevadas y el volumen de inversión en IA constituyen un freno adicional. El mercado no estaba abandonando el crecimiento; estaba diferenciando con más dureza quién puede absorber un coste de capital elevado.</p>
+<p>El sentimiento presentó dos mensajes distintos. El Fear &amp; Greed terminó en 42, desde 52 una semana antes, pero la encuesta AAII elevó los alcistas al 39,7% desde el 32,9% y redujo los bajistas al 37,6% desde el 44,4%. La divergencia importa porque el deterioro del indicador agregado no vino acompañado de un giro claramente defensivo entre los inversores minoristas. La prudencia aumentó, pero no apareció una capitulación.</p>
+<p>La <strong>volatilidad</strong> siguió sorprendentemente baja. El VIX cerró entre 14 y 17 puntos durante 25 sesiones consecutivas, la racha más larga desde mayo de 1992 según el gráfico difundido durante la semana, y el S&amp;P 500 acumuló 26 sesiones sin una caída diaria de al menos el 1%. Es un contraste notable frente a un entorno de crudo al alza, rendimientos soberanos elevados y una reunión de la Fed abierta. La calma del índice no eliminó el riesgo; lo desplazó hacia dispersión sectorial, tipos y materias primas.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-7.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-7.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p>El <strong>crudo</strong> fue la excepción a esa calma. Brent y WTI subieron un 7,6% y cerca de un 10% en la semana. El jueves atravesaron Ormuz cuatro buques de materias primas, frente a una media de diez días próxima a 15, y el diésel estadounidense alcanzó un máximo de 5,85 dólares por galón. La transmisión dejó de ser únicamente financiera: combustible, transporte, agricultura y cadenas logísticas volvieron a incorporar un coste directo de un conflicto que durante agosto había perdido presencia en los precios.</p>
+<p>El oro mantuvo un soporte distinto al de la renta variable. Un gráfico de Azuria Capital basado en datos de S&amp;P Global Market Intelligence muestra que la actividad mundial de perforación permanece muy por debajo del máximo alcanzado alrededor de 2022, pese al fuerte aumento del precio del metal desde entonces. Otavio Costa interpreta esa divergencia como evidencia de una respuesta de inversión insuficiente en minería, con reservas que se consumen, leyes de mineral más bajas y presupuestos de exploración contenidos. La tesis es de oferta y necesita tiempo: un precio alto no genera producción adicional de forma inmediata.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-8.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-8.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p>La demanda oficial continuó aportando apoyo. Los bancos centrales compraron 23 toneladas netas de oro en julio, cuarto mes consecutivo de compras; China añadió 20 toneladas y Polonia 8. El acumulado de 2026 alcanzó 130 toneladas, frente a 160 en el mismo periodo del año anterior, y el Banco de Corea comunicó además su primera inversión en oro en trece años mediante una posición de 250 millones de dólares en un ETF respaldado por el metal. El flujo no aceleró respecto al año pasado, pero mantuvo un comprador estructural activo en niveles de precio elevados.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-9.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-9.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p>Bitcoin añadió otro ángulo al debate sobre activos de reserva. Bitwise Asset Management calcula que la correlación móvil de 90 días entre Bitcoin y oro alcanzó +0,50, cerca del máximo registrado durante 2020; la misma publicación sitúa la correlación con el Nasdaq 100 alrededor de -0,30. El repunte coincidió con el anuncio del Tesoro estadounidense del 19 de agosto de que duplicaría las recompras de deuda de larga duración de 2.000 a 4.000 millones de dólares por operación. Esa coincidencia <strong>puede ayudar a explicar</strong> parte del comportamiento común, aunque una correlación de corto plazo no demuestra que Bitcoin haya cambiado de régimen de forma permanente.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-10.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-10.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p>Entre los episodios corporativos, Nike quedó como ejemplo del cambio de liderazgo bursátil de largo plazo. La compañía será retirada del S&amp;P 100 a final de septiembre después de una caída cercana al 80% desde su máximo; la publicación facilitada para esta semana cifra en unos 230.000 millones de dólares la pérdida de capitalización desde ese punto. El acontecimiento tiene un peso menor en la dirección semanal del índice, pero conserva valor documental: una compañía que formó parte del núcleo de grandes valores estadounidenses durante casi dieciocho años abandona el índice tras un deterioro prolongado de precio y expectativas.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-11.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-11.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<hr>
+<h2>2. Macro</h2>
+<p>Las nóminas no agrícolas de agosto aumentaron en 162.000 y las revisiones de junio y julio añadieron 55.000 puestos en conjunto. La tasa de paro permaneció en el 4,1%, la participación laboral subió dos décimas hasta el 61,6% y la medida amplia U6 cayó del 7,9% al 7,7%. Los salarios medios avanzaron un 0,3% mensual y un 3,1% interanual; Regions calcula que la masa salarial privada agregada creció un 0,7% mensual y un 4,3% interanual al combinar empleo, horas y salarios. El titular redujo el argumento de una debilidad laboral inmediata.</p>
+<p>La composición fue más irregular que el total. Ocio y hostelería sumaron 62.000 empleos, la educación de gobiernos locales 42.000, construcción 22.000 y manufacturas 16.000. Salud añadió 13.000, bastante menos que su promedio mensual del último año. Más del 60% del crecimiento del empleo procedió de ocio y hostelería y del rebote de educación local, dos áreas muy expuestas a ajustes de calendario y estacionalidad.</p>
+<p>Scotiabank cuestionó precisamente ese ajuste estacional. Su análisis calcula que, si se hubieran aplicado los factores de agosto de 2024 o 2025, el incremento de nóminas habría sido de unos 15.000 puestos en vez de 162.000. Regions llega a una cautela parecida por otra vía: los datos no ajustados muestran una tendencia media de poco más de 57.000 empleos mensuales, suficiente para estabilizar el paro pero muy inferior a la impresión que deja el dato de agosto aislado. Son interpretaciones de dos casas; no alteran el dato oficial, pero sí rebajan la confianza que conviene depositar en un solo mes.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-12.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-12.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p>El resto del bloque laboral fue menos contundente. Las vacantes JOLTS de julio aumentaron hasta 7,27 millones desde 7,18 millones, pero quedaron por debajo de los cerca de 7,35 millones esperados; ADP calculó solo 38.000 empleos privados en agosto, su cifra más baja desde enero, y las solicitudes iniciales de desempleo se situaron en 206.000 frente a 204.000 revisadas la semana anterior. La economía no presentó un patrón de aceleración laboral uniforme. El informe oficial fue el dato dominante, no el único.</p>
+<p>Los indicadores de actividad reforzaron la idea de crecimiento resistente con inflación incómoda. El ISM manufacturero bajó a 54,6 desde 55,6 y quedó por debajo del 55,4 esperado, aunque encadenó ocho meses en expansión; nuevos pedidos, producción y empleo permanecieron por encima de 50 y el índice de precios se mantuvo en 71,1. En servicios, el ISM subió 1,3 puntos hasta 55,4, los nuevos pedidos alcanzaron 60,9 y los precios pagados 72,6, su nivel más alto desde julio de 2022 según la publicación facilitada. El componente de empleo quedó en 47,8 por segundo mes consecutivo en contracción.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-15.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-15.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p>La Reserva Federal recibió así dos mensajes que apuntaban en la misma dirección para la reunión de septiembre: crecimiento suficiente para tolerar tipos más altos y presiones de precios que aún exigen vigilancia. Christopher Waller había dado alivio el jueves al afirmar que se inclinaba por mantener los tipos si los datos confirmaban la desinflación; Schwab recoge que la probabilidad de subida pasó aproximadamente del 65% al inicio de la semana al 51% tras esas declaraciones y volvió cerca del 61% después del empleo. El cierre exacto de la imagen de FedWatch del domingo fue algo inferior a esa referencia intradía: 59,4% de subida y 40,6% de mantenimiento.</p>
+<p>Edward Jones considera la reunión plenamente abierta y centra la decisión en tres bloques: empleo, inflación observada y expectativas de inflación. El crecimiento salarial del 3,1% interanual reduce el riesgo de una nueva espiral salarios-precios, pero el petróleo y los precios pagados de los PMI operan en sentido contrario. Citigroup retrasó además su previsión del siguiente recorte de tipos hasta junio de 2027 después del informe de empleo. La discusión dejó de ser cuándo empezaría una relajación adicional y pasó a si septiembre necesita otra subida antes de volver a evaluar el ciclo.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-6.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-6.webp', 'El sesgo se volvió algo más hawkish: la probabilidad de subida de 25 pb en septiembre alcanzó el 59,4%, frente al 57,0% una semana antes.')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El sesgo se volvió algo más hawkish: la probabilidad de subida de 25 pb en septiembre alcanzó el 59,4%, frente al 57,0% una semana antes.</figcaption>
+</figure>
+<p>El <strong>CPI estadounidense</strong> será la prueba inmediata. Scotiabank calificó la publicación de agosto como decisiva para la reunión del 16 de septiembre y situó también al PPI del día anterior dentro del mismo bloque de riesgo. Un dato de inflación que confirme moderación permitiría a la Fed separar el buen empleo de la presión de costes; una sorpresa al alza reforzaría el canal ya abierto por petróleo, ISM y nóminas. La semana terminó antes de conocer esa respuesta.</p>
+<p>Los Treasury recogieron el cambio de expectativas. El rendimiento a diez años llegó aproximadamente al 4,82% durante la semana y terminó alrededor del 4,77%, frente al 4,72% del viernes anterior; el dos años subió unos 2 puntos básicos hasta el 4,366% y el treinta años cerca de 3 puntos hasta el 5,24%. El movimiento fue global: Schwab registró máximos de treinta años en el diez años japonés, de diecinueve años en Reino Unido, de diecisiete años en Francia y de diez años en Alemania. El petróleo actuó como catalizador, pero no explica por sí solo esa sincronización.</p>
+<p>Wells Fargo separa el ruido operativo del problema de fondo en Estados Unidos. El Treasury General Account se acercaba a 950.000 millones de dólares, por encima de un colchón habitual de aproximadamente 550.000-650.000 millones, y el Tesoro había duplicado el tamaño de su programa de recompras de bonos antiguos. Utilizar esa caja no crea dinero nuevo ni aumenta por sí mismo la deuda total. La presión estructural procede de déficits persistentes, una deuda federal superior a 40 billones de dólares y una elevada necesidad de financiación que mantiene sensible la parte larga de la curva.</p>
+<p>A la oferta soberana se añadió una fuente privada creciente ligada a la <strong>IA</strong>. La estimación difundida esta semana cifra en 320.000 millones de dólares la emisión combinada de deuda de grandes tecnológicas y sus vehículos especiales durante 2026, unos 120.000 millones más que el año anterior. El gráfico de Bloomberg y J.P. Morgan Asset Management aproxima esa emisión al 70% de la del Tesoro medida en equivalentes de bonos a diez años, frente a alrededor del 30% en 2025. No sustituye a la oferta pública, pero compite por la misma base de compradores y eleva la cantidad de duración que el mercado debe absorber.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-16.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-16.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p>Japón reforzó ese mecanismo internacional. El yen avanzó alrededor de un 2% frente al dólar durante la semana, su mayor subida desde la intervención conjunta de finales de julio, y los datos de posicionamiento citados por Reuters pasaron de un sesgo bajista a uno alcista. El mercado asignaba un 97% de probabilidad a una subida del Banco de Japón hasta el 1,25% en septiembre. Un yen más firme y rendimientos japoneses superiores reducen la ventaja relativa de la deuda estadounidense para inversores domésticos y pueden aumentar la presión de repatriación de capital.</p>
+<p>El <strong>estrecho de Ormuz</strong> volvió a convertirse en el principal riesgo geopolítico para inflación global. Tras una pausa relativa durante agosto, la Guardia Revolucionaria iraní lanzó misiles balísticos contra dos buques de la Marina estadounidense y Estados Unidos respondió atacando tres petroleros iraníes, incluido uno próximo a Kharg. Irán afirmó haber atacado a su vez tres petroleros en rutas que consideraba no autorizadas y otros buques vinculados a Estados Unidos. Antes de la guerra, Kharg canalizaba cerca del 90% de las exportaciones de crudo iraníes, por lo que cualquier escalada alrededor de la isla afecta de forma directa a la capacidad exportadora del país.</p>
+<p>El mercado físico continuó deteriorado. Cuatro buques de materias primas cruzaron Ormuz el jueves, muy por debajo de la media de diez días cercana a 15, y el estrecho había transportado aproximadamente una quinta parte del petróleo mundial antes del conflicto. El Brent cerró en 96,28 dólares y el WTI en 91,48, con el diésel estadounidense en un máximo histórico. El repunte de combustibles refinados amplía la transmisión hacia transporte de mercancías, agricultura y costes de producción con más rapidez que una subida aislada del crudo.</p>
+<p>OPEC+ mantuvo sin cambios sus cuotas para octubre. En septiembre había completado la retirada gradual de 1,65 millones de barriles diarios de recortes acordados en 2023, pero varios miembros continúan produciendo por debajo de sus objetivos y la guerra limita la cantidad que puede llegar efectivamente al mercado. El grupo trasladó ahora el foco a la revisión de capacidades que servirá para fijar las bases de producción de 2027. En este contexto, la cuota formal tiene menos capacidad para estabilizar precios que la disponibilidad física de rutas y barriles.</p>
+<p>La economía iraní está absorbiendo una parte creciente del coste. Reuters describe menores ingresos petroleros, acceso más difícil a divisas y financiación, presión sobre importaciones y preocupación por suministros de combustible y trigo. El Gobierno creó una estructura específica para gestionar los problemas económicos derivados de la guerra y reconoció tensiones en moneda, inflación, empleo y condiciones de vida. El bloqueo y las sanciones están reduciendo parte de la capacidad de Teherán para utilizar Ormuz como instrumento de presión, aunque las mismas fuentes advierten de que el deterioro económico no garantiza una concesión política y puede convivir con una estrategia de resistencia prolongada.</p>
+<p>BBINV interpreta que el impacto macroeconómico del shock energético de 2026 puede ser menos severo que el de 2022 porque la inflación parte de niveles más controlados y los tipos europeos se encuentran más cerca de una zona neutral que al inicio del anterior episodio. Esa diferencia reduce el riesgo de que el shock obligue a una nueva secuencia de endurecimiento tan agresiva como la de entonces. El argumento no elimina el efecto del crudo sobre precios y crecimiento; cambia la intensidad probable de su transmisión monetaria.</p>
+<p>Las <strong>condiciones financieras</strong> agregadas aún no recogieron un endurecimiento equivalente al observado en petróleo y bonos. El NFCI permaneció claramente por debajo de cero a finales de agosto y su trayectoria desde primavera fue de relajación. Crédito, apalancamiento y riesgo agregado no estaban enviando una restricción comparable a la de los mercados de duración. Ese colchón ayuda a entender por qué la renta variable pudo absorber la subida de rendimientos sin una corrección mucho mayor.</p>
+<figure style="margin:28px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-5.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-5.webp', 'El NFCI permaneció por debajo de cero y se relajó frente a los niveles de primavera, pese al repunte reciente de los rendimientos soberanos.')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+  <figcaption style="font-size:0.72rem;color:var(--text-light);margin-top:6px;">El NFCI permaneció por debajo de cero y se relajó frente a los niveles de primavera, pese al repunte reciente de los rendimientos soberanos.</figcaption>
+</figure>
+<p>Canadá ofreció un contraste entre empleo y utilización del trabajo. La economía perdió 41.700 puestos en agosto, frente a una expectativa de creación de 15.000, y la tasa de paro permaneció en el 6,4% porque la fuerza laboral se redujo en unas 37.000 personas. Las horas trabajadas aumentaron un 0,6% mensual por segundo mes consecutivo y apuntaban a un crecimiento cercano al 5% trimestral anualizado en el tercer trimestre, el mayor desde finales de 2021. Las empresas parecen haber utilizado más intensamente a sus plantillas existentes en vez de ampliar el número de trabajadores.</p>
+<p>El detalle canadiense tampoco fue uniforme. Manufacturas añadieron 22.000 empleos, información, cultura y ocio 12.000 y salud y servicios sociales 6.000; servicios de apoyo empresarial perdieron 20.000 y comercio minorista y mayorista 11.000. El crecimiento salarial interanual se moderó hasta el 2%, por debajo de la inflación reciente, y la masa de salarios por horas apenas cambió en agosto tras avances fuertes en julio. Scotiabank considera que el balance para el Banco de Canadá es más hawkish de lo que sugiere el titular de destrucción de empleo porque el fuerte aumento de horas puede anticipar un PIB del tercer trimestre más robusto.</p>
+<figure style="margin:20px 0;text-align:center;">
+  <img src="assets/img/recaps/2026-09-06/picture-17.webp" loading="lazy" alt="Gráfico del informe semanal" onclick="openImgLightbox('assets/img/recaps/2026-09-06/picture-17.webp', '')" style="max-width:100%;border-radius:4px;border:1px solid var(--border);cursor:zoom-in;" />
+</figure>
+<p>En Latinoamérica, el calendario de la próxima semana concentra inflación y bancos centrales. Scotiabank espera que Chile mantenga el tipo oficial en el 4,50% y Perú en el 4,25%. En Chile estima una aceleración del CPI hasta el 3,8% interanual desde el 3,5%, al tiempo que la economía había caído un 1,5% interanual en julio y acumulaba un -0,4% en el año; la casa prevé que el banco central reduzca de forma sustancial su previsión de crecimiento de 2026. En Perú, la inflación alcanzó el 4,4% en agosto, máximo desde septiembre de 2023, aunque el avance mensual fue de solo el 0,1% y buena parte de la presión procede de shocks de oferta.</p>
+<p>Brasil, México y Colombia completan ese bloque. Scotiabank espera que la inflación brasileña ronde el 4,3% y ve margen para un recorte de 25 puntos básicos de la Selic hasta el 13,75% el 17 de septiembre; en México anticipa una inflación general alrededor del 3,3% con la subyacente ligeramente por debajo del 4%, y destaca que el ingreso real mensual por persona aumentó un 21,1% entre 2016 y 2024 pese a una moderación reciente del empleo formal. En Colombia proyecta un CPI general del 6,2% y subyacente del 6,3%. La región no presenta un ciclo monetario único: crecimiento, shocks de oferta y persistencia de precios están produciendo velocidades distintas.</p>
+<p>Europa y comercio añaden otros dos catalizadores. El BCE llega a su reunión del jueves con una subida de 25 puntos básicos prácticamente descontada y con nuevas previsiones que condicionarán la expectativa de una pausa en octubre y otra posible subida en diciembre. Canadá tenía además programada para el martes la entrada en vigor de aranceles de represalia contra Estados Unidos, reabriendo un frente comercial que Scotiabank considera relevante para inversión, presupuestos y financiación pública canadiense. Ambos eventos pueden alterar curvas y divisas aunque no hayan sido el centro del movimiento de esta semana.</p>
+<p>Venezuela dejó un acontecimiento energético con horizonte más largo. Eni firmó con PDVSA un acuerdo de producción compartida de 25 años para desarrollar Junín 5 y actuar como operador, con inversiones previstas de unos 1.500 millones de dólares anuales. El proyecto produce actualmente alrededor de 12.000 barriles diarios y plantea llegar a 400.000 en 2030; la petrolera italiana podría elevar con el tiempo su producción total en Venezuela muy por encima de los 64.000 barriles equivalentes diarios actuales. El acuerdo también mejora las posibilidades de recuperar más de 2.300 millones de dólares que PDVSA adeuda a Eni, a los que se añaden unos 400 millones vinculados al proyecto gasista Perla compartido con Repsol. La reapertura parcial del sector venezolano está empezando a traducirse en compromisos de capital y en una reordenación de derechos económicos acumulados durante años de sanciones y falta de pagos.</p>
+<hr>
+<h2>Cierre</h2>
+<p>El mercado llega al CPI con el Treasury a diez años cerca del 4,8%, el Brent por encima de 96 dólares y una probabilidad del 59,4% de subida de la Fed en septiembre. La cuestión central ya no es si la actividad estadounidense puede evitar un frenazo inmediato, sino cuánto endurecimiento adicional pueden absorber beneficios, consumo y financiación si la energía permanece cara y la oferta de duración continúa aumentando. Ormuz, inflación y curvas soberanas marcarán si la resistencia de los índices fue una muestra de fortaleza fundamental o simplemente un aplazamiento del ajuste.</p>
+<hr>
+<h2>Fuentes</h2>
+<p style="font-size:0.82rem;color:var(--text-mid);line-height:1.8;">T. Rowe Price · Scotiabank · Edward Jones · FactSet · BBINV · Charles Schwab · Wells Fargo Investment Institute · Regions Bank · Reuters · Otavio Costa · The Kobeissi Letter · Finviz · CNN · AAII · Chicago Fed · CME Group</p>
+<!-- BIBLIOGRAFÍA COMPLETA (recap-2026-09-06) — no se muestra en la web, solo para referencia interna:
+1. T. Rowe Price — “Global Markets Weekly Update” — web — https://www.troweprice.com/personal-investing/resources/insights/global-markets-weekly-update.html
+2. Scotiabank Economics — “Economics Publications” — web — https://www.scotiabank.com/ca/en/about/economics/economics-publications.html
+3. Scotiabank Economics — “The Global Week Ahead: Markets Go Back to School” — web — https://www.scotiabank.com/ca/en/about/economics/economics-publications/post.other-publications.global-week-ahead.september-4--2026.html
+4. Scotiabank Economics — “Why I Don’t Trust Nonfarm Payrolls” — web/PDF — https://www.scotiabank.com/ca/en/about/economics/economics-publications/post.other-publications.economic-indicators.scotia-flash.-september-4--2026--1.html
+5. Scotiabank Economics — “Latam Weekly: Regional CPI, BCCh and BCRP to Hold” — web/PDF — https://www.scotiabank.com/ca/en/about/economics/economics-publications/post.other-publications.latam-weekly.latam-weekly--september-4--2026-.html
+6. Scotiabank Economics — “Canada Cut Jobs, Worked Harder as GDP Tracking Rips” — web/PDF — https://www.scotiabank.com/ca/en/about/economics/economics-publications/post.other-publications.economic-indicators.scotia-flash.-september-4--2026-.html
+7. Edward Jones — “Weekly Stock Market Update” — Three Datapoints the Fed Is Likely Watching Ahead of the September FOMC Meeting — web — https://www.edwardjones.com/us-en/market-news-insights/stock-market-news/stock-market-weekly-update
+8. FactSet — “Analysts Increasing EPS Estimates for S&P 500 Companies For 2nd Straight Quarter” — web — https://insight.factset.com/analysts-increasing-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter
+9. BBINV — “Comentario de mercado viernes 4 de Septiembre del 2026” — web — https://www.bbinv.es/?page_id=27
+10. Charles Schwab — “U.S. Market Commentary” — web — https://international.schwab.com/us-market-commentary
+11. Charles Schwab — “Weekly Trader’s Stock Market Outlook” — web — https://international.schwab.com/story/weekly-traders-outlook
+12. Charles Schwab — “Yields Rise, Breadth Fades, Bitcoin Pauses” — web — https://international.schwab.com/story/weekly-digest
+13. Charles Schwab — “Sector Views: Monthly Stock Sector Outlook” — web — https://international.schwab.com/story/stock-sector-outlook
+14. Wells Fargo Investment Institute — “Market Commentary” — Couch-cushion cash won’t fix the bond-market problem — web/PDF — https://www.wellsfargoadvisors.com/research-analysis/commentary.htm
+15. Wells Fargo Investment Institute — “Stock Market News” — Opening Comment, Friday September 4, 2026 — web — https://www.wellsfargoadvisors.com/research-analysis/commentary/stock-market-news.htm
+16. Regions Bank / Doing More Today — “September 2026 Economic Commentary; August Employment Report: Another Big Swing, Same Stable Trend” — web/PDF — https://doingmoretoday.com/september-2026-economic-commentary/
+17. Reuters — “Iran's Hormuz leverage wanes as US economic squeeze bites” — web — https://www.reuters.com/business/energy/irans-hormuz-leverage-wanes-us-economic-squeeze-bites-2026-09-06/
+18. Reuters — “US, Iranian forces fire at vessels in waters near Iran” — web — https://www.reuters.com/world/middle-east/explosions-heard-near-irans-kharg-island-gulf-origin-unknown-fars-news-says-2026-09-05/
+19. Reuters — “US military strikes three Iranian crude oil carriers, Central Command says” — web — https://www.reuters.com/world/middle-east/us-military-strikes-three-iranian-crude-oil-carriers-central-command-says-2026-09-05/
+20. Reuters — “Oil ends week higher on renewed US-Iran strikes, diesel hits record” — web — https://www.reuters.com/business/energy/oil-set-steepest-weekly-gain-since-mid-july-over-intensifying-us-iran-tensions-2026-09-04/
+21. Reuters — “Iran to tackle economic issues, says further attacks will be 'more painful'” — web — https://www.reuters.com/world/middle-east/iran-tackle-economic-issues-says-further-attacks-will-be-more-painful-2026-09-06/
+22. Otavio (Tavi) Costa — “Gold prices, drilling activity and mining cycle” — web — https://x.com/TaviCosta/status/2096302448365486223
+23. The Kobeissi Letter — “AI debt issuance and Treasury yields” — web — https://x.com/KobeissiLetter/status/2096286487230685349
+24. The Kobeissi Letter — “Bitcoin and gold 90-day correlation” — web — https://x.com/KobeissiLetter/status/2096269626015629679
+25. The Kobeissi Letter — “Central-bank gold purchases in July” — web — https://x.com/KobeissiLetter/status/2095957468786700595
+26. The Kobeissi Letter — “VIX stays between 14 and 17 for 25 straight days” — web — https://x.com/KobeissiLetter/status/2095898052212957202
+27. The Kobeissi Letter — “U.S. ISM Services PMI” — August 2026 — web — https://x.com/KobeissiLetter/status/2096333284967948431
+28. The Kobeissi Letter — “Nike to be removed from the S&P 100” — web — https://x.com/KobeissiLetter/status/2096317768408703022
+29. Reuters — “Strong August jobs report sends yields higher” — web — https://www.reuters.com/business/view-strong-august-jobs-report-sends-yields-higher-2026-09-04/
+30. Reuters — “US nonfarm payrolls blow past expectations in August; unemployment rate steady at 4.1%” — web — https://www.reuters.com/business/us-nonfarm-payrolls-surge-august-unemployment-rate-steady-41-2026-09-04/
+31. Reuters — “Wall Street ends lower as solid jobs data fuels hawkish Fed bets” — web — https://www.reuters.com/business/nasdaq-sp-500-futures-climb-ahead-key-jobs-report-2026-09-04/
+32. Reuters — “OPEC+ keeps oil output policy unchanged for October” — web — https://www.reuters.com/business/energy/opec-set-keep-oil-output-policy-unchanged-sunday-sources-say-2026-09-06/
+33. Reuters — “Yen's changing fortunes might finally be spooking the bears” — web — https://www.reuters.com/world/asia-pacific/yens-changing-fortunes-might-finally-be-spooking-bears-2026-09-04/
+34. Reuters — “Italy's Eni doubles down in Venezuela with rising hope of recovering debt” — web — https://www.reuters.com/business/energy/italys-eni-doubles-down-venezuela-with-rising-hope-recovering-debt-2026-09-04/
+35. Reuters — “Citigroup delays Fed rate-cut forecast to 2027 after strong U.S. jobs report” — web — https://www.reuters.com/business/citigroup-delays-fed-rate-cut-forecast-2027-after-strong-us-jobs-report-2026-09-04/
+36. FINVIZ — “S&P 500 heatmap” — web
+37. FINVIZ — “Groups / sector performance” — web
+38. CNN — “Fear & Greed Index” — web
+39. AAII — “Investor Sentiment Survey” — web
+40. Federal Reserve Bank of Chicago — “National Financial Conditions Index (NFCI)” — web
+41. CME Group — “FedWatch Tool” — web
+-->`
+  },
   'recap-2026-08-30': {
     title: 'Semana del 24 al 30 de Agosto de 2026',
     category: 'Recap Semanal · Macro',
@@ -12917,24 +13341,53 @@ function openArticle(id) {
 
 
 
+/* ===== LEGACY INICIO ======================================================
+   Resolucion de la fuente de datos de la pestana Mercados.
+
+   En PRODUCCION la pestana lee de mktDataV2.js (yfinance). La fuente antigua
+   (mktData.js, generado del Excel) queda accesible solo por la pagina oculta
+   ?tab=mercados-legacy.
+
+   Un gid con prefijo 'legacy:' (por ejemplo 'legacy:indices') resuelve contra
+   mktData y contra los paneles #mkt-legacy-*. Sin prefijo resuelve contra
+   mktDataV2 y contra los paneles de siempre (#mkt-indices...), cuyos
+   identificadores no han cambiado. Asi las dos paginas comparten TODO el
+   codigo de calculo y de graficos, y lo unico que cambia es el origen.
+
+   PROVISIONAL: al retirar el flujo de Excel, quitar la rama 'legacy:' de las
+   seis funciones (mktSrc pasa a devolver siempre mktDataV2[gid]), borrar
+   compStateLegacy y las claves 'legacy:' de mktState.
+   ========================================================================= */
+function mktBase(gid) { return gid.indexOf('legacy:') === 0 ? gid.slice(7) : gid; }
+function mktUid(gid)  { return gid.indexOf('legacy:') === 0 ? 'legacy-' + gid.slice(7) : gid; }
+function mktSrc(gid)  { return gid.indexOf('legacy:') === 0 ? mktData[gid.slice(7)] : mktDataV2[gid]; }
+function mktNs(gid)   { return gid.indexOf('legacy:') === 0 ? 'legacy' : ''; }
+function compSt(ns)   { return ns === 'legacy' ? compStateLegacy : compState; }
+function compSfx(ns)  { return ns === 'legacy' ? '-legacy' : ''; }
+/* ===== LEGACY FIN ===== */
+
 // ===== MERCADOS STATE =====
 const mktState = {};
 ['indices','factores','sectores','commodities','rentafija'].forEach(g => {
   mktState[g] = { activo: null, periodo: 'YTD', modo: 'ret', chart: null, homeChart: null, sortCol: null, sortDir: 1 };
+  /* LEGACY */ mktState['legacy:' + g] = { activo: null, periodo: 'YTD', modo: 'ret', chart: null, homeChart: null, sortCol: null, sortDir: 1 };
 });
 // Render home markets chart (initial page)
 (function(){ const p = document.getElementById('home-mkt-indices'); if (p && !p.dataset.rendered) { renderHomeMktPanel('indices'); p.dataset.rendered='1'; } })();
 
 // ===== SHOW TAB =====
 function showMkTab(id, btn) {
-  document.querySelectorAll('.mktab').forEach(b => b.classList.remove('active'));
+  /* Los botones y paneles se buscan dentro de la pagina del boton pulsado,
+     para que la pestana publica y la legacy no se pisen entre si. */
+  const root = (btn && btn.closest('.page')) || document;
+  root.querySelectorAll('.mktab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.mkt-panel').forEach(p => p.style.display = 'none');
-  const panel = document.getElementById('mkt-' + id);
+  root.querySelectorAll('.mkt-panel').forEach(p => p.style.display = 'none');
+  const panel = document.getElementById('mkt-' + mktUid(id));    /* V2 */
   panel.style.display = 'block';
   if (!panel.dataset.rendered) {
-    if (id === 'comparador') renderComparador();
-    else if (id === 'macro') renderMacro();
+    if (mktBase(id) === 'comparador') renderComparador(mktNs(id)); /* V2 */
+    else if (mktBase(id) === 'macro') renderMacro();               /* V2 */
     else renderMktPanel(id);
     panel.dataset.rendered = '1';
   }
@@ -12988,8 +13441,8 @@ const MKT_NOTA_RF = `<div style="font-size:0.7rem;color:var(--text-light);font-s
 
 // ===== RENDER PANEL =====
 function renderMktPanel(gid) {
-  const grupo = mktData[gid];
-  const panel = document.getElementById('mkt-' + gid);
+  const grupo = mktSrc(gid);                                     /* V2 */
+  const panel = document.getElementById('mkt-' + mktUid(gid));   /* V2 */
   const activos = grupo.activos;
   if (!mktState[gid].activo && activos.length) mktState[gid].activo = activos[0].ticker + '_' + activos[0].nombre;
 
@@ -12997,7 +13450,7 @@ function renderMktPanel(gid) {
 
   // Build table
   let tableHtml = `<div style="overflow-x:auto;margin-bottom:32px">
-    <table class="mkt-table" id="mkt-tbl-${gid}">
+    <table class="mkt-table" id="mkt-tbl-${mktUid(gid)}">
       <thead><tr>
         <th onclick="sortMktTable('${gid}','nombre')">Activo</th>
         <th onclick="sortMktTable('${gid}','ticker')">Ticker</th>
@@ -13022,7 +13475,7 @@ function renderMktPanel(gid) {
   }
   tableHtml += `</tbody></table></div>`;
   // Nota metodologica: solo en Renta Fija, donde el dato necesita el matiz.
-  if (gid === 'rentafija') tableHtml += MKT_NOTA_RF;
+  if (mktBase(gid) === 'rentafija') tableHtml += MKT_NOTA_RF;   /* V2 */
 
   // Build chart section
   const activoOpts = activos.map(a => {
@@ -13038,15 +13491,15 @@ function renderMktPanel(gid) {
 
   const chartHtml = `<div class="mkt-chart-box">
     <div class="mkt-controls">
-      <select class="mkt-select" id="mkt-sel-${gid}" onchange="setMktActivo('${gid}',this.value)">${activoOpts}</select>
-      <div class="period-btns" id="mkt-periods-${gid}">${periodBtns}</div>
+      <select class="mkt-select" id="mkt-sel-${mktUid(gid)}" onchange="setMktActivo('${gid}',this.value)">${activoOpts}</select>
+      <div class="period-btns" id="mkt-periods-${mktUid(gid)}">${periodBtns}</div>
       <div class="toggle-btns">
         <button class="tbtn ${mktState[gid].modo==='ret'?'active':''}" onclick="setMktModo('${gid}','ret',this)">Rentabilidad</button>
         <button class="tbtn ${mktState[gid].modo==='precio'?'active':''}" onclick="setMktModo('${gid}','precio',this)">Precio</button>
       </div>
     </div>
     <div style="font-size:0.7rem;color:var(--text-light);margin-bottom:20px;font-style:italic">Serie histórica iniciada en 2018</div>
-    <canvas id="mkt-chart-${gid}" height="80"></canvas>
+    <canvas id="mkt-chart-${mktUid(gid)}" height="80"></canvas>
   </div>`;
 
   panel.innerHTML = tableHtml + chartHtml;
@@ -13056,7 +13509,7 @@ function renderMktPanel(gid) {
 // ===== CHART =====
 function renderMktChart(gid) {
   const state = mktState[gid];
-  const grupo = mktData[gid];
+  const grupo = mktSrc(gid);                                     /* V2 */
   const activo = grupo.activos.find(a => (a.ticker + '_' + a.nombre) === state.activo);
   if (!activo) return;
 
@@ -13090,7 +13543,7 @@ function renderMktChart(gid) {
     yLabel = 'Rentabilidad acumulada (%)';
   }
 
-  const canvas = document.getElementById('mkt-chart-' + gid);
+  const canvas = document.getElementById('mkt-chart-' + mktUid(gid));   /* V2 */
   if (!canvas) return;
   if (state.chart) state.chart.destroy();
 
@@ -13140,7 +13593,7 @@ function setMktActivo(gid, val) {
 
 function setMktPeriod(gid, p, btn) {
   mktState[gid].periodo = p;
-  document.querySelectorAll('#mkt-periods-' + gid + ' .pbtn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#mkt-periods-' + mktUid(gid) + ' .pbtn').forEach(b => b.classList.remove('active'));   /* V2 */
   btn.classList.add('active');
   renderMktChart(gid);
 }
@@ -13157,7 +13610,7 @@ function sortMktTable(gid, col) {
   const state = mktState[gid];
   if (state.sortCol === col) state.sortDir *= -1;
   else { state.sortCol = col; state.sortDir = 1; }
-  const grupo = mktData[gid];
+  const grupo = mktSrc(gid);                                     /* V2 */
   const periods = ['1W','1M','3M','6M','YTD','1Y','3Y','5Y'];
   grupo.activos.sort((a, b) => {
     let va, vb;
@@ -13169,7 +13622,7 @@ function sortMktTable(gid, col) {
     return state.sortDir * (va - vb);
   });
   // re-render panel
-  const panel = document.getElementById('mkt-' + gid);
+  const panel = document.getElementById('mkt-' + mktUid(gid));   /* V2 */
   panel.dataset.rendered = '';
   renderMktPanel(gid);
 }
@@ -13181,9 +13634,23 @@ function sortMktTable(gid, col) {
 // ===== COMPARADOR =====
 const COMP_COLORS = ['#6B2737','#2d7a4f','#1a6b8a','#8B6914','#7a2d6f','#2d4a7a','#8a4a1a','#3d7a2d'];
 let compState = { selected: [], periodo: 'YTD', chart: null };
+/* Estado propio de la pagina legacy. Las dos comparten funciones pero no
+   seleccion: se pueden tener activos distintos elegidos en cada una. */
+let compStateLegacy = { selected: [], periodo: 'YTD', chart: null };
 
-function renderComparador() {
-  const panel = document.getElementById('mkt-comparador');
+/* El comparador esta parametrizado por 'ns' (namespace): '' es la pestana
+   Mercados publica (yfinance) y 'legacy' la copia oculta que lee del Excel.
+     - compSt(ns)  -> el estado que toca
+     - compSfx(ns) -> sufijo de los id del DOM ('' o '-v2')
+   Con ns='' el sufijo es vacio, asi que todos los id son exactamente los de
+   antes y el comportamiento de la pestana actual no cambia.
+   El namespace viaja tambien dentro del gid guardado en cada seleccion
+   ('legacy:indices'), de modo que getCompPrices() sabe de que fuente leer sin
+   necesidad de parametros extra. */
+function renderComparador(ns) {
+  ns = ns || '';                                     /* V2 */
+  const sfx = compSfx(ns), st = compSt(ns);          /* V2 */
+  const panel = document.getElementById(ns === 'legacy' ? 'mkt-legacy-comparador' : 'mkt-comparador');
   if (!panel) return;
 
   const grupos_labels = {
@@ -13196,21 +13663,22 @@ function renderComparador() {
 
   const periods = ['1M','3M','6M','YTD','1Y','3Y','5Y'];
   const periodBtns = periods.map(p => {
-    const active = p === compState.periodo ? 'active' : '';
-    return `<button class="pbtn ${active}" onclick="setCompPeriod('${p}',this)">${p}</button>`;
+    const active = p === st.periodo ? 'active' : '';
+    return `<button class="pbtn ${active}" onclick="setCompPeriod('${ns}','${p}',this)">${p}</button>`;
   }).join('');
 
   // Build grouped dropdown - groups as accordion
   let groupsHtml = '';
   for (const [gid, glabel] of Object.entries(grupos_labels)) {
-    const activos = mktData[gid].activos;
+    const gidNs = ns === 'legacy' ? 'legacy:' + gid : gid;
+    const activos = mktSrc(gidNs).activos;
     const items = activos.map(a => {
-      const key = gid + '|' + a.ticker + '|' + a.nombre;
-      const isSelected = compState.selected.find(s => s.key === key);
+      const key = gidNs + '|' + a.ticker + '|' + a.nombre;
+      const isSelected = st.selected.find(s => s.key === key);
       const checked = isSelected ? 'checked' : '';
       // data-buscar permite filtrar por nombre o por ticker sin recorrer el DOM
       return `<label class="comp-option${isSelected ? ' sel' : ''}" data-buscar="${(a.nombre + ' ' + a.ticker).toLowerCase()}">
-        <input type="checkbox" value="${key}" ${checked} onchange="toggleCompActivo(this)">
+        <input type="checkbox" value="${key}" ${checked} onchange="toggleCompActivo('${ns}',this)">
         <span>${a.nombre}</span>
         <span class="comp-tk">${a.ticker}</span>
       </label>`;
@@ -13229,30 +13697,30 @@ function renderComparador() {
   panel.innerHTML = `
     <div class="mkt-chart-box">
       <div class="mkt-controls" style="flex-wrap:wrap;gap:12px;margin-bottom:16px">
-        <div class="comp-dropdown" id="comp-dd-wrapper">
-          <button class="mkt-select" onclick="toggleCompDropdown()" id="comp-dd-btn">+ Añadir activo</button>
-          <div class="comp-dropdown-menu" id="comp-dropdown-menu" style="display:none">
+        <div class="comp-dropdown" id="comp-dd-wrapper${sfx}">
+          <button class="mkt-select" onclick="toggleCompDropdown('${ns}')" id="comp-dd-btn${sfx}">+ Añadir activo</button>
+          <div class="comp-dropdown-menu" id="comp-dropdown-menu${sfx}" style="display:none">
             <div class="comp-search">
-              <input type="text" id="comp-buscar" placeholder="Buscar por nombre o ticker"
-                     oninput="filtrarCompOpciones(this.value)" autocomplete="off">
+              <input type="text" id="comp-buscar${sfx}" placeholder="Buscar por nombre o ticker"
+                     oninput="filtrarCompOpciones('${ns}',this.value)" autocomplete="off">
             </div>
-            <div id="comp-groups">${groupsHtml}</div>
-            <div class="comp-vacio" id="comp-sin-resultados" style="display:none">Ningún activo coincide.</div>
+            <div id="comp-groups${sfx}">${groupsHtml}</div>
+            <div class="comp-vacio" id="comp-sin-resultados${sfx}" style="display:none">Ningún activo coincide.</div>
             <div class="comp-pie">
-              <span id="comp-contador"></span>
-              <button onclick="limpiarComp()">Quitar todos</button>
+              <span id="comp-contador${sfx}"></span>
+              <button onclick="limpiarComp('${ns}')">Quitar todos</button>
             </div>
           </div>
         </div>
         <div class="period-btns">${periodBtns}</div>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="comp-chips"></div>
-      <canvas id="comp-chart" height="90"></canvas>
-      <div id="comp-nota"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="comp-chips${sfx}"></div>
+      <canvas id="comp-chart${sfx}" height="90"></canvas>
+      <div id="comp-nota${sfx}"></div>
     </div>
-    <div id="comp-table-wrap"></div>`;
+    <div id="comp-table-wrap${sfx}"></div>`;
 
-  refreshComparador();
+  refreshComparador(ns);
 }
 
 /* Refresco ligero del comparador.
@@ -13261,50 +13729,53 @@ function renderComparador() {
    en cada seleccion. Aqui solo se tocan las partes que cambian (fichas, nota,
    grafico, tabla y contador), de modo que el desplegable y el grupo abierto se
    quedan como estaban y se pueden marcar varios activos seguidos. */
-function refreshComparador() {
-  const chips = document.getElementById('comp-chips');
+function refreshComparador(ns) {
+  ns = ns || '';                                     /* V2 */
+  const sfx = compSfx(ns), st = compSt(ns);          /* V2 */
+  const chips = document.getElementById('comp-chips' + sfx);
   if (!chips) return;
 
-  chips.innerHTML = compState.selected.length === 0
+  chips.innerHTML = st.selected.length === 0
     ? `<span style="font-size:0.8rem;color:var(--text-light);font-style:italic">Selecciona al menos 2 activos para comparar</span>`
-    : compState.selected.map((s, i) => `
+    : st.selected.map((s, i) => `
         <div class="comp-chip">
           <span class="chip-dot" style="background:${COMP_COLORS[i % COMP_COLORS.length]}"></span>
           ${s.nombre}
-          <button onclick="removeCompActivo('${s.key}')">×</button>
+          <button onclick="removeCompActivo('${ns}','${s.key}')">×</button>
         </div>`).join('');
 
-  const nota = document.getElementById('comp-nota');
+  const nota = document.getElementById('comp-nota' + sfx);
   if (nota) {
-    nota.innerHTML = compState.selected.some(s => s.gid === 'rentafija')
+    nota.innerHTML = st.selected.some(s => mktBase(s.gid) === 'rentafija')   /* V2 */
       ? MKT_NOTA_RF.replace('margin:-18px 0 28px', 'margin:16px 0 0') : '';
   }
 
   // Marca visual de los ya elegidos y contador, sin rehacer el desplegable
-  const n = compState.selected.length;
-  document.querySelectorAll('#comp-dropdown-menu .comp-option').forEach(op => {
+  const n = st.selected.length;
+  document.querySelectorAll('#comp-dropdown-menu' + sfx + ' .comp-option').forEach(op => {
     op.classList.toggle('sel', op.querySelector('input').checked);
   });
-  const cont = document.getElementById('comp-contador');
+  const cont = document.getElementById('comp-contador' + sfx);
   if (cont) cont.textContent = n === 0 ? 'Ninguno seleccionado'
                                        : n + (n === 1 ? ' activo seleccionado' : ' activos seleccionados');
-  const btn = document.getElementById('comp-dd-btn');
+  const btn = document.getElementById('comp-dd-btn' + sfx);
   if (btn) btn.textContent = n === 0 ? '+ Añadir activo' : '+ Añadir activo (' + n + ')';
 
   if (n === 0) {
-    if (compState.chart) { compState.chart.destroy(); compState.chart = null; }
-    const wrap = document.getElementById('comp-table-wrap');
+    if (st.chart) { st.chart.destroy(); st.chart = null; }
+    const wrap = document.getElementById('comp-table-wrap' + sfx);
     if (wrap) wrap.innerHTML = '';
     return;
   }
-  renderCompChart();
+  renderCompChart(ns);
 }
 
 // Filtra las opciones por nombre o ticker y abre los grupos con coincidencias.
-function filtrarCompOpciones(texto) {
+function filtrarCompOpciones(ns, texto) {
+  const sfx = compSfx(ns || '');                     /* V2 */
   const q = (texto || '').trim().toLowerCase();
   let visibles = 0;
-  document.querySelectorAll('#comp-groups .comp-group').forEach(grupo => {
+  document.querySelectorAll('#comp-groups' + sfx + ' .comp-group').forEach(grupo => {
     const items = grupo.querySelectorAll('.comp-option');
     let coinciden = 0;
     items.forEach(op => {
@@ -13320,14 +13791,16 @@ function filtrarCompOpciones(texto) {
       grupo.querySelector('.comp-arrow').textContent = '▴';
     }
   });
-  const vacio = document.getElementById('comp-sin-resultados');
+  const vacio = document.getElementById('comp-sin-resultados' + sfx);
   if (vacio) vacio.style.display = visibles ? 'none' : 'block';
 }
 
-function limpiarComp() {
-  compState.selected = [];
-  document.querySelectorAll('#comp-dropdown-menu input[type=checkbox]').forEach(i => { i.checked = false; });
-  refreshComparador();
+function limpiarComp(ns) {
+  ns = ns || '';                                     /* V2 */
+  const sfx = compSfx(ns);
+  compSt(ns).selected = [];
+  document.querySelectorAll('#comp-dropdown-menu' + sfx + ' input[type=checkbox]').forEach(i => { i.checked = false; });
+  refreshComparador(ns);
 }
 
 function toggleCompGroup(header) {
@@ -13339,14 +13812,15 @@ function toggleCompGroup(header) {
 }
 
 
-function toggleCompDropdown() {
-  const menu = document.getElementById('comp-dropdown-menu');
+function toggleCompDropdown(ns) {
+  const sfx = compSfx(ns || '');                     /* V2 */
+  const menu = document.getElementById('comp-dropdown-menu' + sfx);
   if (!menu) return;
   const abrir = menu.style.display === 'none';
   menu.style.display = abrir ? 'block' : 'none';
   if (abrir) {
     // El foco va al buscador: se puede escribir el ticker sin tocar el raton
-    const buscador = document.getElementById('comp-buscar');
+    const buscador = document.getElementById('comp-buscar' + sfx);
     if (buscador) setTimeout(() => buscador.focus(), 20);
   }
   // Close on outside click
@@ -13363,41 +13837,56 @@ function toggleCompDropdown() {
 // Escape cierra el desplegable sin tener que buscar un hueco donde pinchar.
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
-  const menu = document.getElementById('comp-dropdown-menu');
-  if (menu && menu.style.display === 'block') menu.style.display = 'none';
+  /* Se comprueban los dos desplegables (el de Mercados y el de la copia legacy).
+     Solo puede haber uno abierto, porque solo hay una pagina visible. */
+  ['comp-dropdown-menu', 'comp-dropdown-menu-legacy'].forEach(id => {
+    const menu = document.getElementById(id);
+    if (menu && menu.style.display === 'block') menu.style.display = 'none';
+  });
 });
 
-function toggleCompActivo(cb) {
+function toggleCompActivo(ns, cb) {
+  ns = ns || '';                                     /* V2 */
+  const st = compSt(ns);
   const key = cb.value;
   const [gid, ticker, nombre] = key.split('|');
   if (cb.checked) {
-    if (!compState.selected.find(s => s.key === key)) {
-      compState.selected.push({ key, gid, ticker, nombre });
+    if (!st.selected.find(s => s.key === key)) {
+      st.selected.push({ key, gid, ticker, nombre });
     }
   } else {
-    compState.selected = compState.selected.filter(s => s.key !== key);
+    st.selected = st.selected.filter(s => s.key !== key);
   }
-  refreshComparador();   // no rehacer el panel: el desplegable sigue abierto
+  refreshComparador(ns);   // no rehacer el panel: el desplegable sigue abierto
 }
 
-function removeCompActivo(key) {
-  compState.selected = compState.selected.filter(s => s.key !== key);
+function removeCompActivo(ns, key) {
+  ns = ns || '';                                     /* V2 */
+  const sfx = compSfx(ns), st = compSt(ns);
+  st.selected = st.selected.filter(s => s.key !== key);
   // El desplegable ya no se reconstruye, asi que hay que desmarcar la casilla
-  const cb = document.querySelector('#comp-dropdown-menu input[value="' + key + '"]');
+  const cb = document.querySelector('#comp-dropdown-menu' + sfx + ' input[value="' + key + '"]');
   if (cb) cb.checked = false;
-  refreshComparador();
+  refreshComparador(ns);
 }
 
-function setCompPeriod(p, btn) {
-  compState.periodo = p;
-  document.querySelectorAll('#mkt-comparador .pbtn').forEach(b => b.classList.remove('active'));
+function setCompPeriod(ns, p, btn) {
+  ns = ns || '';                                     /* V2 */
+  compSt(ns).periodo = p;
+  const panelSel = ns === 'legacy' ? '#mkt-legacy-comparador' : '#mkt-comparador';
+  document.querySelectorAll(panelSel + ' .pbtn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderCompChart();
-  renderCompTable();
+  renderCompChart(ns);
+  renderCompTable(ns);
 }
 
+/* El gid guardado en cada seleccion ya lleva el namespace ('indices' para la
+   fuente en produccion, 'legacy:indices' para el Excel), asi que mktSrc()
+   resuelve solo contra la fuente correcta. El comparador de la PORTADA marca
+   sus gids con 'legacy:' porque el resto de la portada tambien sigue leyendo
+   del Excel; ver el aviso de cabecera del fichero. */
 function getCompPrices(s) {
-  const activos = mktData[s.gid].activos;
+  const activos = mktSrc(s.gid).activos;
   const a = activos.find(a => a.ticker === s.ticker && a.nombre === s.nombre);
   return a ? a.prices : [];
 }
@@ -13416,14 +13905,16 @@ function filterMktByPeriod(prices, periodo) {
   return prices.filter(([d]) => new Date(d) >= refDate);
 }
 
-function renderCompChart() {
-  const canvas = document.getElementById('comp-chart');
-  if (!canvas || compState.selected.length < 1) return;
-  if (compState.chart) compState.chart.destroy();
+function renderCompChart(ns) {
+  ns = ns || '';                                     /* V2 */
+  const sfx = compSfx(ns), st = compSt(ns);
+  const canvas = document.getElementById('comp-chart' + sfx);
+  if (!canvas || st.selected.length < 1) return;
+  if (st.chart) st.chart.destroy();
 
-  const datasets = compState.selected.map((s, i) => {
+  const datasets = st.selected.map((s, i) => {
     const prices = getCompPrices(s);
-    const filtered = filterMktByPeriod(prices, compState.periodo);
+    const filtered = filterMktByPeriod(prices, st.periodo);
     if (!filtered.length) return null;
     const base = filtered[0][1];
     const data = filtered.map(([d,p]) => ({ x: d, y: parseFloat(((p/base-1)*100).toFixed(2)) }));
@@ -13438,7 +13929,7 @@ function renderCompChart() {
     };
   }).filter(Boolean);
 
-  compState.chart = new Chart(canvas, {
+  st.chart = new Chart(canvas, {
     type: 'line',
     data: { datasets },
     options: {
@@ -13466,26 +13957,28 @@ function renderCompChart() {
     }
   });
 
-  renderCompTable();
+  renderCompTable(ns);
 }
 
-function renderCompTable() {
-  const wrap = document.getElementById('comp-table-wrap');
-  if (!wrap || compState.selected.length === 0) return;
+function renderCompTable(ns) {
+  ns = ns || '';                                     /* V2 */
+  const sfx = compSfx(ns), st = compSt(ns);
+  const wrap = document.getElementById('comp-table-wrap' + sfx);
+  if (!wrap || st.selected.length === 0) return;
 
   let html = `<table class="mkt-table" style="margin-top:16px">
     <thead><tr>
       <th style="text-align:left">Activo</th>
       <th>Grupo</th>
       <th>Precio actual</th>
-      <th>Rentabilidad (${compState.periodo})</th>
+      <th>Rentabilidad (${st.periodo})</th>
     </tr></thead><tbody>`;
 
   const grupos_labels = { indices:'Índices', factores:'Factores', sectores:'Sectores USA', commodities:'Commodities', rentafija:'Renta Fija' };
 
-  const rows = compState.selected.map((s, i) => {
+  const rows = st.selected.map((s, i) => {
     const prices = getCompPrices(s);
-    const filtered = filterMktByPeriod(prices, compState.periodo);
+    const filtered = filterMktByPeriod(prices, st.periodo);
     const ret = filtered.length >= 2 ? (filtered[filtered.length-1][1] / filtered[0][1] - 1) : null;
     const last = prices.length ? prices[prices.length-1][1] : null;
     return { s, i, ret, last };
@@ -13498,7 +13991,7 @@ function renderCompTable() {
     const dot = `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${COMP_COLORS[i%COMP_COLORS.length]};margin-right:6px"></span>`;
     html += `<tr>
       <td>${dot}${s.nombre} <span style="color:var(--text-light);font-size:0.72rem">${s.ticker}</span></td>
-      <td style="color:var(--text-light)">${grupos_labels[s.gid]}</td>
+      <td style="color:var(--text-light)">${grupos_labels[mktBase(s.gid)]}</td>
       <td>${last ? '$'+last.toFixed(2) : '—'}</td>
       <td>${retFmt}</td>
     </tr>`;
@@ -13523,7 +14016,7 @@ function showHomeMkTab(id, btn) {
 }
 
 function renderHomeMktPanel(gid) {
-  const grupo = mktData[gid];
+  const grupo = mktSrc(gid);   /* fuente en produccion (yfinance) */
   const panel = document.getElementById('home-mkt-' + gid);
   const activos = grupo.activos;
   if (!mktState[gid].activo && activos.length) mktState[gid].activo = activos[0].ticker + '_' + activos[0].nombre;
@@ -13558,7 +14051,7 @@ function renderHomeMktPanel(gid) {
 
 function renderHomeMktChart(gid) {
   const state = mktState[gid];
-  const grupo = mktData[gid];
+  const grupo = mktSrc(gid);   /* fuente en produccion (yfinance) */
   const activo = grupo.activos.find(a => (a.ticker + '_' + a.nombre) === state.activo);
   if (!activo) return;
 
@@ -13668,7 +14161,7 @@ function renderHomeComparador() {
 
   let groupsHtml = '';
   for (const [gid, glabel] of Object.entries(grupos_labels)) {
-    const items = mktData[gid].activos.map(a => {
+    const items = mktSrc(gid).activos.map(a => {
       const key = gid + '|' + a.ticker + '|' + a.nombre;
       const checked = homeCompState.selected.find(s => s.key === key) ? 'checked' : '';
       return `<label class="comp-option"><input type="checkbox" value="${key}" ${checked} onchange="toggleHomeCompActivo(this)"><span>${a.nombre}</span></label>`;
@@ -16957,9 +17450,718 @@ window.addEventListener('popstate', function() {
   }
 })();
 
+/* ===== LEGACY INICIO ======================================================
+   Unico acceso a la copia antigua (Excel). A proposito no hay enlace en el
+   menu ni en la portada: hay que escribir ?tab=mercados-legacy en la URL.
+   El hash #mercados-legacy tambien funciona.
+   PROVISIONAL: borrar este bloque al retirar el flujo de Excel.
+   ========================================================================= */
+(function initTabHeatmaps() {
+  try {
+    const tab = new URLSearchParams(window.location.search).get('tab');
+    if (tab === 'heatmaps') showPage('heatmaps', true);
+  } catch (e) { /* navegador sin URLSearchParams: no se hace nada */ }
+})();
+
+(function initTabLegacy() {
+  try {
+    const tab = new URLSearchParams(window.location.search).get('tab');
+    if (tab === 'mercados-legacy') showPage('mercados-legacy', true);
+  } catch (e) { /* navegador sin URLSearchParams: no se hace nada */ }
+})();
+/* ===== LEGACY FIN ===== */
+
+
+/* =============================================================
+   HM — Heatmaps. Namespace EXCLUSIVO del apartado de mapas de
+   calor. Solo LEE heatmapData (assets/js/heatmapData.js, que
+   genera DASHBOARDS\MERCADO\INDICES\actualizar_heatmaps.py).
+   No modifica ninguna estructura ni funcion compartida.
+
+   El calculo de color, el reparto de rectangulos (squarify) y la
+   eleccion de tinta estan tomados TAL CUAL del disenyo exportado
+   "HEATMAP\Heatmap SP500.html": misma paleta, misma gamma, mismos
+   umbrales de contraste. No se han reconstruido a ojo.
+
+   Hay UN solo contenedor de mapa en la pagina. Cual se pinta lo
+   decide el selector de arriba, que se monta recorriendo
+   heatmapData.meta.mapas: anyadir un mapa nuevo es cosa del script
+   que genera los datos, no de la maquetacion.
+   ============================================================= */
+var HM = (function () {
+
+  /* ---------- TECHO DE LA ESCALA DE COLOR ----------
+     UNA SOLA ESCALA PARA TODOS LOS MAPAS, fijada a mano (no calculada): es lo
+     que se considera un movimiento fuerte en cada plazo.
+
+     Que sea la misma en todos los mapas es lo que permite COMPARAR UN MAPA CON
+     OTRO: un verde oscuro significa lo mismo en el S&P 500 que en Espacio.
+     La contrapartida es que en los grupos volatiles se sale de rango mucha
+     gente; es lo buscado, porque pasado el umbral el color deja de graduar y
+     lo que informa es la flecha, no cuanto mas ha subido.
+
+     El valor bueno es el que viene en heatmapData.meta.techos, que es donde lo
+     escribe el script. Esto de aqui abajo es el respaldo por si el fichero
+     fuese antiguo. Para ajustarlos, se tocan en el script y se regenera. */
+  const TECHOS = { '1D': 3, '1S': 7, '1M': 15, 'YTD': 40, '1A': 50 };
+  function techoDe(b) {
+    const m = meta().techos;
+    if (m && m[periodo]) return m[periodo];
+    // compatibilidad con ficheros anteriores, que llevaban el techo por mapa
+    if (b && b.techos && b.techos[periodo]) return b.techos[periodo];
+    return TECHOS[periodo] || 3;
+  }
+
+  const GAMMA   = 0.62;   // curva de la escala; igual que el disenyo
+  const GAP     = 6;      // separacion entre teselas, en px
+  const CABEZA  = 18;     // alto de la etiqueta de sector, en px
+
+  const ETIQUETAS = { '1D':'1 día', '1S':'1 semana', '1M':'1 mes', 'YTD':'Año en curso', '1A':'1 año' };
+  const MAPA_INICIAL    = 'sp500';
+  const PERIODO_INICIAL = '1S';
+  const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio',
+                 'agosto','septiembre','octubre','noviembre','diciembre'];
+
+  let mapa    = MAPA_INICIAL;
+  let periodo = PERIODO_INICIAL;
+  let zoom    = null;      // sector aislado, solo en mapas con varios sectores
+  let montado = false;
+  let ro      = null;
+
+  // ---------- color (portado del disenyo) ----------
+  function hex(h) { return [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)]; }
+  function mix(a, b, t) {
+    const A = hex(a), B = hex(b);
+    return 'rgb(' + A.map((v,i) => Math.round(v + (B[i]-v)*t)).join(',') + ')';
+  }
+  function rgbToHex(s) {
+    return '#' + s.match(/\d+/g).map(Number).map(v => v.toString(16).padStart(2,'0')).join('');
+  }
+  function lum(s) {
+    const n = s.match(/\d+/g).map(Number).map(v => {
+      const c = v/255;
+      return c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4);
+    });
+    return 0.2126*n[0] + 0.7152*n[1] + 0.0722*n[2];
+  }
+  function contraste(bg, fgL) {
+    const L = lum(bg);
+    return (Math.max(L,fgL) + 0.05) / (Math.min(L,fgL) + 0.05);
+  }
+  // Tinta o blanco: se elige el que mida mas contraste sobre la tesela.
+  function tintaSobre(bg) {
+    return contraste(bg, 1) >= contraste(bg, lum('rgb(30,26,22)'))
+      ? { fg: 'rgba(255,253,250,.98)', fg2: 'rgba(255,253,250,.92)' }
+      : { fg: '#1E1A16', fg2: '#1E1A16' };
+  }
+  // Evita la franja de luminancia donde ni la tinta ni el blanco llegan a 4.5:1.
+  function evitarFranja(bg) {
+    let out = bg, guarda = 0;
+    while (lum(out) > 0.15 && lum(out) < 0.27 && guarda++ < 20) out = mix(rgbToHex(out), '#000000', 0.06);
+    return out;
+  }
+  function color(p, techo) {
+    if (p === null || p === undefined || isNaN(p)) {
+      const bg = 'rgb(226,222,211)';
+      return Object.assign({ bg }, tintaSobre(bg));
+    }
+    if (Math.abs(p) < 0.12) {
+      const bg = 'rgb(232,227,215)';
+      return Object.assign({ bg }, tintaSobre(bg));
+    }
+    const t = Math.pow(Math.min(1, Math.abs(p)/techo), GAMMA);
+    const bg = evitarFranja(p >= 0
+      ? mix('#DDE6DD', '#0E4131', 0.26 + t*0.74)
+      : mix('#F0DAD0', '#77220F', 0.26 + t*0.74));
+    return Object.assign({ bg }, tintaSobre(bg));
+  }
+
+  // ---------- reparto de rectangulos (portado del disenyo) ----------
+  function peor(fila, total, w, h) {
+    const suma = fila.reduce((s,i) => s+i.v, 0);
+    const frac = suma/total;
+    const largo = (w >= h) ? h : w;
+    const grueso = (w >= h) ? w*frac : h*frac;
+    let mx = 0;
+    fila.forEach(it => {
+      const lado = largo*(it.v/suma) || 1e-6;
+      mx = Math.max(mx, grueso/lado, lado/grueso);
+    });
+    return mx;
+  }
+  /* ordenFila (opcional): reordena los elementos DENTRO de cada fila del
+     treemap justo antes de colocarlos. No toca los tamanyos: cada tesela
+     conserva el suyo, que sale de su valor; lo unico que cambia es en que
+     posicion de la fila se dibuja. Sirve para que un grupo pequenyo se lea de
+     un vistazo por rentabilidad sin dejar de dimensionarse por capitalizacion. */
+  function squarify(items, x, y, w, h, ordenFila) {
+    const res = [];
+    let resto = items.slice().sort((a,b) => b.v-a.v);
+    while (resto.length) {
+      const total = resto.reduce((s,i) => s+i.v, 0);
+      let fila = [resto[0]], i = 1, mejor = peor(fila, total, w, h);
+      while (i < resto.length) {
+        const cand = fila.concat([resto[i]]);
+        const wr = peor(cand, total, w, h);
+        if (wr <= mejor) { fila = cand; mejor = wr; i++; } else break;
+      }
+      const suma = fila.reduce((s,it) => s+it.v, 0);
+      const frac = suma/total;
+      if (ordenFila) fila = fila.slice().sort(ordenFila);
+      if (w >= h) {
+        const rw = w*frac; let cy = y;
+        fila.forEach(it => { const rh = h*(it.v/suma); res.push(Object.assign({}, it, {x, y:cy, w:rw, h:rh})); cy += rh; });
+        x += rw; w -= rw;
+      } else {
+        const rh = h*frac; let cx = x;
+        fila.forEach(it => { const rw = w*(it.v/suma); res.push(Object.assign({}, it, {x:cx, y, w:rw, h:rh})); cx += rw; });
+        y += rh; h -= rh;
+      }
+      resto = resto.slice(fila.length);
+    }
+    return res;
+  }
+
+  // ---------- utilidades ----------
+  function nf(v, dec) { return v.toFixed(dec).replace('.', ',').replace('-', '−'); }
+  function sgn(v, dec) { return (v > 0 ? '+' : '') + nf(v, dec); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  // La capitalizacion llega en millones de USD
+  function fmtCap(m) {
+    return m >= 1000 ? nf(m/1000, 1) + ' mil M$' : nf(m, 0) + ' M$';
+  }
+  function fechaLarga(iso) {
+    if (!iso) return '';
+    const d = new Date(iso + 'T12:00:00');
+    if (isNaN(d)) return iso;
+    return d.getDate() + ' de ' + MESES[d.getMonth()] + ' de ' + d.getFullYear();
+  }
+  function $(id) { return document.getElementById(id); }
+
+  function meta()     { return (typeof heatmapData !== 'undefined' && heatmapData.meta) || {}; }
+  function periodos() { return meta().periodos || ['1D','1S','1M','YTD','1A']; }
+  function mapas() {
+    // Lo normal es que el fichero traiga meta.mapas. Si no (fichero antiguo),
+    // se deducen de las claves que no son 'meta', para no quedarse en blanco.
+    if (meta().mapas && meta().mapas.length) return meta().mapas;
+    return Object.keys(heatmapData || {})
+      .filter(k => k !== 'meta' && heatmapData[k] && heatmapData[k].sectores)
+      .map(k => ({ id: k, etiqueta: (heatmapData[k].nombre || k) }));
+  }
+  function bloque()  { return (typeof heatmapData !== 'undefined' && heatmapData[mapa]) || null; }
+  function idxPeriodo() { const i = periodos().indexOf(periodo); return i < 0 ? 0 : i; }
+  function ret(fila) { const v = fila[3][idxPeriodo()]; return (v === null || v === undefined) ? null : v; }
+  // Marca del ETF de referencia: la pone el script en la posicion 9 de la fila
+  function esEtf(fila) { return fila[9] === 1; }
+  // Un mapa se puede aislar por sector solo si tiene mas de uno. Asi la regla
+  // vale tambien para los mapas que se anyadan mas adelante.
+  function esAislable() { const b = bloque(); return !!b && b.sectores.length > 1; }
+
+  // ---------- URL ----------
+  /* El mapa y el periodo viajan en la URL para poder guardar o compartir un
+     enlace directo. Se usa replaceState y no pushState: cambiar de periodo no
+     deberia llenar el historial de pasos atras. */
+  function sincronizarURL() {
+    try {
+      const u = new URL(window.location.href);
+      u.searchParams.set('tab', 'heatmaps');
+      u.searchParams.set('map', mapa);
+      u.searchParams.set('periodo', periodo);
+      history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+    } catch (e) { /* file:// en algunos navegadores no deja tocar el historial */ }
+  }
+  function limpiarURL() {
+    try {
+      const u = new URL(window.location.href);
+      if (!u.searchParams.has('tab') && !u.searchParams.has('map')) return;
+      ['tab', 'map', 'periodo'].forEach(k => u.searchParams.delete(k));
+      history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+    } catch (e) { /* idem */ }
+  }
+  function leerURL() {
+    try {
+      const q = new URLSearchParams(window.location.search);
+      const m = q.get('map');
+      if (m && heatmapData[m] && heatmapData[m].sectores) mapa = m;
+      const p = q.get('periodo');
+      if (p && periodos().indexOf(p) >= 0) periodo = p;
+    } catch (e) { /* sin URLSearchParams se queda con los valores por defecto */ }
+  }
+
+  // ---------- pie e informacion ----------
+  function tamanoCorto(b) {
+    if (b.equiponderado) return 'TAMAÑO = IGUAL PARA TODOS';
+    return b.pesoPor === 'capitalizacion' ? 'TAMAÑO = CAPITALIZACIÓN' : 'TAMAÑO = PESO EN EL ÍNDICE';
+  }
+
+  /* Contenido del icono de informacion. Es lo que antes estaba en el pie, mas
+     el detalle que no cabia: se consulta cuando hace falta y el resto del
+     tiempo no molesta. Se arma con los datos del mapa activo, asi que dice la
+     verdad de cada uno y no un texto generico. */
+  function pintarPanelInfo(b, techo, hayEtf) {
+    const panel = $('hm-info-panel');
+    if (!panel) return;
+    const t = String(techo).replace('.', ',');
+    const g = String(GAMMA).replace('.', ',');
+    let h = '';
+
+    h += '<h4>Color</h4><p>Verde sube, rojo baja, sobre la variación del periodo ' +
+         'elegido. El tono satura al llegar a <b>±' + t + '%</b>: a partir de ahí el color ' +
+         'ya no gradúa y la tesela se marca con una flecha <b>↑↓</b>. Por eso dos ' +
+         'teselas con porcentajes muy distintos pueden verse iguales. La escala ' +
+         'es la misma en todos los mapas, para poder compararlos entre sí ' +
+         '(curva γ ' + g + ').</p>';
+
+    if (b.equiponderado) {
+      h += '<h4>Tamaño</h4><p>Todas las teselas miden lo mismo.</p>';
+    } else if (b.pesoPor === 'capitalizacion') {
+      h += '<h4>Tamaño</h4><p>Capitalización de mercado, convertida a dólares para ' +
+           'que sea comparable, y comprimida con su <b>raíz cuadrada</b>: en bruto, ' +
+           'la mayor del grupo dejaría a las pequeñas en tiras invisibles. Hay ' +
+           'además un mínimo y un máximo por tesela.</p>';
+    } else {
+      h += '<h4>Tamaño</h4><p>Peso de cada valor en el índice, y de cada sector ' +
+           'como suma de los suyos.</p>';
+    }
+
+    if (hayEtf) {
+      h += '<h4>ETF de referencia</h4><p>La tesela con <b>contorno discontinuo</b> es un ' +
+           'ETF del sector, no una empresa del grupo. Se colorea y se ordena como ' +
+           'las demás para que sirva de línea divisoria, pero <b>no cuenta</b> en la ' +
+           'media ni en los contadores de suben y bajan.</p>';
+    }
+
+    if (b.avisoPie) {
+      h += '<h4>Husos horarios</h4><p>Este grupo mezcla plazas que no cierran a la vez: ' +
+           b.avisoPie.replace('1D NO ES SIMULTÁNEO: ', '').toLowerCase() + '. ' +
+           'La vista de <b>1 día</b> compara el último cierre de cada valor con el ' +
+           'anterior, y esos cierres no son simultáneos: una noticia de la tarde ' +
+           'americana entra hoy en unos y mañana en otros. En los demás periodos ' +
+           'el desfase es irrelevante.</p>';
+    }
+
+    const fecha = b.fechaDatos ? fechaLarga(b.fechaDatos) : '—';
+    h += '<h4>Datos</h4><p>Precios de Yahoo Finance, cierres sin ajustar, <b>en la moneda ' +
+         'de cada mercado</b> (sin convertir divisas). Último cierre: <b>' + fecha + '</b>.' +
+         (b.ponderado ? ' Composición y pesos del índice, del fichero de posiciones del SPY de State Street.' : '') +
+         '</p>';
+
+    panel.innerHTML = h;
+  }
+
+  function alternarPanelInfo(abrir) {
+    const panel = $('hm-info-panel'), btn = $('hm-info-btn');
+    if (!panel || !btn) return;
+    const nuevo = (abrir === undefined) ? panel.hidden : abrir;
+    panel.hidden = !nuevo;
+    btn.setAttribute('aria-expanded', nuevo ? 'true' : 'false');
+  }
+
+  // ---------- leyenda ----------
+  function pintarLeyenda(el, techo) {
+    let h = '';
+    for (let i = 0; i < 9; i++) {
+      h += '<div style="width:26px;height:9px;background:' + color(-techo + i*(techo*2)/8, techo).bg + '"></div>';
+    }
+    el.innerHTML = h;
+  }
+
+  // ---------- tooltip ----------
+  function crearTip(caja) {
+    let d = caja.querySelector('.hm-tip');
+    if (d) return d;
+    d = document.createElement('div');
+    d.className = 'hm-tip';
+    d.style.cssText = 'position:absolute;width:250px;box-sizing:border-box;padding:13px 15px 14px;' +
+      'background:#1F1C18;display:none;flex-direction:column;gap:4px;pointer-events:none;z-index:5;';
+    caja.appendChild(d);
+    return d;
+  }
+  function filaTip(k, v) {
+    return '<span>' + esc(k) + '</span><span style="color:#E7E1D5;text-align:right;">' + esc(v) + '</span>';
+  }
+  function mostrarTip(caja, rec, mx, my, W, H) {
+    const tip = crearTip(caja);
+    const p = rec.p;
+    let detalle = rec.etf ? filaTip('TIPO', 'ETF de referencia') : filaTip('SECTOR', rec.sector);
+    if (rec.mercado) detalle += filaTip('MERCADO', rec.mercado);
+    if (rec.precio !== undefined && rec.precio !== null) {
+      detalle += filaTip('ÚLTIMO', nf(rec.precio, 2) + ' ' + (rec.divisa || ''));
+    }
+    if (rec.cap !== null && rec.cap !== undefined) {
+      detalle += filaTip('CAPITALIZACIÓN', fmtCap(rec.cap));
+    }
+    if (rec.peso !== null && rec.peso !== undefined) {
+      detalle += filaTip('PESO EN EL ÍNDICE', nf(rec.peso, 2) + '%');
+      if (p !== null) detalle += filaTip('APORTE AL ÍNDICE', sgn(rec.peso/100*p, 3) + ' pp');
+    }
+    tip.innerHTML =
+      '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;">' +
+        '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:15px;font-weight:500;color:#F6F2E9;letter-spacing:.01em;">' + esc(rec.t) + '</span>' +
+        '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;color:' +
+          (p === null ? '#B7AF9F' : (p >= 0 ? '#63C7A2' : '#E58C74')) + ';">' +
+          (p === null ? '—' : sgn(p, 2) + '%') + '</span>' +
+      '</div>' +
+      '<span style="font-size:12.5px;color:#C9C2B4;line-height:1.3;">' + esc(rec.name) + '</span>' +
+      '<div style="height:1px;background:rgba(255,255,255,.14);margin:3px 0 1px;"></div>' +
+      '<div style="display:grid;grid-template-columns:auto auto;gap:3px 18px;font-family:\'IBM Plex Mono\',monospace;font-size:11px;color:#B7AF9F;letter-spacing:.04em;">' +
+        detalle +
+      '</div>';
+    const th = tip.offsetHeight || 168;
+    tip.style.display = 'flex';
+    tip.style.left = Math.min(Math.max(8, mx + 16), Math.max(8, W - 258)) + 'px';
+    tip.style.top  = Math.min(Math.max(8, my + 16), Math.max(8, H - th - 8)) + 'px';
+  }
+  function ocultarTip(caja) {
+    const t = caja.querySelector('.hm-tip');
+    if (t) t.style.display = 'none';
+  }
+
+  // ---------- pintado ----------
+  function pintar() {
+    const caja = $('hm-box');
+    const b = bloque();
+    if (!caja || !b) return;
+
+    const techo = techoDe(b);
+    const aislable = esAislable();
+    if (!aislable) zoom = null;
+
+    const W = Math.max(320, Math.round(caja.clientWidth || 1200));
+    const alto = b.compacto ? Math.min(340, Math.max(200, W*0.24))
+                            : Math.min(760, Math.max(380, W*0.58));
+    const H = Math.round(alto);
+    caja.style.height = H + 'px';
+
+    // --- cabecera ---
+    const todas = [];
+    b.sectores.forEach(s => s.filas.forEach(f => todas.push({ sector: s.nombre, f })));
+    /* El ETF de referencia se pinta y se ordena como uno mas, pero NO cuenta en
+       la media del grupo ni en los contadores de suben/bajan: esta para hacer de
+       linea divisoria (lo que queda por delante bate al sector, lo que queda por
+       detras no), no para promediar consigo mismo. */
+    const conDato = todas.filter(x => ret(x.f) !== null && !esEtf(x.f));
+    /* En el S&P 500 la cifra de cabecera es la rentabilidad del indice, o sea
+       la media PONDERADA por peso. En los grupos de nicho el peso es solo un
+       recurso de dibujo (raiz de la capitalizacion), asi que ponderar por el
+       daria un numero sin significado: ahi se usa la media simple. */
+    const pesoTot = conDato.reduce((a,x) => a + x.f[2], 0) || 1;
+    const idx = b.mediaSimple
+      ? conDato.reduce((a,x) => a + ret(x.f), 0) / (conDato.length || 1)
+      : conDato.reduce((a,x) => a + x.f[2]*ret(x.f), 0) / pesoTot;
+    const suben = conDato.filter(x => ret(x.f) > 0).length;
+
+    const elLbl = $('hm-idxlabel');
+    if (elLbl) elLbl.textContent = b.mediaSimple ? 'MEDIA DEL GRUPO' : 'ÍNDICE PONDERADO';
+    const elIdx = $('hm-idx');
+    if (elIdx) {
+      elIdx.textContent = sgn(idx, 2) + '%';
+      elIdx.style.cssText = "font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;" +
+        'font-variant-numeric:tabular-nums;color:' + (idx >= 0 ? '#14503D' : '#8E2B18') + ';';
+    }
+    const elBr = $('hm-breadth');
+    if (elBr) elBr.textContent = suben + ' suben / ' + (conDato.length - suben) + ' bajan';
+    if ($('hm-caplo')) $('hm-caplo').textContent = '−' + String(techo).replace('.', ',') + '%';
+    if ($('hm-caphi')) $('hm-caphi').textContent = '+' + String(techo).replace('.', ',') + '%';
+    if ($('hm-legend')) pintarLeyenda($('hm-legend'), techo);
+
+    const nombreMapa = (mapas().find(m => m.id === mapa) || {}).etiqueta || b.nombre || mapa;
+    if ($('hm-eyebrow')) $('hm-eyebrow').textContent = nombreMapa + ' · ' + (zoom ? 'sector' : periodo);
+    if ($('hm-title')) $('hm-title').textContent = zoom || (b.nombre || 'Mapa de calor');
+    if ($('hm-sub')) {
+      $('hm-sub').textContent = zoom
+        ? b.sectores.filter(s => s.nombre === zoom).reduce((a,s) => a + s.filas.length, 0) +
+          ' valores · pulsa la miga de pan o haz clic fuera del mapa para volver'
+        : (aislable ? 'Clic en un sector para aislarlo · pasa el cursor para el detalle'
+                    : 'Pasa el cursor por cualquier tesela para ver el detalle');
+    }
+    if ($('hm-note')) {
+      /* En el pie va SOLO lo que el mapa no cuenta por si mismo: que significa
+         el tamanyo, y donde esta el techo de la escala, que es lo que explica
+         que dos teselas con porcentajes distintos se vean iguales.
+         La gamma, el detalle de la raiz, las flechas, el ETF y las fuentes se
+         han movido al icono de informacion: siguen consultables, pero no
+         compiten con el mapa. */
+      $('hm-note').textContent = tamanoCorto(b) +
+        ' · COLOR = VARIACIÓN ' + periodo + ', TECHO ±' + String(techo).replace('.', ',') + '%' +
+        /* El aviso de husos solo tiene sentido en la vista de 1 dia: es la unica
+           que compara cierres entre si. En 1S o 1A la separacion de unas horas
+           entre plazas es irrelevante. */
+        (b.avisoPie && periodo === '1D' ? ' · ' + b.avisoPie : '');
+    }
+    pintarPanelInfo(b, techo, todas.some(x => esEtf(x.f)));
+
+    // --- miga de pan ---
+    const crumbWrap = $('hm-crumb-wrap');
+    if (crumbWrap) {
+      crumbWrap.style.display = zoom ? '' : 'none';
+      if (zoom && $('hm-crumb-txt')) {
+        $('hm-crumb-txt').innerHTML = esc(nombreMapa) +
+          ' <span style="opacity:.45;">&rsaquo;</span> ' + esc(zoom);
+      }
+    }
+
+    // --- fecha de los datos ---
+    const elF = $('hm-fecha');
+    if (elF) {
+      const partes = [];
+      if (b.fechaDatos) partes.push('Datos al ' + fechaLarga(b.fechaDatos));
+      if (meta().generado) partes.push('fichero generado el ' + meta().generado.replace(' ', ' a las '));
+      elF.textContent = partes.join(' · ');
+    }
+
+    // --- cuerpo ---
+    const mostrados = zoom ? b.sectores.filter(s => s.nombre === zoom) : b.sectores;
+    const cajas = squarify(
+      mostrados.map(s => ({ nombre: s.nombre, filas: s.filas, v: s.filas.reduce((a,c) => a+c[2], 0) })),
+      0, 0, W, H
+    );
+
+    let html = '';
+    const registros = {};
+    let nTesela = 0;
+
+    cajas.forEach(bx => {
+      const conD = bx.filas.filter(f => ret(f) !== null);
+      const pesoSec = conD.reduce((a,f) => a+f[2], 0) || 1;
+      const spct = conD.reduce((a,f) => a + f[2]*ret(f), 0) / pesoSec;
+      const innerW = Math.max(1, bx.w - GAP*2);
+
+      html += '<div ' + (aislable ? 'data-sector="' + esc(bx.nombre) + '" ' : '') +
+        'style="position:absolute;left:' + (bx.x + GAP) + 'px;top:' + (bx.y + GAP) + 'px;' +
+        'width:' + innerW + 'px;height:' + CABEZA + 'px;line-height:' + CABEZA + 'px;' +
+        'display:flex;align-items:center;justify-content:space-between;overflow:hidden;' +
+        'white-space:nowrap;' + (aislable ? 'cursor:pointer;' : '') +
+        "font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;" +
+        'text-transform:uppercase;color:#6f6455;">' +
+        '<span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(bx.nombre) + '</span>' +
+        (innerW > 150 ? '<span style="flex-shrink:0;margin-left:12px;font-variant-numeric:tabular-nums;' +
+          'letter-spacing:.02em;color:' + (spct >= 0 ? '#1B5C46' : '#8E3A21') + ';">' + sgn(spct, 2) + '%</span>' : '') +
+        '</div>';
+
+      /* En los grupos equiponderados todas las teselas miden lo mismo, asi que
+         el orden no lo decide el tamanyo: se ordenan por rentabilidad del
+         periodo activo, de mayor a menor, y el mapa se lee de un vistazo.
+         squarify ordena por valor y con valores iguales el sort de JS es
+         estable, asi que este orden se respeta. */
+      let filas = bx.filas.map(f => ({ t: f[0], name: f[1], v: f[2], p: ret(f), fila: f }));
+      if (b.equiponderado) {
+        filas.sort((x, y) => {
+          if (x.p === null) return 1;
+          if (y.p === null) return -1;
+          return y.p - x.p;
+        });
+      }
+
+      /* En los grupos de nicho las teselas de cada fila se colocan de mayor a
+         menor rentabilidad del periodo activo. En el S&P 500 no: alli el orden
+         que manda es el de sectores, y reordenar dentro de cada fila solo
+         emborronaria la lectura por bloques. */
+      const ordenFila = b.ponderado ? null : (m, n) => {
+        if (m.p === null) return 1;
+        if (n.p === null) return -1;
+        return n.p - m.p;
+      };
+      squarify(filas, bx.x + GAP, bx.y + GAP + CABEZA + 4, innerW,
+               Math.max(1, bx.h - GAP*2 - CABEZA - 4), ordenFila).forEach(it => {
+        const w = Math.max(0, it.w - GAP), h = Math.max(0, it.h - GAP);
+        if (w <= 0 || h <= 0) return;
+        const c = color(it.p, techo);
+        const fs = Math.max(8.5, Math.min(44, Math.sqrt(w*h)/4.0, (w - 20)/(0.62*Math.max(3, it.t.length))));
+        const tl = w > 54 && h > 39;
+        const dec = fs < 15 ? 1 : 2;
+        const id = 'hm-t' + (nTesela++);
+        registros[id] = {
+          t: it.t, name: it.name, sector: bx.nombre, p: it.p,
+          // El peso solo se ensenya cuando significa algo: en el indice. En los
+          // nichos es tamanyo de dibujo, y ahi lo util es la capitalizacion.
+          peso: b.ponderado ? it.v : null,
+          mercado: it.fila[4] || null, divisa: it.fila[5] || null,
+          precio: it.fila[6], cap: (it.fila[8] === undefined ? null : it.fila[8]),
+          etf: esEtf(it.fila)
+        };
+        /* El ETF lleva un contorno discontinuo por dentro y una etiqueta, para
+           que se vea de un golpe que no es una empresa del grupo. Se colorea con
+           su rentabilidad como las demas: el contorno distingue sin falsear. */
+        const etf = esEtf(it.fila);
+        html += '<div id="' + id + '" data-hm="1"' + (aislable ? ' data-sector="' + esc(bx.nombre) + '"' : '') +
+          ' style="position:absolute;left:' + it.x + 'px;top:' + it.y + 'px;width:' + w + 'px;height:' + h + 'px;' +
+          'background:' + c.bg + ';display:flex;flex-direction:column;' +
+          'align-items:' + (tl ? 'flex-start' : 'center') + ';justify-content:' + (tl ? 'flex-end' : 'center') + ';' +
+          'padding:' + (tl ? '0 10px 9px' : '0') + ';box-sizing:border-box;overflow:hidden;' +
+          (etf ? 'outline:2px dashed ' + c.fg2 + ';outline-offset:-5px;' : '') +
+          (aislable ? 'cursor:pointer;' : '') + 'transition:filter .12s ease;">' +
+          (etf && h > 30 && w > 46
+            ? '<span style="position:absolute;top:5px;left:7px;font-family:\'IBM Plex Mono\',monospace;' +
+              'font-size:9px;letter-spacing:.12em;line-height:1;color:' + c.fg2 + ';opacity:.9;">ETF</span>' : '') +
+          (it.p !== null && Math.abs(it.p) > techo && h > 34 && w > 42
+            ? '<span style="position:absolute;top:5px;right:6px;font-family:\'IBM Plex Mono\',monospace;' +
+              'font-size:10px;line-height:1;color:' + c.fg2 + ';opacity:.85;">' + (it.p > 0 ? '↑' : '↓') + '</span>' : '') +
+          (w > 26 && h > 15
+            ? '<span style="font-family:\'IBM Plex Sans\',sans-serif;font-weight:600;font-size:' + fs + 'px;' +
+              'line-height:1.05;color:' + c.fg + ';letter-spacing:-.01em;">' + esc(it.t) + '</span>' : '') +
+          (h > 34 && w > 42 && it.p !== null
+            ? '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:' + Math.max(8, fs*0.55) + 'px;' +
+              'line-height:1.1;color:' + c.fg2 + ';font-variant-numeric:tabular-nums;">' + sgn(it.p, dec) + '%</span>' : '') +
+          /* Nombre de la empresa, solo si la tesela da de si. Un ticker como
+             0303.HK o 9992.HK no dice nada por si solo; en las teselas
+             pequenyas no cabe y se deja igual que antes, con ticker y %. */
+          (h > 62 && w > 78 && it.name
+            ? '<span style="font-family:\'IBM Plex Sans\',sans-serif;font-size:' +
+              Math.max(9, Math.min(13, fs*0.42)) + 'px;line-height:1.25;color:' + c.fg2 + ';' +
+              'opacity:.82;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;' +
+              'margin-top:2px;">' + esc(it.name) + '</span>' : '') +
+          '</div>';
+      });
+    });
+
+    caja.innerHTML = html;
+
+    caja.onmouseleave = () => ocultarTip(caja);
+    caja.onmousemove = e => {
+      const el = e.target.closest('[data-hm]');
+      if (!el) { ocultarTip(caja); return; }
+      const r = caja.getBoundingClientRect();
+      mostrarTip(caja, registros[el.id], e.clientX - r.left, e.clientY - r.top, W, H);
+    };
+    caja.onclick = aislable ? (e => {
+      const el = e.target.closest('[data-sector]');
+      if (!el) return;
+      /* Se marca el evento como "nacido dentro del mapa". Hace falta porque
+         justo debajo se repinta la caja entera: cuando el clic siga subiendo
+         hasta el manejador de "clic fuera", el elemento pulsado ya no estara
+         en el DOM y su closest('#hm-box') daria null, de modo que el sector
+         se aislaria y se soltaria en el mismo clic. */
+      e._hmDentroDelMapa = true;
+      zoom = zoom ? null : el.getAttribute('data-sector');
+      ocultarTip(caja);
+      pintar();
+    }) : null;
+  }
+
+  // ---------- selectores ----------
+  function pintarSelectorMapas() {
+    const cont = $('hm-mapas');
+    if (!cont) return;
+    cont.innerHTML = mapas().map(m =>
+      '<button class="hm-mbtn' + (m.id === mapa ? ' active' : '') + '" data-m="' + esc(m.id) + '">' +
+      esc(m.etiqueta) + '</button>').join('');
+    cont.onclick = e => {
+      const b = e.target.closest('.hm-mbtn');
+      if (!b) return;
+      mapa = b.getAttribute('data-m');
+      zoom = null;                       // cambiar de mapa nunca hereda el sector aislado
+      alternarPanelInfo(false);
+      cont.querySelectorAll('.hm-mbtn').forEach(x => x.classList.toggle('active', x === b));
+      sincronizarURL();
+      pintar();
+    };
+  }
+  function pintarSelectorPeriodos() {
+    const cont = $('hm-periods');
+    if (!cont) return;
+    cont.innerHTML = periodos().map(p =>
+      '<button class="hm-pbtn' + (p === periodo ? ' active' : '') + '" data-p="' + p + '">' +
+      esc(ETIQUETAS[p] || p) + '</button>').join('');
+    cont.onclick = e => {
+      const b = e.target.closest('.hm-pbtn');
+      if (!b) return;
+      periodo = b.getAttribute('data-p');
+      cont.querySelectorAll('.hm-pbtn').forEach(x => x.classList.toggle('active', x === b));
+      sincronizarURL();
+      pintar();
+    };
+  }
+
+  function salirDelSector() {
+    if (!zoom) return;
+    zoom = null;
+    pintar();
+  }
+
+  // ---------- entrada y salida del apartado ----------
+  function mostrar() {
+    if (typeof heatmapData === 'undefined') {
+      const c = $('hm-box');
+      if (c) c.innerHTML = '<div style="padding:40px 0;font-family:\'IBM Plex Mono\',monospace;' +
+        'font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9a9084;">' +
+        'No se ha podido cargar heatmapData.js</div>';
+      return;
+    }
+    if (!montado) {
+      montado = true;
+      leerURL();
+      pintarSelectorMapas();
+      pintarSelectorPeriodos();
+
+      // Redibuja al cambiar el ancho: el reparto de rectangulos depende de el
+      const caja = $('hm-box');
+      if (caja && window.ResizeObserver) {
+        let ancho = caja.clientWidth;
+        ro = new ResizeObserver(() => {
+          const w = caja.clientWidth;
+          if (Math.abs(w - ancho) > 2) { ancho = w; pintar(); }
+        });
+        ro.observe(caja);
+      }
+
+      document.addEventListener('keydown', e => {
+        if (e.key !== 'Escape') return;
+        alternarPanelInfo(false);
+        salirDelSector();
+      });
+
+      /* Clic fuera del mapa: tambien sale del sector aislado. Se excluyen los
+         selectores y la propia miga de pan, que tienen su manejador. */
+      document.addEventListener('click', e => {
+        if (!zoom) return;
+        if (e._hmDentroDelMapa) return;            // el clic ha sido en el mapa
+        if (e.target.closest('#hm-box') || e.target.closest('#hm-mapas') ||
+            e.target.closest('#hm-periods') || e.target.closest('#hm-crumb-wrap')) return;
+        salirDelSector();
+      });
+
+      const crumb = $('hm-crumb');
+      if (crumb) crumb.onclick = salirDelSector;
+
+      const btnInfo = $('hm-info-btn');
+      if (btnInfo) btnInfo.onclick = e => { e.stopPropagation(); alternarPanelInfo(); };
+      // Se cierra al pulsar fuera o con Escape, como el resto de desplegables
+      document.addEventListener('click', e => {
+        if (!e.target.closest('#hm-info-panel') && !e.target.closest('#hm-info-btn')) {
+          alternarPanelInfo(false);
+        }
+      });
+    }
+    sincronizarURL();
+    pintar();
+  }
+
+  /* Al irse a otra pestana se suelta el sector aislado y se limpian los
+     parametros de la URL: volver a Heatmaps mas tarde no deberia reaparecer
+     dentro de un sector de hace media hora. */
+  function salir() {
+    zoom = null;
+    limpiarURL();
+  }
+
+  return { mostrar: mostrar, salir: salir, pintar: pintar, TECHOS: TECHOS };
+})();
+
+/* Si se ha entrado directamente por ?tab=heatmaps o #heatmaps, showPage() ya
+   activo la pagina antes de que existiera HM y no pudo pintarla. Se pinta ahora. */
+(function () {
+  const p = document.getElementById('page-heatmaps');
+  if (p && p.classList.contains('active')) HM.mostrar();
+})();
+
+
 /* =============================================================
    HP — Home Page (Inicio). Namespace EXCLUSIVO de la pagina de
-   Inicio. Solo LEE datos ya existentes (mktData, fredHistorical,
+   Inicio. Solo LEE datos ya existentes (mktDataV2, fredHistorical,
    articles, recaps, watchlist, twrData, itasTwrData). No modifica
    ninguna estructura ni funcion compartida.
    ============================================================= */
@@ -16996,7 +18198,7 @@ const HP = (function () {
   // ---------- acceso a series reales ----------
   function assetPrices(group, ticker) {
     try {
-      const a = mktData[group].activos.find(x => x.ticker === ticker);
+      const a = mktDataV2[group].activos.find(x => x.ticker === ticker);
       return (a && a.prices && a.prices.length) ? a.prices : null;
     } catch (e) { return null; }
   }
@@ -21050,8 +22252,8 @@ MC.init();
     // Macro: fecha oficial del snapshot
     if (typeof macroCycle !== 'undefined' && macroCycle.fechaOficial) anotar(macroCycle.fechaOficial.iso);
     // Mercados: ultimo cierre de la serie de referencia
-    if (typeof mktData !== 'undefined' && mktData.indices && mktData.indices.activos) {
-      const spy = mktData.indices.activos.filter(function (a) { return a.ticker === 'SPY'; })[0];
+    if (typeof mktDataV2 !== 'undefined' && mktDataV2.indices && mktDataV2.indices.activos) {
+      const spy = mktDataV2.indices.activos.filter(function (a) { return a.ticker === 'SPY'; })[0];
       if (spy && spy.prices && spy.prices.length) anotar(spy.prices[spy.prices.length - 1][0]);
     }
     // Carteras: ultimo punto de TWR
