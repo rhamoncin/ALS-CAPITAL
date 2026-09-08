@@ -2,44 +2,22 @@
 <html lang="es">
 <!--
   ===========================================================================
-  AVISO TEMPORAL - FUENTE DE DATOS DE LA PESTANA MERCADOS   (05/09/2026)
+  FUENTE DE DATOS DE LA PESTANA MERCADOS   (08/09/2026)
   ===========================================================================
-  La pestana "Mercados" lee ahora de assets/js/mktDataV2.js, que se genera
-  con yfinance (DASHBOARDS\MERCADO\INDICES\actualizar_mercados_yf.py).
+  TODO el sitio lee de assets/js/mktDataV2.js, que genera con yfinance el
+  script DASHBOARDS\MERCADO\INDICES\actualizar_mercados_yf.py: la pestana
+  Mercados, los graficos de la portada (modulo HP) y la fecha de "ultimo
+  cierre" del pie.
 
-  La fuente antigua (el Excel via STOCKHISTORY -> mktData.js) sigue viva pero
-  YA NO SE VE: queda como red de seguridad en una pagina oculta, sin enlace en
-  el menu, accesible solo por  ?tab=mercados-legacy  (o #mercados-legacy).
+  El flujo antiguo (Excel via STOCKHISTORY -> mktData.js) y la pagina oculta
+  ?tab=mercados-legacy que lo mostraba se RETIRARON el 08/09/2026, tras cuatro
+  dias seguidos de funcionamiento correcto de la fuente nueva.
 
-  ESTO ES PROVISIONAL. Cuando se confirme que la fuente nueva va bien, hay que
-  borrar la pagina legacy y todo el flujo de Excel. Que hay que quitar:
+  OJO CON EL EXCEL: "Mercados - Indices.xlsx" NO se ha borrado, y no se puede
+  borrar. Lo que se retiro son sus hojas de PRECIOS; su hoja Activos es la que
+  sigue diciendole al script nuevo que activos hay.
 
-    EN ESTE FICHERO (buscar los marcadores LEGACY INICIO / LEGACY FIN):
-      1. El <script src="assets/js/mktData.js"> y su comentario.
-      2. El bloque <div id="page-mercados-legacy"> entero.
-      3. La linea de showPage() que atiende a 'mercados-legacy'.
-      4. El bloque initTabLegacy() del enrutado por ?tab=.
-      5. En los ayudantes: simplificar mktBase/mktUid/mktSrc/mktNs/compSt/
-         compSfx quitando la rama 'legacy:', y dejar mktSrc devolviendo
-         siempre mktDataV2. Quitar tambien compStateLegacy y las claves
-         'legacy:' de mktState.
-      6. En renderComparador/refreshComparador/etc., quitar el parametro ns.
-
-    FUERA DE ESTE FICHERO:
-      7. assets/js/mktData.js
-      8. DASHBOARDS\MERCADO\INDICES\actualizar_mercados.py  (y su carpeta
-         backups\, y github_token.txt si no lo usa nada mas)
-      9. El Excel "Mercados - Indices.xlsx" solo si no se quiere conservar
-         como archivo historico. OJO: la pestana Activos de ese Excel es la
-         que sigue alimentando la LISTA de activos del script nuevo, asi que
-         el Excel NO se puede borrar sin sustituir antes esa lista.
-
-  La PORTADA ya esta migrada (05/09/2026): sus mini-graficos, la miniatura de
-  la tarjeta de Mercados y la fecha de "ultimo cierre" leen tambien de
-  mktDataV2.js. TODO el sitio usa ya la misma fuente, y el unico sitio que
-  queda leyendo mktData.js es la pagina oculta ?tab=mercados-legacy.
-
-  Detalle completo en:  AA_INSTRUCCIONES\MERCADOS\PENDIENTE_borrar_flujo_excel.md
+  Detalle en:  AA_INSTRUCCIONES\MERCADOS\flujo_update_mercados_indices.md
   ===========================================================================
 -->
 <head>
@@ -3881,44 +3859,6 @@
 </div>
 
 
-<!-- ===== LEGACY INICIO =======================================================
-     Mercados (Excel) - la fuente ANTIGUA, conservada como red de seguridad.
-     Lee de mktData.js, que genera actualizar_mercados.py desde el Excel via
-     STOCKHISTORY. NO tiene enlace en el menu a proposito: se llega solo por
-     ?tab=mercados-legacy (o #mercados-legacy).
-     PROVISIONAL: borrar este bloque entero cuando se retire el flujo de Excel.
-     ========================================================================== -->
-<div id="page-mercados-legacy" class="page">
-  <div style="padding:48px 48px 16px;max-width:1400px;margin:0 auto">
-    <div class="section-label">Datos de mercado &middot; fuente Excel (STOCKHISTORY)</div>
-    <div class="section-title">Mercados <span style="font-size:0.5em;color:var(--text-light);font-weight:400">legacy</span></div>
-    <div class="divider"></div>
-  </div>
-  <div style="max-width:1400px;margin:0 auto;padding:0 48px 48px">
-    <div style="background:#f4f0ea;border:1px solid #d9cfc2;border-radius:4px;padding:12px 16px;margin-bottom:28px;font-size:0.78rem;color:var(--text-mid);line-height:1.6">
-      <strong>Fuente antigua, fuera de servicio.</strong> Esta copia lee del Excel
-      y se conserva solo como respaldo mientras se comprueba la fuente nueva.
-      La pesta&ntilde;a <em>Mercados</em> del men&uacute; es la buena y toma los precios de
-      Yahoo Finance. Estos datos solo se actualizan si se ejecuta a mano el
-      script antiguo, as&iacute; que lo normal es que vayan por detr&aacute;s.
-    </div>
-    <div style="display:flex;gap:4px;margin-bottom:32px;border-bottom:2px solid var(--border)">
-      <button class="mktab active" onclick="showMkTab('legacy:indices',this)">&Iacute;ndices</button>
-      <button class="mktab" onclick="showMkTab('legacy:factores',this)">Factores</button>
-      <button class="mktab" onclick="showMkTab('legacy:sectores',this)">Sectores USA</button>
-      <button class="mktab" onclick="showMkTab('legacy:commodities',this)">Commodities</button>
-      <button class="mktab" onclick="showMkTab('legacy:rentafija',this)">Renta Fija</button>
-      <button class="mktab mktab-comparador" onclick="showMkTab('legacy:comparador',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:6px;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>Comparador</button>
-    </div>
-    <div id="mkt-legacy-indices" class="mkt-panel"></div>
-    <div id="mkt-legacy-factores" class="mkt-panel" style="display:none"></div>
-    <div id="mkt-legacy-sectores" class="mkt-panel" style="display:none"></div>
-    <div id="mkt-legacy-commodities" class="mkt-panel" style="display:none"></div>
-    <div id="mkt-legacy-rentafija" class="mkt-panel" style="display:none"></div>
-    <div id="mkt-legacy-comparador" class="mkt-panel" style="display:none"></div>
-  </div>
-</div>
-<!-- ===== LEGACY FIN ===== -->
 
 
 <!-- ===================== HEATMAPS ===================== -->
@@ -7673,12 +7613,8 @@
 <!-- Fuente en produccion: yfinance -->
 <script src="assets/js/mktDataV2.js?v=20260905"></script>
 <script src="assets/js/heatmapData.js?v=20260905"></script>
-<!-- LEGACY INICIO: fuente antigua (Excel). Solo la usa la pagina oculta
-     ?tab=mercados-legacy y, de momento, la portada. Borrar al retirar el flujo. -->
-<script src="assets/js/mktData.js?v=20260810b"></script>
-<!-- LEGACY FIN -->
 <!-- El parametro ?v= fuerza a los navegadores a recargar los datos cuando se
-     regenera el fichero. Subir el numero al actualizar el Excel. -->
+     regenera el fichero. Subir el numero al cambiar la estructura del JS. -->
 <script src="assets/js/macroCycle.js?v=6b9936c244"></script>
 <script src="assets/js/rentaFijaData.js"></script>
 <script src="assets/data/energy/eia_oil_production_data.js"></script>
@@ -10858,7 +10794,6 @@ function showPage(id, skipHistory) {
   }
   if (id === 'home') { const p = document.getElementById('home-mkt-indices'); if (p && !p.dataset.rendered) { renderHomeMktPanel('indices'); p.dataset.rendered='1'; } }
   if (id === 'mercados') { const p = document.getElementById('mkt-indices'); if (p && !p.dataset.rendered) { renderMktPanel('indices'); p.dataset.rendered='1'; } }
-  /* LEGACY */ if (id === 'mercados-legacy') { const p = document.getElementById('mkt-legacy-indices'); if (p && !p.dataset.rendered) { renderMktPanel('legacy:indices'); p.dataset.rendered='1'; } }
   /* HM se define mas abajo en este mismo script. Si se entra directamente
      por ?tab=heatmaps o #heatmaps, showPage() corre ANTES de que exista, asi
      que aqui solo se llama si ya esta; del pintado inicial en ese caso se
@@ -13341,53 +13276,31 @@ function openArticle(id) {
 
 
 
-/* ===== LEGACY INICIO ======================================================
-   Resolucion de la fuente de datos de la pestana Mercados.
-
-   En PRODUCCION la pestana lee de mktDataV2.js (yfinance). La fuente antigua
-   (mktData.js, generado del Excel) queda accesible solo por la pagina oculta
-   ?tab=mercados-legacy.
-
-   Un gid con prefijo 'legacy:' (por ejemplo 'legacy:indices') resuelve contra
-   mktData y contra los paneles #mkt-legacy-*. Sin prefijo resuelve contra
-   mktDataV2 y contra los paneles de siempre (#mkt-indices...), cuyos
-   identificadores no han cambiado. Asi las dos paginas comparten TODO el
-   codigo de calculo y de graficos, y lo unico que cambia es el origen.
-
-   PROVISIONAL: al retirar el flujo de Excel, quitar la rama 'legacy:' de las
-   seis funciones (mktSrc pasa a devolver siempre mktDataV2[gid]), borrar
-   compStateLegacy y las claves 'legacy:' de mktState.
-   ========================================================================= */
-function mktBase(gid) { return gid.indexOf('legacy:') === 0 ? gid.slice(7) : gid; }
-function mktUid(gid)  { return gid.indexOf('legacy:') === 0 ? 'legacy-' + gid.slice(7) : gid; }
-function mktSrc(gid)  { return gid.indexOf('legacy:') === 0 ? mktData[gid.slice(7)] : mktDataV2[gid]; }
-function mktNs(gid)   { return gid.indexOf('legacy:') === 0 ? 'legacy' : ''; }
-function compSt(ns)   { return ns === 'legacy' ? compStateLegacy : compState; }
-function compSfx(ns)  { return ns === 'legacy' ? '-legacy' : ''; }
-/* ===== LEGACY FIN ===== */
+/* Resolucion de la fuente de datos de la pestana Mercados.
+   Queda una sola fuente, mktDataV2.js (yfinance). La funcion se conserva
+   porque la usan renderComparador() y getCompPrices(), que reciben el gid ya
+   resuelto y no tienen por que saber de donde sale. */
+function mktSrc(gid) { return mktDataV2[gid]; }
 
 // ===== MERCADOS STATE =====
 const mktState = {};
 ['indices','factores','sectores','commodities','rentafija'].forEach(g => {
   mktState[g] = { activo: null, periodo: 'YTD', modo: 'ret', chart: null, homeChart: null, sortCol: null, sortDir: 1 };
-  /* LEGACY */ mktState['legacy:' + g] = { activo: null, periodo: 'YTD', modo: 'ret', chart: null, homeChart: null, sortCol: null, sortDir: 1 };
 });
 // Render home markets chart (initial page)
 (function(){ const p = document.getElementById('home-mkt-indices'); if (p && !p.dataset.rendered) { renderHomeMktPanel('indices'); p.dataset.rendered='1'; } })();
 
 // ===== SHOW TAB =====
 function showMkTab(id, btn) {
-  /* Los botones y paneles se buscan dentro de la pagina del boton pulsado,
-     para que la pestana publica y la legacy no se pisen entre si. */
   const root = (btn && btn.closest('.page')) || document;
   root.querySelectorAll('.mktab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   root.querySelectorAll('.mkt-panel').forEach(p => p.style.display = 'none');
-  const panel = document.getElementById('mkt-' + mktUid(id));    /* V2 */
+  const panel = document.getElementById('mkt-' + id);
   panel.style.display = 'block';
   if (!panel.dataset.rendered) {
-    if (mktBase(id) === 'comparador') renderComparador(mktNs(id)); /* V2 */
-    else if (mktBase(id) === 'macro') renderMacro();               /* V2 */
+    if (id === 'comparador') renderComparador();
+    else if (id === 'macro') renderMacro();
     else renderMktPanel(id);
     panel.dataset.rendered = '1';
   }
@@ -13441,8 +13354,8 @@ const MKT_NOTA_RF = `<div style="font-size:0.7rem;color:var(--text-light);font-s
 
 // ===== RENDER PANEL =====
 function renderMktPanel(gid) {
-  const grupo = mktSrc(gid);                                     /* V2 */
-  const panel = document.getElementById('mkt-' + mktUid(gid));   /* V2 */
+  const grupo = mktSrc(gid);
+  const panel = document.getElementById('mkt-' + gid);
   const activos = grupo.activos;
   if (!mktState[gid].activo && activos.length) mktState[gid].activo = activos[0].ticker + '_' + activos[0].nombre;
 
@@ -13450,7 +13363,7 @@ function renderMktPanel(gid) {
 
   // Build table
   let tableHtml = `<div style="overflow-x:auto;margin-bottom:32px">
-    <table class="mkt-table" id="mkt-tbl-${mktUid(gid)}">
+    <table class="mkt-table" id="mkt-tbl-${gid}">
       <thead><tr>
         <th onclick="sortMktTable('${gid}','nombre')">Activo</th>
         <th onclick="sortMktTable('${gid}','ticker')">Ticker</th>
@@ -13475,7 +13388,7 @@ function renderMktPanel(gid) {
   }
   tableHtml += `</tbody></table></div>`;
   // Nota metodologica: solo en Renta Fija, donde el dato necesita el matiz.
-  if (mktBase(gid) === 'rentafija') tableHtml += MKT_NOTA_RF;   /* V2 */
+  if (gid === 'rentafija') tableHtml += MKT_NOTA_RF;
 
   // Build chart section
   const activoOpts = activos.map(a => {
@@ -13491,15 +13404,15 @@ function renderMktPanel(gid) {
 
   const chartHtml = `<div class="mkt-chart-box">
     <div class="mkt-controls">
-      <select class="mkt-select" id="mkt-sel-${mktUid(gid)}" onchange="setMktActivo('${gid}',this.value)">${activoOpts}</select>
-      <div class="period-btns" id="mkt-periods-${mktUid(gid)}">${periodBtns}</div>
+      <select class="mkt-select" id="mkt-sel-${gid}" onchange="setMktActivo('${gid}',this.value)">${activoOpts}</select>
+      <div class="period-btns" id="mkt-periods-${gid}">${periodBtns}</div>
       <div class="toggle-btns">
         <button class="tbtn ${mktState[gid].modo==='ret'?'active':''}" onclick="setMktModo('${gid}','ret',this)">Rentabilidad</button>
         <button class="tbtn ${mktState[gid].modo==='precio'?'active':''}" onclick="setMktModo('${gid}','precio',this)">Precio</button>
       </div>
     </div>
     <div style="font-size:0.7rem;color:var(--text-light);margin-bottom:20px;font-style:italic">Serie histórica iniciada en 2018</div>
-    <canvas id="mkt-chart-${mktUid(gid)}" height="80"></canvas>
+    <canvas id="mkt-chart-${gid}" height="80"></canvas>
   </div>`;
 
   panel.innerHTML = tableHtml + chartHtml;
@@ -13509,7 +13422,7 @@ function renderMktPanel(gid) {
 // ===== CHART =====
 function renderMktChart(gid) {
   const state = mktState[gid];
-  const grupo = mktSrc(gid);                                     /* V2 */
+  const grupo = mktSrc(gid);
   const activo = grupo.activos.find(a => (a.ticker + '_' + a.nombre) === state.activo);
   if (!activo) return;
 
@@ -13543,7 +13456,7 @@ function renderMktChart(gid) {
     yLabel = 'Rentabilidad acumulada (%)';
   }
 
-  const canvas = document.getElementById('mkt-chart-' + mktUid(gid));   /* V2 */
+  const canvas = document.getElementById('mkt-chart-' + gid);
   if (!canvas) return;
   if (state.chart) state.chart.destroy();
 
@@ -13593,7 +13506,7 @@ function setMktActivo(gid, val) {
 
 function setMktPeriod(gid, p, btn) {
   mktState[gid].periodo = p;
-  document.querySelectorAll('#mkt-periods-' + mktUid(gid) + ' .pbtn').forEach(b => b.classList.remove('active'));   /* V2 */
+  document.querySelectorAll('#mkt-periods-' + gid + ' .pbtn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderMktChart(gid);
 }
@@ -13610,7 +13523,7 @@ function sortMktTable(gid, col) {
   const state = mktState[gid];
   if (state.sortCol === col) state.sortDir *= -1;
   else { state.sortCol = col; state.sortDir = 1; }
-  const grupo = mktSrc(gid);                                     /* V2 */
+  const grupo = mktSrc(gid);
   const periods = ['1W','1M','3M','6M','YTD','1Y','3Y','5Y'];
   grupo.activos.sort((a, b) => {
     let va, vb;
@@ -13622,7 +13535,7 @@ function sortMktTable(gid, col) {
     return state.sortDir * (va - vb);
   });
   // re-render panel
-  const panel = document.getElementById('mkt-' + mktUid(gid));   /* V2 */
+  const panel = document.getElementById('mkt-' + gid);
   panel.dataset.rendered = '';
   renderMktPanel(gid);
 }
@@ -13634,23 +13547,10 @@ function sortMktTable(gid, col) {
 // ===== COMPARADOR =====
 const COMP_COLORS = ['#6B2737','#2d7a4f','#1a6b8a','#8B6914','#7a2d6f','#2d4a7a','#8a4a1a','#3d7a2d'];
 let compState = { selected: [], periodo: 'YTD', chart: null };
-/* Estado propio de la pagina legacy. Las dos comparten funciones pero no
-   seleccion: se pueden tener activos distintos elegidos en cada una. */
-let compStateLegacy = { selected: [], periodo: 'YTD', chart: null };
 
-/* El comparador esta parametrizado por 'ns' (namespace): '' es la pestana
-   Mercados publica (yfinance) y 'legacy' la copia oculta que lee del Excel.
-     - compSt(ns)  -> el estado que toca
-     - compSfx(ns) -> sufijo de los id del DOM ('' o '-v2')
-   Con ns='' el sufijo es vacio, asi que todos los id son exactamente los de
-   antes y el comportamiento de la pestana actual no cambia.
-   El namespace viaja tambien dentro del gid guardado en cada seleccion
-   ('legacy:indices'), de modo que getCompPrices() sabe de que fuente leer sin
-   necesidad de parametros extra. */
-function renderComparador(ns) {
-  ns = ns || '';                                     /* V2 */
-  const sfx = compSfx(ns), st = compSt(ns);          /* V2 */
-  const panel = document.getElementById(ns === 'legacy' ? 'mkt-legacy-comparador' : 'mkt-comparador');
+function renderComparador() {
+  const st = compState;
+  const panel = document.getElementById('mkt-comparador');
   if (!panel) return;
 
   const grupos_labels = {
@@ -13664,21 +13564,20 @@ function renderComparador(ns) {
   const periods = ['1M','3M','6M','YTD','1Y','3Y','5Y'];
   const periodBtns = periods.map(p => {
     const active = p === st.periodo ? 'active' : '';
-    return `<button class="pbtn ${active}" onclick="setCompPeriod('${ns}','${p}',this)">${p}</button>`;
+    return `<button class="pbtn ${active}" onclick="setCompPeriod('${p}',this)">${p}</button>`;
   }).join('');
 
   // Build grouped dropdown - groups as accordion
   let groupsHtml = '';
   for (const [gid, glabel] of Object.entries(grupos_labels)) {
-    const gidNs = ns === 'legacy' ? 'legacy:' + gid : gid;
-    const activos = mktSrc(gidNs).activos;
+    const activos = mktSrc(gid).activos;
     const items = activos.map(a => {
-      const key = gidNs + '|' + a.ticker + '|' + a.nombre;
+      const key = gid + '|' + a.ticker + '|' + a.nombre;
       const isSelected = st.selected.find(s => s.key === key);
       const checked = isSelected ? 'checked' : '';
       // data-buscar permite filtrar por nombre o por ticker sin recorrer el DOM
       return `<label class="comp-option${isSelected ? ' sel' : ''}" data-buscar="${(a.nombre + ' ' + a.ticker).toLowerCase()}">
-        <input type="checkbox" value="${key}" ${checked} onchange="toggleCompActivo('${ns}',this)">
+        <input type="checkbox" value="${key}" ${checked} onchange="toggleCompActivo(this)">
         <span>${a.nombre}</span>
         <span class="comp-tk">${a.ticker}</span>
       </label>`;
@@ -13697,30 +13596,30 @@ function renderComparador(ns) {
   panel.innerHTML = `
     <div class="mkt-chart-box">
       <div class="mkt-controls" style="flex-wrap:wrap;gap:12px;margin-bottom:16px">
-        <div class="comp-dropdown" id="comp-dd-wrapper${sfx}">
-          <button class="mkt-select" onclick="toggleCompDropdown('${ns}')" id="comp-dd-btn${sfx}">+ Añadir activo</button>
-          <div class="comp-dropdown-menu" id="comp-dropdown-menu${sfx}" style="display:none">
+        <div class="comp-dropdown" id="comp-dd-wrapper">
+          <button class="mkt-select" onclick="toggleCompDropdown()" id="comp-dd-btn">+ Añadir activo</button>
+          <div class="comp-dropdown-menu" id="comp-dropdown-menu" style="display:none">
             <div class="comp-search">
-              <input type="text" id="comp-buscar${sfx}" placeholder="Buscar por nombre o ticker"
-                     oninput="filtrarCompOpciones('${ns}',this.value)" autocomplete="off">
+              <input type="text" id="comp-buscar" placeholder="Buscar por nombre o ticker"
+                     oninput="filtrarCompOpciones(this.value)" autocomplete="off">
             </div>
-            <div id="comp-groups${sfx}">${groupsHtml}</div>
-            <div class="comp-vacio" id="comp-sin-resultados${sfx}" style="display:none">Ningún activo coincide.</div>
+            <div id="comp-groups">${groupsHtml}</div>
+            <div class="comp-vacio" id="comp-sin-resultados" style="display:none">Ningún activo coincide.</div>
             <div class="comp-pie">
-              <span id="comp-contador${sfx}"></span>
-              <button onclick="limpiarComp('${ns}')">Quitar todos</button>
+              <span id="comp-contador"></span>
+              <button onclick="limpiarComp()">Quitar todos</button>
             </div>
           </div>
         </div>
         <div class="period-btns">${periodBtns}</div>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="comp-chips${sfx}"></div>
-      <canvas id="comp-chart${sfx}" height="90"></canvas>
-      <div id="comp-nota${sfx}"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px" id="comp-chips"></div>
+      <canvas id="comp-chart" height="90"></canvas>
+      <div id="comp-nota"></div>
     </div>
-    <div id="comp-table-wrap${sfx}"></div>`;
+    <div id="comp-table-wrap"></div>`;
 
-  refreshComparador(ns);
+  refreshComparador();
 }
 
 /* Refresco ligero del comparador.
@@ -13729,10 +13628,9 @@ function renderComparador(ns) {
    en cada seleccion. Aqui solo se tocan las partes que cambian (fichas, nota,
    grafico, tabla y contador), de modo que el desplegable y el grupo abierto se
    quedan como estaban y se pueden marcar varios activos seguidos. */
-function refreshComparador(ns) {
-  ns = ns || '';                                     /* V2 */
-  const sfx = compSfx(ns), st = compSt(ns);          /* V2 */
-  const chips = document.getElementById('comp-chips' + sfx);
+function refreshComparador() {
+  const st = compState;
+  const chips = document.getElementById('comp-chips');
   if (!chips) return;
 
   chips.innerHTML = st.selected.length === 0
@@ -13741,41 +13639,40 @@ function refreshComparador(ns) {
         <div class="comp-chip">
           <span class="chip-dot" style="background:${COMP_COLORS[i % COMP_COLORS.length]}"></span>
           ${s.nombre}
-          <button onclick="removeCompActivo('${ns}','${s.key}')">×</button>
+          <button onclick="removeCompActivo('${s.key}')">×</button>
         </div>`).join('');
 
-  const nota = document.getElementById('comp-nota' + sfx);
+  const nota = document.getElementById('comp-nota');
   if (nota) {
-    nota.innerHTML = st.selected.some(s => mktBase(s.gid) === 'rentafija')   /* V2 */
+    nota.innerHTML = st.selected.some(s => s.gid === 'rentafija')
       ? MKT_NOTA_RF.replace('margin:-18px 0 28px', 'margin:16px 0 0') : '';
   }
 
   // Marca visual de los ya elegidos y contador, sin rehacer el desplegable
   const n = st.selected.length;
-  document.querySelectorAll('#comp-dropdown-menu' + sfx + ' .comp-option').forEach(op => {
+  document.querySelectorAll('#comp-dropdown-menu .comp-option').forEach(op => {
     op.classList.toggle('sel', op.querySelector('input').checked);
   });
-  const cont = document.getElementById('comp-contador' + sfx);
+  const cont = document.getElementById('comp-contador');
   if (cont) cont.textContent = n === 0 ? 'Ninguno seleccionado'
                                        : n + (n === 1 ? ' activo seleccionado' : ' activos seleccionados');
-  const btn = document.getElementById('comp-dd-btn' + sfx);
+  const btn = document.getElementById('comp-dd-btn');
   if (btn) btn.textContent = n === 0 ? '+ Añadir activo' : '+ Añadir activo (' + n + ')';
 
   if (n === 0) {
     if (st.chart) { st.chart.destroy(); st.chart = null; }
-    const wrap = document.getElementById('comp-table-wrap' + sfx);
+    const wrap = document.getElementById('comp-table-wrap');
     if (wrap) wrap.innerHTML = '';
     return;
   }
-  renderCompChart(ns);
+  renderCompChart();
 }
 
 // Filtra las opciones por nombre o ticker y abre los grupos con coincidencias.
-function filtrarCompOpciones(ns, texto) {
-  const sfx = compSfx(ns || '');                     /* V2 */
+function filtrarCompOpciones(texto) {
   const q = (texto || '').trim().toLowerCase();
   let visibles = 0;
-  document.querySelectorAll('#comp-groups' + sfx + ' .comp-group').forEach(grupo => {
+  document.querySelectorAll('#comp-groups .comp-group').forEach(grupo => {
     const items = grupo.querySelectorAll('.comp-option');
     let coinciden = 0;
     items.forEach(op => {
@@ -13791,16 +13688,14 @@ function filtrarCompOpciones(ns, texto) {
       grupo.querySelector('.comp-arrow').textContent = '▴';
     }
   });
-  const vacio = document.getElementById('comp-sin-resultados' + sfx);
+  const vacio = document.getElementById('comp-sin-resultados');
   if (vacio) vacio.style.display = visibles ? 'none' : 'block';
 }
 
-function limpiarComp(ns) {
-  ns = ns || '';                                     /* V2 */
-  const sfx = compSfx(ns);
-  compSt(ns).selected = [];
-  document.querySelectorAll('#comp-dropdown-menu' + sfx + ' input[type=checkbox]').forEach(i => { i.checked = false; });
-  refreshComparador(ns);
+function limpiarComp() {
+  compState.selected = [];
+  document.querySelectorAll('#comp-dropdown-menu input[type=checkbox]').forEach(i => { i.checked = false; });
+  refreshComparador();
 }
 
 function toggleCompGroup(header) {
@@ -13812,15 +13707,14 @@ function toggleCompGroup(header) {
 }
 
 
-function toggleCompDropdown(ns) {
-  const sfx = compSfx(ns || '');                     /* V2 */
-  const menu = document.getElementById('comp-dropdown-menu' + sfx);
+function toggleCompDropdown() {
+  const menu = document.getElementById('comp-dropdown-menu');
   if (!menu) return;
   const abrir = menu.style.display === 'none';
   menu.style.display = abrir ? 'block' : 'none';
   if (abrir) {
     // El foco va al buscador: se puede escribir el ticker sin tocar el raton
-    const buscador = document.getElementById('comp-buscar' + sfx);
+    const buscador = document.getElementById('comp-buscar');
     if (buscador) setTimeout(() => buscador.focus(), 20);
   }
   // Close on outside click
@@ -13837,17 +13731,12 @@ function toggleCompDropdown(ns) {
 // Escape cierra el desplegable sin tener que buscar un hueco donde pinchar.
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
-  /* Se comprueban los dos desplegables (el de Mercados y el de la copia legacy).
-     Solo puede haber uno abierto, porque solo hay una pagina visible. */
-  ['comp-dropdown-menu', 'comp-dropdown-menu-legacy'].forEach(id => {
-    const menu = document.getElementById(id);
-    if (menu && menu.style.display === 'block') menu.style.display = 'none';
-  });
+  const menu = document.getElementById('comp-dropdown-menu');
+  if (menu && menu.style.display === 'block') menu.style.display = 'none';
 });
 
-function toggleCompActivo(ns, cb) {
-  ns = ns || '';                                     /* V2 */
-  const st = compSt(ns);
+function toggleCompActivo(cb) {
+  const st = compState;
   const key = cb.value;
   const [gid, ticker, nombre] = key.split('|');
   if (cb.checked) {
@@ -13857,34 +13746,29 @@ function toggleCompActivo(ns, cb) {
   } else {
     st.selected = st.selected.filter(s => s.key !== key);
   }
-  refreshComparador(ns);   // no rehacer el panel: el desplegable sigue abierto
+  refreshComparador();   // no rehacer el panel: el desplegable sigue abierto
 }
 
-function removeCompActivo(ns, key) {
-  ns = ns || '';                                     /* V2 */
-  const sfx = compSfx(ns), st = compSt(ns);
+function removeCompActivo(key) {
+  const st = compState;
   st.selected = st.selected.filter(s => s.key !== key);
   // El desplegable ya no se reconstruye, asi que hay que desmarcar la casilla
-  const cb = document.querySelector('#comp-dropdown-menu' + sfx + ' input[value="' + key + '"]');
+  const cb = document.querySelector('#comp-dropdown-menu input[value="' + key + '"]');
   if (cb) cb.checked = false;
-  refreshComparador(ns);
+  refreshComparador();
 }
 
-function setCompPeriod(ns, p, btn) {
-  ns = ns || '';                                     /* V2 */
-  compSt(ns).periodo = p;
-  const panelSel = ns === 'legacy' ? '#mkt-legacy-comparador' : '#mkt-comparador';
+function setCompPeriod(p, btn) {
+  compState.periodo = p;
+  const panelSel = '#mkt-comparador';
   document.querySelectorAll(panelSel + ' .pbtn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderCompChart(ns);
-  renderCompTable(ns);
+  renderCompChart();
+  renderCompTable();
 }
 
-/* El gid guardado en cada seleccion ya lleva el namespace ('indices' para la
-   fuente en produccion, 'legacy:indices' para el Excel), asi que mktSrc()
-   resuelve solo contra la fuente correcta. El comparador de la PORTADA marca
-   sus gids con 'legacy:' porque el resto de la portada tambien sigue leyendo
-   del Excel; ver el aviso de cabecera del fichero. */
+/* Cada seleccion guarda su gid ('indices', 'factores'...), asi que mktSrc()
+   resuelve la serie sin necesidad de parametros extra. */
 function getCompPrices(s) {
   const activos = mktSrc(s.gid).activos;
   const a = activos.find(a => a.ticker === s.ticker && a.nombre === s.nombre);
@@ -13905,10 +13789,9 @@ function filterMktByPeriod(prices, periodo) {
   return prices.filter(([d]) => new Date(d) >= refDate);
 }
 
-function renderCompChart(ns) {
-  ns = ns || '';                                     /* V2 */
-  const sfx = compSfx(ns), st = compSt(ns);
-  const canvas = document.getElementById('comp-chart' + sfx);
+function renderCompChart() {
+  const st = compState;
+  const canvas = document.getElementById('comp-chart');
   if (!canvas || st.selected.length < 1) return;
   if (st.chart) st.chart.destroy();
 
@@ -13957,13 +13840,12 @@ function renderCompChart(ns) {
     }
   });
 
-  renderCompTable(ns);
+  renderCompTable();
 }
 
-function renderCompTable(ns) {
-  ns = ns || '';                                     /* V2 */
-  const sfx = compSfx(ns), st = compSt(ns);
-  const wrap = document.getElementById('comp-table-wrap' + sfx);
+function renderCompTable() {
+  const st = compState;
+  const wrap = document.getElementById('comp-table-wrap');
   if (!wrap || st.selected.length === 0) return;
 
   let html = `<table class="mkt-table" style="margin-top:16px">
@@ -13991,7 +13873,7 @@ function renderCompTable(ns) {
     const dot = `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${COMP_COLORS[i%COMP_COLORS.length]};margin-right:6px"></span>`;
     html += `<tr>
       <td>${dot}${s.nombre} <span style="color:var(--text-light);font-size:0.72rem">${s.ticker}</span></td>
-      <td style="color:var(--text-light)">${grupos_labels[mktBase(s.gid)]}</td>
+      <td style="color:var(--text-light)">${grupos_labels[s.gid]}</td>
       <td>${last ? '$'+last.toFixed(2) : '—'}</td>
       <td>${retFmt}</td>
     </tr>`;
@@ -17450,26 +17332,13 @@ window.addEventListener('popstate', function() {
   }
 })();
 
-/* ===== LEGACY INICIO ======================================================
-   Unico acceso a la copia antigua (Excel). A proposito no hay enlace en el
-   menu ni en la portada: hay que escribir ?tab=mercados-legacy en la URL.
-   El hash #mercados-legacy tambien funciona.
-   PROVISIONAL: borrar este bloque al retirar el flujo de Excel.
-   ========================================================================= */
+/* Acceso directo al apartado de mapas de calor por ?tab=heatmaps. */
 (function initTabHeatmaps() {
   try {
     const tab = new URLSearchParams(window.location.search).get('tab');
     if (tab === 'heatmaps') showPage('heatmaps', true);
   } catch (e) { /* navegador sin URLSearchParams: no se hace nada */ }
 })();
-
-(function initTabLegacy() {
-  try {
-    const tab = new URLSearchParams(window.location.search).get('tab');
-    if (tab === 'mercados-legacy') showPage('mercados-legacy', true);
-  } catch (e) { /* navegador sin URLSearchParams: no se hace nada */ }
-})();
-/* ===== LEGACY FIN ===== */
 
 
 /* =============================================================
