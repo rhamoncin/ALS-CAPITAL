@@ -17773,13 +17773,23 @@ var HM = (function () {
       }
     }
 
-    // --- fecha de los datos ---
+    /* --- fecha de los datos ---
+       Solo se ensenya en la vista de 1 DIA, que es la unica donde saber a que
+       sesion corresponden los numeros cambia como se leen. En 1S, 1M, YTD o 1A
+       el dia exacto del ultimo cierre no aporta nada y ensucia la cabecera.
+
+       La fecha y hora en que se genero el fichero NO se ensenya nunca: es
+       informacion de mantenimiento, no de mercado. Se sigue guardando en
+       heatmapData.js (meta.generado) y en actualizar_heatmaps.log, que es
+       donde se mira cuando hace falta.
+
+       El span se oculta del todo cuando no hay texto: al ser un elemento
+       flex, dejarlo vacio abriria un hueco de 5px bajo el titulo. */
     const elF = $('hm-fecha');
     if (elF) {
-      const partes = [];
-      if (b.fechaDatos) partes.push('Datos al ' + fechaLarga(b.fechaDatos));
-      if (meta().generado) partes.push('fichero generado el ' + meta().generado.replace(' ', ' a las '));
-      elF.textContent = partes.join(' · ');
+      const txt = (periodo === '1D' && b.fechaDatos) ? 'Datos al ' + fechaLarga(b.fechaDatos) : '';
+      elF.textContent = txt;
+      elF.style.display = txt ? '' : 'none';
     }
 
     // --- cuerpo ---
