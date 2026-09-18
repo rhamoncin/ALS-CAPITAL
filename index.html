@@ -1206,6 +1206,100 @@
     .em-signals-grid { grid-template-columns:1fr; }
   }
 
+  /* EMR-CSS-INICIO */
+  /* ── Earnings Monitor · selector de trimestre e informe en formato research ── */
+  .emq-bar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:18px 0 4px; }
+  .emq-lbl { font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-light); margin-right:4px; }
+  .emq-btn { font-size:0.76rem; padding:5px 12px; border-radius:4px; border:1px solid var(--border); background:#fff; color:var(--text-mid); cursor:pointer; font-family:inherit; }
+  .emq-btn:hover { border-color:rgba(107,39,55,0.35); color:var(--burgundy); }
+  .emq-btn.active { border-color:var(--burgundy); color:var(--burgundy); background:rgba(107,39,55,0.05); font-weight:500; }
+  .emq-btn small { color:var(--text-light); font-weight:400; margin-left:4px; }
+
+  .emr { max-width:1200px; margin:0 auto; padding:0 48px 56px; }
+  .emr-head { padding:22px 0 22px; border-bottom:2px solid var(--border); margin-bottom:22px; }
+  .emr-kicker { font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--burgundy); margin-bottom:12px; }
+  .emr-kicker span { color:var(--text-light); font-weight:500; letter-spacing:0.06em; }
+  .emr-title { font-family:'Playfair Display',serif; font-size:1.55rem; font-weight:600; color:var(--text-dark); line-height:1.35; margin:0 0 12px; max-width:900px; }
+  .emr-meta { font-size:0.74rem; color:var(--text-light); }
+  .emr-box { background:#fff; border:1px solid var(--border); border-radius:4px; padding:22px 28px; margin-bottom:18px; }
+  .emr-lbl { font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--burgundy); margin-bottom:14px; }
+  .emr-sub { font-size:0.64rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-light); margin:4px 0 8px; }
+  .emr-take { border-left:3px solid var(--burgundy); }
+  .emr-take ol { margin:0; padding-left:20px; display:flex; flex-direction:column; gap:10px; }
+  .emr-take li { font-size:0.88rem; line-height:1.7; color:var(--text-mid); padding-left:4px; }
+  .emr-take li::marker { color:var(--burgundy); font-weight:600; }
+  .emr-take strong, .emr-tema strong, .emr-p strong { color:var(--text-dark); font-weight:600; }
+  .emr-chg { width:100%; border-collapse:collapse; }
+  .emr-chg td { padding:8px 10px; font-size:0.8rem; color:var(--text-mid); border-bottom:1px solid #f0ece8; line-height:1.55; vertical-align:top; }
+  .emr-chg tr:last-child td { border-bottom:none; }
+  .emr-chg-k { font-weight:600; color:var(--text-dark) !important; white-space:nowrap; width:160px; }
+  .emr-chg-d { white-space:nowrap; width:120px; font-size:0.72rem !important; color:var(--burgundy) !important; font-weight:600; }
+  .emr-sc { width:100%; border-collapse:collapse; margin-bottom:18px; }
+  .emr-sc th { padding:8px 12px; text-align:left; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-light); border-bottom:1px solid var(--border); background:#faf7f5; white-space:nowrap; }
+  .emr-sc td { padding:9px 12px; vertical-align:top; border-bottom:1px solid #f0ece8; }
+  .emr-sc tr:last-child td { border-bottom:none; }
+  .emr-sc-k { font-weight:600; color:var(--text-dark); font-size:0.77rem; width:190px; }
+  .emr-sc-k span { display:block; font-weight:400; font-size:0.66rem; color:var(--text-light); margin-top:1px; }
+  .emr-sc-v { font-size:0.82rem; font-weight:600; color:var(--text-dark); font-variant-numeric:tabular-nums; }
+  .emr-sc-c { font-size:0.69rem; color:var(--text-light); margin-top:2px; line-height:1.4; }
+  .emr-src { font-size:0.66rem; color:var(--text-light); line-height:1.5; margin-top:8px; }
+  .emr-ex-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .emr-ex { margin:0 0 18px; }
+  .emr-ex-n { font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-light); }
+  .emr-ex-t { font-size:0.9rem; font-weight:600; color:var(--text-dark); line-height:1.4; margin:4px 0 2px; }
+  .emr-ex-s { font-size:0.72rem; color:var(--text-light); margin-bottom:10px; }
+  .emr-ex-c { position:relative; height:220px; }
+  .emr-tema h3, .emr-pulso h3 { font-family:'Playfair Display',serif; font-size:1.08rem; font-weight:600; color:var(--text-dark); line-height:1.4; margin:0 0 10px; }
+  .emr-tema p, .emr-pulso p, .emr-p { font-size:0.87rem; line-height:1.8; color:var(--text-mid); margin:0 0 12px; }
+  .emr-tema ul, .emr-pulso ul { list-style:none; padding:0; margin:4px 0 0; display:flex; flex-direction:column; gap:8px; }
+  .emr-tema li, .emr-pulso li { font-size:0.82rem; line-height:1.6; color:var(--text-mid); display:flex; gap:10px; align-items:flex-start; }
+  .emr-tag { flex-shrink:0; font-size:0.6rem; font-weight:700; letter-spacing:0.06em; border:1px solid; border-radius:3px; padding:1px 5px; margin-top:2px; min-width:30px; text-align:center; }
+  .emr-quotes { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .emr-quotes blockquote { margin:0; padding:0 0 0 14px; border-left:2px solid var(--burgundy-pale); }
+  .emr-quotes p { font-family:'Playfair Display',serif; font-style:italic; font-size:0.9rem; line-height:1.6; color:var(--text-dark); margin:0 0 8px; }
+  .emr-quotes cite { font-style:normal; font-size:0.7rem; color:var(--text-light); }
+  .emr-pulso { background:var(--cream-dark); }
+  .emr-2col { display:grid; grid-template-columns:3fr 2fr; gap:18px; }
+  .emr-watch { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:9px; }
+  .emr-watch li { font-size:0.83rem; line-height:1.6; color:var(--text-mid); padding-left:18px; position:relative; }
+  .emr-watch li::before { content:'\2192'; position:absolute; left:0; color:var(--text-light); }
+  .emr-next { margin-top:14px; padding-top:12px; border-top:1px solid #f0ece8; font-size:0.76rem; color:var(--text-light); }
+  .emr-cov { width:100%; border-collapse:collapse; }
+  .emr-cov th { padding:7px 10px; text-align:left; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-light); border-bottom:1px solid var(--border); background:#faf7f5; white-space:nowrap; }
+  .emr-cov td { padding:8px 10px; font-size:0.76rem; color:var(--text-mid); border-bottom:1px solid #f0ece8; vertical-align:top; }
+  .emr-cov a { color:var(--burgundy); text-decoration:none; border-bottom:1px solid rgba(107,39,55,0.25); }
+  .emr-glos { margin-top:14px; }
+  .emr-glos summary { cursor:pointer; font-size:0.72rem; font-weight:600; color:var(--burgundy); }
+  .emr-glos dl { display:grid; grid-template-columns:max-content 1fr; gap:6px 16px; margin:12px 0 0; }
+  .emr-glos dt { font-size:0.76rem; font-weight:600; color:var(--text-dark); }
+  .emr-glos dd { margin:0; font-size:0.76rem; color:var(--text-mid); line-height:1.55; }
+  @media (max-width:900px) {
+    .emr { padding:0 16px 40px; }
+    .emr-ex-grid, .emr-2col, .emr-quotes { grid-template-columns:1fr; }
+    .emr-box { padding:18px 16px; }
+    .emr-title { font-size:1.25rem; }
+    .emr-chg-k, .emr-chg-d { white-space:normal; width:auto; }
+    .emr-glos dl { grid-template-columns:1fr; }
+  }
+  .emr-drivers { margin-top:10px; font-size:0.74rem; color:var(--text-mid); }
+  .emr-drivers span { font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-light); margin-right:8px; }
+  .emr-q { border-left:3px solid var(--burgundy); }
+  .emr-q-q { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:600; color:var(--text-dark); line-height:1.45; margin-bottom:8px; }
+  .emr-q p { font-size:0.87rem; line-height:1.75; color:var(--text-mid); margin:0; }
+  .emr-chg th { text-align:left; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-light); padding:8px 10px; border-bottom:1px solid var(--border); background:#faf7f5; }
+  .emr-cos { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .emr-co { padding:18px 22px; }
+  .emr-co-n { font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-light); margin-bottom:6px; }
+  .emr-co-t { font-size:0.9rem; font-weight:600; color:var(--text-dark); line-height:1.4; margin-bottom:8px; }
+  .emr-co p { font-size:0.8rem; line-height:1.65; color:var(--text-mid); margin:0; }
+  .emr-mac { margin:0; display:flex; flex-direction:column; gap:12px; }
+  .emr-mac dt { font-size:0.74rem; font-weight:700; color:var(--text-dark); margin-bottom:2px; }
+  .emr-mac dd { margin:0; font-size:0.84rem; line-height:1.7; color:var(--text-mid); }
+  .emr-mac dd span { display:block; font-size:0.74rem; color:var(--text-light); margin-top:2px; }
+  .emr-mac strong { color:var(--text-dark); font-weight:600; }
+  @media (max-width:900px) { .emr-cos { grid-template-columns:1fr; } }
+  .emr-chg td, .emr-chg th { vertical-align:middle; }
+  /* EMR-CSS-FIN */
   /* ── Visión General Energy ── */
   .vg-header { display:flex; align-items:baseline; gap:16px; margin-bottom:20px; flex-wrap:wrap; }
   .vg-period-badge { font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--burgundy); background:var(--burgundy-pale); border:1px solid rgba(107,39,55,0.18); padding:3px 12px; border-radius:4px; }
@@ -22558,5 +22652,268 @@ MC.init();
     <span class="als-tt-val" id="als-tt-total"></span>
   </div>
 </div>
+<!-- EMR-JS-INICIO -->
+<script src="assets/js/earningsData.js?v=f1640ee040"></script>
+<script>
+// ====== EARNINGS MONITOR · RENDER DE INFORME SECTORIAL (formato research) ======
+// Cada informe es un objeto de datos (sector + trimestre natural). El HTML se genera aquí,
+// así añadir un trimestre nuevo = añadir un objeto; los anteriores no se tocan.
+const EMR_COLORES = ['#6B2737', '#5E5A56', '#C4A67A', '#2D6A4F'];
+
+function emrEsc(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+// Texto con **negrita** y *cursiva* permitidas
+function emrTxt(s) {
+  return emrEsc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+function renderEMReport(d, el) {
+  const rid = (d.sector || 'x') + '-' + (d.trimestre || '');
+  const emp = d.empresas;
+  const col = {};
+  emp.forEach((e, i) => { col[e.id] = EMR_COLORES[i % EMR_COLORES.length]; });
+  let h = '';
+
+  // Cabecera
+  h += '<div class="emr-head">' +
+         '<div class="emr-kicker">' + emrEsc(d.sectorNombre) + ' &middot; ' + emrEsc(d.label) + ' <span>(' + emrEsc(d.meses) + ')</span></div>' +
+         '<h2 class="emr-title">' + emrTxt(d.titulo) + '</h2>' +
+         '<div class="emr-meta">' + emp.map(e => emrEsc(e.nombre)).join(' &middot; ') +
+           ' &nbsp;|&nbsp; Publicado ' + emrEsc(d.publicado) + '</div>' +
+         (d.drivers ? '<div class="emr-drivers"><span>Qu&eacute; miramos</span>' + emrEsc(d.drivers) + '</div>' : '') +
+       '</div>';
+
+  // Pregunta del trimestre
+  if (d.pregunta) {
+    h += '<div class="emr-box emr-q"><div class="emr-lbl">La pregunta del trimestre</div>' +
+         '<div class="emr-q-q">' + emrTxt(d.pregunta.q) + '</div><p>' + emrTxt(d.pregunta.a) + '</p></div>';
+  }
+
+  // Key takeaways
+  h += '<div class="emr-box emr-take"><div class="emr-lbl">Puntos clave</div><ol>' +
+       d.takeaways.map(t => '<li><strong>' + emrEsc(t.lead) + '</strong> ' + emrTxt(t.texto) + '</li>').join('') +
+       '</ol></div>';
+
+  // Qué ha cambiado vs trimestre anterior
+  if (d.cambios && d.cambios.length) {
+    h += '<div class="emr-box"><div class="emr-lbl">Qu&eacute; ha cambiado frente al ' + emrEsc(d.labelAnterior) + '</div>' +
+         '<table class="emr-chg"><tbody>' +
+         d.cambios.map(c => '<tr><td class="emr-chg-k">' + emrEsc(c.kpi) + '</td><td class="emr-chg-d">' + emrEsc(c.dir) + '</td><td>' + emrTxt(c.texto) + '</td></tr>').join('') +
+         '</tbody></table></div>';
+  }
+
+  // Del trimestre anterior a este: lo que vigilábamos y qué ha pasado
+  if (d.seguimiento && d.seguimiento.length) {
+    h += '<div class="emr-box"><div class="emr-lbl">Seguimiento de lo que vigil&aacute;bamos en el ' + emrEsc(d.labelAnterior) + '</div>' +
+         '<table class="emr-chg"><thead><tr><th>Qu&eacute; vigil&aacute;bamos</th><th></th><th>Qu&eacute; ha pasado</th></tr></thead><tbody>' +
+         d.seguimiento.map(c => '<tr><td class="emr-chg-k">' + emrEsc(c.kpi) + '</td><td class="emr-chg-d">' + emrEsc(c.dir) + '</td><td>' + emrTxt(c.texto) + '</td></tr>').join('') +
+         '</tbody></table></div>';
+  }
+
+  // Scorecard
+  h += '<div class="emr-box"><div class="emr-lbl">Scorecard del trimestre</div>';
+  d.scorecard.forEach(g => {
+    h += '<div class="emr-sub">' + emrEsc(g.titulo) + '</div><div class="em-table-wrap"><table class="emr-sc"><thead><tr><th>KPI</th>' +
+         emp.map(e => '<th>' + emrEsc(e.nombre) + '</th>').join('') + '</tr></thead><tbody>';
+    g.filas.forEach(f => {
+      h += '<tr><td class="emr-sc-k">' + emrEsc(f.kpi) + (f.nota ? '<span>' + emrEsc(f.nota) + '</span>' : '') + '</td>';
+      emp.forEach(e => {
+        const v = f.v[e.id] || {};
+        h += '<td><div class="emr-sc-v">' + emrEsc(v.v || 'N/D') + '</div>' +
+             (v.c ? '<div class="emr-sc-c">' + emrEsc(v.c) + '</div>' : '') + '</td>';
+      });
+      h += '</tr>';
+    });
+    h += '</tbody></table></div>';
+  });
+  if (d.scorecardNota) h += '<div class="emr-src">' + emrTxt(d.scorecardNota) + '</div>';
+  h += '</div>';
+
+  // Fichas por compañía (breves: el detalle numérico está en el scorecard)
+  if (d.companias && d.companias.length) {
+    h += '<div class="emr-cos">' + d.companias.map(c =>
+      '<div class="emr-box emr-co" style="border-top:3px solid ' + (col[c.e] || '#ccc') + '"><div class="emr-co-n">' + emrEsc(c.nombre) + '</div>' +
+      '<div class="emr-co-t">' + emrEsc(c.titular) + '</div><p>' + emrTxt(c.texto) + '</p></div>').join('') + '</div>';
+  }
+
+  // Exhibits (gráficos)
+  if (d.exhibits && d.exhibits.length) {
+    h += '<div class="emr-ex-grid">';
+    d.exhibits.forEach((x, i) => {
+      h += '<figure class="emr-box emr-ex"><div class="emr-ex-n">Gr&aacute;fico ' + (i + 1) + '</div>' +
+           '<figcaption class="emr-ex-t">' + emrEsc(x.titulo) + '</figcaption>' +
+           '<div class="emr-ex-s">' + emrEsc(x.sub) + '</div>' +
+           '<div class="emr-ex-c"><canvas id="emr-cv-' + rid + '-' + i + '"></canvas></div>' +
+           '<div class="emr-src">Fuente: ' + emrEsc(x.fuente) + '</div></figure>';
+    });
+    h += '</div>';
+  }
+
+  // Temas
+  d.temas.forEach(t => {
+    h += '<div class="emr-box emr-tema"><h3>' + emrEsc(t.titulo) + '</h3>' +
+         t.parrafos.map(p => '<p>' + emrTxt(p) + '</p>').join('') +
+         (t.evidencias && t.evidencias.length ? '<ul>' + t.evidencias.map(v =>
+           '<li><span class="emr-tag" style="border-color:' + (col[v.e] || '#ccc') + ';color:' + (col[v.e] || '#666') + '">' + emrEsc(v.e) + '</span>' + emrTxt(v.t) + '</li>').join('') + '</ul>' : '') +
+         '</div>';
+  });
+
+  // Management
+  if (d.citas && d.citas.length) {
+    h += '<div class="emr-box"><div class="emr-lbl">Lo que dicen los equipos directivos</div><div class="emr-quotes">' +
+         d.citas.map(c => '<blockquote><p>&ldquo;' + emrEsc(c.texto) + '&rdquo;</p><cite>' + emrEsc(c.quien) + ', ' + emrEsc(c.contexto) + '</cite></blockquote>').join('') +
+         '</div></div>';
+  }
+
+  // Pulso posterior al trimestre
+  if (d.pulso) {
+    h += '<div class="emr-box emr-pulso"><div class="emr-lbl">' + emrEsc(d.pulso.etiqueta) + '</div><h3>' + emrEsc(d.pulso.titulo) + '</h3>' +
+         d.pulso.parrafos.map(p => '<p>' + emrTxt(p) + '</p>').join('') +
+         (d.pulso.bullets ? '<ul>' + d.pulso.bullets.map(v => '<li><span class="emr-tag" style="border-color:' + (col[v.e] || '#ccc') + ';color:' + (col[v.e] || '#666') + '">' + emrEsc(v.e) + '</span>' + emrTxt(v.t) + '</li>').join('') + '</ul>' : '') +
+         '</div>';
+  }
+
+  // Lectura macro + vigilancia
+  h += '<div class="emr-2col">' +
+       '<div class="emr-box"><div class="emr-lbl">Lectura macro</div>' +
+         (d.macroIntro ? '<p class="emr-p">' + emrTxt(d.macroIntro) + '</p>' : '') +
+         '<dl class="emr-mac">' + d.macro.map(m => '<dt>' + emrEsc(m.tema) + '</dt><dd>' + emrTxt(m.texto) + (m.vs ? '<span>' + emrTxt(m.vs) + '</span>' : '') + '</dd>').join('') + '</dl></div>' +
+       '<div class="emr-box"><div class="emr-lbl">Qu&eacute; vigilar</div><ul class="emr-watch">' +
+         d.vigilar.map(w => '<li>' + emrTxt(w) + '</li>').join('') + '</ul>' +
+         (d.proximo ? '<div class="emr-next">' + emrTxt(d.proximo) + '</div>' : '') + '</div>' +
+       '</div>';
+
+  // Cobertura y fuentes + glosario
+  h += '<div class="emr-box emr-foot"><div class="emr-lbl">Cobertura y fuentes</div><div class="em-table-wrap"><table class="emr-cov"><thead><tr>' +
+       '<th>Compa&ntilde;&iacute;a</th><th>Periodo fiscal</th><th>Meses</th><th>Publicaci&oacute;n</th><th>Documentos</th></tr></thead><tbody>' +
+       d.cobertura.map(c => '<tr><td>' + emrEsc(c.empresa) + '</td><td>' + emrEsc(c.fiscal) + '</td><td>' + emrEsc(c.meses) + '</td><td>' + emrEsc(c.publicado) + '</td><td>' +
+         c.docs.map(x => x.url ? '<a href="' + emrEsc(x.url) + '" target="_blank" rel="noopener">' + emrEsc(x.t) + '</a>' : emrEsc(x.t)).join(' &middot; ') + '</td></tr>').join('') +
+       '</tbody></table></div>' +
+       '<div class="emr-src">' + emrTxt(d.metodo) + '</div>' +
+       '<details class="emr-glos"><summary>Glosario</summary><dl>' +
+         d.glosario.map(g => '<dt>' + emrEsc(g.t) + '</dt><dd>' + emrEsc(g.d) + '</dd>').join('') +
+       '</dl></details></div>';
+
+  el.innerHTML = h;
+
+  // Gráficos
+  if (typeof Chart === 'undefined' || !d.exhibits) return;
+  d.exhibits.forEach((x, i) => {
+    const cv = document.getElementById('emr-cv-' + rid + '-' + i);
+    if (!cv) return;
+    if (cv._chart) cv._chart.destroy();
+    const ds = emp.filter(e => x.series[e.id]).map(e => ({
+      label: e.nombre, data: x.series[e.id],
+      borderColor: col[e.id], backgroundColor: x.tipo === 'bar' ? col[e.id] : col[e.id],
+      borderWidth: 2, pointRadius: x.tipo === 'bar' ? 0 : 2.5, pointHoverRadius: 4, tension: 0.25,
+      barPercentage: 0.85, categoryPercentage: 0.7
+    }));
+    const fmt = v => (x.dec != null ? v.toFixed(x.dec) : v) + (x.unidad || '');
+    cv._chart = new Chart(cv, {
+      type: x.tipo || 'line',
+      data: { labels: x.trimestres, datasets: ds },
+      options: {
+        responsive: true, maintainAspectRatio: false, animation: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 10, boxHeight: 10, font: { size: 11 }, color: '#666360' } },
+          tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.parsed.y) } }
+        },
+        scales: {
+          x: { grid: { display: false }, ticks: { color: '#7D7975', font: { size: 11 } } },
+          y: { beginAtZero: !!x.cero, grid: { color: '#F2F1EE' }, border: { display: false },
+               ticks: { color: '#7D7975', font: { size: 11 }, callback: v => fmt(v) } }
+        }
+      }
+    });
+  });
+}
+
+// ====== MONTAJE EN LA PÁGINA: selector de trimestre por sector ======
+// EM_REPORTS (assets/js/earningsData.js) = { <sector_id>: [informe, ...] } ordenados de antiguo a reciente.
+function emrInformes(sid) {
+  return (typeof EM_REPORTS !== 'undefined' && EM_REPORTS[sid]) ? EM_REPORTS[sid] : null;
+}
+
+// Bloque HTML antiguo (formato anterior al renderizador): se conserva como una entrada más del selector
+// mientras ese trimestre no se haya reelaborado.
+const EMR_LEGACY = { trimestre: 'anterior', label: '1T 2026', meses: 'formato anterior', legacyDe: '2026-1T' };
+const emrLegacyHTML = {};
+
+function emrMontar(sid, trimestre) {
+  const informes = emrInformes(sid);
+  const cont = document.getElementById('em-sub-' + sid);
+  if (!informes || !informes.length || !cont) return;
+  if (cont.dataset.emr !== '1' && !(sid in emrLegacyHTML)) emrLegacyHTML[sid] = cont.innerHTML;
+  const conLegacy = emrLegacyHTML[sid] && emrLegacyHTML[sid].trim() && !informes.some(r => r.trimestre === EMR_LEGACY.legacyDe);
+  const lista = conLegacy ? [EMR_LEGACY].concat(informes) : informes;
+  const d = lista.find(r => r.trimestre === trimestre) || informes[informes.length - 1];
+  if (cont.dataset.emr !== '1') {
+    cont.innerHTML = '<div class="emr" style="padding-bottom:0"><div class="emq-bar"><span class="emq-lbl">Trimestre</span>' +
+      lista.map(r => '<button class="emq-btn" data-q="' + r.trimestre + '" onclick="emrElegir(\'' + sid + '\',\'' + r.trimestre + '\')">' +
+        emrEsc(r.label) + ' <small>' + emrEsc(r.meses.replace(/\s*\d{4}$/, '')) + '</small></button>').join('') +
+      '</div></div><div id="emr-view-' + sid + '"></div>';
+    cont.dataset.emr = '1';
+  }
+  cont.querySelectorAll('.emq-btn').forEach(b => b.classList.toggle('active', b.dataset.q === d.trimestre));
+  const vista = document.getElementById('emr-view-' + sid);
+  if (vista.dataset.q !== d.trimestre) {
+    if (d === EMR_LEGACY) {
+      vista.className = '';
+      vista.innerHTML = emrLegacyHTML[sid];
+    } else {
+      vista.className = 'emr';
+      renderEMReport(d, vista);
+    }
+    vista.dataset.q = d.trimestre;
+  }
+}
+
+function emrElegir(sid, trimestre) {
+  emrMontar(sid, trimestre);
+  const lista = emrInformes(sid);
+  const ultimo = lista[lista.length - 1].trimestre;
+  const nh = '#earnings/' + sid + (trimestre === ultimo ? '' : '/' + trimestre);
+  try { if (window.location.hash !== nh) history.replaceState({ page: 'earnings', sector: sid }, '', nh); } catch (e) { /* entornos sin historial (visores embebidos) */ }
+  const top = document.getElementById('em-sub-' + sid).getBoundingClientRect().top + window.scrollY - 120;
+  if (window.scrollY > top) window.scrollTo(0, top);
+}
+
+// Tarjetas de la portada: trimestre y titular del último informe
+function emrActualizarPortada() {
+  if (typeof EM_REPORTS === 'undefined') return;
+  Object.keys(EM_REPORTS).forEach(sid => {
+    const lista = EM_REPORTS[sid];
+    const card = document.getElementById('em-card-' + sid);
+    if (!card || !lista.length) return;
+    const d = lista[lista.length - 1];
+    const q = card.querySelector('.em-sel-q');
+    if (q) q.innerHTML = emrEsc(d.label) + ' &middot; ' + emrEsc(d.meses.replace(/\s*\d{4}$/, ''));
+    const t = card.querySelector('.em-sel-title');
+    if (t && d.tarjeta) t.textContent = d.tarjeta;
+    // Sin etiquetas de estado (eran del formato anterior) y compañías según el informe
+    const pill = card.querySelector('.em-sel-pill');
+    if (pill) pill.remove();
+    if (t && t.nextElementSibling) t.nextElementSibling.textContent = d.empresas.map(e => e.nombre).join(' · ');
+  });
+}
+
+// Engancha la navegación existente: #earnings/<sector> o #earnings/<sector>/<AAAA-nT>
+(function () {
+  if (typeof showEMSector !== 'function') return;
+  const original = showEMSector;
+  showEMSector = function (id, skipHistory) {
+    const partes = String(id).split('/');
+    original(partes[0], skipHistory);
+    emrMontar(partes[0], partes[1]);
+  };
+  emrActualizarPortada();
+  // Si la página ya se abrió en un sector antes de cargar este script, montarlo ahora
+  const h = window.location.hash.slice(1);
+  if (h.startsWith('earnings/')) showEMSector(h.slice(9), true);
+})();
+
+</script>
+<!-- EMR-JS-FIN -->
 </body>
 </html>
