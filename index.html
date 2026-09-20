@@ -11111,7 +11111,22 @@ function openLightbox(idx, ticker) {
   document.getElementById('lightbox-caption').textContent = img.caption || '';
   const lb = document.getElementById('lightbox');
   lb.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+  setPageScrollLock(true);
+}
+
+/* Bloqueo del scroll de la pagina mientras hay una capa a pantalla completa abierta.
+   Sin esto aparecen dos barras de desplazamiento: la de la capa, que funciona, y la
+   de la pagina de debajo, que no lleva a ninguna parte. Al cerrar una capa el scroll
+   solo se libera si no queda ninguna otra abierta. */
+function setPageScrollLock(lock) {
+  if (lock) { document.body.style.overflow = 'hidden'; return; }
+  const visible = el => el && el.style.display !== 'none' && el.style.display !== '';
+  const lb2 = document.getElementById('lb-overlay');
+  const abierta = document.getElementById('article-overlay')
+    || visible(document.getElementById('lightbox'))
+    || visible(document.getElementById('mobile-banner'))
+    || (lb2 && lb2.classList.contains('open'));
+  document.body.style.overflow = abierta ? 'hidden' : '';
 }
 
 function openImgLightbox(src, caption) {
@@ -11119,12 +11134,12 @@ function openImgLightbox(src, caption) {
   document.getElementById('lightbox-caption').textContent = caption || '';
   const lb = document.getElementById('lightbox');
   lb.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+  setPageScrollLock(true);
 }
 
 function closeLightbox() {
   document.getElementById('lightbox').style.display = 'none';
-  document.body.style.overflow = '';
+  setPageScrollLock(false);
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
@@ -14001,6 +14016,7 @@ const articles = {
 function openArticle(id) {
   const a = articles[id];
   if (!a) return;
+  const scrollPrevio = window.scrollY;
   const overlay = document.createElement('div');
   overlay.id = 'article-overlay';
   overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:var(--cream);z-index:500;overflow-y:auto;padding:48px 24px';
@@ -14009,7 +14025,7 @@ function openArticle(id) {
   const btn = document.createElement('button');
   btn.textContent = '← Volver';
   btn.style.cssText = 'background:none;border:none;cursor:pointer;color:var(--text-light);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:40px;padding:0';
-  btn.onclick = function() { overlay.remove(); };
+  btn.onclick = function() { overlay.remove(); setPageScrollLock(false); window.scrollTo(0, scrollPrevio); };
   const cat = document.createElement('div');
   cat.textContent = a.category;
   cat.style.cssText = 'font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--burgundy);margin-bottom:12px';
@@ -14029,6 +14045,7 @@ function openArticle(id) {
   inner.appendChild(footer);
   overlay.appendChild(inner);
   document.body.appendChild(overlay);
+  setPageScrollLock(true);
   overlay.scrollTop = 0;
 }
 
@@ -16896,12 +16913,14 @@ function lbOpen(src, alt, caption) {
   document.getElementById('lb-img').alt = alt || '';
   document.getElementById('lb-caption').textContent = caption || '';
   overlay.classList.add('open');
+  setPageScrollLock(true);
   document.addEventListener('keydown', lbKeyClose);
 }
 
 function lbClose(e) {
   if (e && e.target !== document.getElementById('lb-overlay') && e.target.className !== 'lb-close') return;
   document.getElementById('lb-overlay').classList.remove('open');
+  setPageScrollLock(false);
   document.getElementById('lb-img').src = '';
   document.removeEventListener('keydown', lbKeyClose);
 }
