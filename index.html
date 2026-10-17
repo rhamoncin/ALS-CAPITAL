@@ -9360,8 +9360,8 @@ function getSortedAls() {
     const map = {
       ticker:  [a.ticker, b.ticker],
       pct:     [a.pct, b.pct],
-      ret:     [a.ret     !== null ? a.ret     : -9999, b.ret     !== null ? b.ret     : -9999],
-      retHist: [a.retTotal !== null ? a.retTotal : -9999, b.retTotal !== null ? b.retTotal : -9999]
+      ret:     [a.priceRetHist != null ? a.priceRetHist : -9999, b.priceRetHist != null ? b.priceRetHist : -9999],
+      retHist: [a.totalRetHist != null ? a.totalRetHist : -9999, b.totalRetHist != null ? b.totalRetHist : -9999]
     };
     const [va, vb] = map[alsSort.col] || [a.ticker, b.ticker];
     if (va < vb) return -1 * alsSort.dir;
@@ -9377,8 +9377,8 @@ function getSortedItas() {
     const map = {
       ticker:   [a.ticker, b.ticker],
       pct:      [a.pct, b.pct],
-      ret:      [a.ret     !== null ? a.ret     : -9999, b.ret     !== null ? b.ret     : -9999],
-      retHist:  [a.retTotal !== null ? a.retTotal : -9999, b.retTotal !== null ? b.retTotal : -9999]
+      ret:      [a.priceRetHist != null ? a.priceRetHist : -9999, b.priceRetHist != null ? b.priceRetHist : -9999],
+      retHist:  [a.totalRetHist != null ? a.totalRetHist : -9999, b.totalRetHist != null ? b.totalRetHist : -9999]
     };
     const [va, vb] = map[itasSort.col] || [a.ticker, b.ticker];
     if (va < vb) return -1 * itasSort.dir;
@@ -9426,12 +9426,12 @@ function renderMobileCards(containerId, positions, onClickFn) {
   positions.forEach(p => {
     const div = document.createElement('div');
     div.className = 'mobile-card';
-    const ret = p.ret !== undefined ? p.ret : null;
+    const ret = p.priceRetHist != null ? p.priceRetHist.toFixed(1) : null;  // mismo «Return» que la tabla
     const pct = p.pct !== undefined ? p.pct : null;
     div.innerHTML = `
       <div class="mobile-card-top">
         <div class="ticker-bold">${p.ticker}</div>
-        ${ret !== null ? `<div class="mobile-card-ret ${parseFloat(ret)>=0?'ret-pos':'ret-neg'}">${parseFloat(ret)>=0?'+':''}${ret}%</div>` : ''}
+        ${ret !== null ? `<div class="mobile-card-ret ${parseFloat(ret)>=0?'ret-pos':'ret-neg'}">${ret.startsWith('-')?'':'+'}${ret}%</div>` : ''}
       </div>
       <div class="mobile-card-name">${p.name || p.nombre || ''}</div>
       <div class="mobile-card-meta">
@@ -9461,10 +9461,11 @@ function renderHomeTbody() {
         <td style="color:var(--text-light)">—</td>
         <td style="color:var(--text-light)">—</td>`;
     } else {
-      const retStr = p.ret !== null
-        ? `<span class="${p.ret >= 0 ? 'ret-pos' : 'ret-neg'}">${(p.ret >= 0 ? '+' : '') + p.ret.toFixed(1) + '%'}</span>`
+      // Return y Total: historia completa de la posición (todos los tramos) sobre todo lo invertido, igual que el recuadro
+      const retStr = p.priceRetHist != null
+        ? `<span class="${p.priceRetHist >= 0 ? 'ret-pos' : 'ret-neg'}">${(p.priceRetHist >= 0 ? '+' : '') + p.priceRetHist.toFixed(1) + '%'}</span>`
         : '—';
-      const histVal = p.retTotal;  // columna «Total»: tramo actual con dividendos, igual que el recuadro
+      const histVal = p.totalRetHist;
       const histStr = histVal !== null
         ? `<span class="${histVal >= 0 ? 'ret-pos' : 'ret-neg'}">${(histVal >= 0 ? '+' : '') + histVal.toFixed(1) + '%'}</span>`
         : '—';
@@ -9507,10 +9508,11 @@ function renderPortfolioTbody() {
         <td style="color:var(--text-light)">—</td>
         <td style="color:var(--text-light)">—</td>`;
     } else {
-      const retStr = p.ret !== null
-        ? `<span class="${p.ret >= 0 ? 'ret-pos' : 'ret-neg'}">${(p.ret >= 0 ? '+' : '') + p.ret.toFixed(1) + '%'}</span>`
+      // Return y Total: historia completa de la posición (todos los tramos) sobre todo lo invertido, igual que el recuadro
+      const retStr = p.priceRetHist != null
+        ? `<span class="${p.priceRetHist >= 0 ? 'ret-pos' : 'ret-neg'}">${(p.priceRetHist >= 0 ? '+' : '') + p.priceRetHist.toFixed(1) + '%'}</span>`
         : '—';
-      const histVal = p.retTotal;  // columna «Total»: tramo actual con dividendos, igual que el recuadro
+      const histVal = p.totalRetHist;
       const histStr = histVal !== null
         ? `<span class="${histVal >= 0 ? 'ret-pos' : 'ret-neg'}">${(histVal >= 0 ? '+' : '') + histVal.toFixed(1) + '%'}</span>`
         : '—';
@@ -9542,8 +9544,9 @@ function renderItasTbody() {
   tbody.innerHTML = '';
   getSortedItas().forEach(p => {
     const tr = document.createElement('tr');
-    const retStr = p.ret !== null && p.ret !== undefined
-      ? `<span class="${p.ret >= 0 ? 'ret-pos' : 'ret-neg'}">${(p.ret >= 0 ? '+' : '') + p.ret.toFixed(1) + '%'}</span>`
+    // Return y Total: historia completa de la posición (todos los tramos) sobre todo lo invertido, igual que el recuadro
+    const retStr = p.priceRetHist != null
+      ? `<span class="${p.priceRetHist >= 0 ? 'ret-pos' : 'ret-neg'}">${(p.priceRetHist >= 0 ? '+' : '') + p.priceRetHist.toFixed(1) + '%'}</span>`
       : '—';
     if (p.ticker === 'CASH') {
       tr.innerHTML = `
@@ -9558,7 +9561,7 @@ function renderItasTbody() {
     } else {
       const avgStr = p.avgLocal != null ? `${p.avgLocal} ${p.currency}` : '—';
       const currStr = p.currentPrice != null ? `${p.currentPrice} ${p.currency}` : '—';
-      const histVal = p.retTotal;  // columna «Total»: tramo actual con dividendos, igual que el recuadro
+      const histVal = p.totalRetHist;
       const histStr = histVal != null
         ? `<span class="${histVal >= 0 ? 'ret-pos' : 'ret-neg'}">${(histVal >= 0 ? '+' : '') + histVal.toFixed(1) + '%'}</span>`
         : '—';
@@ -11006,7 +11009,7 @@ function openCompany(ticker, cartera) {
   // El peso, la rentabilidad y el precio medio ya vienen calculados de Portfolio
   // Performance y en euros: no hay que recalcular nada con la tabla FX.
   const pct = p.pct.toFixed(1);
-  const ret = (p.ret != null ? p.ret : 0).toFixed(1);
+  const ret = (p.priceRetHist != null ? p.priceRetHist : 0).toFixed(1);  // mismo «Return» que la tabla
   document.getElementById('det-ticker').textContent = p.ticker;
   document.getElementById('det-name').textContent = p.name;
   document.getElementById('det-country').textContent = p.country;
