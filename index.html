@@ -15096,14 +15096,14 @@ function calcRet(prices, period) {
   const lastDate = new Date(last[0]);
   const lastPrice = last[1];
   let refDate;
-  if (period === '1W') { refDate = new Date(lastDate); refDate.setDate(refDate.getDate() - 7); }
-  else if (period === '1M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth() - 1); }
-  else if (period === '3M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth() - 3); }
-  else if (period === '6M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth() - 6); }
-  else if (period === '1Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear() - 1); }
-  else if (period === '3Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear() - 3); }
-  else if (period === '5Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear() - 5); }
-  else if (period === 'YTD') { refDate = new Date(lastDate.getFullYear(), 0, 1); }
+  if (period === '1W') { refDate = new Date(lastDate); refDate.setUTCDate(refDate.getUTCDate() - 7); }
+  else if (period === '1M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth() - 1); }
+  else if (period === '3M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth() - 3); }
+  else if (period === '6M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth() - 6); }
+  else if (period === '1Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear() - 1); }
+  else if (period === '3Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear() - 3); }
+  else if (period === '5Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear() - 5); }
+  else if (period === 'YTD') { refDate = new Date(Date.UTC(lastDate.getUTCFullYear(), 0, 1)); }
   else if (period === '2018') { refDate = new Date('2018-01-01'); }
   if (!refDate) return null;
   let refPrice = null;
@@ -15216,14 +15216,14 @@ function renderMktChart(gid) {
   const lastDate = new Date(prices[prices.length-1][0]);
 
   let refDate;
-  if (periodo === '1W') { refDate = new Date(lastDate); refDate.setDate(refDate.getDate()-7); }
-  else if (periodo === '1M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth()-1); }
-  else if (periodo === '3M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth()-3); }
-  else if (periodo === '6M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth()-6); }
-  else if (periodo === '1Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear()-1); }
-  else if (periodo === '3Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear()-3); }
-  else if (periodo === '5Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear()-5); }
-  else if (periodo === 'YTD') { refDate = new Date(lastDate.getFullYear(),0,1); }
+  if (periodo === '1W') { refDate = new Date(lastDate); refDate.setUTCDate(refDate.getUTCDate()-7); }
+  else if (periodo === '1M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth()-1); }
+  else if (periodo === '3M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth()-3); }
+  else if (periodo === '6M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth()-6); }
+  else if (periodo === '1Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear()-1); }
+  else if (periodo === '3Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear()-3); }
+  else if (periodo === '5Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear()-5); }
+  else if (periodo === 'YTD') { refDate = new Date(Date.UTC(lastDate.getUTCFullYear(), 0, 1)); }
   
 
   const filtered = prices.filter(([d]) => new Date(d) >= refDate);
@@ -15562,13 +15562,13 @@ function filterMktByPeriod(prices, periodo) {
   if (!prices.length) return [];
   const lastDate = new Date(prices[prices.length-1][0]);
   let refDate;
-  if (periodo === '1M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth()-1); }
-  else if (periodo === '3M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth()-3); }
-  else if (periodo === '6M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth()-6); }
-  else if (periodo === 'YTD') { refDate = new Date(lastDate.getFullYear(),0,1); }
-  else if (periodo === '1Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear()-1); }
-  else if (periodo === '3Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear()-3); }
-  else if (periodo === '5Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear()-5); }
+  if (periodo === '1M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth()-1); }
+  else if (periodo === '3M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth()-3); }
+  else if (periodo === '6M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth()-6); }
+  else if (periodo === 'YTD') { refDate = new Date(Date.UTC(lastDate.getUTCFullYear(), 0, 1)); }
+  else if (periodo === '1Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear()-1); }
+  else if (periodo === '3Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear()-3); }
+  else if (periodo === '5Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear()-5); }
   return prices.filter(([d]) => new Date(d) >= refDate);
 }
 
@@ -15727,14 +15727,14 @@ function renderHomeMktChart(gid) {
   const lastDate = new Date(prices[prices.length-1][0]);
 
   let refDate;
-  if (periodo === '1W') { refDate = new Date(lastDate); refDate.setDate(refDate.getDate()-7); }
-  else if (periodo === '1M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth()-1); }
-  else if (periodo === '3M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth()-3); }
-  else if (periodo === '6M') { refDate = new Date(lastDate); refDate.setMonth(refDate.getMonth()-6); }
-  else if (periodo === '1Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear()-1); }
-  else if (periodo === '3Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear()-3); }
-  else if (periodo === '5Y') { refDate = new Date(lastDate); refDate.setFullYear(refDate.getFullYear()-5); }
-  else if (periodo === 'YTD') { refDate = new Date(lastDate.getFullYear(),0,1); }
+  if (periodo === '1W') { refDate = new Date(lastDate); refDate.setUTCDate(refDate.getUTCDate()-7); }
+  else if (periodo === '1M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth()-1); }
+  else if (periodo === '3M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth()-3); }
+  else if (periodo === '6M') { refDate = new Date(lastDate); refDate.setUTCMonth(refDate.getUTCMonth()-6); }
+  else if (periodo === '1Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear()-1); }
+  else if (periodo === '3Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear()-3); }
+  else if (periodo === '5Y') { refDate = new Date(lastDate); refDate.setUTCFullYear(refDate.getUTCFullYear()-5); }
+  else if (periodo === 'YTD') { refDate = new Date(Date.UTC(lastDate.getUTCFullYear(), 0, 1)); }
 
   const filtered = prices.filter(([d]) => new Date(d) >= refDate);
   if (!filtered.length) return;
